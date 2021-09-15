@@ -11,9 +11,11 @@ public class PlayerNotificationController : MonoBehaviour
     //private UnityAction onDialogue;
     private bool isPopupShown = false;
     private DialogueTrigger dialogueCaller;
+    private DialogueManager dialogueManagerSingleton;
 
     private void Awake()
     {
+        dialogueManagerSingleton = FindObjectOfType<DialogueManager>();
         //onDialogue = new UnityAction(onDialogue);
     }
 
@@ -39,20 +41,23 @@ public class PlayerNotificationController : MonoBehaviour
     // Other methods
     public void ShowPopupTextField(object dialogueTriggerScriptReference)
     {
-        dialogueCaller = (DialogueTrigger)dialogueTriggerScriptReference;
+        if (dialogueManagerSingleton.isDisplayingMessage == false)
+        {
+            dialogueCaller = (DialogueTrigger)dialogueTriggerScriptReference;
 
-        string popupText = "Press [E]";
-        popupTextField.text = popupText;
-        popupTextField.enabled = true;
-        isPopupShown = true;
-        Debug.Log("Show Popup field");
+            string popupText = "Press [E]";
+            popupTextField.text = popupText;
+            popupTextField.enabled = true;
+            isPopupShown = true;
+            //Debug.Log("Show Popup field");
+        }
     }
     public void HidePopupTextField()
     {
         popupTextField.enabled = false;
         isPopupShown = false;
         dialogueCaller = null;
-        Debug.Log("Hide Popup field");
+        //Debug.Log("Hide Popup field");
     }
     private void OnDialogue(object dialogueTriggerScriptReference)
     {

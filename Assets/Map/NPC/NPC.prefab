@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 138775903525123742}
   - component: {fileID: 348619541412192810}
   - component: {fileID: 6816586970343372720}
+  - component: {fileID: 4507979778485378316}
   m_Layer: 2
   m_Name: Trigger
   m_TagString: Dialogue
@@ -66,6 +67,27 @@ MonoBehaviour:
     - Hello there young traveler!
     - I have a mission for you! A very important one!
     - Lol, actually I don't. See ya later!
+--- !u!50 &4507979778485378316
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607852217628888686}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &4507979778816504389
 GameObject:
   m_ObjectHideFlags: 0

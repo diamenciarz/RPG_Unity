@@ -13,6 +13,9 @@ public class DialogueManager : MonoBehaviour
     public GameObject dialogueBoxGO;
 
     public Animator textAnimator;
+
+    [HideInInspector]
+    public bool isDisplayingMessage = false;
     //Private variables
     private Queue<string> sentences;
     private Coroutine textAnimationCoroutine;
@@ -25,6 +28,7 @@ public class DialogueManager : MonoBehaviour
 
     public IEnumerator StartDialogue(Dialogue dialogueInput)
     {
+        isDisplayingMessage = true;
         dialogueBoxGO.SetActive(true);
         textAnimator.SetBool("isClosed", false);
 
@@ -64,6 +68,7 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         textAnimator.SetBool("isClosed", true);
+        isDisplayingMessage = false;
     }
     IEnumerator animateSentence(string inputSentence) 
     {

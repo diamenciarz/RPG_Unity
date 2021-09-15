@@ -10,19 +10,18 @@ public class DialogueTrigger : MonoBehaviour
     private void Start()
     {
         myCollider2D = GetComponent<Collider2D>();
-            Debug.Log("Player entered the trigger area");
     }
 
     public void TriggerDialogue()
     {
-        StartCoroutine(FindObjectOfType<DialogueManager>().StartDialogue(dialogue));
+        DialogueManager foundClass = FindObjectOfType<DialogueManager>();
+        StartCoroutine(foundClass.StartDialogue(dialogue));
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
             EventManager.TriggerEvent("ShowDialogue",this);
-            Debug.Log("Player entered the trigger area");
 
         }
     }
@@ -30,8 +29,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            EventManager.TriggerEvent("HideDialogue", this);
-            Debug.Log("Player left the trigger area");
+            EventManager.TriggerEvent("HideDialogue");
 
         }
     }
