@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
     public Text nameText;
     public Text dialogueText;
     public Text buttonText;
+    public GameObject dialogueBoxGO;
 
     public Animator textAnimator;
     //Private variables
@@ -22,9 +23,9 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
     }
 
-    public void StartDialogue(Dialogue dialogueInput)
+    public IEnumerator StartDialogue(Dialogue dialogueInput)
     {
-
+        dialogueBoxGO.SetActive(true);
         textAnimator.SetBool("isClosed", false);
 
         nameText.text = dialogueInput.name;
@@ -36,6 +37,9 @@ public class DialogueManager : MonoBehaviour
         {
             sentences.Enqueue(sentence);
         }
+        dialogueText.text = "";
+
+        yield return new WaitForSeconds(0.6f);
         DisplayNextSentence();
     }
     public void DisplayNextSentence()
