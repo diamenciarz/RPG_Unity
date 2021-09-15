@@ -1195,29 +1195,6 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0.00001
---- !u!1 &474197839 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4507979778816504389, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
-  m_PrefabInstance: {fileID: 4507979778485378314}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &474197840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 474197839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29a970a57056c414ab493bf02b33d2e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogue:
-    name: Dave the Questgiver
-    sentences:
-    - Hello there young traveler!
-    - I have a mission for you! A very important one!
-    - Lol, actually I don't. See ya later!
 --- !u!1 &477154083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2714,7 +2691,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3333334, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2901,6 +2878,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 348619541412192810, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4507979778816504389, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
       propertyPath: m_Name
       value: NPC

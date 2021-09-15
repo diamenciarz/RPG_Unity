@@ -14,7 +14,14 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            
+            EventManager.TriggerEvent("ShowDialogue",this);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            EventManager.TriggerEvent("HideDialogue", this);
         }
     }
 }
