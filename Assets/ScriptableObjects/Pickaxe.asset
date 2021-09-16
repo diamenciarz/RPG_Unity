@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 0}
   itemType: 0
-  itemDescription: 
+  itemDescription: Pickaxe, wow!
   usesLeft: 2
