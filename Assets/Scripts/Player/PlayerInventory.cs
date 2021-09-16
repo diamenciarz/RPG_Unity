@@ -16,9 +16,9 @@ public class PlayerInventory : MonoBehaviour
             {
                 playerInventoryObject.AddItemToInventory(itemScript.itemClass, 1);
                 Destroy(collision.gameObject);
-            }
         }
     }
+}
     private void OnApplicationQuit()
     {
         playerInventoryObject.ClearInventory();
