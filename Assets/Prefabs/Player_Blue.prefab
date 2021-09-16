@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6195473770567518807}
   - component: {fileID: 5147535588325408921}
   - component: {fileID: 6195473770939546903}
+  - component: {fileID: 114496066386386624}
   m_Layer: 6
   m_Name: Player_Blue
   m_TagString: Player
@@ -170,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupTextField: {fileID: 0}
+  isPopupShown: 0
   dialogueTriggerList: []
   activeDialogueTrigger: {fileID: 0}
 --- !u!50 &6195473770939546903
@@ -193,3 +195,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &114496066386386624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770567518804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba5b380efe8d1f34e8cefd60bf0953d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventoryObject: {fileID: 0}

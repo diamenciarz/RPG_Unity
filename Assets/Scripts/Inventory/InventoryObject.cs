@@ -25,6 +25,10 @@ public class InventoryObject : ScriptableObject
             inventorySlotContainer.Add(new InventorySlot(inputItem,itemAmount));
         }
     }
+    public void ClearInventory()
+    {
+        inventorySlotContainer.Clear();
+    }
 }
 [System.Serializable]
 public class InventorySlot
