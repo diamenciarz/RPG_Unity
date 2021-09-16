@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f817ca2b208a3074e9fbbd0153f82104, type: 3}
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 7722089354677798067, guid: 33eca5015ce8c214fa7d4f4098d1c6d2, type: 3}
   itemType: 0
   itemDescription: Pickaxe, wow!
   usesLeft: 2

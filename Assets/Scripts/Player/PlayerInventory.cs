@@ -21,6 +21,6 @@ public class PlayerInventory : MonoBehaviour
 }
     private void OnApplicationQuit()
     {
-        playerInventoryObject.ClearInventory();
+        //playerInventoryObject.ClearInventory();
     }
 }
