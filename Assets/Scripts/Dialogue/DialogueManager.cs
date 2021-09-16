@@ -26,7 +26,18 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
     }
 
-    public IEnumerator StartDialogue(Dialogue dialogueInput)
+    private void OnEnable()
+    {
+        EventManager.StartListening("PlayerLeftDialogue", EndDialogue);
+    }
+    private void OnDisable()
+    {
+        EventManager.StopListening("PlayerLeftDialogue", EndDialogue);
+    }
+
+
+
+        public IEnumerator StartDialogue(Dialogue dialogueInput)
     {
         isDisplayingMessage = true;
         dialogueBoxGO.SetActive(true);
@@ -69,6 +80,7 @@ public class DialogueManager : MonoBehaviour
     {
         textAnimator.SetBool("isClosed", true);
         isDisplayingMessage = false;
+        EventManager.TriggerEvent("StartPopupCoroutine");
     }
     IEnumerator animateSentence(string inputSentence) 
     {

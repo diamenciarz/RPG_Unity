@@ -29,7 +29,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            EventManager.TriggerEvent("HideDialogue");
+            EventManager.TriggerEvent("HideDialogue",this);
 
         }
     }

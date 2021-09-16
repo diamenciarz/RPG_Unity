@@ -170,6 +170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupTextField: {fileID: 0}
+  dialogueTriggerList: []
+  activeDialogueTrigger: {fileID: 0}
 --- !u!50 &6195473770939546903
 Rigidbody2D:
   serializedVersion: 4
@@ -187,7 +189,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
