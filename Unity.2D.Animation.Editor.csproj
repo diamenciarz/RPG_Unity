@@ -102,8 +102,8 @@
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\IMGUI\Brush.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\MeshTool\MeshToolWrapper.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\Selection\SerializableSelection.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\SpriteMeshData\WeightEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\TextContent.cs" />
+    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\SpriteMeshData\WeightEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\SkinningCache\BoneCache.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\VisibilityTool\BoneReparentTool.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\Editor\SkinningModule\SpriteBoneInfluence\SpriteBoneInfluenceTool.cs" />
