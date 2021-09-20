@@ -9,10 +9,10 @@ public class PlayerNotificationController : MonoBehaviour
     public Text popupTextField;
 
     //private UnityAction onDialogue;
-    public bool isPopupShown = false;
+    private bool isPopupShown = false;
     private DialogueManager dialogueManagerSingleton;
-    public List<DialogueTrigger> dialogueTriggerList;
-    public DialogueTrigger activeDialogueTrigger;
+    private List<DialogueTrigger> dialogueTriggerList;
+    private DialogueTrigger activeDialogueTrigger;
 
     Coroutine popupWaitCoroutine;
 
