@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float playerSpeed = 10f;
 
+    private int forceMultiplier = 100;
     private RaycastHit2D moveHit2D;
     private Rigidbody2D myRigidbody2D;
     private BoxCollider2D myCollider2D;
@@ -26,10 +27,28 @@ public class PlayerMovement : MonoBehaviour
 
         RotateTowardsMoveVector(moveVectorThisFrame);
         MoveIfPossible();
+        //MoveUsingPhysics();
+        //BounceOffWalls();
     }
     private void RotateTowardsMoveVector(Vector3 moveVector)
     {
         transform.rotation = Quaternion.FromToRotation(Vector3.up,moveVector);
+    }
+    private void MoveUsingPhysics()
+    {
+        myRigidbody2D.AddForce(new Vector2(moveVectorThisFrame.x * Time.deltaTime * playerSpeed * forceMultiplier, moveVectorThisFrame.y * Time.deltaTime * playerSpeed * forceMultiplier));
+    }
+    private void BounceOffWalls()
+    {
+        moveHit2D = Physics2D.BoxCast(transform.position, myCollider2D.size, 0, new Vector2(moveVectorThisFrame.x, 0), moveDistanceThisFrame, LayerMask.GetMask("Actors", "Obstacles"));
+        if (moveHit2D.collider != null)
+        {
+            myRigidbody2D.velocity = new Vector2(-myRigidbody2D.velocity.x, myRigidbody2D.velocity.y);
+        }
+        if (moveHit2D.collider != null)
+        {
+            myRigidbody2D.velocity = new Vector2(myRigidbody2D.velocity.x, -myRigidbody2D.velocity.y);
+        }
     }
     private void MoveIfPossible()
     {

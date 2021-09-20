@@ -4,8 +4,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 
-public class InventoryObject : ScriptableObject
-{ 
+public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
+{
+    public ItemDatabaseObject itemDatabase;
     public List<InventorySlot> inventorySlotContainer = new List<InventorySlot>();
 
     public void AddItemToInventory(ItemObject inputItem, int itemAmount)
@@ -22,22 +23,37 @@ public class InventoryObject : ScriptableObject
         }
         if (hasItem == false)
         {
-            inventorySlotContainer.Add(new InventorySlot(inputItem,itemAmount));
+            inventorySlotContainer.Add(new InventorySlot(itemDatabase.getItemIDDictionary[inputItem], inputItem, itemAmount));
         }
     }
     public void ClearInventory()
     {
         inventorySlotContainer.Clear();
     }
+
+    public void OnAfterDeserialize()
+    {
+        for (int i = 0; i < inventorySlotContainer.Count; i++)
+        {
+            inventorySlotContainer[i].item = itemDatabase.getItemDictionary[inventorySlotContainer[i].itemID];
+        }
+    }
+
+    public void OnBeforeSerialize()
+    {
+    }
 }
 [System.Serializable]
 public class InventorySlot
 {
+    public int itemID;
     public ItemObject item;
     public int amount;
 
-    public InventorySlot(ItemObject inputItem,int itemAmount)
+    public InventorySlot(int inputItemID ,ItemObject inputItem,int itemAmount)
     {
+
+        itemID = inputItemID;
         item = inputItem;
         amount = itemAmount;
     }
