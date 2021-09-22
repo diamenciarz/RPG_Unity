@@ -7,44 +7,32 @@ using UnityEditor;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 
-public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
+public class InventoryObject : ScriptableObject
 {
     public string savePath;
-    private ItemDatabaseObject itemDatabase;
-    public List<InventorySlot> inventorySlotContainer = new List<InventorySlot>();
+    public ItemDatabaseObject itemDatabase;
+    public Inventory inventory;
 
-    public void AddItemToInventory(ItemObject inputItem, int itemAmount)
+    public void AddItemToInventory(Item inputItem, int itemAmount)
     {
         bool hasItem = false;
-        for (int i = 0; i < inventorySlotContainer.Count; i++)
+        for (int i = 0; i < inventory.inventorySlotContainer.Count; i++)
         {
-            if (inventorySlotContainer[i].item == inputItem)
+            if (inventory.inventorySlotContainer[i].item == inputItem)
             {
-                inventorySlotContainer[i].AddAmount(itemAmount);
+                inventory.inventorySlotContainer[i].AddAmount(itemAmount);
                 hasItem = true;
                 break;
             }
         }
         if (hasItem == false)
         {
-            inventorySlotContainer.Add(new InventorySlot(itemDatabase.getItemIDDictionary[inputItem], inputItem, itemAmount));
+            inventory.inventorySlotContainer.Add(new InventorySlot(inputItem.itemID, inputItem, itemAmount));
 
 
         }
     }
-    private void OnEnable()
-    {
-        #if UNITY_EDITOR
-        itemDatabase = (ItemDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Item Database.asset",typeof(ItemDatabaseObject));
-        #else
-        itemDatabase = Resources.Load<ItemDatabaseObject>("Database");
-        #endif
-    }
-    public void ClearInventory()
-    {
-        inventorySlotContainer.Clear();
-    }
-    
+    [ContextMenu("Save Inventory")]
     public void SaveInventory()
     {
         string saveData = JsonUtility.ToJson(this, true);
@@ -52,44 +40,38 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
         FileStream file = File.Create(string.Concat(Application.persistentDataPath, savePath));
         bf.Serialize(file, saveData);
         file.Close();
-        Debug.Log("Inventory saved");
 
     }
+    [ContextMenu("Load Inventory")]
     public void LoadInventory()
     {
         if (File.Exists(string.Concat(Application.persistentDataPath, savePath)))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(string.Concat(Application.persistentDataPath, savePath),FileMode.Open);
-            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(),this);
+            FileStream file = File.Open(string.Concat(Application.persistentDataPath, savePath), FileMode.Open);
+            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
-            Debug.Log("Inventory loaded");
         }
     }
-
-    public void OnAfterDeserialize()
+    [ContextMenu("Clear Inventory")]
+    public void ClearInventory()
     {
-        for (int i = 0; i < inventorySlotContainer.Count; i++)
-        {
-            if (inventorySlotContainer[i].itemID < itemDatabase.getItemDictionary.Count)
-            {
-                inventorySlotContainer[i].item = itemDatabase.getItemDictionary[inventorySlotContainer[i].itemID];
-            }
-        }
+        inventory = new Inventory();
     }
-
-    public void OnBeforeSerialize()
-    {
-    }
+}
+[System.Serializable]
+public class Inventory
+{
+    public List<InventorySlot> inventorySlotContainer = new List<InventorySlot>();
 }
 [System.Serializable]
 public class InventorySlot
 {
     public int itemID;
-    public ItemObject item;
+    public Item item;
     public int amount;
 
-    public InventorySlot(int inputItemID ,ItemObject inputItem,int itemAmount)
+    public InventorySlot(int inputItemID ,Item inputItem,int itemAmount)
     {
 
         itemID = inputItemID;

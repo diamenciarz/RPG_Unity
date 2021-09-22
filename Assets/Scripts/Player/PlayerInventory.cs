@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    
     public InventoryObject playerInventoryObject;
     private void Update()
     {
@@ -20,15 +21,16 @@ public class PlayerInventory : MonoBehaviour
     {
         if (collision.tag == "Pickable Item")
         {
-            var itemScript = collision.GetComponent<Item>();
+            var itemScript = collision.GetComponent<GroundItem>();
 
             if (itemScript)
             {
-                playerInventoryObject.AddItemToInventory(itemScript.itemClass, 1);
+                playerInventoryObject.AddItemToInventory(new Item(itemScript.itemClass), 1);
                 Destroy(collision.gameObject);
+                
+            }
         }
     }
-}
     private void OnApplicationQuit()
     {
         //playerInventoryObject.ClearInventory();
