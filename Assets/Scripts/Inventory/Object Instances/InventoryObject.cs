@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using UnityEditor;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 
 public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
 {
-    public ItemDatabaseObject itemDatabase;
+    public string savePath;
+    private ItemDatabaseObject itemDatabase;
     public List<InventorySlot> inventorySlotContainer = new List<InventorySlot>();
 
     public void AddItemToInventory(ItemObject inputItem, int itemAmount)
@@ -26,16 +30,45 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
             inventorySlotContainer.Add(new InventorySlot(itemDatabase.getItemIDDictionary[inputItem], inputItem, itemAmount));
         }
     }
+    private void OnEnable()
+    {
+        itemDatabase = (ItemDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/ScriptableObjects/Item Database.asset",typeof(ItemDatabaseObject));
+    }
     public void ClearInventory()
     {
         inventorySlotContainer.Clear();
+    }
+    
+    public void SaveInventory()
+    {
+        string saveData = JsonUtility.ToJson(this, true);
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(string.Concat(Application.persistentDataPath, savePath));
+        bf.Serialize(file,savePath);
+        file.Close();
+        Debug.Log("Inventory saved");
+
+    }
+    public void LoadInventory()
+    {
+        if (File.Exists(string.Concat(Application.persistentDataPath, savePath)))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(string.Concat(Application.persistentDataPath, savePath),FileMode.Open);
+            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(),this);
+            file.Close();
+            Debug.Log("Inventory loaded");
+        }
     }
 
     public void OnAfterDeserialize()
     {
         for (int i = 0; i < inventorySlotContainer.Count; i++)
         {
-            inventorySlotContainer[i].item = itemDatabase.getItemDictionary[inventorySlotContainer[i].itemID];
+            if (inventorySlotContainer[i].itemID < itemDatabase.getItemDictionary.Count)
+            {
+                inventorySlotContainer[i].item = itemDatabase.getItemDictionary[inventorySlotContainer[i].itemID];
+            }
         }
     }
 

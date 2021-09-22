@@ -5,7 +5,17 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public InventoryObject playerInventoryObject;
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerInventoryObject.SaveInventory();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            playerInventoryObject.LoadInventory();
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Pickable Item")
