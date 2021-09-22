@@ -50,7 +50,7 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
         string saveData = JsonUtility.ToJson(this, true);
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(string.Concat(Application.persistentDataPath, savePath));
-        bf.Serialize(file,savePath);
+        bf.Serialize(file, saveData);
         file.Close();
         Debug.Log("Inventory saved");
 
