@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d72cccced061604ba73c6affb5a8b6b, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 7722089354677798067, guid: 4ecc2f98e1c68de4fbf78015d900032e, type: 3}
+  itemId: 2
+  itemSprite: {fileID: -5910303173932007768, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   itemType: 2
   itemDescription: Potion, wow!
-  canUse: 0
+  canUse: 1

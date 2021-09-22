@@ -6,20 +6,18 @@ using UnityEngine;
 
 public class ItemDatabaseObject : ScriptableObject, ISerializationCallbackReceiver
 {
-    public ItemObject[] Items;
-    public Dictionary<ItemObject, int> getItemIDDictionary = new Dictionary<ItemObject, int>();
+    public ItemObject[] itemObjectArray;
     public Dictionary<int, ItemObject> getItemDictionary = new Dictionary<int, ItemObject>();
 
     public void OnAfterDeserialize()
     {
-        getItemIDDictionary = new Dictionary<ItemObject, int>();
         getItemDictionary = new Dictionary<int, ItemObject>();
 
         //Fills a dictionary with items from the array
-        for (int i = 0; i < Items.Length; i++)
+        for (int i = 0; i < itemObjectArray.Length; i++)
         {
-            getItemIDDictionary.Add(Items[i],i);
-            getItemDictionary.Add(i,Items[i]);
+            itemObjectArray[i].itemId = i;
+            getItemDictionary.Add(i,itemObjectArray[i]);
         }
     }
     public void OnBeforeSerialize()

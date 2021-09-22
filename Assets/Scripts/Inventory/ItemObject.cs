@@ -11,7 +11,7 @@ public enum ItemType
 
 public abstract class ItemObject : ScriptableObject
 {
-    public int itemID;
+    public int itemId;
     public Sprite itemSprite;
     public ItemType itemType;
     [TextArea(15,20)]
@@ -26,6 +26,6 @@ public class Item
     public Item(ItemObject itemObject)
     {
         itemName = itemObject.name;
-        itemID = itemObject.itemID;
+        itemID = itemObject.itemId;
     }
 }

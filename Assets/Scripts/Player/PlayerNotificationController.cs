@@ -11,7 +11,8 @@ public class PlayerNotificationController : MonoBehaviour
     //private UnityAction onDialogue;
     private bool isPopupShown = false;
     private DialogueManager dialogueManagerSingleton;
-    private List<DialogueTrigger> dialogueTriggerList;
+    //[HideInInspector]
+    public List<DialogueTrigger> dialogueTriggerList;
     private DialogueTrigger activeDialogueTrigger;
 
     Coroutine popupWaitCoroutine;
@@ -51,7 +52,8 @@ public class PlayerNotificationController : MonoBehaviour
     // List methods
     public void EnteredDialogueTrigger(object dialogueTriggerScript)
     {
-        dialogueTriggerList.Add((DialogueTrigger)dialogueTriggerScript);
+        DialogueTrigger dialogueTrigger = (DialogueTrigger)dialogueTriggerScript;
+        dialogueTriggerList.Add(dialogueTrigger);
         if (popupWaitCoroutine == null)
         {
             StartPopupCoroutine();
@@ -66,11 +68,12 @@ public class PlayerNotificationController : MonoBehaviour
     }
     public void LeftDialogueTrigger(object dialogueTriggerScript)
     {
-        if (dialogueTriggerList.Contains((DialogueTrigger)dialogueTriggerScript))
+        DialogueTrigger dialogueTrigger = (DialogueTrigger)dialogueTriggerScript;
+        if (dialogueTriggerList.Contains(dialogueTrigger))
         {
-            dialogueTriggerList.Remove((DialogueTrigger)dialogueTriggerScript);
+            dialogueTriggerList.Remove(dialogueTrigger);
 
-            if ((DialogueTrigger)dialogueTriggerScript == activeDialogueTrigger)
+            if (dialogueTrigger == activeDialogueTrigger)
             {
                 EventManager.TriggerEvent("PlayerLeftDialogue");
             }

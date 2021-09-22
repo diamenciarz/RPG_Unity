@@ -27,32 +27,35 @@ public class DisplayInventory : MonoBehaviour
     }
     private void UpdateDisplay()
     {
-        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotContainer.Count; i++)
+        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotList.Count; i++)
         {
-            if (displayedItemsDictionary.ContainsKey(inventoryToDisplay.inventory.inventorySlotContainer[i]))
+            InventorySlot slot = inventoryToDisplay.inventory.inventorySlotList[i];
+            if (displayedItemsDictionary.ContainsKey(slot))
             {
-                displayedItemsDictionary[inventoryToDisplay.inventory.inventorySlotContainer[i]].GetComponentInChildren<TextMeshProUGUI>().text = inventoryToDisplay.inventory.inventorySlotContainer[i].amount.ToString("n0");
+                displayedItemsDictionary[slot].GetComponentInChildren<TextMeshProUGUI>().text = slot.amount.ToString("n0");
             }
             else
             {
                 var itemSlot = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
-                itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = inventoryPrefab.GetComponent<Image>().sprite;
+                itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.item.itemID].itemSprite;
                 itemSlot.GetComponent<RectTransform>().localPosition = GetItemSlotPosition(i);
-                itemSlot.GetComponentInChildren<TextMeshProUGUI>().text = inventoryToDisplay.inventory.inventorySlotContainer[i].amount.ToString("n0");
-                displayedItemsDictionary.Add(inventoryToDisplay.inventory.inventorySlotContainer[i],itemSlot);
+                itemSlot.GetComponentInChildren<TextMeshProUGUI>().text = slot.amount.ToString("n0");
+                displayedItemsDictionary.Add(slot,itemSlot);
             }
         }
     }
 
     private void CreateDisplay()
     {
-        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotContainer.Count; i++)
+        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotList.Count; i++)
         {
+            InventorySlot slot = inventoryToDisplay.inventory.inventorySlotList[i];
+
             var itemSlot = Instantiate(inventoryPrefab, Vector3.zero,Quaternion.identity,transform);
-            itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = inventoryPrefab.GetComponent<Image>().sprite;
+            itemSlot.transform.GetChild(0).GetComponent<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.item.itemID].itemSprite;
             itemSlot.GetComponent<RectTransform>().localPosition = GetItemSlotPosition(i);
-            itemSlot.GetComponentInChildren<TextMeshProUGUI>().text = inventoryToDisplay.inventory.inventorySlotContainer[i].amount.ToString("n0");
-            displayedItemsDictionary.Add(inventoryToDisplay.inventory.inventorySlotContainer[i], itemSlot);
+            itemSlot.GetComponentInChildren<TextMeshProUGUI>().text = slot.amount.ToString("n0");
+            displayedItemsDictionary.Add(slot, itemSlot);
         }
     }
     private Vector3 GetItemSlotPosition(int positionNumber)

@@ -14,10 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   savePath: /inventory.Save
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
-  inventorySlotContainer:
-  - itemID: 1
-    item: {fileID: 11400000, guid: 6a4e1ef2cefd51c488059f8f18bb9232, type: 2}
-    amount: 0
-  - itemID: 2
-    item: {fileID: 11400000, guid: 48758104e556696409ba86da0c07df0e, type: 2}
-    amount: 12
+  inventory:
+    inventorySlotList:
+    - itemID: 1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 1
+    - itemID: 1
+      amount: 1
+      item:
+        itemName: Pickaxe
+        itemID: 1
+    - itemID: 1
+      amount: 1
+      item:
+        itemName: Pickaxe
+        itemID: 1

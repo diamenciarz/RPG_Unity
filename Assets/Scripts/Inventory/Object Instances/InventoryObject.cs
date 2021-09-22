@@ -16,18 +16,18 @@ public class InventoryObject : ScriptableObject
     public void AddItemToInventory(Item inputItem, int itemAmount)
     {
         bool hasItem = false;
-        for (int i = 0; i < inventory.inventorySlotContainer.Count; i++)
+        for (int i = 0; i < inventory.inventorySlotList.Count; i++)
         {
-            if (inventory.inventorySlotContainer[i].item == inputItem)
+            if (inventory.inventorySlotList[i].item.itemID == inputItem.itemID)
             {
-                inventory.inventorySlotContainer[i].AddAmount(itemAmount);
+                inventory.inventorySlotList[i].AddAmount(itemAmount);
                 hasItem = true;
                 break;
             }
         }
         if (hasItem == false)
         {
-            inventory.inventorySlotContainer.Add(new InventorySlot(inputItem.itemID, inputItem, itemAmount));
+            inventory.inventorySlotList.Add(new InventorySlot(inputItem.itemID, inputItem, itemAmount));
 
 
         }
@@ -56,22 +56,22 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
     {
-        inventory = new Inventory();
+        inventory.inventorySlotList.Clear();
     }
 }
 [System.Serializable]
 public class Inventory
 {
-    public List<InventorySlot> inventorySlotContainer = new List<InventorySlot>();
+    public List<InventorySlot> inventorySlotList = new List<InventorySlot>();
 }
 [System.Serializable]
 public class InventorySlot
 {
     public int itemID;
-    public Item item;
     public int amount;
+    public Item item;
 
-    public InventorySlot(int inputItemID ,Item inputItem,int itemAmount)
+    public InventorySlot(int inputItemID, Item inputItem, int itemAmount)
     {
 
         itemID = inputItemID;
