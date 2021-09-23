@@ -12,8 +12,13 @@ public class InventoryObject : ScriptableObject
     public string savePath;
     public ItemDatabaseObject itemDatabase;
     public Inventory inventory;
-    public int inventorySize = 24;
+    public int inventorySize = 28;
 
+    private void Awake()
+    {
+        //Fill inventory with empty slots up to inventorySize
+        ClearInventory();
+    }
     public void AddItemToInventory(Item inputItem, int itemAmount)
     {
         Debug.Log("Added " + inputItem.itemName + " to inventory.");
@@ -36,14 +41,13 @@ public class InventoryObject : ScriptableObject
         }
         //If no instance was found, then just add it to an empty slot
         SetEmptySlot(inputItem, itemAmount);
-        EventManager.TriggerEvent("Update Inventory Display");
     }
     private int ReturnFirstFreeInventorySlotIndex()
     {
         int returnIndex = -1;
         for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
         {
-            if (inventory.inventorySlotArray[i].itemID <= -1)
+            if (inventory.inventorySlotArray[i].item.itemID <= -1)
             {
                 returnIndex = i;
             }
@@ -54,9 +58,9 @@ public class InventoryObject : ScriptableObject
     {
         for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
         {
-            if (inventory.inventorySlotArray[i].itemID <= -1)
+            if (inventory.inventorySlotArray[i].item.itemID <= -1)
             {
-                inventory.inventorySlotArray[i].UpdateSlot(inputItem.itemID, inputItem,inputAmount);
+                inventory.inventorySlotArray[i].UpdateSlot(inputItem,inputAmount);
                 return inventory.inventorySlotArray[i];
             }
         }
@@ -71,7 +75,7 @@ public class InventoryObject : ScriptableObject
         FileStream file = File.Create(string.Concat(Application.persistentDataPath, savePath));
         bf.Serialize(file, saveData);
         file.Close();
-
+        EventManager.TriggerEvent("Update Inventory Display");
     }
     [ContextMenu("Load Inventory")]
     public void LoadInventory()
@@ -83,43 +87,37 @@ public class InventoryObject : ScriptableObject
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
         }
+        EventManager.TriggerEvent("Update Inventory Display");
     }
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
     {
-        inventory.inventorySlotArray = new InventorySlot[28];
+        inventory.inventorySlotArray = new InventorySlot[inventorySize];
         EventManager.TriggerEvent("Update Inventory Display");
     }
 }
 [System.Serializable]
 public class Inventory
 {
-    public InventorySlot[] inventorySlotArray = new InventorySlot[28];
+    public InventorySlot[] inventorySlotArray;
 }
 [System.Serializable]
 public class InventorySlot
 {
-    public int itemID;
     public int amount;
     public Item item;
     public InventorySlot()
     {
-
-        itemID = -1;
         item = null;
         amount = 0;
     }
-    public InventorySlot(int inputItemID, Item inputItem, int itemAmount)
+    public InventorySlot(Item inputItem, int itemAmount)
     {
-
-        itemID = inputItemID;
         item = inputItem;
         amount = itemAmount;
     }
-    public void UpdateSlot(int inputItemID, Item inputItem, int itemAmount)
+    public void UpdateSlot(Item inputItem, int itemAmount)
     {
-
-        itemID = inputItemID;
         item = inputItem;
         amount = itemAmount;
     }

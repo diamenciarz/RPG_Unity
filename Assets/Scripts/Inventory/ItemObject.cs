@@ -40,6 +40,10 @@ public class Item
     public int itemID;
     public ItemBuff[] itemBuffs;
 
+    public Item()
+    {
+        itemID = -1;
+    }
     public Item(ItemObject itemObject)
     {
         itemName = itemObject.name;

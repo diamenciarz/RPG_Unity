@@ -15,149 +15,125 @@ MonoBehaviour:
   savePath: /inventory.Save
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
   inventory:
-    inventorySlotList:
-    - itemID: -1
-      amount: 0
+    inventorySlotArray:
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
-    - itemID: -1
-      amount: 0
+    - amount: 0
       item:
         itemName: 
-        itemID: 0
+        itemID: -1
         itemBuffs: []
   inventorySize: 24

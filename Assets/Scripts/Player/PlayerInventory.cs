@@ -26,6 +26,8 @@ public class PlayerInventory : MonoBehaviour
             if (itemScript)
             {
                 playerInventoryObject.AddItemToInventory(new Item(itemScript.itemClass), 1);
+                EventManager.TriggerEvent("Update Inventory Display");
+
                 Destroy(collision.gameObject);
                 
             }
