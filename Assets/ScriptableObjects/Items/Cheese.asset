@@ -16,5 +16,6 @@ MonoBehaviour:
   itemSprite: {fileID: -1740728576598609648, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   itemType: 1
   itemDescription: 
+  itemBuffs: []
   duration: 30
   speedPercentIncrease: 2

@@ -16,4 +16,13 @@ MonoBehaviour:
   itemSprite: {fileID: -5161473790163378302, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   itemType: 0
   itemDescription: Pickaxe, wow!
+  itemBuffs:
+  - itemAttributesEnumerator: 4
+    attributeValue: 0
+    minValue: 1
+    maxValue: 3
+  - itemAttributesEnumerator: 3
+    attributeValue: 0
+    minValue: 3
+    maxValue: 15
   usesLeft: 2
