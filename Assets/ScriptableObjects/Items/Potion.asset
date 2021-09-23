@@ -16,4 +16,13 @@ MonoBehaviour:
   itemSprite: {fileID: -5910303173932007768, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   itemType: 2
   itemDescription: Potion, wow!
+  itemBuffs:
+  - itemAttributesEnumerator: 0
+    attributeValue: 0
+    minValue: 2
+    maxValue: 10
+  - itemAttributesEnumerator: 1
+    attributeValue: 0
+    minValue: 1
+    maxValue: 3
   canUse: 1

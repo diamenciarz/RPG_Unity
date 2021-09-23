@@ -16,18 +16,148 @@ MonoBehaviour:
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
   inventory:
     inventorySlotList:
-    - itemID: 1
+    - itemID: -1
       amount: 0
       item:
         itemName: 
-        itemID: 1
-    - itemID: 1
-      amount: 1
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
       item:
-        itemName: Pickaxe
-        itemID: 1
-    - itemID: 1
-      amount: 1
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
       item:
-        itemName: Pickaxe
-        itemID: 1
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+    - itemID: -1
+      amount: 0
+      item:
+        itemName: 
+        itemID: 0
+        itemBuffs: []
+  inventorySize: 24

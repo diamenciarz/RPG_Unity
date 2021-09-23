@@ -12,25 +12,54 @@ public class InventoryObject : ScriptableObject
     public string savePath;
     public ItemDatabaseObject itemDatabase;
     public Inventory inventory;
+    public int inventorySize = 24;
 
     public void AddItemToInventory(Item inputItem, int itemAmount)
     {
-        bool hasItem = false;
-        for (int i = 0; i < inventory.inventorySlotList.Count; i++)
+        //If the item has properties, then add it to an empty slot
+        if (inputItem.itemBuffs.Length > 0)
+        {
+            SetEmptySlot(inputItem, itemAmount);
+            return;
+        }
+        //If the item is stackable
+        //Check if this item is already in the inventory
+        for (int i = 0; i < inventory.inventorySlotList.Length; i++)
         {
             if (inventory.inventorySlotList[i].item.itemID == inputItem.itemID)
             {
+                //Add an amount of it
                 inventory.inventorySlotList[i].AddAmount(itemAmount);
-                hasItem = true;
                 break;
             }
         }
-        if (hasItem == false)
+        //If no instance was found, then just add it to an empty slot
+        SetEmptySlot(inputItem, itemAmount);
+    }
+    private int ReturnFreeInventorySlotIndex()
+    {
+        int returnIndex = -1;
+        for (int i = 0; i < inventory.inventorySlotList.Length; i++)
         {
-            inventory.inventorySlotList.Add(new InventorySlot(inputItem.itemID, inputItem, itemAmount));
-
-
+            if (inventory.inventorySlotList[i].itemID <= -1)
+            {
+                returnIndex = i;
+            }
         }
+        return returnIndex;
+    }
+    public InventorySlot SetEmptySlot(Item inputItem, int inputAmount)
+    {
+        for (int i = 0; i < inventory.inventorySlotList.Length; i++)
+        {
+            if (inventory.inventorySlotList[i].itemID <= -1)
+            {
+                inventory.inventorySlotList[i].UpdateSlot(inputItem.itemID, inputItem,inputAmount);
+                return inventory.inventorySlotList[i];
+            }
+        }
+        Debug.Log("Inventory full");
+        return null;
     }
     [ContextMenu("Save Inventory")]
     public void SaveInventory()
@@ -56,13 +85,13 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
     {
-        inventory.inventorySlotList.Clear();
+        inventory.inventorySlotList = new InventorySlot[28];
     }
 }
 [System.Serializable]
 public class Inventory
 {
-    public List<InventorySlot> inventorySlotList = new List<InventorySlot>();
+    public InventorySlot[] inventorySlotList = new InventorySlot[28];
 }
 [System.Serializable]
 public class InventorySlot
@@ -70,8 +99,21 @@ public class InventorySlot
     public int itemID;
     public int amount;
     public Item item;
+    public InventorySlot()
+    {
 
+        itemID = -1;
+        item = null;
+        amount = 0;
+    }
     public InventorySlot(int inputItemID, Item inputItem, int itemAmount)
+    {
+
+        itemID = inputItemID;
+        item = inputItem;
+        amount = itemAmount;
+    }
+    public void UpdateSlot(int inputItemID, Item inputItem, int itemAmount)
     {
 
         itemID = inputItemID;
