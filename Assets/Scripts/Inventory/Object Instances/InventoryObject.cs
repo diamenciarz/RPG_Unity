@@ -21,7 +21,7 @@ public class InventoryObject : ScriptableObject
     }
     public void AddItemToInventory(Item inputItem, int itemAmount)
     {
-        Debug.Log("Added " + inputItem.itemName + " to inventory.");
+        //Debug.Log("Added " + inputItem.itemName + " to inventory.");
         //If the item has properties, then add it to an empty slot
         if (inputItem.itemBuffs.Length > 0)
         {
