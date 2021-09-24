@@ -23,7 +23,7 @@ public class DynamicInterface : UserInterface
         {
             var itemGameObject = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
             itemGameObject.GetComponent<RectTransform>().localPosition = GetItemSlotPosition(i);
-            Debug.Log("Created slot");
+            //Debug.Log("Created slot");
             displayedItemsDictionary.Add(itemGameObject, inventoryToDisplay.inventory.inventorySlotArray[i]);
 
             //Hook up each slot to unity events
