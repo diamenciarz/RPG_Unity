@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class DisplayInventory : MonoBehaviour
+public class UserInterface : MonoBehaviour
 {
     public MouseItem mouseItem = new MouseItem();
 
@@ -45,7 +45,7 @@ public class DisplayInventory : MonoBehaviour
             foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
             {
                 //If the slot is not empty
-                if (slot.Value.amount> 0)
+                if (slot.Value.amount > 0)
                 {
                     //Display the item
                     slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.Value.item.itemID].itemSprite;
@@ -147,4 +147,11 @@ public class DisplayInventory : MonoBehaviour
     {
         return new Vector3(xDisplayStart + xOffsetOfItemSlots * (positionNumber % amountOfColumns), yDisplayStart + (-yOffsetOfItemSlots * (positionNumber / amountOfColumns)), 0f);
     }
+}
+public class MouseItem
+{
+    public GameObject beginMouseGO;
+    public InventorySlot beginItemSlot;
+    public InventorySlot hoverItemSlot;
+    public GameObject hoverMouseGO;
 }
