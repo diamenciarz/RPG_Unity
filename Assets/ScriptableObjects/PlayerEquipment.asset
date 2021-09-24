@@ -36,9 +36,4 @@ MonoBehaviour:
         itemName: 
         itemID: -1
         itemBuffs: []
-    - amount: 0
-      item:
-        itemName: 
-        itemID: -1
-        itemBuffs: []
   inventorySize: 24

@@ -6,15 +6,18 @@ public class PlayerInventory : MonoBehaviour
 {
     
     public InventoryObject playerInventoryObject;
+    public InventoryObject playerEquipmentObject;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerInventoryObject.SaveInventory();
+            playerEquipmentObject.SaveInventory();
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
             playerInventoryObject.LoadInventory();
+            playerEquipmentObject.LoadInventory();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,5 +39,6 @@ public class PlayerInventory : MonoBehaviour
     private void OnApplicationQuit()
     {
         playerInventoryObject.ClearInventory();
+        playerEquipmentObject.ClearInventory();
     }
 }
