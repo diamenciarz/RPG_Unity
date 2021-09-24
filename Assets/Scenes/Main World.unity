@@ -15341,8 +15341,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -300, y: -400}
-  m_SizeDelta: {x: 600, y: 800}
+  m_AnchoredPosition: {x: -250, y: -400}
+  m_SizeDelta: {x: 500, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1375298200
 MonoBehaviour:
@@ -15401,7 +15401,7 @@ MonoBehaviour:
   yOffsetOfItemSlots: 100
   amountOfColumns: 4
   xDisplayStart: -150
-  yDisplayStart: 290
+  yDisplayStart: 250
 --- !u!1 &1390375900
 GameObject:
   m_ObjectHideFlags: 0
