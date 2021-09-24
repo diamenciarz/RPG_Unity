@@ -7,12 +7,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3635efd9596892e419c3dde8d9c14436, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: 
-  savePath: /inventory.Save
+  savePath: /player_inventory.Save
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
   inventory:
     inventorySlotArray:

@@ -473,6 +473,7 @@ RectTransform:
   - {fileID: 65316957}
   - {fileID: 1779586482}
   - {fileID: 1375298199}
+  - {fileID: 438352360}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4047,6 +4048,96 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &438352359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 438352360}
+  - component: {fileID: 438352362}
+  - component: {fileID: 438352361}
+  - component: {fileID: 438352363}
+  m_Layer: 5
+  m_Name: Equipment Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &438352360
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 70590090}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 250, y: 0}
+  m_SizeDelta: {x: 500, y: 700}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &438352361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6666667}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c6458c3bb6e2e7b4a807efca37384299, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &438352362
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_CullTransparentMesh: 1
+--- !u!114 &438352363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18163d4a6f6594c499e03da14b2631f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nullImage: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  inventoryToDisplay: {fileID: 11400000, guid: 21899b4769c108544b5fae5aa86841de, type: 2}
 --- !u!1 &477154083
 GameObject:
   m_ObjectHideFlags: 0
@@ -15341,7 +15432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -250, y: -400}
+  m_AnchoredPosition: {x: -250, y: -450}
   m_SizeDelta: {x: 500, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1375298200
@@ -15391,17 +15482,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1375298198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b899ed7b7b9da734ab84a0f393584096, type: 3}
+  m_Script: {fileID: 11500000, guid: d1f0c333b3bbcaa4da7826b5b8dd2042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPrefab: {fileID: 1053627389418387313, guid: ad1aab6f61ca28a419faca3ce2b012d3, type: 3}
   nullImage: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   inventoryToDisplay: {fileID: 11400000, guid: a2cfe87dbd379724b84ec41547fb47d3, type: 2}
+  inventoryPrefab: {fileID: 1053627389418387313, guid: ad1aab6f61ca28a419faca3ce2b012d3, type: 3}
   xOffsetOfItemSlots: 100
   yOffsetOfItemSlots: 100
   amountOfColumns: 4
   xDisplayStart: -150
-  yDisplayStart: 250
+  yDisplayStart: 260
 --- !u!1 &1390375900
 GameObject:
   m_ObjectHideFlags: 0
