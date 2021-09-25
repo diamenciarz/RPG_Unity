@@ -129,19 +129,26 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
     {
-        inventory.inventorySlotArray = new InventorySlot[inventorySize];
-        EventManager.TriggerEvent("Update Inventory Display");
+        inventory.ClearInventory();
+        //EventManager.TriggerEvent("Update Inventory Display");
     }
-    
 }
 [System.Serializable]
 public class Inventory
 {
     public InventorySlot[] inventorySlotArray;
+    public void ClearInventory()
+    {
+        for (int i = 0; i < inventorySlotArray.Length; i++)
+        {
+            inventorySlotArray[i].UpdateSlot(new ItemDataForSlots(), 0);
+        }
+    }
 }
 [System.Serializable]
 public class InventorySlot
 {
+    public ItemType[] allowedItemTypes = new ItemType[0];
     public UserInterface parent;
     public int amount;
     public ItemDataForSlots item;
@@ -163,5 +170,24 @@ public class InventorySlot
     public void AddAmount(int value)
     {
         amount += value;
+    }
+    public bool CanPlaceItemInSlot(ItemObject itemToCheck)
+    {
+        //If this 
+        if (allowedItemTypes.Length <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            for (int i = 0; i < allowedItemTypes.Length; i++)
+            {
+                if (allowedItemTypes[i] == itemToCheck.itemType)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

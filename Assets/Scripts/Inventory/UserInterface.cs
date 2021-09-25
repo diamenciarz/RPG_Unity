@@ -53,7 +53,7 @@ public abstract class UserInterface : MonoBehaviour
             if (slot.Value.amount > 0)
             {
                 //Display the item
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.Value.item.itemID].itemSprite;
+                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[slot.Value.item.itemID].itemSprite;
                 slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = slot.Value.amount == 1 ? "" : slot.Value.amount.ToString("n0");
             }
             else
@@ -81,45 +81,65 @@ public abstract class UserInterface : MonoBehaviour
     }
     protected void OnBeginDrag(GameObject obj)
     {
-        GameObject mouseObject = new GameObject();
-        //MouseItem mouseItem = new MouseItem(mouseObject); //?
-        RectTransform rectTransform = mouseObject.AddComponent<RectTransform>();
-
-        //Make sure the size of the created clone item is the same as the size of the original itemSlot
-        Vector2 itemSize = obj.GetComponent<RectTransform>().sizeDelta;
-        rectTransform.sizeDelta = itemSize;
-        mouseObject.transform.SetParent(transform.parent);
-
-        //Debug.Log("Item id: " + displayedItemsDictionary[obj].item.itemID);
-        if (displayedItemsDictionary[obj].item.itemID >= 0)
+        if (displayedItemsDictionary[obj].amount > 0)
         {
-            Image image = mouseObject.AddComponent<Image>();
-            image.sprite = inventoryToDisplay.itemDatabase.getItemDictionary[displayedItemsDictionary[obj].item.itemID].itemSprite;
-            image.raycastTarget = false;
-        }
-        DataHolder.mouseItem.beginMouseGO = mouseObject;
-        DataHolder.mouseItem.beginItemSlot = displayedItemsDictionary[obj];
-    }
-    protected void OnEndDrag(GameObject obj)
-    {
-        if (DataHolder.mouseItem.hoverMouseGO != null)
-        {
-            inventoryToDisplay.SwapItemsInSlots(DataHolder.mouseItem.beginItemSlot, DataHolder.mouseItem.hoverItemSlot); DataHolder.mouseItem.hoverItemSlot.parent.displayedItemsDictionary[DataHolder.mouseItem.hoverMouseGO]
+            GameObject temporaryMouseObject = new GameObject();
+            //MouseItem mouseItem = new MouseItem(mouseObject); //?
+            RectTransform rectTransform = temporaryMouseObject.AddComponent<RectTransform>();
+
+            //Make sure the size of the created clone item is the same as the size of the original itemSlot
+            Vector2 itemSize = obj.GetComponent<RectTransform>().sizeDelta;
+            rectTransform.sizeDelta = itemSize;
+            temporaryMouseObject.transform.SetParent(transform.parent);
+
+            //Debug.Log("Item id: " + displayedItemsDictionary[obj].item.itemID);
+            if (displayedItemsDictionary[obj].item.itemID >= 0)
+            {
+                Image image = temporaryMouseObject.AddComponent<Image>();
+                image.sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID].itemSprite;
+                image.raycastTarget = false;
+            }
+            DataHolder.mouseItem.temporaryMouseGO = temporaryMouseObject;
+            DataHolder.mouseItem.beginItemSlot = displayedItemsDictionary[obj];
         }
         else
         {
-            inventoryToDisplay.DeleteItemFromSlot(DataHolder.mouseItem.beginItemSlot);
+            DataHolder.mouseItem.temporaryMouseGO = null;
+            DataHolder.mouseItem.beginItemSlot = null;
         }
+    }
+    protected void OnEndDrag(GameObject obj)
+    {
+        if (DataHolder.mouseItem.beginItemSlot != null)
+        {
+            MouseItem itemOnMouse = DataHolder.mouseItem;
+            GameObject mouseHoverObj = itemOnMouse.hoverMouseGO;
+            InventorySlot mouseHoverSlot = itemOnMouse.hoverItemSlot;
 
-        //Cleanup
-        Destroy(DataHolder.mouseItem.beginMouseGO);
-        DataHolder.mouseItem.beginItemSlot = null;
+            Dictionary<int,ItemObject> getItemObjectFromDictionary = inventoryToDisplay.itemDatabase.getItemObjectDictionary;
+            //If dropped item on any item slot Game Object
+            if (mouseHoverObj != null)
+            {
+                if (mouseHoverSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[displayedItemsDictionary[obj].item.itemID]))
+                {
+                    inventoryToDisplay.SwapItemsInSlots(itemOnMouse.beginItemSlot, mouseHoverSlot); //itemOnMouse.hoverItemSlot.parent.displayedItemsDictionary[itemOnMouse.hoverMouseGO]
+                }
+            }
+            else
+            {
+                //If not, then delete the item
+                inventoryToDisplay.DeleteItemFromSlot(itemOnMouse.beginItemSlot);
+            }
+            //Cleanup
+            Destroy(DataHolder.mouseItem.temporaryMouseGO);
+            DataHolder.mouseItem.beginItemSlot = null;
+        }
     }
     protected void OnDrag(GameObject obj)
     {
-        if (DataHolder.mouseItem.beginMouseGO != null)
+        if (DataHolder.mouseItem.temporaryMouseGO != null)
         {
-            DataHolder.mouseItem.beginMouseGO.GetComponent<RectTransform>().position = Input.mousePosition;
+            DataHolder.mouseItem.temporaryMouseGO.GetComponent<RectTransform>().position = Input.mousePosition;
         }
     }
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
@@ -133,7 +153,7 @@ public abstract class UserInterface : MonoBehaviour
 }
 public class MouseItem
 {
-    public GameObject beginMouseGO;
+    public GameObject temporaryMouseGO;
     public InventorySlot beginItemSlot;
     public InventorySlot hoverItemSlot;
     public GameObject hoverMouseGO;

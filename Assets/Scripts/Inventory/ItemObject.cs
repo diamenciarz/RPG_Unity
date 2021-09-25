@@ -6,7 +6,9 @@ public enum ItemType
 {
     Tool,
     Food,
-    UsableItem
+    UsableItem,
+    Boots,
+    Weapon
 }
 
 public enum ItemAttributes
@@ -43,6 +45,7 @@ public class ItemDataForSlots
     public ItemDataForSlots()
     {
         itemID = -1;
+        itemName = "";
     }
     public ItemDataForSlots(ItemObject itemObject)
     {
