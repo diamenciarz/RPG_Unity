@@ -24,30 +24,35 @@ public abstract class UserInterface : MonoBehaviour
     }
     private void Start()
     {
+        //AssignParentInventoryToEachSlot();
         CreateSlots();
         UpdateDisplay();
     }
-
+    public void AssignParentInventoryToEachSlot()
+    {
+        foreach (var inventorySlot in inventoryToDisplay.inventory.inventorySlotArray)
+        {
+            inventorySlot.parent = this;
+            //Is not setting the parent correctly
+        }
+    }
     private void UpdateDisplay()
     {
-        //Debug.Log("Called Update Inventory");
-        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotArray.Length; i++)
+        Debug.Log("Displayed items dictionary length: " + displayedItemsDictionary.Count);
+        foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
         {
-            foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
+            //If the slot is not empty
+            if (slot.Value.amount > 0)
             {
-                //If the slot is not empty
-                if (slot.Value.amount > 0)
-                {
-                    //Display the item
-                    slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.Value.item.itemID].itemSprite;
-                    slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = slot.Value.amount == 1 ? "" : slot.Value.amount.ToString("n0");
-                }
-                else
-                {
-                    //Display an empty sprite
-                    slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = nullImage;
-                    slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                }
+                //Display the item
+                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemDictionary[slot.Value.item.itemID].itemSprite;
+                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = slot.Value.amount == 1 ? "" : slot.Value.amount.ToString("n0");
+            }
+            else
+            {
+                //Display an empty sprite
+                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = nullImage;
+                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = "";
             }
         }
     }
@@ -77,6 +82,7 @@ public abstract class UserInterface : MonoBehaviour
         rectTransform.sizeDelta = itemSize;
         mouseObject.transform.SetParent(transform.parent);
 
+        Debug.Log("Item id: " + displayedItemsDictionary[obj].item.itemID);
         if (displayedItemsDictionary[obj].item.itemID >= 0)
         {
             Image image = mouseObject.AddComponent<Image>();
@@ -90,7 +96,7 @@ public abstract class UserInterface : MonoBehaviour
     {
         if (DataHolder.mouseItem.hoverMouseGO != null)
         {
-            inventoryToDisplay.SwapItemsInSlots(DataHolder.mouseItem.beginItemSlot, DataHolder.mouseItem.hoverItemSlot);
+            inventoryToDisplay.SwapItemsInSlots(DataHolder.mouseItem.beginItemSlot, DataHolder.mouseItem.hoverItemSlot.parent.displayedItemsDictionary[DataHolder.mouseItem.hoverMouseGO]);
         }
         else
         {

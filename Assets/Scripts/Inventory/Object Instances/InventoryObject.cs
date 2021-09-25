@@ -9,10 +9,10 @@ using UnityEditor;
 
 public class InventoryObject : ScriptableObject
 {
+    public int inventorySize;
     public string savePath;
     public ItemDatabaseObject itemDatabase;
     public Inventory inventory;
-    public int inventorySize = 28;
 
     private void Awake()
     {
@@ -47,6 +47,17 @@ public class InventoryObject : ScriptableObject
         //If no instance was found, then just add it to an empty slot
         SetEmptySlot(inputItem, itemAmount);
     }
+    public InventorySlot SetEmptySlot(Item inputItem, int inputAmount)
+    {
+        int freeSlotIndex = ReturnFirstFreeInventorySlotIndex();
+        if (freeSlotIndex <= -1)
+        {
+            inventory.inventorySlotArray[freeSlotIndex].UpdateSlot(inputItem, inputAmount);
+            return inventory.inventorySlotArray[freeSlotIndex];
+        }
+        Debug.Log("Inventory full");
+        return null;
+    }
     private int ReturnFirstFreeInventorySlotIndex()
     {
         int returnIndex = -1;
@@ -59,29 +70,27 @@ public class InventoryObject : ScriptableObject
         }
         return returnIndex;
     }
-    public InventorySlot SetEmptySlot(Item inputItem, int inputAmount)
-    {
-        for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
-        {
-            if (inventory.inventorySlotArray[i].item.itemID <= -1)
-            {
-                inventory.inventorySlotArray[i].UpdateSlot(inputItem,inputAmount);
-                return inventory.inventorySlotArray[i];
-            }
-        }
-        Debug.Log("Inventory full");
-        return null;
-    }
     public void SwapItemsInSlots(InventorySlot itemToMove, InventorySlot moveToSlot)
     {
-        InventorySlot saveSecondSlot = new InventorySlot(moveToSlot.item, moveToSlot.amount);
-        moveToSlot.UpdateSlot(itemToMove.item,itemToMove.amount);
-        itemToMove.UpdateSlot(saveSecondSlot.item, saveSecondSlot.amount);
+        bool areBothIDsSame = itemToMove.item.itemID == moveToSlot.item.itemID;
+        bool isFirstSlotItemStackable = itemToMove.item.itemBuffs.Length == 0;
+        bool isSecondSlotItemStackable = moveToSlot.item.itemBuffs.Length == 0;
+        if (areBothIDsSame && isFirstSlotItemStackable && isSecondSlotItemStackable)
+        {
+            moveToSlot.AddAmount(itemToMove.amount);
+            itemToMove.UpdateSlot(null, 0);
+        }
+        else
+        {
+            InventorySlot saveSecondSlot = new InventorySlot(moveToSlot.item, moveToSlot.amount);
+            moveToSlot.UpdateSlot(itemToMove.item, itemToMove.amount);
+            itemToMove.UpdateSlot(saveSecondSlot.item, saveSecondSlot.amount);
+        }
         EventManager.TriggerEvent("Update Inventory Display");
     }
     public void DeleteItemFromSlot(InventorySlot itemSlot)
     {
-        itemSlot.UpdateSlot(null,0);
+        itemSlot.UpdateSlot(null, 0);
         EventManager.TriggerEvent("Update Inventory Display");
     }
     [ContextMenu("Save Inventory")]
@@ -121,10 +130,7 @@ public class InventoryObject : ScriptableObject
         inventory.inventorySlotArray = new InventorySlot[inventorySize];
         EventManager.TriggerEvent("Update Inventory Display");
     }
-    public void UpdateInventory()
-    {
-
-    }
+    
 }
 [System.Serializable]
 public class Inventory
@@ -134,6 +140,7 @@ public class Inventory
 [System.Serializable]
 public class InventorySlot
 {
+    public UserInterface parent;
     public int amount;
     public Item item;
     public InventorySlot()

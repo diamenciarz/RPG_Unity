@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    
+    public InventoryObject[] inventoryToSaveList;
     public InventoryObject playerInventoryObject;
-    public InventoryObject playerEquipmentObject;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            playerInventoryObject.SaveInventory();
-            playerEquipmentObject.SaveInventory();
+            foreach (InventoryObject inventory in inventoryToSaveList)
+            {
+                inventory.SaveInventory();
+            }
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            playerInventoryObject.LoadInventory();
-            playerEquipmentObject.LoadInventory();
+            foreach (InventoryObject inventory in inventoryToSaveList)
+            {
+                inventory.LoadInventory();
+            }
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -38,7 +41,9 @@ public class PlayerInventory : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        playerInventoryObject.ClearInventory();
-        playerEquipmentObject.ClearInventory();
+        foreach (InventoryObject inventory in inventoryToSaveList)
+        {
+            inventory.ClearInventory();
+        }
     }
 }

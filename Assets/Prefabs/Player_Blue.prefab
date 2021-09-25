@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupTextField: {fileID: 0}
+  dialogueTriggerList: []
 --- !u!50 &6195473770939546903
 Rigidbody2D:
   serializedVersion: 4
@@ -204,4 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5b380efe8d1f34e8cefd60bf0953d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryToSaveList:
+  - {fileID: 11400000, guid: 21899b4769c108544b5fae5aa86841de, type: 2}
+  - {fileID: 11400000, guid: a2cfe87dbd379724b84ec41547fb47d3, type: 2}
   playerInventoryObject: {fileID: 11400000, guid: a2cfe87dbd379724b84ec41547fb47d3, type: 2}

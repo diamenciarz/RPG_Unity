@@ -12,28 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3635efd9596892e419c3dde8d9c14436, type: 3}
   m_Name: PlayerEquipment
   m_EditorClassIdentifier: 
+  inventorySize: 4
   savePath: /player_equipment.Save
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
   inventory:
     inventorySlotArray:
-    - amount: 0
+    - parentInventory: {fileID: 0}
+      amount: 0
       item:
         itemName: 
         itemID: -1
         itemBuffs: []
-    - amount: 0
+    - parentInventory: {fileID: 0}
+      amount: 0
       item:
         itemName: 
         itemID: -1
         itemBuffs: []
-    - amount: 0
+    - parentInventory: {fileID: 0}
+      amount: 0
       item:
         itemName: 
         itemID: -1
         itemBuffs: []
-    - amount: 0
+    - parentInventory: {fileID: 0}
+      amount: 0
       item:
         itemName: 
         itemID: -1
         itemBuffs: []
-  inventorySize: 24
