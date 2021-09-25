@@ -24,21 +24,29 @@ public abstract class UserInterface : MonoBehaviour
     }
     private void Start()
     {
-        //AssignParentInventoryToEachSlot();
+        AssignParentUserInterfaceToEachSlot();
+
+        
         CreateSlots();
         UpdateDisplay();
     }
-    public void AssignParentInventoryToEachSlot()
+    public void AssignParentUserInterfaceToEachSlot()
     {
+        for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotArray.Length; i++)
+        {
+            inventoryToDisplay.inventory.inventorySlotArray[i].parent = this;
+        }
+        /*
         foreach (var inventorySlot in inventoryToDisplay.inventory.inventorySlotArray)
         {
             inventorySlot.parent = this;
             //Is not setting the parent correctly
-        }
+        }*/
     }
     private void UpdateDisplay()
     {
-        Debug.Log("Displayed items dictionary length: " + displayedItemsDictionary.Count);
+        //Debug.Log("Displayed items dictionary length: " + displayedItemsDictionary.Count);
+        //For every slot, update the display game object (square with a sprite and number)
         foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
         {
             //If the slot is not empty
@@ -82,7 +90,7 @@ public abstract class UserInterface : MonoBehaviour
         rectTransform.sizeDelta = itemSize;
         mouseObject.transform.SetParent(transform.parent);
 
-        Debug.Log("Item id: " + displayedItemsDictionary[obj].item.itemID);
+        //Debug.Log("Item id: " + displayedItemsDictionary[obj].item.itemID);
         if (displayedItemsDictionary[obj].item.itemID >= 0)
         {
             Image image = mouseObject.AddComponent<Image>();
@@ -96,7 +104,7 @@ public abstract class UserInterface : MonoBehaviour
     {
         if (DataHolder.mouseItem.hoverMouseGO != null)
         {
-            inventoryToDisplay.SwapItemsInSlots(DataHolder.mouseItem.beginItemSlot, DataHolder.mouseItem.hoverItemSlot.parent.displayedItemsDictionary[DataHolder.mouseItem.hoverMouseGO]);
+            inventoryToDisplay.SwapItemsInSlots(DataHolder.mouseItem.beginItemSlot, DataHolder.mouseItem.hoverItemSlot); DataHolder.mouseItem.hoverItemSlot.parent.displayedItemsDictionary[DataHolder.mouseItem.hoverMouseGO]
         }
         else
         {

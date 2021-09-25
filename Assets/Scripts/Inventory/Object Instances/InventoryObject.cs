@@ -19,7 +19,7 @@ public class InventoryObject : ScriptableObject
         //Fill inventory with empty slots up to inventorySize
         ClearInventory();
     }
-    public void AddItemToInventory(Item inputItem, int itemAmount)
+    public void AddItemToInventory(ItemDataForSlots inputItem, int itemAmount)
     {
         //Debug.Log("Added " + inputItem.itemName + " to inventory.");
         //If the item has properties, then add it to an empty slot
@@ -47,10 +47,11 @@ public class InventoryObject : ScriptableObject
         //If no instance was found, then just add it to an empty slot
         SetEmptySlot(inputItem, itemAmount);
     }
-    public InventorySlot SetEmptySlot(Item inputItem, int inputAmount)
+    public InventorySlot SetEmptySlot(ItemDataForSlots inputItem, int inputAmount)
     {
         int freeSlotIndex = ReturnFirstFreeInventorySlotIndex();
-        if (freeSlotIndex <= -1)
+        //Debug.Log("Found free slot at index: " + freeSlotIndex);
+        if (freeSlotIndex > -1)
         {
             inventory.inventorySlotArray[freeSlotIndex].UpdateSlot(inputItem, inputAmount);
             return inventory.inventorySlotArray[freeSlotIndex];
@@ -63,9 +64,10 @@ public class InventoryObject : ScriptableObject
         int returnIndex = -1;
         for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
         {
+            //Debug.Log("Checking item ID: " + inventory.inventorySlotArray[i].item.itemID);
             if (inventory.inventorySlotArray[i].item.itemID <= -1)
             {
-                returnIndex = i;
+                return i;
             }
         }
         return returnIndex;
@@ -142,18 +144,18 @@ public class InventorySlot
 {
     public UserInterface parent;
     public int amount;
-    public Item item;
+    public ItemDataForSlots item;
     public InventorySlot()
     {
         item = null;
         amount = 0;
     }
-    public InventorySlot(Item inputItem, int itemAmount)
+    public InventorySlot(ItemDataForSlots inputItem, int itemAmount)
     {
         item = inputItem;
         amount = itemAmount;
     }
-    public void UpdateSlot(Item inputItem, int itemAmount)
+    public void UpdateSlot(ItemDataForSlots inputItem, int itemAmount)
     {
         item = inputItem;
         amount = itemAmount;

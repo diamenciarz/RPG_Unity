@@ -9,6 +9,9 @@ public class StaticInterface : UserInterface
     public GameObject[] slots;
     public override void CreateSlots()
     {
+        //Clear inventory, set it's size to the inventorySize, give each slot a parent
+        //inventoryToDisplay.ClearInventory();
+
         displayedItemsDictionary = new Dictionary<GameObject, InventorySlot>();
 
         for (int i = 0; i < inventoryToDisplay.inventory.inventorySlotArray.Length; i++)
@@ -26,6 +29,6 @@ public class StaticInterface : UserInterface
             //Add each slot to the dictionary containing slots as values
             displayedItemsDictionary.Add(itemGameObject,inventoryToDisplay.inventory.inventorySlotArray[i]);
         }
-        EventManager.TriggerEvent("Update Inventory Display");
+        //EventManager.TriggerEvent("Update Inventory Display");
     }
 }

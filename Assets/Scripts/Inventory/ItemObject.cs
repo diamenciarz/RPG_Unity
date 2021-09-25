@@ -27,29 +27,30 @@ public abstract class ItemObject : ScriptableObject
     public string itemDescription;
     public ItemBuff[] itemBuffs;
 
-    public Item CreateNewItem()
+    public ItemDataForSlots CreateNewItem()
     {
-        Item returnItem = new Item(this);
+        ItemDataForSlots returnItem = new ItemDataForSlots(this);
         return returnItem;
     }
 }
 [System.Serializable]
-public class Item
+public class ItemDataForSlots
 {
     public string itemName;
     public int itemID;
     public ItemBuff[] itemBuffs;
 
-    public Item()
+    public ItemDataForSlots()
     {
         itemID = -1;
     }
-    public Item(ItemObject itemObject)
+    public ItemDataForSlots(ItemObject itemObject)
     {
+        //Set name, ID and buffs
         itemName = itemObject.name;
         itemID = itemObject.itemId;
-
         itemBuffs = new ItemBuff[itemObject.itemBuffs.Length];
+        //Set random value of each buff
         for (int i = 0; i < itemObject.itemBuffs.Length; i++)
         {
             ItemAttributes itemAttribute = itemObject.itemBuffs[i].itemAttributesEnumerator;
