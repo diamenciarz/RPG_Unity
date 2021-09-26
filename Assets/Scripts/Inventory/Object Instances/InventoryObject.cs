@@ -21,52 +21,60 @@ public class InventoryObject : ScriptableObject
     }
     public void AddItemToInventory(ItemDataForSlots inputItem, int itemAmount)
     {
-        //Debug.Log("Added " + inputItem.itemName + " to inventory.");
         //If the item has properties, then add it to an empty slot
-        if (inputItem.itemBuffs.Length > 0)
+        bool isStackable = inputItem.itemBuffs.Length <= 0;
+        if (!isStackable)
         {
-            SetEmptySlot(inputItem, itemAmount);
+            InsertItemToEmptySlot(inputItem, itemAmount);
             return;
         }
         //If the item is stackable
+
+        int inventorySize = inventory.inventorySlotArray.Length;
         //Check if this item is already in the inventory
-        for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
+        for (int i = 0; i < inventorySize; i++)
         {
+            bool isTheCurrentSlotEmpty = inventory.inventorySlotArray[i].amount != 0;
             //Check if the slot is not empty
-            if (inventory.inventorySlotArray[i].amount != 0)
+            if (!isTheCurrentSlotEmpty)
             {
+                bool areBothIDsMatching = (inventory.inventorySlotArray[i].item.itemID == inputItem.itemID);
                 //Check if the current slot contains the item we are looking to add to inventory
-                if (inventory.inventorySlotArray[i].item.itemID == inputItem.itemID)
+                if (areBothIDsMatching)
                 {
-                    //Add an amount of it
-                    inventory.inventorySlotArray[i].AddAmount(itemAmount);
+                    inventory.inventorySlotArray[i].AddItemAmount(itemAmount);
                     return;
                 }
             }
         }
-        //If no instance was found, then just add it to an empty slot
-        SetEmptySlot(inputItem, itemAmount);
+        //If this item is not in the inventory yet, then just add it to an empty slot
+        InsertItemToEmptySlot(inputItem, itemAmount);
     }
-    public InventorySlot SetEmptySlot(ItemDataForSlots inputItem, int inputAmount)
+    public void InsertItemToEmptySlot(ItemDataForSlots inputItem, int inputAmount)
     {
-        int freeSlotIndex = ReturnFirstFreeInventorySlotIndex();
-        //Debug.Log("Found free slot at index: " + freeSlotIndex);
+        int freeSlotIndex = GetFirstFreeInventorySlotIndex();
         if (freeSlotIndex > -1)
         {
-            inventory.inventorySlotArray[freeSlotIndex].UpdateSlot(inputItem, inputAmount);
-            return inventory.inventorySlotArray[freeSlotIndex];
+            inventory.inventorySlotArray[freeSlotIndex].UpdateSlotItem(inputItem, inputAmount);
         }
-        Debug.Log("Inventory full");
-        return null;
+        Debug.Log("Inventory full - item was lost");
     }
-    private int ReturnFirstFreeInventorySlotIndex()
+    public InventorySlot GetFirstFreeInventorySlotFromInventory()
+    {
+        int freeSlotIndex = GetFirstFreeInventorySlotIndex();
+        return inventory.inventorySlotArray[freeSlotIndex];
+    }
+    private int GetFirstFreeInventorySlotIndex()
     {
         int returnIndex = -1;
-        for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
+
+        int inventoryLength = inventory.inventorySlotArray.Length;
+        for (int i = 0; i < inventoryLength; i++)
         {
-            //Debug.Log("Checking item ID: " + inventory.inventorySlotArray[i].item.itemID);
-            if (inventory.inventorySlotArray[i].item.itemID <= -1)
+            bool isTheSlotEmpty = inventory.inventorySlotArray[i].item.itemID <= -1;
+            if (isTheSlotEmpty)
             {
+                //Return empty slot index from the inventory
                 return i;
             }
         }
@@ -77,27 +85,13 @@ public class InventoryObject : ScriptableObject
         //Check if is moving to a slot
         if (moveToSlot != null && slotToMoveFrom != null)
         {
-            //Check if is trying to move an actual item
+            //Don't swap an empty slot
             if (slotToMoveFrom.amount > 0)
             {
+                //
+                ItemDataForSlots secondItemData = GetItemDataFromSlot(moveToSlot);
                 //Check slot item types to see, if can swap at all
-                bool isTheFirstItemTypeRight = moveToSlot.CanPlaceItemInSlot(itemDatabase.getItemObjectDictionary[slotToMoveFrom.item.itemID]);
-                bool isTheSecondItemTypeRight;
-                ItemDataForSlots secondItemData;
-                //If the second item slot is empty, then create an empty item class with ID -1 and null variables
-                
-                if (moveToSlot.amount > 0)
-                {
-                    secondItemData = moveToSlot.item;
-                    isTheSecondItemTypeRight = slotToMoveFrom.CanPlaceItemInSlot(itemDatabase.getItemObjectDictionary[secondItemData.itemID]);
-                }
-                else
-                {
-                    secondItemData = new ItemDataForSlots();
-                    isTheSecondItemTypeRight = true;
-                }
-                
-                if (isTheFirstItemTypeRight && isTheSecondItemTypeRight)
+                if (IsItemTypeMatchingSlot(slotToMoveFrom, moveToSlot) && IsItemTypeMatchingSlot(moveToSlot, slotToMoveFrom))
                 {
                     //Check if should swap items in slots or add items from one slot to another
                     bool areBothIDsSame = slotToMoveFrom.item.itemID == secondItemData.itemID;
@@ -107,19 +101,47 @@ public class InventoryObject : ScriptableObject
                     if (areBothIDsSame && isFirstSlotItemStackable && isSecondSlotItemStackable)
                     {
                         //Add items from one slot to another
-                        moveToSlot.AddAmount(slotToMoveFrom.amount);
-                        slotToMoveFrom.RemoveItemFromSlot();
+                        moveToSlot.AddItemAmount(slotToMoveFrom.amount);
+                        slotToMoveFrom.RemoveItem();
                     }
                     else
                     {
                         //Swap items in slots
                         InventorySlot saveSecondSlot = new InventorySlot(secondItemData, moveToSlot.amount);
-                        moveToSlot.UpdateSlot(slotToMoveFrom.item, slotToMoveFrom.amount);
-                        slotToMoveFrom.UpdateSlot(saveSecondSlot.item, saveSecondSlot.amount);
+                        moveToSlot.UpdateSlotItem(slotToMoveFrom.item, slotToMoveFrom.amount);
+                        slotToMoveFrom.UpdateSlotItem(saveSecondSlot.item, saveSecondSlot.amount);
                     }
+                    EventManager.TriggerEvent("Update Inventory Display");
                 }
             }
         }
+    }
+    private bool IsItemTypeMatchingSlot(InventorySlot inventorySlotToCheck, InventorySlot inventorySlotForItemData)
+    {
+        ItemDataForSlots firstItemData = GetItemDataFromSlot(inventorySlotForItemData);
+        if (firstItemData.itemID == -1)
+        {
+            return true;
+        }
+        else
+        {
+            return inventorySlotToCheck.CanPlaceItemInSlot(itemDatabase.getItemObjectDictionary[firstItemData.itemID]);
+        }
+    }
+    private ItemDataForSlots GetItemDataFromSlot(InventorySlot slot)
+    {
+        ItemDataForSlots itemData;
+
+        if (slot.item == null)
+        {
+            Debug.Log("Item data was inded null and this method is useful");
+            itemData = new ItemDataForSlots();
+        }
+        else
+        {
+            itemData = slot.item;
+        }
+        return itemData;
     }
     [ContextMenu("Save Inventory")]
     public void SaveInventory()
@@ -167,7 +189,7 @@ public class Inventory
     {
         for (int i = 0; i < inventorySlotArray.Length; i++)
         {
-            inventorySlotArray[i].UpdateSlot(new ItemDataForSlots(), 0);
+            inventorySlotArray[i].UpdateSlotItem(new ItemDataForSlots(), 0);
         }
     }
 }
@@ -180,7 +202,7 @@ public class InventorySlot
     public ItemDataForSlots item;
     public InventorySlot()
     {
-        item = null;
+        item = new ItemDataForSlots();
         amount = 0;
     }
     public InventorySlot(ItemDataForSlots inputItem, int itemAmount)
@@ -188,40 +210,40 @@ public class InventorySlot
         item = inputItem;
         amount = itemAmount;
     }
-    public void UpdateSlot(ItemDataForSlots inputItem, int itemAmount)
+    public void UpdateSlotItem(ItemDataForSlots inputItem, int itemAmount)
     {
         item = inputItem;
         amount = itemAmount;
     }
-    public void AddAmount(int value)
+    public void AddItemAmount(int value)
     {
         amount += value;
     }
 
-    public void RemoveItemFromSlot()
+    public void RemoveItem()
     {
-        amount = 0;
         item = new ItemDataForSlots();
+        amount = 0;
+        EventManager.TriggerEvent("Update Inventory Display");
     }
     public bool CanPlaceItemInSlot(ItemObject itemToCheck)
     {
-        //If this 
         if (itemToCheck != null)
         {
-            if (allowedItemTypes.Length <= 0)
+            bool isAnyItemTypeAllowed = allowedItemTypes.Length <= 0;
+            if (isAnyItemTypeAllowed)
             {
-                Debug.Log("Can swap items");
+                //Debug.Log("Can swap items");
                 return true;
             }
-            else
+
+            for (int i = 0; i < allowedItemTypes.Length; i++)
             {
-                for (int i = 0; i < allowedItemTypes.Length; i++)
+                bool doItemTypesMatch = allowedItemTypes[i] == itemToCheck.itemType;
+                if (doItemTypesMatch)
                 {
-                    if (allowedItemTypes[i] == itemToCheck.itemType)
-                    {
-                        Debug.Log("Can swap items");
-                        return true;
-                    }
+                    Debug.Log("Can swap items");
+                    return true;
                 }
             }
         }

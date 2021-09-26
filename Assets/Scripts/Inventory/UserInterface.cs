@@ -126,48 +126,13 @@ public abstract class UserInterface : MonoBehaviour
 
         if (MouseData.hoverUI == null)
         {
-            MouseData.beginItemSlot.RemoveItemFromSlot();
-            EventManager.TriggerEvent("Update Inventory Display");
-
+            MouseData.beginItemSlot.RemoveItem();
             return;
         }
         if (MouseData.hoverMouseGO)
         {
             inventoryToDisplay.TryToSwapItemsInSlots(MouseData.beginItemSlot, MouseData.hoverItemSlot);
-            EventManager.TriggerEvent("Update Inventory Display");
         }
-        /*
-        //Can not swap an empty slot onto an item
-        if (MouseData.beginItemSlot != null)
-        {
-            GameObject mouseHoverObj = MouseData.hoverMouseGO;
-            InventorySlot mouseHoverSlot = MouseData.hoverItemSlot;
-
-            Dictionary<int, ItemObject> getItemObjectFromDictionary = inventoryToDisplay.itemDatabase.getItemObjectDictionary;
-            //If dropped item on any item slot Game Object or UI
-            if (MouseData.hoverUI != null)
-            {
-                //If cursor is hovering over another slot
-                //If the item in hand can be moved onto the slot that the cursor is hovering over
-                if (mouseHoverSlot != null && mouseHoverSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[displayedItemsDictionary[obj].item.itemID]))
-                {
-                    //Then if the item, which the cursor is hovering over, can be moved onto the slot, which the cursor started dragging from
-                    //Or if the slot, which we are moving the item into, has no item
-                    if (mouseHoverSlot.item.itemID == -1 || MouseData.beginItemSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[mouseHoverSlot.item.itemID]))
-                    {
-                        inventoryToDisplay.TrySwapItemsInSlots(MouseData.beginItemSlot, MouseData.hoverItemSlot);
-                    }
-                    //Else can not swap the item
-                }
-                //Else, can not swap the item, so don't
-            }
-            else
-            {
-                //If not, then delete the item
-                inventoryToDisplay.DeleteItemFromSlot(MouseData.beginItemSlot);
-            }
-            MouseData.beginItemSlot = null;
-        }*/
     }
     protected void OnDrag(GameObject obj)
     {
