@@ -4162,6 +4162,7 @@ GameObject:
   - component: {fileID: 438352362}
   - component: {fileID: 438352361}
   - component: {fileID: 438352363}
+  - component: {fileID: 438352364}
   m_Layer: 5
   m_Name: Equipment Panel
   m_TagString: Untagged
@@ -4249,6 +4250,19 @@ MonoBehaviour:
   - {fileID: 671518344}
   - {fileID: 1393884350}
   - {fileID: 1260932463}
+--- !u!114 &438352364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &477154083
 GameObject:
   m_ObjectHideFlags: 0
@@ -15739,6 +15753,7 @@ GameObject:
   - component: {fileID: 1375298201}
   - component: {fileID: 1375298200}
   - component: {fileID: 1375298202}
+  - component: {fileID: 1375298203}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -15823,6 +15838,19 @@ MonoBehaviour:
   amountOfColumns: 4
   xDisplayStart: -150
   yDisplayStart: 260
+--- !u!114 &1375298203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375298198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &1390375900
 GameObject:
   m_ObjectHideFlags: 0

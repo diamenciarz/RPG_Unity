@@ -174,19 +174,22 @@ public class InventorySlot
     public bool CanPlaceItemInSlot(ItemObject itemToCheck)
     {
         //If this 
-        if (allowedItemTypes.Length <= 0)
+        if (itemToCheck != null)
         {
-            Debug.Log("Can swap items");
-            return true;
-        }
-        else
-        {
-            for (int i = 0; i < allowedItemTypes.Length; i++)
+            if (allowedItemTypes.Length <= 0)
             {
-                if (allowedItemTypes[i] == itemToCheck.itemType)
+                Debug.Log("Can swap items");
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < allowedItemTypes.Length; i++)
                 {
-                    Debug.Log("Can swap items");
-                    return true;
+                    if (allowedItemTypes[i] == itemToCheck.itemType)
+                    {
+                        Debug.Log("Can swap items");
+                        return true;
+                    }
                 }
             }
         }

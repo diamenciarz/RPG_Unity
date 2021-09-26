@@ -26,9 +26,11 @@ public abstract class UserInterface : MonoBehaviour
     {
         AssignParentUserInterfaceToEachSlot();
 
-
         CreateSlots();
         UpdateDisplay();
+
+        AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
+        AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
     }
     public void AssignParentUserInterfaceToEachSlot()
     {
@@ -66,6 +68,7 @@ public abstract class UserInterface : MonoBehaviour
     }
 
     public abstract void CreateSlots();
+    //Slot events
     protected void OnEnter(GameObject obj)
     {
         DataHolder.mouseItem.hoverMouseGO = obj;
@@ -118,11 +121,12 @@ public abstract class UserInterface : MonoBehaviour
             InventorySlot mouseHoverSlot = itemOnMouse.hoverItemSlot;
 
             Dictionary<int, ItemObject> getItemObjectFromDictionary = inventoryToDisplay.itemDatabase.getItemObjectDictionary;
-            //If dropped item on any item slot Game Object
-            if (mouseHoverObj != null)
+            //If dropped item on any item slot Game Object or UI
+            if (itemOnMouse.hoverUI != null)
             {
+                //If cursor is hovering over another slot
                 //If the item in hand can be moved onto the slot that the cursor is hovering over
-                if (mouseHoverSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[displayedItemsDictionary[obj].item.itemID]))
+                if (mouseHoverSlot != null && mouseHoverSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[displayedItemsDictionary[obj].item.itemID]))
                 {
                     //Then if the item, which the cursor is hovering over, can be moved onto the slot, which the cursor started dragging from
                     //Or if the slot, which we are moving the item into, has no item
@@ -151,6 +155,21 @@ public abstract class UserInterface : MonoBehaviour
             DataHolder.mouseItem.temporaryMouseGO.GetComponent<RectTransform>().position = Input.mousePosition;
         }
     }
+    //Interface events
+    protected void OnEnterInterface(GameObject obj)
+    {
+        UserInterface userInterface;
+        if (obj.TryGetComponent<UserInterface>(out userInterface))
+        {
+            DataHolder.mouseItem.hoverUI = userInterface;
+        }
+    }
+    protected void OnExitInterface(GameObject obj)
+    {
+        DataHolder.mouseItem.hoverUI = null;
+        
+    }
+    //Custom event method. The events are triggered by unity UI elements
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
     {
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
@@ -162,6 +181,7 @@ public abstract class UserInterface : MonoBehaviour
 }
 public class MouseItem
 {
+    public UserInterface hoverUI;
     public GameObject temporaryMouseGO;
     public InventorySlot beginItemSlot;
     public InventorySlot hoverItemSlot;
