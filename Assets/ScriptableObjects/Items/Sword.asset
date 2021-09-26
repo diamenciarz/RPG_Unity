@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f817ca2b208a3074e9fbbd0153f82104, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  itemId: 1
-  itemSprite: {fileID: 3209857603516439956, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
+  itemId: 3
+  itemSprite: {fileID: 2433043825051513338, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   itemType: 4
   itemDescription: Pickaxe, wow!
   itemBuffs:
