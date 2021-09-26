@@ -46,6 +46,7 @@ public class ItemDataForSlots
     {
         itemID = -1;
         itemName = "";
+        itemBuffs = new ItemBuff[0];
     }
     public ItemDataForSlots(ItemObject itemObject)
     {

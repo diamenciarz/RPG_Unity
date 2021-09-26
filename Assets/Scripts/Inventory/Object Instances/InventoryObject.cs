@@ -72,28 +72,54 @@ public class InventoryObject : ScriptableObject
         }
         return returnIndex;
     }
-    public void SwapItemsInSlots(InventorySlot itemToMove, InventorySlot moveToSlot)
+    public void TryToSwapItemsInSlots(InventorySlot slotToMoveFrom, InventorySlot moveToSlot)
     {
-        bool areBothIDsSame = itemToMove.item.itemID == moveToSlot.item.itemID;
-        bool isFirstSlotItemStackable = itemToMove.item.itemBuffs.Length == 0;
-        bool isSecondSlotItemStackable = moveToSlot.item.itemBuffs.Length == 0;
-        if (areBothIDsSame && isFirstSlotItemStackable && isSecondSlotItemStackable)
+        //Check if is moving to a slot
+        if (moveToSlot != null && slotToMoveFrom != null)
         {
-            moveToSlot.AddAmount(itemToMove.amount);
-            itemToMove.UpdateSlot(null, 0);
+            //Check if is trying to move an actual item
+            if (slotToMoveFrom.amount > 0)
+            {
+                //Check slot item types to see, if can swap at all
+                bool isTheFirstItemTypeRight = moveToSlot.CanPlaceItemInSlot(itemDatabase.getItemObjectDictionary[slotToMoveFrom.item.itemID]);
+                bool isTheSecondItemTypeRight;
+                ItemDataForSlots secondItemData;
+                //If the second item slot is empty, then create an empty item class with ID -1 and null variables
+                
+                if (moveToSlot.amount > 0)
+                {
+                    secondItemData = moveToSlot.item;
+                    isTheSecondItemTypeRight = slotToMoveFrom.CanPlaceItemInSlot(itemDatabase.getItemObjectDictionary[secondItemData.itemID]);
+                }
+                else
+                {
+                    secondItemData = new ItemDataForSlots();
+                    isTheSecondItemTypeRight = true;
+                }
+                
+                if (isTheFirstItemTypeRight && isTheSecondItemTypeRight)
+                {
+                    //Check if should swap items in slots or add items from one slot to another
+                    bool areBothIDsSame = slotToMoveFrom.item.itemID == secondItemData.itemID;
+                    bool isFirstSlotItemStackable = slotToMoveFrom.item.itemBuffs.Length == 0;
+                    bool isSecondSlotItemStackable = secondItemData.itemBuffs.Length == 0;
+
+                    if (areBothIDsSame && isFirstSlotItemStackable && isSecondSlotItemStackable)
+                    {
+                        //Add items from one slot to another
+                        moveToSlot.AddAmount(slotToMoveFrom.amount);
+                        slotToMoveFrom.RemoveItemFromSlot();
+                    }
+                    else
+                    {
+                        //Swap items in slots
+                        InventorySlot saveSecondSlot = new InventorySlot(secondItemData, moveToSlot.amount);
+                        moveToSlot.UpdateSlot(slotToMoveFrom.item, slotToMoveFrom.amount);
+                        slotToMoveFrom.UpdateSlot(saveSecondSlot.item, saveSecondSlot.amount);
+                    }
+                }
+            }
         }
-        else
-        {
-            InventorySlot saveSecondSlot = new InventorySlot(moveToSlot.item, moveToSlot.amount);
-            moveToSlot.UpdateSlot(itemToMove.item, itemToMove.amount);
-            itemToMove.UpdateSlot(saveSecondSlot.item, saveSecondSlot.amount);
-        }
-        EventManager.TriggerEvent("Update Inventory Display");
-    }
-    public void DeleteItemFromSlot(InventorySlot itemSlot)
-    {
-        itemSlot.UpdateSlot(null, 0);
-        EventManager.TriggerEvent("Update Inventory Display");
     }
     [ContextMenu("Save Inventory")]
     public void SaveInventory()
@@ -170,6 +196,12 @@ public class InventorySlot
     public void AddAmount(int value)
     {
         amount += value;
+    }
+
+    public void RemoveItemFromSlot()
+    {
+        amount = 0;
+        item = new ItemDataForSlots();
     }
     public bool CanPlaceItemInSlot(ItemObject itemToCheck)
     {

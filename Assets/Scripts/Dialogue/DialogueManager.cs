@@ -92,7 +92,3 @@ public class DialogueManager : MonoBehaviour
         }
     }
 }
-public static class DataHolder
-{
-    public static MouseItem mouseItem = new MouseItem();
-}
