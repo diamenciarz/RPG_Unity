@@ -176,6 +176,7 @@ public class InventorySlot
         //If this 
         if (allowedItemTypes.Length <= 0)
         {
+            Debug.Log("Can swap items");
             return true;
         }
         else
@@ -184,6 +185,7 @@ public class InventorySlot
             {
                 if (allowedItemTypes[i] == itemToCheck.itemType)
                 {
+                    Debug.Log("Can swap items");
                     return true;
                 }
             }

@@ -752,7 +752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45959ae8937d81245a857f453422330f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemClass: {fileID: 11400000, guid: 48758104e556696409ba86da0c07df0e, type: 2}
+  itemClass: {fileID: 11400000, guid: d124c8d1e47cd18439d6b46ab099f0da, type: 2}
 --- !u!61 &370054989
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -841,7 +841,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5161473790163378302, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
+  m_Sprite: {fileID: 2433043825051513338, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5040,7 +5040,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3209857603516439956, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
+  m_Sprite: {fileID: 2433043825051513338, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -19007,6 +19007,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8486999731878681924, guid: 81ff433eacf4259479ede7d0bd63c8b2, type: 3}
+      propertyPath: itemClass
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a4e1ef2cefd51c488059f8f18bb9232, type: 2}
+    - target: {fileID: 8486999731878681927, guid: 81ff433eacf4259479ede7d0bd63c8b2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5910303173932007768, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
     - target: {fileID: 8486999731878681979, guid: 81ff433eacf4259479ede7d0bd63c8b2, type: 3}
       propertyPath: m_Name
       value: Knif (4)

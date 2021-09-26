@@ -26,7 +26,7 @@ public abstract class UserInterface : MonoBehaviour
     {
         AssignParentUserInterfaceToEachSlot();
 
-        
+
         CreateSlots();
         UpdateDisplay();
     }
@@ -110,20 +110,29 @@ public abstract class UserInterface : MonoBehaviour
     }
     protected void OnEndDrag(GameObject obj)
     {
+        //Can not swap an empty slot onto an item
         if (DataHolder.mouseItem.beginItemSlot != null)
         {
             MouseItem itemOnMouse = DataHolder.mouseItem;
             GameObject mouseHoverObj = itemOnMouse.hoverMouseGO;
             InventorySlot mouseHoverSlot = itemOnMouse.hoverItemSlot;
 
-            Dictionary<int,ItemObject> getItemObjectFromDictionary = inventoryToDisplay.itemDatabase.getItemObjectDictionary;
+            Dictionary<int, ItemObject> getItemObjectFromDictionary = inventoryToDisplay.itemDatabase.getItemObjectDictionary;
             //If dropped item on any item slot Game Object
             if (mouseHoverObj != null)
             {
+                //If the item in hand can be moved onto the slot that the cursor is hovering over
                 if (mouseHoverSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[displayedItemsDictionary[obj].item.itemID]))
                 {
-                    inventoryToDisplay.SwapItemsInSlots(itemOnMouse.beginItemSlot, mouseHoverSlot); //itemOnMouse.hoverItemSlot.parent.displayedItemsDictionary[itemOnMouse.hoverMouseGO]
+                    //Then if the item, which the cursor is hovering over, can be moved onto the slot, which the cursor started dragging from
+                    //Or if the slot, which we are moving the item into, has no item
+                    if (mouseHoverSlot.item.itemID == -1 || itemOnMouse.beginItemSlot.CanPlaceItemInSlot(getItemObjectFromDictionary[mouseHoverSlot.item.itemID]))
+                    {
+                        inventoryToDisplay.SwapItemsInSlots(itemOnMouse.beginItemSlot, mouseHoverSlot); //itemOnMouse.hoverItemSlot.parent.displayedItemsDictionary[itemOnMouse.hoverMouseGO]
+                    }
+                    //Else can not swap the item
                 }
+                //Else, can not swap the item, so don't
             }
             else
             {
