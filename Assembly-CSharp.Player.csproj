@@ -699,6 +699,10 @@
       <Project>{7EA7835F-6745-79AB-DF8A-D9F8DDE4847A}</Project>
       <Name>Unity.2D.SpriteShape.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="XNode.csproj">
+      <Project>{B60FE496-4358-98F7-9FD4-50198F76A92A}</Project>
+      <Name>XNode</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
