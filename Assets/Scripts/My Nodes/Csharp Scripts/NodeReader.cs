@@ -9,7 +9,7 @@ public class NodeReader : MonoBehaviour
     public DialogueGraph dialogueGraph;
     Coroutine reader;
 
-    public Text speaker;
+    public Text speakerName;
     public Text dialogue;
 
     private void Start()
@@ -38,7 +38,7 @@ public class NodeReader : MonoBehaviour
         //
         if (stringArray[0] == "DialogueNode")
         {
-            speaker.text = stringArray[1];
+            speakerName.text = stringArray[1];
             dialogue.text = stringArray[2];
             //Wait for one click, before going further with the dialogue
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
