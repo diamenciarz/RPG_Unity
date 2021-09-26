@@ -18,10 +18,12 @@ public abstract class UserInterface : MonoBehaviour
     private void OnEnable()
     {
         EventManager.StartListening("Update Inventory Display", UpdateDisplay);
+        EventManager.StartListening("Update Item Display", UpdateDisplayItem);
     }
     private void OnDisable()
     {
         EventManager.StopListening("Update Inventory Display", UpdateDisplay);
+        EventManager.StopListening("Update Item Display", UpdateDisplayItem);
     }
     private void Start()
     {
@@ -48,35 +50,42 @@ public abstract class UserInterface : MonoBehaviour
         {
             inventoryToDisplay.inventory.inventorySlotArray[i].parent = this;
         }
-        /*
-        foreach (var inventorySlot in inventoryToDisplay.inventory.inventorySlotArray)
-        {
-            inventorySlot.parent = this;
-            //Is not setting the parent correctly
-        }*/
     }
     private void UpdateDisplay()
     {
-        //Debug.Log("Displayed items dictionary length: " + displayedItemsDictionary.Count);
         //For every slot, update the display game object (square with a sprite and number)
         foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
         {
-            //If the slot is not empty
-            if (slot.Value.amount > 0)
-            {
-                //Display the item
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[slot.Value.item.itemID].itemSprite;
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = slot.Value.amount == 1 ? "" : slot.Value.amount.ToString("n0");
-            }
-            else
-            {
-                //Display an empty sprite
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = nullImage;
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            }
+            UpdateDisplayItem(slot.Key);
         }
     }
+    private void UpdateDisplayItem(object itemGameObject)
+    {
+        GameObject displayGameObject = (GameObject)itemGameObject;
+        if (!displayedItemsDictionary.ContainsKey(displayGameObject))
+        {
+            return;
+        }
+        InventorySlot inventorySlot = displayedItemsDictionary[displayGameObject];
 
+        UpdateDisplayGameObject(displayGameObject,inventorySlot);
+    }
+    private void UpdateDisplayGameObject(GameObject displayGameObject, InventorySlot inventorySlot)
+    {
+        //If the slot is not empty
+        if (inventorySlot.amount > 0)
+        {
+            //Display the item
+            displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[inventorySlot.item.itemID].itemSprite;
+            displayGameObject.GetComponentInChildren<TextMeshProUGUI>().text = inventorySlot.amount == 1 ? "" : inventorySlot.amount.ToString("n0");
+        }
+        else
+        {
+            //Display an empty sprite
+            displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>().sprite = nullImage;
+            displayGameObject.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        }
+    }
     public abstract void CreateSlots();
     //Slot events
     protected void OnEnter(GameObject obj)
@@ -97,7 +106,8 @@ public abstract class UserInterface : MonoBehaviour
         GameObject temporaryMouseObject = CreateTemporaryItemObject(obj);
 
         MouseData.temporaryMouseGO = temporaryMouseObject;
-        MouseData.beginItemSlot = displayedItemsDictionary[obj];
+        MouseData.beginDragItemSlot = displayedItemsDictionary[obj];
+        MouseData.beginDragItemGO = obj;
     }
     private GameObject CreateTemporaryItemObject(GameObject obj)
     {
@@ -126,12 +136,12 @@ public abstract class UserInterface : MonoBehaviour
 
         if (MouseData.hoverUI == null)
         {
-            MouseData.beginItemSlot.RemoveItem();
+            MouseData.beginDragItemSlot.RemoveItem();
             return;
         }
         if (MouseData.hoverMouseGO)
         {
-            inventoryToDisplay.TryToSwapItemsInSlots(MouseData.beginItemSlot, MouseData.hoverItemSlot);
+            inventoryToDisplay.TryToSwapItemsInSlots(MouseData.beginDragItemSlot, MouseData.hoverItemSlot);
         }
     }
     protected void OnDrag(GameObject obj)
@@ -166,7 +176,9 @@ public static class MouseData
     public static UserInterface hoverUI;
 
     public static GameObject temporaryMouseGO;
-    public static InventorySlot beginItemSlot;
+
+    public static GameObject beginDragItemGO;
+    public static InventorySlot beginDragItemSlot;
     public static InventorySlot hoverItemSlot;
     public static GameObject hoverMouseGO;
 }

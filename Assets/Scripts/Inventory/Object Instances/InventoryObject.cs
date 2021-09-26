@@ -111,7 +111,8 @@ public class InventoryObject : ScriptableObject
                         moveToSlot.UpdateSlotItem(slotToMoveFrom.item, slotToMoveFrom.amount);
                         slotToMoveFrom.UpdateSlotItem(saveSecondSlot.item, saveSecondSlot.amount);
                     }
-                    EventManager.TriggerEvent("Update Inventory Display");
+                    EventManager.TriggerEvent("Update Item Display", MouseData.hoverMouseGO);
+                    EventManager.TriggerEvent("Update Item Display", MouseData.beginDragItemGO);
                 }
             }
         }
