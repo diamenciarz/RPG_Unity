@@ -46,38 +46,42 @@ public class NodeReader : MonoBehaviour
         GameObject buttonGO = (GameObject)obj;
 
         BaseNode nodeToJumpTo = dialogueButtonDictionary[buttonGO].GetNodeToJumpTo();
-        SetNextNode(nodeToJumpTo);
+        SetCurrentNode(nodeToJumpTo);
     }
     //This is called by a dialogue trigger on an NPC
     public IEnumerator StartDialogue(DialogueGraph inputDialogueGraph)
     {
         //Wait for the screen to get ready
         float waitTimeToEliminateLag = 1;
-        yield return new WaitForSeconds(waitTimeToEliminateLag);
+        dialogueBoxGO.SetActive(true);
+        textAnimator.SetBool("isClosed", false);
 
         //Set text to default
         nameText.text = dialogueGraph.name;
         dialogueText.text = "";
 
         //Create new dialogue choice buttons
-        CreateNewDialogueChoiceButtons();
 
         //Initialize variables
         dialogueGraph = inputDialogueGraph;
         isDisplayingMessage = true;
         isThisTheLastMessage = false;
-        dialogueBoxGO.SetActive(true);
-        textAnimator.SetBool("isClosed", false);
 
-        foreach (BaseNode bn in dialogueGraph.nodes)
+        SetStartingNode();
+
+        ReadCurrentNode();
+        yield return new WaitForSeconds(waitTimeToEliminateLag);
+    }
+    private void SetStartingNode()
+    {
+        foreach (BaseNode baseNode in dialogueGraph.nodes)
         {
-            if (bn.GetString() == "Start")
+            if (baseNode.GetString() == "Start")
             {
-                dialogueGraph.currentNode = bn;
+                dialogueGraph.currentNode = baseNode;
                 break;
             }
         }
-        ReadCurrentNode();
     }
 
     public void ReadCurrentNode()
@@ -85,17 +89,17 @@ public class NodeReader : MonoBehaviour
         BaseNode baseNode = dialogueGraph.currentNode;
         string data = baseNode.GetString();
         string[] stringArray = data.Split('/');
-        //Exception, when starting dialogue
-        if (stringArray[0] == "Start")
-        {
-            GoToNextNodeThroughOutputName("exit");
-
-        }
-        //Exception, when this is the last dialogue option
+        //Check, if this is the last dialogue option
         if (IsThisTheLastMessage())
         {
             isThisTheLastMessage = true;
-            CreateNewDialogueChoiceButtons();
+        }
+        //Exception, when starting dialogue
+        if (stringArray[0] == "Start")
+        {
+            Debug.Log("Starting dialogue");
+            GoToNextNodeThroughOutputName("exit");
+
         }
         //Default option
         if (stringArray[0] == "DialogueNode")
@@ -127,7 +131,12 @@ public class NodeReader : MonoBehaviour
     }
     private void CreateSingleButton(int buttonIndex, string message, string portName)
     {
-        GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, ReturnButtonPosition(buttonIndex), Quaternion.identity, transform);
+        GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, Vector3.zero, Quaternion.identity);
+
+        dialogueBoxGO.GetComponent<RectTransform>().position = ReturnButtonPosition(buttonIndex);
+        dialogueButtonGO.transform.SetParent(dialogueBoxGO.transform);
+        //dialogueBoxGO.GetComponent<RectTransform>().
+
         dialogueChoiceButtonList.Add(dialogueButtonGO);
 
         BaseNode nextNode = FindNextNodeUsingOutputPortName(portName);
@@ -136,7 +145,7 @@ public class NodeReader : MonoBehaviour
             DialogueButton dialogueButton = new DialogueButton(nextNode);
             dialogueButtonDictionary.Add(dialogueButtonGO, dialogueButton);
 
-            dialogueButtonGO.GetComponent<Text>().text = message;
+            dialogueButtonGO.GetComponentInChildren<Text>().text = message;
 
             AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { OnDialogueChoiceButtonClicked(dialogueButtonGO); }); 
         }
@@ -153,6 +162,7 @@ public class NodeReader : MonoBehaviour
         {
             Destroy(button);
         }
+        dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
         dialogueChoiceButtonList.Clear();
     }
     private Vector3 ReturnButtonPosition(int index)
@@ -225,7 +235,8 @@ public class NodeReader : MonoBehaviour
         BaseNode returnedNode = FindNextNodeUsingOutputPortName(outputName);
         if (returnedNode != null)
         {
-            SetNextNode(returnedNode);
+            //Set a new graph as current
+            SetCurrentNode(returnedNode);
         }
         else
         {
@@ -239,13 +250,14 @@ public class NodeReader : MonoBehaviour
         {
             if (nodePort.fieldName == outputName)
             {
-                //Set a new graph as current
-                return nodePort.Connection.node as BaseNode;
+                Debug.Log("Connection name: " + nodePort.Connection.fieldName);
+                BaseNode returnNode = nodePort.Connection.node as BaseNode;
+                return returnNode;
             }
         }
         return null;
     }
-    private void SetNextNode(BaseNode nextNode)
+    private void SetCurrentNode(BaseNode nextNode)
     {
         dialogueGraph.currentNode = nextNode;
     }

@@ -14,8 +14,6 @@ public class InventoryAnimator : MonoBehaviour
     private void Start()
     {
         isDisplayingInventory = false;
-        inventoryPanelAnimator.SetBool("isClosed", !isDisplayingInventory);
-        equipmentPanelAnimator.SetBool("isClosed", !isDisplayingInventory);
     }
     private void Update()
     {
@@ -32,7 +30,6 @@ public class InventoryAnimator : MonoBehaviour
         {
             inventoryPanelAnimator.gameObject.SetActive(true);
             equipmentPanelAnimator.gameObject.SetActive(true);
-
         }
 
         isDisplayingInventory = isOpen;
@@ -47,6 +44,7 @@ public class InventoryAnimator : MonoBehaviour
     {
         inventoryPanelAnimator.SetBool("isClosed", !isDisplayingInventory);
         equipmentPanelAnimator.SetBool("isClosed", !isDisplayingInventory);
+
         yield return new WaitForSeconds(0.6f);
         
         bool shouldPlayNewAnimation = equipmentPanelAnimator.GetBool("isClosed") == isDisplayingInventory;

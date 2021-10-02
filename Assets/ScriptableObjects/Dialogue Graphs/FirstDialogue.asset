@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 6000008790648409012}
-  - {fileID: 7630676748943832778}
   - {fileID: 2910407359243858882}
+  - {fileID: 7630676748943832778}
   - {fileID: 5655482366599179970}
-  currentNode: {fileID: 0}
+  - {fileID: 6890432963639349874}
+  currentNode: {fileID: 2910407359243858882}
 --- !u!114 &2910407359243858882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31,25 +32,55 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 424, y: -24}
+  position: {x: 408, y: -88}
   ports:
     keys:
     - entry
-    - exit
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
     values:
     - _fieldName: entry
       _node: {fileID: 2910407359243858882}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: exit
+      - fieldName: Choice1
         node: {fileID: 5655482366599179970}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: exit
+    - _fieldName: Choice1
+      _node: {fileID: 2910407359243858882}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 2910407359243858882}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 2910407359243858882}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
       _node: {fileID: 2910407359243858882}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -59,7 +90,10 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   entry: 0
-  exit: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
   speakerName: John
   dialogue: Bye!
 --- !u!114 &5655482366599179970
@@ -79,21 +113,24 @@ MonoBehaviour:
   ports:
     keys:
     - entry
-    - exit
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
     values:
     - _fieldName: entry
       _node: {fileID: 5655482366599179970}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: exit
+      - fieldName: Choice1
         node: {fileID: 7630676748943832778}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: exit
+    - _fieldName: Choice1
       _node: {fileID: 5655482366599179970}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -105,8 +142,41 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 5655482366599179970}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 6890432963639349874}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 5655482366599179970}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 5655482366599179970}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   entry: 0
-  exit: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
   speakerName: John
   dialogue: Wazzup?
 --- !u!114 &6000008790648409012
@@ -140,6 +210,83 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   exit: 0
+--- !u!114 &6890432963639349874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 408, y: 88}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: 6890432963639349874}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice2
+        node: {fileID: 5655482366599179970}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: 6890432963639349874}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 6890432963639349874}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 6890432963639349874}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 6890432963639349874}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: John
+  dialogue: Heya!
 --- !u!114 &7630676748943832778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,11 +300,14 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -104, y: -24}
+  position: {x: -88, y: -24}
   ports:
     keys:
     - entry
-    - exit
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
     values:
     - _fieldName: entry
       _node: {fileID: 7630676748943832778}
@@ -171,7 +321,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: exit
+    - _fieldName: Choice1
       _node: {fileID: 7630676748943832778}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -183,7 +333,37 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 7630676748943832778}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 7630676748943832778}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 7630676748943832778}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   entry: 0
-  exit: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
   speakerName: John
   dialogue: Hello!
