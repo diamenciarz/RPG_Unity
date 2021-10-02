@@ -28,23 +28,17 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening("PlayerLeftDialogue", EndDialogue);
+
     }
     private void OnDisable()
     {
-        EventManager.StopListening("PlayerLeftDialogue", EndDialogue);
     }
 
 
 
-        public IEnumerator StartDialogue(Dialogue dialogueInput)
+    public IEnumerator StartDialogue(Dialogue dialogueInput)
     {
-        isDisplayingMessage = true;
-        dialogueBoxGO.SetActive(true);
-        textAnimator.SetBool("isClosed", false);
-
-        nameText.text = dialogueInput.name;
-        buttonText.text = "Continue...";
+        yield return new WaitForEndOfFrame();
 
         sentences.Clear();
 
@@ -52,16 +46,14 @@ public class DialogueManager : MonoBehaviour
         {
             sentences.Enqueue(sentence);
         }
-        dialogueText.text = "";
-
-        yield return new WaitForSeconds(0.6f);
+        
         DisplayNextSentence();
     }
     public void DisplayNextSentence()
     {
         if (sentences.Count == 0)
         {
-            EndDialogue();
+            //EndDialogue();
             return;
         }
         if (sentences.Count == 1)
@@ -70,19 +62,10 @@ public class DialogueManager : MonoBehaviour
         }
 
         string nextSentenceToSay = sentences.Dequeue();
-        if (textAnimationCoroutine != null)
-        {
-            StopCoroutine(textAnimationCoroutine);
-        }
-        textAnimationCoroutine = StartCoroutine(animateSentence(nextSentenceToSay));
+        
     }
-    void EndDialogue()
-    {
-        textAnimator.SetBool("isClosed", true);
-        isDisplayingMessage = false;
-        EventManager.TriggerEvent("StartPopupCoroutine");
-    }
-    IEnumerator animateSentence(string inputSentence) 
+
+    IEnumerator AnimateSentence(string inputSentence)
     {
         dialogueText.text = "";
         foreach (char letter in inputSentence.ToCharArray())
