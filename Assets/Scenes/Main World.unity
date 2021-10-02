@@ -299,7 +299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &65316957
 RectTransform:
   m_ObjectHideFlags: 0
@@ -670,55 +670,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &239444053
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 239444055}
-  - component: {fileID: 239444054}
-  m_Layer: 0
-  m_Name: DialogueManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &239444054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239444053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1a6e9578b380484ab5b8984fe581579, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nameText: {fileID: 477154085}
-  dialogueText: {fileID: 953062346}
-  buttonText: {fileID: 58589146}
-  dialogueBoxGO: {fileID: 65316956}
-  textAnimator: {fileID: 65316960}
-  isDisplayingMessage: 0
---- !u!4 &239444055
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239444053}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1312.5936, y: 496.12015, z: -411.99063}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &370054987
 GameObject:
@@ -4163,6 +4114,7 @@ GameObject:
   - component: {fileID: 438352361}
   - component: {fileID: 438352363}
   - component: {fileID: 438352364}
+  - component: {fileID: 438352365}
   m_Layer: 5
   m_Name: Equipment Panel
   m_TagString: Untagged
@@ -4264,6 +4216,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!95 &438352365
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438352359}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7be417ff7584fbc4494299bdda5a6af6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &477154083
 GameObject:
   m_ObjectHideFlags: 0
@@ -4659,6 +4630,10 @@ PrefabInstance:
       value: San the Safegiver
       objectReference: {fileID: 0}
     - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
+      propertyPath: dialogueGraph
+      value: 
+      objectReference: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
+    - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
       propertyPath: dialogue.sentences.Array.data[1]
       value: I have someone to save for you
       objectReference: {fileID: 0}
@@ -4742,6 +4717,10 @@ PrefabInstance:
       propertyPath: dialogue.name
       value: Kyle the Killer
       objectReference: {fileID: 0}
+    - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
+      propertyPath: dialogueGraph
+      value: 
+      objectReference: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
     - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
       propertyPath: dialogue.sentences.Array.data[1]
       value: I have someone to kill for you!
@@ -5216,9 +5195,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b2a4038dc3d094caca3f583e5cbf89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueGraphTemporary: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
   dialogueGraph: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
-  speakerName: {fileID: 477154085}
-  dialogue: {fileID: 953062346}
+  nameText: {fileID: 477154085}
+  dialogueText: {fileID: 953062346}
+  buttonText: {fileID: 58589146}
+  dialogueBoxGO: {fileID: 65316956}
+  textAnimator: {fileID: 65316960}
+  isDisplayingMessage: 0
 --- !u!4 &1191653067
 Transform:
   m_ObjectHideFlags: 0
@@ -5227,7 +5211,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191653065}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1086.0334, y: 544.39215, z: -27.713856}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -15801,6 +15785,7 @@ GameObject:
   - component: {fileID: 1375298200}
   - component: {fileID: 1375298202}
   - component: {fileID: 1375298203}
+  - component: {fileID: 1375298204}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -15899,6 +15884,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!95 &1375298204
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375298198}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1cf0b80e7c445da428930d930d9b3919, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1390375900
 GameObject:
   m_ObjectHideFlags: 0
@@ -16096,9 +16100,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 239444054}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: DisplayNextSentence
+      - m_Target: {fileID: 1191653066}
+        m_TargetAssemblyTypeName: NodeReader, Assembly-CSharp
+        m_MethodName: NextSentence
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18274,7 +18278,7 @@ Transform:
   m_Children:
   - {fileID: 1271477547}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1777645379 stripped
 Transform:
@@ -18333,11 +18337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a970a57056c414ab493bf02b33d2e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue:
-    name: Dean
-    sentences:
-    - Not eeqwhiuhefh weuiheauifhaew fef ewergf awe sesr
-    - afawef weaf wafew fae wfwafaweg ewg a
+  dialogueGraph: {fileID: 0}
 --- !u!114 &1779586484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18432,6 +18432,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1779586481}
   m_CullTransparentMesh: 1
+--- !u!1 &1818277568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1818277569}
+  - component: {fileID: 1818277570}
+  m_Layer: 5
+  m_Name: InventoryAnimator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1818277569
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818277568}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.66, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1066.6667, y: 651.51514}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1818277570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818277568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfdbd359f35db048aed2c00ac5bcbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryPanelAnimator: {fileID: 438352365}
+  equipmentPanelAnimator: {fileID: 1375298204}
 --- !u!1 &1828457228
 GameObject:
   m_ObjectHideFlags: 0
@@ -18964,6 +19014,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
+      propertyPath: dialogueGraph
+      value: 
+      objectReference: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
 --- !u!1001 &6195473770939546901

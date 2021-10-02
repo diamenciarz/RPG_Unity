@@ -10,7 +10,7 @@ public class PlayerNotificationController : MonoBehaviour
 
     //private UnityAction onDialogue;
     private bool isPopupShown = false;
-    private DialogueManager dialogueManagerSingleton;
+    private NodeReader nodeReaderSingleton;
     //[HideInInspector]
     public List<DialogueTrigger> dialogueTriggerList;
     private DialogueTrigger activeDialogueTrigger;
@@ -19,7 +19,7 @@ public class PlayerNotificationController : MonoBehaviour
 
     private void Awake()
     {
-        dialogueManagerSingleton = FindObjectOfType<DialogueManager>();
+        nodeReaderSingleton = FindObjectOfType<NodeReader>();
         //onDialogue = new UnityAction(EnteredDialogueTrigger);
     }
 
@@ -61,7 +61,7 @@ public class PlayerNotificationController : MonoBehaviour
     }
     IEnumerator PopupCoroutine()
     {
-        yield return new WaitUntil(() => (!dialogueManagerSingleton.isDisplayingMessage)&&(dialogueTriggerList.Count != 0));
+        yield return new WaitUntil(() => (!nodeReaderSingleton.isDisplayingMessage)&&(dialogueTriggerList.Count != 0));
 
         ShowPopupTextField();
         popupWaitCoroutine = null;

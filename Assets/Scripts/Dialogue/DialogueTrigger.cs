@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
 {
-    public Dialogue dialogue;
+    public DialogueGraph dialogueGraph;
     private Collider2D myCollider2D;
 
     private void Start()
@@ -14,23 +14,21 @@ public class DialogueTrigger : MonoBehaviour
 
     public void TriggerDialogue()
     {
-        DialogueManager foundClass = FindObjectOfType<DialogueManager>();
-        StartCoroutine(foundClass.StartDialogue(dialogue));
+        NodeReader foundClass = FindObjectOfType<NodeReader>();
+        StartCoroutine(foundClass.StartDialogue(dialogueGraph));
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            EventManager.TriggerEvent("ShowDialogue",this);
-
+            EventManager.TriggerEvent("ShowDialogue", this);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            EventManager.TriggerEvent("HideDialogue",this);
-
+            EventManager.TriggerEvent("HideDialogue", this);
         }
     }
 }
