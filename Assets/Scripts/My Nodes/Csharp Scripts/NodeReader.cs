@@ -26,8 +26,6 @@ public class NodeReader : MonoBehaviour
     public bool isDisplayingMessage = false;
     //Private variables
     private Coroutine textAnimationCoroutine;
-    private Coroutine readNodeCoroutine;
-    private bool nextSentence;
     private bool isThisTheLastMessage = false;
     private List<GameObject> dialogueChoiceButtonList = new List<GameObject>();
     private Dictionary<GameObject, DialogueButton> dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
@@ -46,7 +44,6 @@ public class NodeReader : MonoBehaviour
     public void NextSentence(object obj)
     {
         GameObject buttonGO = (GameObject)obj;
-        nextSentence = true;
 
         BaseNode nodeToJumpTo = dialogueButtonDictionary[buttonGO].GetNodeToJumpTo();
         SetNextNode(nodeToJumpTo);
@@ -54,13 +51,17 @@ public class NodeReader : MonoBehaviour
     //This is called by a dialogue trigger on an NPC
     public IEnumerator StartDialogue(DialogueGraph inputDialogueGraph)
     {
+        //Wait for the screen to get ready
         float waitTimeToEliminateLag = 1;
         yield return new WaitForSeconds(waitTimeToEliminateLag);
+
         //Set text to default
         nameText.text = dialogueGraph.name;
         dialogueText.text = "";
+
         //Create new dialogue choice buttons
-        CreateDialogueChoiceButtons();
+        CreateNewDialogueChoiceButtons();
+
         //Initialize variables
         dialogueGraph = inputDialogueGraph;
         isDisplayingMessage = true;
@@ -76,12 +77,10 @@ public class NodeReader : MonoBehaviour
                 break;
             }
         }
-
-
-        readNodeCoroutine = StartCoroutine(ReadNode());
+        ReadCurrentNode();
     }
 
-    IEnumerator ReadNode()
+    public void ReadCurrentNode()
     {
         BaseNode baseNode = dialogueGraph.currentNode;
         string data = baseNode.GetString();
@@ -92,27 +91,22 @@ public class NodeReader : MonoBehaviour
             GoToNextNodeThroughOutputName("exit");
 
         }
+        //Exception, when this is the last dialogue option
         if (IsThisTheLastMessage())
         {
             isThisTheLastMessage = true;
-            CreateDialogueChoiceButtons();
+            CreateNewDialogueChoiceButtons();
         }
-        //
+        //Default option
         if (stringArray[0] == "DialogueNode")
         {
             UpdateName(stringArray[1]);
             UpdateText(stringArray[2]);
 
-            CreateDialogueChoiceButtons();
-
-            //Wait for one click, before going further with the dialogue
-            yield return new WaitUntil(() => nextSentence == true);
-            nextSentence = false;
-
-            GoToNextNodeThroughOutputName("exit");
+            CreateNewDialogueChoiceButtons();
         }
     }
-    private void CreateDialogueChoiceButtons()
+    private void CreateNewDialogueChoiceButtons()
     {
         DeletePreviousButtons();
 
@@ -216,25 +210,14 @@ public class NodeReader : MonoBehaviour
     //Moves to a next dialogue node - important
     private void GoToNextNodeThroughOutputName(string outputName)
     {
-        StopTheLastReadNodeCoroutine();
         if (!isThisTheLastMessage)
         {
             SetNextNodeUsingOutputPortName(outputName);
-
-            //Start a new ReadNode coroutine
-            readNodeCoroutine = StartCoroutine(ReadNode());
+            ReadCurrentNode();
         }
         else
         {
             EndDialogue();
-        }
-    }
-    private void StopTheLastReadNodeCoroutine()
-    {
-        if (readNodeCoroutine != null)
-        {
-            StopCoroutine(readNodeCoroutine);
-            readNodeCoroutine = null;
         }
     }
     private void SetNextNodeUsingOutputPortName(string outputName)

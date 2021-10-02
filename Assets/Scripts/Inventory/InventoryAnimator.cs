@@ -28,6 +28,13 @@ public class InventoryAnimator : MonoBehaviour
 
     public void UpdateInventoryState(bool isOpen)
     {
+        if (inventoryPanelAnimator.gameObject.activeSelf == false)
+        {
+            inventoryPanelAnimator.gameObject.SetActive(true);
+            equipmentPanelAnimator.gameObject.SetActive(true);
+
+        }
+
         isDisplayingInventory = isOpen;
 
         if (inventoryAnimationCoroutine == null)
