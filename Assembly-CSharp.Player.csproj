@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
-    <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />

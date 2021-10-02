@@ -1,28 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using XNode;
 
 public class NodeReader : MonoBehaviour
 {
-    public DialogueGraph dialogueGraphTemporary;
     public DialogueGraph dialogueGraph;
-    Coroutine readNodeCoroutine;
-
+    [Header("Components")]
     public Text nameText;
     public Text dialogueText;
-    public Text buttonText;
-    public GameObject dialogueBoxGO;
 
+    [Header("Instances")]
+    public GameObject dialogueBoxGO;
+    public GameObject dialogueChoiceButtonPrefab;
     public Animator textAnimator;
+    [Header("Button placement")]
+    [SerializeField] Vector2 firstButtonPosition;
+    [SerializeField] int yOffset;
+    [SerializeField] int xOffset;
 
     [HideInInspector]
     public bool isDisplayingMessage = false;
     //Private variables
+    private Coroutine textAnimationCoroutine;
+    private Coroutine readNodeCoroutine;
     private bool nextSentence;
     private bool isThisTheLastMessage = false;
-    private Coroutine textAnimationCoroutine;
+    private List<GameObject> dialogueChoiceButtonList = new List<GameObject>();
+    private Dictionary<GameObject, DialogueButton> dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
 
     private void OnEnable()
     {
@@ -42,10 +50,13 @@ public class NodeReader : MonoBehaviour
     //This is called by a dialogue trigger on an NPC
     public IEnumerator StartDialogue(DialogueGraph inputDialogueGraph)
     {
+        float waitTimeToEliminateLag = 1;
+        yield return new WaitForSeconds(waitTimeToEliminateLag);
         //Set text to default
         nameText.text = dialogueGraph.name;
         dialogueText.text = "";
-        buttonText.text = "Continue...";
+        //Create new dialogue choice buttons
+        CreateDialogueChoiceButtons();
         //Initialize variables
         dialogueGraph = inputDialogueGraph;
         isDisplayingMessage = true;
@@ -62,7 +73,6 @@ public class NodeReader : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.6f);
 
         readNodeCoroutine = StartCoroutine(ReadNode());
     }
@@ -81,7 +91,7 @@ public class NodeReader : MonoBehaviour
         if (IsThisTheLastMessage())
         {
             isThisTheLastMessage = true;
-            buttonText.text = "End conversation";
+            CreateDialogueChoiceButtons();
         }
         //
         if (stringArray[0] == "DialogueNode")
@@ -95,6 +105,62 @@ public class NodeReader : MonoBehaviour
 
             GoToNextNodeThroughOutput("exit");
         }
+    }
+    private void CreateDialogueChoiceButtons()
+    {
+        DeletePreviousButtons();
+
+        ICollection outputCollection = dialogueGraph.currentNode.Outputs as ICollection;
+        if (outputCollection != null)
+        {
+            for (int i = 0; i < outputCollection.Count; i++)
+            {
+                string portName = "Choice" + (i + 1);
+                CreateSingleButton(i, "Choice", portName);
+            }
+        }
+        else
+        {
+            string portName = "Choice1";
+            CreateSingleButton(1, "End conversation", portName);
+        }
+    }
+    private void CreateSingleButton(int buttonIndex, string message, string portName)
+    {
+        GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, ReturnButtonPosition(buttonIndex), Quaternion.identity, transform);
+        dialogueChoiceButtonList.Add(dialogueButtonGO);
+        DialogueButton dialogueButton = new DialogueButton(FindNextNodeUsingOutputPortName(portName));
+        dialogueButtonDictionary.Add(dialogueButtonGO, dialogueButton);
+
+
+        dialogueButtonGO.GetComponent<Text>().text = message;
+
+        AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnDialogueChoiceButtonClicked(gameObject); }); 
+    }
+    private void DeletePreviousButtons()
+    {
+        foreach (GameObject button in dialogueChoiceButtonList)
+        {
+            Destroy(button);
+        }
+        dialogueChoiceButtonList.Clear();
+    }
+    private Vector3 ReturnButtonPosition(int index)
+    {
+        if (index > 5)
+        {
+            Debug.Log("Can only make max 6 buttons");
+            return new Vector3(firstButtonPosition.x, firstButtonPosition.y, 0);
+        }
+        else
+        {
+            Vector3 returnVector = new Vector3(firstButtonPosition.x + xOffset * (index % 2), firstButtonPosition.y + yOffset * (index / 2), 0);
+            return returnVector;
+        }
+    }
+    protected void OnDialogueChoiceButtonClicked(GameObject obj)
+    {
+
     }
     private bool IsThisTheLastMessage()
     {
@@ -137,7 +203,7 @@ public class NodeReader : MonoBehaviour
         StopTheLastReadNodeCoroutine();
         if (!isThisTheLastMessage)
         {
-            FindAndSetNextNodeUsingOutputPortName(outputName);
+            SetNextNodeUsingOutputPortName(outputName);
 
             //Start a new ReadNode coroutine
             readNodeCoroutine = StartCoroutine(ReadNode());
@@ -155,16 +221,29 @@ public class NodeReader : MonoBehaviour
             readNodeCoroutine = null;
         }
     }
-    private void FindAndSetNextNodeUsingOutputPortName(string outputName)
+    private BaseNode FindNextNodeUsingOutputPortName(string outputName)
     {
-        foreach (NodePort nodePort in dialogueGraph.currentNode.Ports)
+
+        foreach (NodePort nodePort in dialogueGraph.currentNode.Outputs)
         {
             if (nodePort.fieldName == outputName)
             {
                 //Set a new graph as current
-                dialogueGraph.currentNode = nodePort.Connection.node as BaseNode;
-                break;
+                return nodePort.Connection.node as BaseNode;
             }
+        }
+        return null;
+    }
+    private void SetNextNodeUsingOutputPortName(string outputName)
+    {
+        BaseNode returnedNode = FindNextNodeUsingOutputPortName(outputName);
+        if (returnedNode != null)
+        {
+            dialogueGraph.currentNode = returnedNode;
+        }
+        else
+        {
+            Debug.Log("Next Node wasn't found - name doesn't exist");
         }
     }
     public void EndDialogue()
@@ -173,5 +252,25 @@ public class NodeReader : MonoBehaviour
         isDisplayingMessage = false;
         EventManager.TriggerEvent("StartPopupCoroutine");
     }
+    protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
+    {
+        EventTrigger trigger = obj.GetComponent<EventTrigger>();
+        var eventTrigger = new EventTrigger.Entry();
+        eventTrigger.eventID = type;
+        eventTrigger.callback.AddListener(action);
+        trigger.triggers.Add(eventTrigger);
+    }
+    public class DialogueButton
+    {
+        private BaseNode nodeToJumpTo;
 
+        public DialogueButton(BaseNode inputNode)
+        {
+            nodeToJumpTo = inputNode;
+        }
+        public BaseNode GetNodeToJumpTo()
+        {
+            return nodeToJumpTo;
+        }
+    }
 }
