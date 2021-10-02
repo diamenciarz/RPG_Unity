@@ -28,6 +28,8 @@ public class StaticInterface : UserInterface
 
             //Add each slot to the dictionary containing slots as values
             displayedItemsDictionary.Add(itemGameObject,inventoryToDisplay.inventory.inventorySlotArray[i]);
+            //Set display game object to slot
+            inventoryToDisplay.inventory.inventorySlotArray[i].SetDisplayGameObject(itemGameObject);
         }
         //EventManager.TriggerEvent("Update Inventory Display");
     }

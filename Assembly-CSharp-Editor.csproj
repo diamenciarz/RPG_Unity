@@ -755,6 +755,10 @@
       <Project>{7A33DE75-6FDE-3D6A-FA6D-7599A84A9A0B}</Project>
       <Name>Unity.Rider.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="XNode.csproj">
+      <Project>{B60FE496-4358-98F7-9FD4-50198F76A92A}</Project>
+      <Name>XNode</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{6BA1CCCD-7564-1ED5-685C-2629A78033EB}</Project>
       <Name>UnityEngine.UI</Name>
@@ -794,6 +798,10 @@
     <ProjectReference Include="Unity.Timeline.Editor.csproj">
       <Project>{9BC26C9D-4DF6-1B2B-4495-5A4649C7DE30}</Project>
       <Name>Unity.Timeline.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="XNodeEditor.csproj">
+      <Project>{312301A9-9CE8-4662-200C-4978EC8F0B6E}</Project>
+      <Name>XNodeEditor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{EECD0BFD-658C-C30F-F439-3395047DA825}</Project>

@@ -216,8 +216,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\ItemGui\ISelectable.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\MenuPriority.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Animation\ClipCurveEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Manipulators\HeaderSplitterManipulator.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Actions\TimelineAction.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Manipulators\HeaderSplitterManipulator.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Actions\TrackActions.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\TimelineClipHandle.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Items\MarkerItem.cs" />

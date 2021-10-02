@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,13 +53,20 @@
     <UnityVersion>2021.1.20f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
+    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\UsableItemObject.cs" />
     <Compile Include="Assets\Scripts\Dialogue\EventManager.cs" />
+    <Compile Include="Assets\Scripts\My Nodes\Csharp Scripts\NodeReader.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupPositionController.cs" />
+    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueGraph.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueTrigger.cs" />
     <Compile Include="Assets\Scripts\Inventory\UserInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\ToolItemObject.cs" />
@@ -70,12 +77,8 @@
     <Compile Include="Assets\Scripts\Inventory\ItemDatabaseObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\DynamicInterface.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
-    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueGraph.cs" />
-    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
-    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueNode.cs" />
-    <Compile Include="Assets\Scripts\My Nodes\Csharp Scripts\NodeReader.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -672,6 +675,10 @@
       <Project>{547CD652-35FE-5744-7987-ED9586608E07}</Project>
       <Name>Unity.TextMeshPro</Name>
     </ProjectReference>
+    <ProjectReference Include="XNode.csproj">
+      <Project>{B60FE496-4358-98F7-9FD4-50198F76A92A}</Project>
+      <Name>XNode</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{6BA1CCCD-7564-1ED5-685C-2629A78033EB}</Project>
       <Name>UnityEngine.UI</Name>
@@ -703,10 +710,6 @@
     <ProjectReference Include="Unity.2D.SpriteShape.Runtime.csproj">
       <Project>{7EA7835F-6745-79AB-DF8A-D9F8DDE4847A}</Project>
       <Name>Unity.2D.SpriteShape.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="XNode.csproj">
-      <Project>{B60FE496-4358-98F7-9FD4-50198F76A92A}</Project>
-      <Name>XNode</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

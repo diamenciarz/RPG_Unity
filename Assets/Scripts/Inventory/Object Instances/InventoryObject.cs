@@ -30,9 +30,9 @@ public class InventoryObject : ScriptableObject
         }
         //If the item is stackable
 
-        int inventorySize = inventory.inventorySlotArray.Length;
+        int inventorySizeToCheck = inventory.inventorySlotArray.Length;
         //Check if this item is already in the inventory
-        for (int i = 0; i < inventorySize; i++)
+        for (int i = 0; i < inventorySizeToCheck; i++)
         {
             bool isTheCurrentSlotEmpty = inventory.inventorySlotArray[i].amount != 0;
             //Check if the slot is not empty
@@ -56,6 +56,7 @@ public class InventoryObject : ScriptableObject
         if (freeSlotIndex > -1)
         {
             inventory.inventorySlotArray[freeSlotIndex].UpdateSlotItem(inputItem, inputAmount);
+            return;
         }
         Debug.Log("Inventory full - item was lost");
     }
@@ -111,8 +112,7 @@ public class InventoryObject : ScriptableObject
                         moveToSlot.UpdateSlotItem(slotToMoveFrom.item, slotToMoveFrom.amount);
                         slotToMoveFrom.UpdateSlotItem(saveSecondSlot.item, saveSecondSlot.amount);
                     }
-                    EventManager.TriggerEvent("Update Item Display", MouseData.hoverMouseGO);
-                    EventManager.TriggerEvent("Update Item Display", MouseData.beginDragItemGO);
+                    Debug.Log("Swapped items in two slots");
                 }
             }
         }
@@ -163,14 +163,7 @@ public class InventoryObject : ScriptableObject
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(string.Concat(Application.persistentDataPath, savePath), FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
-            /* //This turns out to not be needed
-            //Create a temporary inventory
-            Inventory newInventory = new Inventory();
-            //Loop through the current inventory and update it slot by slot
-            for (int i = 0; i < inventory.inventorySlotArray.Length; i++)
-            {
-                inventory.inventorySlotArray[i].UpdateSlot();
-            }*/
+
             file.Close();
         }
         EventManager.TriggerEvent("Update Inventory Display");
@@ -178,8 +171,17 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
     {
+        CorrectInventoryArrayLength();
         inventory.ClearInventory();
         //EventManager.TriggerEvent("Update Inventory Display");
+    }
+    public void CorrectInventoryArrayLength()
+    {
+        bool isInventoryTheRightLength = inventory.inventorySlotArray.Length == inventorySize;
+        if (!isInventoryTheRightLength)
+        {
+            inventory.inventorySlotArray = new InventorySlot[inventorySize];
+        }
     }
 }
 [System.Serializable]
@@ -198,6 +200,7 @@ public class Inventory
 public class InventorySlot
 {
     public ItemType[] allowedItemTypes = new ItemType[0];
+    public GameObject displayGameObject;
     public UserInterface parent;
     public int amount;
     public ItemDataForSlots item;
@@ -215,17 +218,21 @@ public class InventorySlot
     {
         item = inputItem;
         amount = itemAmount;
+        EventManager.TriggerEvent("Update Item Display", displayGameObject);
+        Debug.Log("Updated item slot");
     }
     public void AddItemAmount(int value)
     {
         amount += value;
+        EventManager.TriggerEvent("Update Item Display", displayGameObject);
     }
 
     public void RemoveItem()
     {
         item = new ItemDataForSlots();
         amount = 0;
-        EventManager.TriggerEvent("Update Inventory Display");
+        EventManager.TriggerEvent("Update Item Display", displayGameObject);
+
     }
     public bool CanPlaceItemInSlot(ItemObject itemToCheck)
     {
@@ -249,5 +256,10 @@ public class InventorySlot
             }
         }
         return false;
+    }
+    public void SetDisplayGameObject(GameObject _object)
+    {
+        Debug.Log("Set display game object to: " + _object);
+        displayGameObject = _object;
     }
 }

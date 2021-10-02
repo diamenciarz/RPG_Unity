@@ -17,12 +17,12 @@ public abstract class UserInterface : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening("Update Inventory Display", UpdateDisplay);
+        EventManager.StartListening("Update Inventory Display", UpdateWholeDisplay);
         EventManager.StartListening("Update Item Display", UpdateDisplayItem);
     }
     private void OnDisable()
     {
-        EventManager.StopListening("Update Inventory Display", UpdateDisplay);
+        EventManager.StopListening("Update Inventory Display", UpdateWholeDisplay);
         EventManager.StopListening("Update Item Display", UpdateDisplayItem);
     }
     private void Start()
@@ -31,7 +31,7 @@ public abstract class UserInterface : MonoBehaviour
         AssignSlotsToMyArray();
         AssignParentUserInterfaceToEachSlot();
 
-        UpdateDisplay();
+        UpdateWholeDisplay();
 
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
@@ -51,8 +51,9 @@ public abstract class UserInterface : MonoBehaviour
             inventoryToDisplay.inventory.inventorySlotArray[i].parent = this;
         }
     }
-    private void UpdateDisplay()
+    private void UpdateWholeDisplay()
     {
+        Debug.Log("Updated whole display");
         //For every slot, update the display game object (square with a sprite and number)
         foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
         {
@@ -62,29 +63,35 @@ public abstract class UserInterface : MonoBehaviour
     private void UpdateDisplayItem(object itemGameObject)
     {
         GameObject displayGameObject = (GameObject)itemGameObject;
+        Debug.Log("Updating: " + displayGameObject);
         if (!displayedItemsDictionary.ContainsKey(displayGameObject))
         {
+            Debug.Log("Dictionary did not contain this item");
             return;
         }
         InventorySlot inventorySlot = displayedItemsDictionary[displayGameObject];
+        //Debug.Log("Updated item slot display");
 
-        UpdateDisplayGameObject(displayGameObject,inventorySlot);
-    }
-    private void UpdateDisplayGameObject(GameObject displayGameObject, InventorySlot inventorySlot)
-    {
+        Image spriteToModify = displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>();
+        TMP_Text textToModify = displayGameObject.GetComponentInChildren<TextMeshProUGUI>();
         //If the slot is not empty
+        Debug.Log("Got to modify item");
         if (inventorySlot.amount > 0)
         {
             //Display the item
-            displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[inventorySlot.item.itemID].itemSprite;
-            displayGameObject.GetComponentInChildren<TextMeshProUGUI>().text = inventorySlot.amount == 1 ? "" : inventorySlot.amount.ToString("n0");
+            spriteToModify.sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[inventorySlot.item.itemID].itemSprite;
+            textToModify.text = inventorySlot.amount == 1 ? "" : inventorySlot.amount.ToString("n0");
         }
         else
         {
             //Display an empty sprite
-            displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>().sprite = nullImage;
-            displayGameObject.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            spriteToModify.sprite = nullImage;
+            textToModify.text = "";
         }
+    }
+    private void UpdateDisplayGameObject(GameObject displayGameObject, InventorySlot inventorySlot)
+    {
+        
     }
     public abstract void CreateSlots();
     //Slot events
@@ -124,6 +131,7 @@ public abstract class UserInterface : MonoBehaviour
             temporaryMouseObject.transform.SetParent(transform.parent);
 
             Image image = temporaryMouseObject.AddComponent<Image>();
+            Debug.Log("Item object: " + inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID]);
             image.sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID].itemSprite;
             image.raycastTarget = false;
         }
@@ -159,7 +167,7 @@ public abstract class UserInterface : MonoBehaviour
     protected void OnExitInterface(GameObject obj)
     {
         MouseData.hoverUI = null;
-        
+
     }
     //Custom event method. The events are triggered by unity UI elements
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)

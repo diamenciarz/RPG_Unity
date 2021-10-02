@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,28 +53,31 @@
     <UnityVersion>2021.1.20f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\GraphAndNodeEditor.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeGraphEditor.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeGraphImporter.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorUtilities.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorBase.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorAction.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\RenamePopup.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorResources.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\NodeEnumDrawer.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorAssetModProcessor.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorGUILayout.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorReflection.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\InputAttributeDrawer.cs" />
+    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\SceneGraphEditor.cs" />
     <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorGUI.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\InputAttributeDrawer.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorBase.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorUtilities.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorGUILayout.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorPreferences.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditor.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeGraphImporter.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorReflection.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\InNodeEditorAttributeProcessor.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\NodeEnumDrawer.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeGraphEditor.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\OutputAttributeDrawer.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\GraphAndNodeEditor.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorResources.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Internal\RerouteReference.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\RenamePopup.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorAction.cs" />
     <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\GraphRenameFixAssetProcessor.cs" />
     <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorWindow.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Internal\RerouteReference.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\InNodeEditorAttributeProcessor.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditor.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorPreferences.cs" />
-    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\Drawers\Odin\OutputAttributeDrawer.cs" />
+    <Compile Include="Assets\xNode-1.8.0\Scripts\Editor\NodeEditorAssetModProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\xNode-1.8.0\Scripts\Editor\XNodeEditor.asmdef" />

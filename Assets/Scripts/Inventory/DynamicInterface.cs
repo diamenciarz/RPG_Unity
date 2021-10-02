@@ -17,7 +17,7 @@ public class DynamicInterface : UserInterface
     public override void CreateSlots()
     {
         //Clear inventory, set it's size to the inventorySize, give each slot a parent
-        //inventoryToDisplay.ClearInventory();
+        inventoryToDisplay.ClearInventory();
 
         displayedItemsDictionary = new Dictionary<GameObject, InventorySlot>();
         //Create item slots in the empty inventory and add them to the InventorySlot dictionary
@@ -27,6 +27,8 @@ public class DynamicInterface : UserInterface
             itemGameObject.GetComponent<RectTransform>().localPosition = GetItemSlotPosition(i);
             //Debug.Log("Created slot");
             displayedItemsDictionary.Add(itemGameObject, inventoryToDisplay.inventory.inventorySlotArray[i]);
+            //Set display game object to slot
+            inventoryToDisplay.inventory.inventorySlotArray[i].SetDisplayGameObject(itemGameObject);
 
             //Hook up each slot to unity events
             AddEvent(itemGameObject, EventTriggerType.PointerEnter, delegate { OnEnter(itemGameObject); });

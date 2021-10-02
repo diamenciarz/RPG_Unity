@@ -18,6 +18,7 @@ MonoBehaviour:
   inventory:
     inventorySlotArray:
     - allowedItemTypes: 04000000
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -25,6 +26,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 04000000
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -32,6 +34,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 04000000
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -39,6 +42,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 0000000004000000
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
