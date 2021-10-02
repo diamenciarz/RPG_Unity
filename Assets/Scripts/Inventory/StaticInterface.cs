@@ -27,10 +27,14 @@ public class StaticInterface : UserInterface
             AddEvent(itemGameObject, EventTriggerType.Drag, delegate { OnDrag(itemGameObject); });
 
             //Add each slot to the dictionary containing slots as values
-            displayedItemsDictionary.Add(itemGameObject,inventoryToDisplay.inventory.inventorySlotArray[i]);
+            displayedItemsDictionary.Add(itemGameObject, inventoryToDisplay.inventory.inventorySlotArray[i]);
             //Set display game object to slot
             inventoryToDisplay.inventory.inventorySlotArray[i].SetDisplayGameObject(itemGameObject);
         }
         //EventManager.TriggerEvent("Update Inventory Display");
+    }
+    public override void AssignDisplayGameObjectsToSlots()
+    { 
+        
     }
 }

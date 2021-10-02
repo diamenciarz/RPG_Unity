@@ -19,11 +19,13 @@ public abstract class UserInterface : MonoBehaviour
     {
         EventManager.StartListening("Update Inventory Display", UpdateWholeDisplay);
         EventManager.StartListening("Update Item Display", UpdateDisplayItem);
+        EventManager.StartListening("Assign Display GO's to Slots", AssignDisplayGameObjectsToSlots);
     }
     private void OnDisable()
     {
         EventManager.StopListening("Update Inventory Display", UpdateWholeDisplay);
         EventManager.StopListening("Update Item Display", UpdateDisplayItem);
+        EventManager.StopListening("Assign Display GO's to Slots", AssignDisplayGameObjectsToSlots);
     }
     private void Start()
     {
@@ -53,7 +55,6 @@ public abstract class UserInterface : MonoBehaviour
     }
     private void UpdateWholeDisplay()
     {
-        Debug.Log("Updated whole display");
         //For every slot, update the display game object (square with a sprite and number)
         foreach (KeyValuePair<GameObject, InventorySlot> slot in displayedItemsDictionary)
         {
@@ -63,19 +64,15 @@ public abstract class UserInterface : MonoBehaviour
     private void UpdateDisplayItem(object itemGameObject)
     {
         GameObject displayGameObject = (GameObject)itemGameObject;
-        Debug.Log("Updating: " + displayGameObject);
         if (!displayedItemsDictionary.ContainsKey(displayGameObject))
         {
-            Debug.Log("Dictionary did not contain this item");
             return;
         }
         InventorySlot inventorySlot = displayedItemsDictionary[displayGameObject];
-        //Debug.Log("Updated item slot display");
 
         Image spriteToModify = displayGameObject.transform.GetChild(0).GetComponentInChildren<Image>();
         TMP_Text textToModify = displayGameObject.GetComponentInChildren<TextMeshProUGUI>();
         //If the slot is not empty
-        Debug.Log("Got to modify item");
         if (inventorySlot.amount > 0)
         {
             //Display the item
@@ -94,6 +91,7 @@ public abstract class UserInterface : MonoBehaviour
         
     }
     public abstract void CreateSlots();
+    public abstract void AssignDisplayGameObjectsToSlots();
     //Slot events
     protected void OnEnter(GameObject obj)
     {

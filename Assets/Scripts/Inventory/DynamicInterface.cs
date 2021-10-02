@@ -37,11 +37,18 @@ public class DynamicInterface : UserInterface
             AddEvent(itemGameObject, EventTriggerType.EndDrag, delegate { OnEndDrag(itemGameObject); });
             AddEvent(itemGameObject, EventTriggerType.Drag, delegate { OnDrag(itemGameObject); });
         }
-        //EventManager.TriggerEvent("Update Inventory Display");
+    }
+    public override void AssignDisplayGameObjectsToSlots()
+    {
+        foreach (KeyValuePair<GameObject, InventorySlot> pair in displayedItemsDictionary)
+        {
+            //Set display game object to slot
+            pair.Value.SetDisplayGameObject(pair.Key);
+        }
     }
     private Vector3 GetItemSlotPosition(int positionNumber)
     {
         return new Vector3(xDisplayStart + xOffsetOfItemSlots * (positionNumber % amountOfColumns), yDisplayStart + (-yOffsetOfItemSlots * (positionNumber / amountOfColumns)), 0f);
     }
-    
+
 }

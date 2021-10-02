@@ -29,26 +29,37 @@ public class InventoryObject : ScriptableObject
             return;
         }
         //If the item is stackable
-
+        //Look for copies of this item in the inventory
+        int returnedIndex = LookForThisItemIndexInInventory(inputItem.itemID);
+        bool doesInventoryContainThisItemAlready = returnedIndex != -1;
+        if (doesInventoryContainThisItemAlready)
+        {
+            inventory.inventorySlotArray[returnedIndex].AddItemAmount(itemAmount);
+            return;
+        }
+        Debug.Log("Added item to empty slot");
+        //If this item is not in the inventory yet, then just add it to an empty slot
+        InsertItemToEmptySlot(inputItem, itemAmount);
+    }
+    private int LookForThisItemIndexInInventory(int itemID)
+    {
         int inventorySizeToCheck = inventory.inventorySlotArray.Length;
         //Check if this item is already in the inventory
         for (int i = 0; i < inventorySizeToCheck; i++)
         {
-            bool isTheCurrentSlotEmpty = inventory.inventorySlotArray[i].amount != 0;
-            //Check if the slot is not empty
+            bool isTheCurrentSlotEmpty = inventory.inventorySlotArray[i].amount == 0;
             if (!isTheCurrentSlotEmpty)
             {
-                bool areBothIDsMatching = (inventory.inventorySlotArray[i].item.itemID == inputItem.itemID);
-                //Check if the current slot contains the item we are looking to add to inventory
+                bool areBothIDsMatching = inventory.inventorySlotArray[i].item.itemID == itemID;
                 if (areBothIDsMatching)
                 {
-                    inventory.inventorySlotArray[i].AddItemAmount(itemAmount);
-                    return;
+                    //Return the position of the item
+                    return i;
                 }
             }
         }
-        //If this item is not in the inventory yet, then just add it to an empty slot
-        InsertItemToEmptySlot(inputItem, itemAmount);
+        //If not, return -1
+        return -1;
     }
     public void InsertItemToEmptySlot(ItemDataForSlots inputItem, int inputAmount)
     {
@@ -167,6 +178,8 @@ public class InventoryObject : ScriptableObject
             file.Close();
         }
         EventManager.TriggerEvent("Update Inventory Display");
+        EventManager.TriggerEvent("Assign Display GO's to Slots");
+
     }
     [ContextMenu("Clear Inventory")]
     public void ClearInventory()
@@ -219,7 +232,6 @@ public class InventorySlot
         item = inputItem;
         amount = itemAmount;
         EventManager.TriggerEvent("Update Item Display", displayGameObject);
-        Debug.Log("Updated item slot");
     }
     public void AddItemAmount(int value)
     {
@@ -259,7 +271,6 @@ public class InventorySlot
     }
     public void SetDisplayGameObject(GameObject _object)
     {
-        Debug.Log("Set display game object to: " + _object);
         displayGameObject = _object;
     }
 }
