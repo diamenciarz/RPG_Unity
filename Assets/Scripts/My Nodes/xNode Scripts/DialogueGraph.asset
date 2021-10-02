@@ -1,22 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1136686277640190178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91af3058300d03b4e96fd4108855f42b, type: 3}
-  m_Name: Base
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 216, y: -168}
-  ports:
-    keys: []
-    values: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,7 +15,6 @@ MonoBehaviour:
   nodes:
   - {fileID: 6000008790648409012}
   - {fileID: 7630676748943832778}
-  - {fileID: -1136686277640190178}
   - {fileID: 2910407359243858882}
   current: {fileID: 6000008790648409012}
 --- !u!114 &2910407359243858882
@@ -48,7 +30,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 24, y: -24}
+  position: {x: 280, y: 8}
   ports:
     keys:
     - entry

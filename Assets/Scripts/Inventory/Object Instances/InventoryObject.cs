@@ -123,7 +123,6 @@ public class InventoryObject : ScriptableObject
                         moveToSlot.UpdateSlotItem(slotToMoveFrom.item, slotToMoveFrom.amount);
                         slotToMoveFrom.UpdateSlotItem(saveSecondSlot.item, saveSecondSlot.amount);
                     }
-                    Debug.Log("Swapped items in two slots");
                 }
             }
         }
@@ -262,7 +261,6 @@ public class InventorySlot
                 bool doItemTypesMatch = allowedItemTypes[i] == itemToCheck.itemType;
                 if (doItemTypesMatch)
                 {
-                    Debug.Log("Can swap items");
                     return true;
                 }
             }

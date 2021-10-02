@@ -18,6 +18,7 @@ MonoBehaviour:
   inventory:
     inventorySlotArray:
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -25,6 +26,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -32,6 +34,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -39,6 +42,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -46,6 +50,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -53,6 +58,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -60,6 +66,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -67,6 +74,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -74,6 +82,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -81,6 +90,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -88,6 +98,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -95,6 +106,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -102,6 +114,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -109,6 +122,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -116,6 +130,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -123,6 +138,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -130,6 +146,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -137,6 +154,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -144,6 +162,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -151,6 +170,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -158,6 +178,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -165,6 +186,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -172,6 +194,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
@@ -179,6 +202,7 @@ MonoBehaviour:
         itemID: -1
         itemBuffs: []
     - allowedItemTypes: 
+      displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:

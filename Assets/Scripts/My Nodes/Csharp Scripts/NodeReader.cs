@@ -26,11 +26,11 @@ public class NodeReader : MonoBehaviour
     }
     IEnumerator ReadNode()
     {
-        BaseNode bn = dialogueGraph.current;
-        string data = bn.GetString();
+        BaseNode baseNode = dialogueGraph.current;
+        string data = baseNode.GetString();
         string[] stringArray = data.Split('/');
         //Exception, when starting dialogue
-        if (stringArray[0] == "DialogueNode")
+        if (stringArray[0] == "Start")
         {
             GoToNextNodeThroughOutput("Exit");
 

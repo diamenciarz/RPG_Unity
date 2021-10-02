@@ -5,7 +5,8 @@ using XNode;
 
 public class BaseNode : Node {
 
-	public virtual string GetString()
+    //[Input] public int entry;
+    public virtual string GetString()
     {
         return null;
     }

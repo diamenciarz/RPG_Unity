@@ -129,7 +129,7 @@ public abstract class UserInterface : MonoBehaviour
             temporaryMouseObject.transform.SetParent(transform.parent);
 
             Image image = temporaryMouseObject.AddComponent<Image>();
-            Debug.Log("Item object: " + inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID]);
+            //Debug.Log("Item object: " + inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID]);
             image.sprite = inventoryToDisplay.itemDatabase.getItemObjectDictionary[displayedItemsDictionary[obj].item.itemID].itemSprite;
             image.raycastTarget = false;
         }

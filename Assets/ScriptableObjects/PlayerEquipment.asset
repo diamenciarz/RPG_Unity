@@ -41,7 +41,7 @@ MonoBehaviour:
         itemName: 
         itemID: -1
         itemBuffs: []
-    - allowedItemTypes: 0000000004000000
+    - allowedItemTypes: 0400000001000000
       displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
