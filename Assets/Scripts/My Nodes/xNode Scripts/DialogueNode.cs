@@ -6,7 +6,10 @@ using XNode;
 public class DialogueNode : BaseNode {
 
 	[Input] public int entry;
-	[Output] public int exit;
+	[Output] public int Choice1;
+	[Output] public int Choice2;
+	[Output] public int Choice3;
+	[Output] public int Choice4;
 
 	public string speakerName;
 	public string dialogue;

@@ -43,9 +43,13 @@ public class NodeReader : MonoBehaviour
         EventManager.StopListening("PlayerLeftDialogue", EndDialogue);
 
     }
-    public void NextSentence()
+    public void NextSentence(object obj)
     {
+        GameObject buttonGO = (GameObject)obj;
         nextSentence = true;
+
+        BaseNode nodeToJumpTo = dialogueButtonDictionary[buttonGO].GetNodeToJumpTo();
+        SetNextNode(nodeToJumpTo);
     }
     //This is called by a dialogue trigger on an NPC
     public IEnumerator StartDialogue(DialogueGraph inputDialogueGraph)
@@ -85,7 +89,7 @@ public class NodeReader : MonoBehaviour
         //Exception, when starting dialogue
         if (stringArray[0] == "Start")
         {
-            GoToNextNodeThroughOutput("exit");
+            GoToNextNodeThroughOutputName("exit");
 
         }
         if (IsThisTheLastMessage())
@@ -99,11 +103,13 @@ public class NodeReader : MonoBehaviour
             UpdateName(stringArray[1]);
             UpdateText(stringArray[2]);
 
+            CreateDialogueChoiceButtons();
+
             //Wait for one click, before going further with the dialogue
             yield return new WaitUntil(() => nextSentence == true);
             nextSentence = false;
 
-            GoToNextNodeThroughOutput("exit");
+            GoToNextNodeThroughOutputName("exit");
         }
     }
     private void CreateDialogueChoiceButtons()
@@ -129,13 +135,23 @@ public class NodeReader : MonoBehaviour
     {
         GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, ReturnButtonPosition(buttonIndex), Quaternion.identity, transform);
         dialogueChoiceButtonList.Add(dialogueButtonGO);
-        DialogueButton dialogueButton = new DialogueButton(FindNextNodeUsingOutputPortName(portName));
-        dialogueButtonDictionary.Add(dialogueButtonGO, dialogueButton);
+
+        BaseNode nextNode = FindNextNodeUsingOutputPortName(portName);
+        if (nextNode != null)
+        {
+            DialogueButton dialogueButton = new DialogueButton(nextNode);
+            dialogueButtonDictionary.Add(dialogueButtonGO, dialogueButton);
+
+            dialogueButtonGO.GetComponent<Text>().text = message;
+
+            AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { OnDialogueChoiceButtonClicked(dialogueButtonGO); }); 
+        }
+        else
+        {
+            Debug.Log("This node's value should never be null, as CreateDialogueChoiceButtons should take care of that");
+        }
 
 
-        dialogueButtonGO.GetComponent<Text>().text = message;
-
-        AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnDialogueChoiceButtonClicked(gameObject); }); 
     }
     private void DeletePreviousButtons()
     {
@@ -160,7 +176,7 @@ public class NodeReader : MonoBehaviour
     }
     protected void OnDialogueChoiceButtonClicked(GameObject obj)
     {
-
+        EventManager.TriggerEvent("Next Dalogue Sentence", obj);
     }
     private bool IsThisTheLastMessage()
     {
@@ -197,8 +213,8 @@ public class NodeReader : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
-
-    private void GoToNextNodeThroughOutput(string outputName)
+    //Moves to a next dialogue node - important
+    private void GoToNextNodeThroughOutputName(string outputName)
     {
         StopTheLastReadNodeCoroutine();
         if (!isThisTheLastMessage)
@@ -221,6 +237,18 @@ public class NodeReader : MonoBehaviour
             readNodeCoroutine = null;
         }
     }
+    private void SetNextNodeUsingOutputPortName(string outputName)
+    {
+        BaseNode returnedNode = FindNextNodeUsingOutputPortName(outputName);
+        if (returnedNode != null)
+        {
+            SetNextNode(returnedNode);
+        }
+        else
+        {
+            Debug.Log("Next Node wasn't found - name doesn't exist");
+        }
+    }
     private BaseNode FindNextNodeUsingOutputPortName(string outputName)
     {
 
@@ -234,17 +262,9 @@ public class NodeReader : MonoBehaviour
         }
         return null;
     }
-    private void SetNextNodeUsingOutputPortName(string outputName)
+    private void SetNextNode(BaseNode nextNode)
     {
-        BaseNode returnedNode = FindNextNodeUsingOutputPortName(outputName);
-        if (returnedNode != null)
-        {
-            dialogueGraph.currentNode = returnedNode;
-        }
-        else
-        {
-            Debug.Log("Next Node wasn't found - name doesn't exist");
-        }
+        dialogueGraph.currentNode = nextNode;
     }
     public void EndDialogue()
     {
