@@ -54,7 +54,7 @@ public class InventoryAnimator : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ready for a new animation");
+            //Debug.Log("Ready for a new animation");
             ClearInventoryAnimationCoroutine();
         }
     }

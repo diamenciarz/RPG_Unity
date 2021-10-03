@@ -15,7 +15,7 @@ public class DialogueTrigger : MonoBehaviour
     public void TriggerDialogue()
     {
         NodeReader foundClass = FindObjectOfType<NodeReader>();
-        StartCoroutine(foundClass.StartDialogue(dialogueGraph));
+        foundClass.StartDialogue(dialogueGraph);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

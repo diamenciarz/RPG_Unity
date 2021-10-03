@@ -1,5 +1,86 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8007146877504510804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 1080, y: 232}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: -8007146877504510804}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice1
+        node: {fileID: 2107010386909320987}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: -8007146877504510804}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: -8007146877504510804}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: -8007146877504510804}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: -8007146877504510804}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: Potionseller
+  dialogue: My potions are too strong for you warrior! You will get nada!
+  choice1Text: -_-
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18,7 +99,94 @@ MonoBehaviour:
   - {fileID: 7630676748943832778}
   - {fileID: 5655482366599179970}
   - {fileID: 6890432963639349874}
-  currentNode: {fileID: 2910407359243858882}
+  - {fileID: 5909285391378250259}
+  - {fileID: -8007146877504510804}
+  - {fileID: 2107010386909320987}
+  currentNode: {fileID: -8007146877504510804}
+--- !u!114 &2107010386909320987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 792, y: 232}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: 2107010386909320987}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice4
+        node: {fileID: 5655482366599179970}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: 2107010386909320987}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: -8007146877504510804}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 2107010386909320987}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 2107010386909320987}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 2107010386909320987}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: Potionseller
+  dialogue: Welcome warrior!
+  choice1Text: I am going into battle and I need your strongest potions!
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
 --- !u!114 &2910407359243858882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,7 +200,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 408, y: -88}
+  position: {x: 424, y: -152}
   ports:
     keys:
     - entry
@@ -94,8 +262,12 @@ MonoBehaviour:
   Choice2: 0
   Choice3: 0
   Choice4: 0
-  speakerName: John
-  dialogue: Bye!
+  speakerName: Woman
+  dialogue: Stuff happens!
+  choice1Text: Ok...
+  choice2Text: 
+  choice3Text: 
+  choice4Text: 
 --- !u!114 &5655482366599179970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,13 +330,100 @@ MonoBehaviour:
       _node: {fileID: 5655482366599179970}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: entry
+        node: {fileID: 5909285391378250259}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: Choice4
       _node: {fileID: 5655482366599179970}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 2107010386909320987}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: Woman
+  dialogue: Prepare for Battle!
+  choice1Text: Sure thing!
+  choice2Text: What is a "battle"?
+  choice3Text: Where is my axe?
+  choice4Text: Gotta go to the potionseller
+--- !u!114 &5909285391378250259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 808, y: -136}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: 5909285391378250259}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice3
+        node: {fileID: 5655482366599179970}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: 5909285391378250259}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 5909285391378250259}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 5909285391378250259}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 5909285391378250259}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
@@ -177,8 +436,12 @@ MonoBehaviour:
   Choice2: 0
   Choice3: 0
   Choice4: 0
-  speakerName: John
-  dialogue: Wazzup?
+  speakerName: Axe
+  dialogue: I am lost...
+  choice1Text: Ah shiet...
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
 --- !u!114 &6000008790648409012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,7 +486,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 408, y: 88}
+  position: {x: 424, y: 200}
   ports:
     keys:
     - entry
@@ -285,8 +548,12 @@ MonoBehaviour:
   Choice2: 0
   Choice3: 0
   Choice4: 0
-  speakerName: John
-  dialogue: Heya!
+  speakerName: Woman
+  dialogue: You will see in a while
+  choice1Text: Ok...
+  choice2Text: 
+  choice3Text: 
+  choice4Text: 
 --- !u!114 &7630676748943832778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,5 +632,9 @@ MonoBehaviour:
   Choice2: 0
   Choice3: 0
   Choice4: 0
-  speakerName: John
-  dialogue: Hello!
+  speakerName: Woman
+  dialogue: Welcome to Summoner's Rift!
+  choice1Text: Welcome, m'Lady!
+  choice2Text: 
+  choice3Text: 
+  choice4Text: 
