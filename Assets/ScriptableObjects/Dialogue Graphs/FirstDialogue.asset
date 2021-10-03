@@ -81,6 +81,177 @@ MonoBehaviour:
   choice2Text: Null
   choice3Text: Null
   choice4Text: Null
+--- !u!114 &-7988136790645618621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 328, y: 888}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: -7988136790645618621}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice3
+        node: {fileID: -2951503872387602222}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: -7988136790645618621}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: -7988136790645618621}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: -7988136790645618621}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: -7988136790645618621}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: 1
+  dialogue: 123132
+  choice1Text: End
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
+--- !u!114 &-2951503872387602222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 126.78186, y: 579.6229}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: -2951503872387602222}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice2
+        node: {fileID: 7630676748943832778}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: -2951503872387602222}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 488039159730970683}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: -2951503872387602222}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 6118371132239432698}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: -2951503872387602222}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: -7988136790645618621}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: -2951503872387602222}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: Choices
+  dialogue: Many
+  choice1Text: 1
+  choice2Text: 2
+  choice3Text: 3
+  choice4Text: Null
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,7 +273,92 @@ MonoBehaviour:
   - {fileID: 5909285391378250259}
   - {fileID: -8007146877504510804}
   - {fileID: 2107010386909320987}
+  - {fileID: -2951503872387602222}
+  - {fileID: 488039159730970683}
+  - {fileID: 6118371132239432698}
+  - {fileID: -7988136790645618621}
   currentNode: {fileID: -8007146877504510804}
+--- !u!114 &488039159730970683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 520, y: 584}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: 488039159730970683}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice1
+        node: {fileID: -2951503872387602222}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: 488039159730970683}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 488039159730970683}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 488039159730970683}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 488039159730970683}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: 1
+  dialogue: 12313
+  choice1Text: End
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
 --- !u!114 &2107010386909320987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,6 +729,87 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   exit: 0
+--- !u!114 &6118371132239432698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 552, y: 824}
+  ports:
+    keys:
+    - entry
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    values:
+    - _fieldName: entry
+      _node: {fileID: 6118371132239432698}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice2
+        node: {fileID: -2951503872387602222}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: 6118371132239432698}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: 6118371132239432698}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: 6118371132239432698}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: 6118371132239432698}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  speakerName: 1
+  dialogue: 2312
+  choice1Text: end
+  choice2Text: Null
+  choice3Text: Null
+  choice4Text: Null
 --- !u!114 &6890432963639349874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +941,10 @@ MonoBehaviour:
       _node: {fileID: 7630676748943832778}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: entry
+        node: {fileID: -2951503872387602222}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -635,6 +975,6 @@ MonoBehaviour:
   speakerName: Woman
   dialogue: Welcome to Summoner's Rift!
   choice1Text: Welcome, m'Lady!
-  choice2Text: 
+  choice2Text: Test
   choice3Text: 
   choice4Text: 

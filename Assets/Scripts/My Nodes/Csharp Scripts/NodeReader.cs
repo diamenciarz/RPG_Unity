@@ -113,22 +113,31 @@ public class NodeReader : MonoBehaviour
         DeletePreviousButtons();
 
         List<NodePort> outputCollection = dialogueGraph.currentNode.Outputs.ToList();
+        DeleteDisconnectedPortsFromList(outputCollection);
         if (outputCollection != null)
         {
-            bool hasCreatedAtLeastOneButton = false;
-            for (int i = 0; i < outputCollection.Count; i++)
+            if (outputCollection.Count != 0)
             {
-                bool thisPortIsConnectedToSomeNode = outputCollection[i].Connection != null;
-                if (thisPortIsConnectedToSomeNode)
+                if (outputCollection.Count <= 3)
                 {
-                    string portName = "Choice" + (i + 1);
-                    CreateSingleButton(i, dialogueMessagesArray[i + 3], portName); // Make an input in the node for button names
-                    hasCreatedAtLeastOneButton = true;
+                    for (int i = 0; i < outputCollection.Count; i++)
+                    {
+                        string portName = "Choice" + (i + 1);
+                        CreateBigButton(i, dialogueMessagesArray[i + 3], portName);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < outputCollection.Count; i++)
+                    {
+                        string portName = "Choice" + (i + 1);
+                        CreateSmallButton(i, dialogueMessagesArray[i + 3], portName);
+                    }
                 }
             }
-            if (!hasCreatedAtLeastOneButton)
+            else
             {
-                CreateEndConversationButton(dialogueMessagesArray[3]); // Make an input in the node for button names
+                CreateEndConversationButton(dialogueMessagesArray[3]);
             }
         }
         else
@@ -136,7 +145,24 @@ public class NodeReader : MonoBehaviour
             Debug.Log("A node should never have no outputs");
         }
     }
-    private void CreateSingleButton(int buttonIndex, string message, string portName)
+    private void DeleteDisconnectedPortsFromList(List<NodePort> outputCollection)
+    {
+        List<NodePort> savePortsToDelete = new List<NodePort>();
+        foreach (NodePort port in outputCollection)
+        {
+            bool thisPortIsDisconnected = port.Connection == null;
+            if (thisPortIsDisconnected)
+            {
+                savePortsToDelete.Add(port);
+            }
+        }
+        foreach (NodePort portToDelete in savePortsToDelete)
+        {
+            outputCollection.Remove(portToDelete);
+        }
+
+    }
+    private void CreateSmallButton(int buttonIndex, string message, string portName)
     {
         GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, Vector3.zero, Quaternion.identity, dialogueBoxGO.transform);
         dialogueButtonGO.GetComponent<RectTransform>().localPosition = ReturnButtonPosition(buttonIndex);
@@ -153,14 +179,37 @@ public class NodeReader : MonoBehaviour
 
             dialogueButtonGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
 
-            AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { OnDialogueChoiceButtonClicked(dialogueButtonGO); }); 
+            AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { OnDialogueChoiceButtonClicked(dialogueButtonGO); });
         }
         else
         {
             Debug.Log("This node's value should never be null, as CreateDialogueChoiceButtons should take care of that");
         }
+    }
+    private void CreateBigButton(int buttonIndex, string message, string portName)
+    {
+        GameObject dialogueButtonGO = Instantiate(endConversationButtonPrefab, Vector3.zero, Quaternion.identity, dialogueBoxGO.transform);
+        Vector3 specialPositionVector = new Vector3(firstButtonPosition.x + (xOffset * 0.5f), firstButtonPosition.y + yOffset * buttonIndex, 0);
+        dialogueButtonGO.GetComponent<RectTransform>().localPosition = specialPositionVector;
 
+        dialogueChoiceButtonList.Add(dialogueButtonGO);
 
+        BaseNode nextNode = FindNextNodeUsingOutputPortName(portName);
+        //Debug.Log("Next node name: " + nextNode);
+
+        if (nextNode != null)
+        {
+            DialogueButton dialogueButton = new DialogueButton(nextNode);
+            dialogueButtonDictionary.Add(dialogueButtonGO, dialogueButton);
+
+            dialogueButtonGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
+
+            AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { OnDialogueChoiceButtonClicked(dialogueButtonGO); });
+        }
+        else
+        {
+            Debug.Log("This node's value should never be null, as CreateDialogueChoiceButtons should take care of that");
+        }
     }
     private void CreateEndConversationButton(string message)
     {

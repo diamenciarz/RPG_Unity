@@ -5091,8 +5091,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueGraph: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
-  nameText: {fileID: 0}
-  dialogueText: {fileID: 0}
+  nameText: {fileID: 477154085}
+  dialogueText: {fileID: 953062346}
   dialogueBoxGO: {fileID: 65316956}
   dialogueChoiceButtonPrefab: {fileID: 3677151485011163866, guid: 2991e265b2322b9499fb5751e168217d, type: 3}
   endConversationButtonPrefab: {fileID: 3677151485011163866, guid: aca9efee0d32fc0468c60e3888eacfa2, type: 3}
