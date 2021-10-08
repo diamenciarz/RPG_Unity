@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using XNode;
 using System.Linq;
 using TMPro;
@@ -24,6 +23,8 @@ public class NodeReader : MonoBehaviour
     [SerializeField] Vector2 firstButtonPosition;
     [SerializeField] int yOffset;
     [SerializeField] int xOffset;
+    [Header("Called Event List")]
+    public List<string> calledEventList;
 
     [HideInInspector]
     public bool isDisplayingMessage = false;
@@ -43,16 +44,6 @@ public class NodeReader : MonoBehaviour
     {
         EventManager.StopListening("Next Dalogue Sentence", NextSentence);
         EventManager.StopListening("PlayerLeftDialogue", EndDialogue);
-
-    }
-    public void NextSentence(object obj)
-    {
-        GameObject buttonGO = (GameObject)obj;
-
-        BaseNode nodeToJumpTo = dialogueButtonDictionary[buttonGO].GetNodeToJumpTo();
-
-        SetCurrentNode(nodeToJumpTo);
-        ReadCurrentNode();
 
     }
     //This is called by a dialogue trigger on an NPC
@@ -97,7 +88,6 @@ public class NodeReader : MonoBehaviour
         if (dialogueMessagesArray[0] == "Start")
         {
             GoToNextNodeThroughOutputName("exit");
-
         }
         //Default option
         if (dialogueMessagesArray[0] == "DialogueNode")
@@ -107,31 +97,57 @@ public class NodeReader : MonoBehaviour
 
             CreateNewDialogueChoiceButtons();
         }
+        if (dialogueMessagesArray[0] == "ActionNode")
+        {
+            TriggerNodeActions();
+            GoToNextNodeThroughOutputName("exit");
+        }
     }
+    public void NextSentence(object obj)
+    {
+        GameObject buttonGO = (GameObject)obj;
+
+        BaseNode nodeToJumpTo = dialogueButtonDictionary[buttonGO].GetNodeToJumpTo();
+
+        SetCurrentNode(nodeToJumpTo);
+        ReadCurrentNode();
+
+    }
+
+
+    //Create buttons block Start
     private void CreateNewDialogueChoiceButtons()
     {
         DeletePreviousButtons();
+        //Debug.Log("Creating buttons");
+        DialogueNode dialogueNode = dialogueGraph.currentNode as DialogueNode;
+        List<NodePort> outputList = dialogueNode.GetEnabledConnectedOutputs(dialogueGraph.currentNode);
 
-        List<NodePort> outputCollection = dialogueGraph.currentNode.Outputs.ToList();
-        DeleteDisconnectedPortsFromList(outputCollection);
-        if (outputCollection != null)
+        if (outputList != null)
         {
-            if (outputCollection.Count != 0)
+            if (outputList.Count != 0)
             {
-                if (outputCollection.Count <= 3)
+                if (outputList.Count <= 3)
                 {
-                    for (int i = 0; i < outputCollection.Count; i++)
+                    //Make up to 3 big buttons
+                    for (int i = 0; i < outputList.Count; i++)
                     {
-                        string portName = "Choice" + (i + 1);
-                        CreateBigButton(i, dialogueMessagesArray[i + 3], portName);
+                        NodePort outputPortForButton = outputList[i];
+                        string portName = outputPortForButton.fieldName;
+                        string buttonName = dialogueMessagesArray[GetThisPortIndex(outputPortForButton) + 3];
+
+                        CreateBigButton(i, buttonName, portName);
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < outputCollection.Count; i++)
+                    for (int i = 0; i < outputList.Count; i++)
                     {
-                        string portName = "Choice" + (i + 1);
-                        CreateSmallButton(i, dialogueMessagesArray[i + 3], portName);
+                        NodePort outputPortForButton = outputList[i];
+                        string portName = outputPortForButton.fieldName;
+                        string buttonName = dialogueMessagesArray[GetThisPortIndex(outputPortForButton) + 3];
+
+                        CreateSmallButton(i, buttonName, portName);
                     }
                 }
             }
@@ -145,31 +161,38 @@ public class NodeReader : MonoBehaviour
             Debug.Log("A node should never have no outputs");
         }
     }
-    private void DeleteDisconnectedPortsFromList(List<NodePort> outputCollection)
+    private int GetThisPortIndex(NodePort portToCheck)
     {
-        List<NodePort> savePortsToDelete = new List<NodePort>();
-        foreach (NodePort port in outputCollection)
+        BaseNode baseNode = portToCheck.node as BaseNode;
+        DialogueNode dialogueNode = baseNode as DialogueNode;
+        List<NodePort> outputList = dialogueNode.GetConnectedOutputs(baseNode);
+        for (int i = 0; i < outputList.Count; i++)
         {
-            bool thisPortIsDisconnected = port.Connection == null;
-            if (thisPortIsDisconnected)
+            bool correctPortFound = portToCheck.fieldName == outputList[i].fieldName;
+            if (correctPortFound)
             {
-                savePortsToDelete.Add(port);
+                return i;
             }
         }
-        foreach (NodePort portToDelete in savePortsToDelete)
+        return -1;
+    }
+    private void DeletePreviousButtons()
+    {
+        foreach (GameObject button in dialogueChoiceButtonList)
         {
-            outputCollection.Remove(portToDelete);
+            Destroy(button);
         }
-
+        dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
+        dialogueChoiceButtonList.Clear();
     }
     private void CreateSmallButton(int buttonIndex, string message, string portName)
     {
         GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, Vector3.zero, Quaternion.identity, dialogueBoxGO.transform);
-        dialogueButtonGO.GetComponent<RectTransform>().localPosition = ReturnButtonPosition(buttonIndex);
+        dialogueButtonGO.GetComponent<RectTransform>().localPosition = CountButtonPosition(buttonIndex);
 
         dialogueChoiceButtonList.Add(dialogueButtonGO);
 
-        BaseNode nextNode = FindNextNodeUsingOutputPortName(portName);
+        BaseNode nextNode = FindNextNodeUsingOutputPortName(dialogueGraph.currentNode, portName);
         //Debug.Log("Next node name: " + nextNode);
 
         if (nextNode != null)
@@ -194,7 +217,7 @@ public class NodeReader : MonoBehaviour
 
         dialogueChoiceButtonList.Add(dialogueButtonGO);
 
-        BaseNode nextNode = FindNextNodeUsingOutputPortName(portName);
+        BaseNode nextNode = FindNextNodeUsingOutputPortName(dialogueGraph.currentNode, portName);
         //Debug.Log("Next node name: " + nextNode);
 
         if (nextNode != null)
@@ -222,16 +245,7 @@ public class NodeReader : MonoBehaviour
         dialogueButtonGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
         AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { EndDialogue(); });
     }
-    private void DeletePreviousButtons()
-    {
-        foreach (GameObject button in dialogueChoiceButtonList)
-        {
-            Destroy(button);
-        }
-        dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
-        dialogueChoiceButtonList.Clear();
-    }
-    private Vector3 ReturnButtonPosition(int index)
+    private Vector3 CountButtonPosition(int index)
     {
         if (index > 5)
         {
@@ -248,6 +262,23 @@ public class NodeReader : MonoBehaviour
     {
         EventManager.TriggerEvent("Next Dalogue Sentence", obj);
     }
+    //Create buttons block End
+
+
+    // Go to next node block Start
+    private void GoToNextNodeThroughOutputName(string outputName)
+    {
+        //Moves to a next dialogue node
+        if (!isThisTheLastMessage)
+        {
+            SetNextNodeUsingOutputPortName(outputName);
+            ReadCurrentNode();
+        }
+        else
+        {
+            EndDialogue();
+        }
+    }
     private bool IsThisTheLastMessage()
     {
         bool AreAllPortsDisconnected = true;
@@ -262,6 +293,44 @@ public class NodeReader : MonoBehaviour
         }
         return AreAllPortsDisconnected;
     }
+    private void SetNextNodeUsingOutputPortName(string outputName)
+    {
+        BaseNode returnedNode = FindNextNodeUsingOutputPortName(dialogueGraph.currentNode, outputName);
+        if (returnedNode != null)
+        {
+            //Set a new graph as current
+            SetCurrentNode(returnedNode);
+        }
+        else
+        {
+            Debug.Log("Next Node wasn't found - name doesn't exist");
+        }
+    }
+    private BaseNode FindNextNodeUsingOutputPortName(BaseNode currentNode, string outputName)
+    {
+        foreach (NodePort nodePort in currentNode.Outputs)
+        {
+            bool thisPortIsConnectedToSomeNode = nodePort.Connection != null;
+            if (thisPortIsConnectedToSomeNode)
+            {
+                bool thisIsThePortIAmLookingFor = nodePort.fieldName == outputName;
+                if (thisIsThePortIAmLookingFor)
+                {
+                    BaseNode returnNode = nodePort.Connection.node as BaseNode;
+                    return returnNode;
+                }
+            }
+        }
+        return null;
+    }
+    private void SetCurrentNode(BaseNode nextNode)
+    {
+        dialogueGraph.currentNode = nextNode;
+    }
+    // Go to next node block End
+
+
+    //Display text functions block Start
     private void UpdateName(string newName)
     {
         nameText.text = newName;
@@ -283,53 +352,27 @@ public class NodeReader : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
     }
-    //Moves to a next dialogue node - important
-    private void GoToNextNodeThroughOutputName(string outputName)
-    {
-        if (!isThisTheLastMessage)
-        {
-            SetNextNodeUsingOutputPortName(outputName);
-            ReadCurrentNode();
-        }
-        else
-        {
-            EndDialogue();
-        }
-    }
-    private void SetNextNodeUsingOutputPortName(string outputName)
-    {
-        BaseNode returnedNode = FindNextNodeUsingOutputPortName(outputName);
-        if (returnedNode != null)
-        {
-            //Set a new graph as current
-            SetCurrentNode(returnedNode);
-        }
-        else
-        {
-            Debug.Log("Next Node wasn't found - name doesn't exist");
-        }
-    }
-    private BaseNode FindNextNodeUsingOutputPortName(string outputName)
-    {
+    //Display text functions block End
 
-        foreach (NodePort nodePort in dialogueGraph.currentNode.Outputs)
-        {
-            bool thisPortIsConnectedToSomeNode = nodePort.Connection != null;
-            if (thisPortIsConnectedToSomeNode)
-            {
-                bool thisIsThePortIAmLookingFor = nodePort.fieldName == outputName;
-                if (thisIsThePortIAmLookingFor)
-                {
-                    BaseNode returnNode = nodePort.Connection.node as BaseNode;
-                    return returnNode;
-                }
-            }
-        }
-        return null;
-    }
-    private void SetCurrentNode(BaseNode nextNode)
+
+    //Read node helper functions block Start
+    private void TriggerNodeActions()
     {
-        dialogueGraph.currentNode = nextNode;
+        int actionNumber = dialogueMessagesArray.Length;
+        for (int i = 1; i < actionNumber; i++)
+        {
+            string actionName = dialogueMessagesArray[i];
+            TriggerActionByName(actionName);
+        }
+    }
+    private void TriggerActionByName(string actionName)
+    {
+        EventManager.TriggerEvent(actionName);
+        if (calledEventList.Contains(actionName) == false)
+        {
+            Debug.Log("Added action:" + actionName);
+            calledEventList.Add(actionName);
+        }
     }
     public void EndDialogue()
     {
@@ -345,6 +388,133 @@ public class NodeReader : MonoBehaviour
         eventTrigger.callback.AddListener(action);
         trigger.triggers.Add(eventTrigger);
     }
+    //Read node helper functions block End
+
+
+    //Get enabled outputs block start
+    private List<NodePort> GetEnabledConnectedOutputs(BaseNode node)
+    {
+        List<NodePort> outputList = GetConnectedOutputs(node);
+
+        DeleteDisabledOutputsFromList(outputList);
+
+        return outputList;
+    }
+    private void DeleteDisabledOutputsFromList(List<NodePort> outputList)
+    {
+        List<NodePort> portsToDelete = new List<NodePort>();
+        foreach (NodePort port in outputList)
+        {
+
+            if (!IsNodeEnabled(port.node as BaseNode))
+            {
+                portsToDelete.Add(port);
+            }
+        }
+        foreach (NodePort portToDelete in portsToDelete)
+        {
+            outputList.Remove(portToDelete);
+        }
+
+    }
+    private bool IsNodeEnabled(BaseNode nodeToCheck)
+    {
+        List<NodePort> nodeInputList = GetConnectedInputs(nodeToCheck);
+        foreach (NodePort port in nodeInputList)
+        {
+            if (port.fieldName == "enablingEvents")
+            {
+                ActionNode enablingEventActionNode = FindPreviousNodeUsingInputPortName(nodeToCheck, "enablingEvents") as ActionNode;
+                if (!DoesCalledEventListContainAll(enablingEventActionNode.eventList))
+                {
+                    return false;
+                }
+            }
+            if (port.fieldName == "disablingEvents")
+            {
+                ActionNode disablingEventActionNode = FindPreviousNodeUsingInputPortName(nodeToCheck, "disablingEvents") as ActionNode;
+                if (!DoesCalledEventListContainAtLeastOne(disablingEventActionNode.eventList))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    private BaseNode FindPreviousNodeUsingInputPortName(BaseNode currentNode, string outputName)
+    {
+        foreach (NodePort nodePort in currentNode.Inputs)
+        {
+            bool thisPortIsConnectedToSomeNode = nodePort.Connection != null;
+            if (thisPortIsConnectedToSomeNode)
+            {
+                bool thisIsThePortIAmLookingFor = nodePort.fieldName == outputName;
+                if (thisIsThePortIAmLookingFor)
+                {
+                    BaseNode returnNode = nodePort.Connection.node as BaseNode;
+                    return returnNode;
+                }
+            }
+        }
+        return null;
+    }
+    private bool DoesCalledEventListContainAll(List<string> events)
+    {
+        foreach (string element in events)
+        {
+            bool containsThisEvent = calledEventList.Contains(element);
+            if (!containsThisEvent)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    private bool DoesCalledEventListContainAtLeastOne(List<string> events)
+    {
+        foreach (string element in events)
+        {
+            bool containsThisEvent = calledEventList.Contains(element);
+            if (containsThisEvent)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private List<NodePort> GetConnectedOutputs(BaseNode node)
+    {
+        List<NodePort> outputList = node.Outputs.ToList();
+        DeleteDisconnectedPortsFromList(outputList);
+        return outputList;
+    }
+    private void DeleteDisconnectedPortsFromList(List<NodePort> outputCollection)
+    {
+        List<NodePort> savePortsToDelete = new List<NodePort>();
+        foreach (NodePort port in outputCollection)
+        {
+            bool thisPortIsDisconnected = port.Connection == null;
+            if (thisPortIsDisconnected)
+            {
+                savePortsToDelete.Add(port);
+            }
+        }
+        foreach (NodePort portToDelete in savePortsToDelete)
+        {
+            outputCollection.Remove(portToDelete);
+        }
+
+    }
+    private List<NodePort> GetConnectedInputs(BaseNode node)
+    {
+        List<NodePort> inputList = node.Inputs.ToList();
+        DeleteDisconnectedPortsFromList(inputList);
+        return inputList;
+    }
+    //Get enabled outputs block end
+
+
     public class DialogueButton
     {
         private BaseNode nodeToJumpTo;

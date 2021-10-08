@@ -6,7 +6,7 @@ public class InventoryAnimator : MonoBehaviour
 {
     public Animator inventoryPanelAnimator;
     public Animator equipmentPanelAnimator;
-    public bool isDisplayingInventory = false;
+    public bool isDisplayingInventory = true;
 
     //Private variables
     private Coroutine inventoryAnimationCoroutine = null; 
