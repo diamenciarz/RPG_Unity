@@ -87,7 +87,10 @@ public class NodeReader : MonoBehaviour
         //Exception, when starting dialogue
         if (dialogueMessagesArray[0] == "Start")
         {
-            GoToNextNodeThroughOutputName("exit");
+            StartNode dialogueNode = baseNode as StartNode;
+            List<NodePort> outputList = dialogueNode.GetEnabledConnectedOutputs(baseNode);
+            Debug.Log("Output count: " + outputList.Count);
+            GoToRandomNextNode(outputList);
         }
         //Default option
         if (dialogueMessagesArray[0] == "DialogueNode")
@@ -111,7 +114,14 @@ public class NodeReader : MonoBehaviour
 
         SetCurrentNode(nodeToJumpTo);
         ReadCurrentNode();
+    }
+    private void GoToRandomNextNode(List<NodePort> outputPortList)
+    {
+        int index = Random.Range(0,outputPortList.Count);
+        NodePort outputPortForButton = outputPortList[index];
+        string portName = outputPortForButton.fieldName;
 
+        GoToNextNodeThroughOutputName(portName);
     }
 
 
@@ -134,7 +144,6 @@ public class NodeReader : MonoBehaviour
                     {
                         NodePort outputPortForButton = outputList[i];
                         string portName = outputPortForButton.fieldName;
-                        Debug.Log("Button index: " + GetThisPortIndex(outputPortForButton) + 3);
                         string buttonName = dialogueMessagesArray[GetThisPortIndex(outputPortForButton) + 3];
 
                         CreateBigButton(i, buttonName, portName);
@@ -154,12 +163,20 @@ public class NodeReader : MonoBehaviour
             }
             else
             {
-                CreateEndConversationButton(dialogueMessagesArray[3]);
+                List<NodePort> allOutputList = dialogueNode.GetConnectedOutputs(dialogueGraph.currentNode);
+                if (allOutputList.Count == 0)
+                {
+                    CreateEndConversationButton(dialogueMessagesArray[3]);
+                }
+                else
+                {
+                    CreateEndConversationButton("[No choices here yet]");
+                }
             }
         }
         else
         {
-            Debug.Log("A node should never have no outputs");
+            Debug.Log("A node should never have a null amount of outputs");
         }
     }
     private int GetThisPortIndex(NodePort portToCheck)
@@ -189,7 +206,7 @@ public class NodeReader : MonoBehaviour
     private void CreateSmallButton(int buttonIndex, string message, string portName)
     {
         GameObject dialogueButtonGO = Instantiate(dialogueChoiceButtonPrefab, Vector3.zero, Quaternion.identity, dialogueBoxGO.transform);
-        dialogueButtonGO.GetComponent<RectTransform>().localPosition = CountButtonPosition(buttonIndex);
+        dialogueButtonGO.GetComponent<RectTransform>().localPosition = ReturnSmallButtonPosition(buttonIndex);
 
         dialogueChoiceButtonList.Add(dialogueButtonGO);
 
@@ -213,7 +230,7 @@ public class NodeReader : MonoBehaviour
     private void CreateBigButton(int buttonIndex, string message, string portName)
     {
         GameObject dialogueButtonGO = Instantiate(endConversationButtonPrefab, Vector3.zero, Quaternion.identity, dialogueBoxGO.transform);
-        Vector3 specialPositionVector = new Vector3(firstButtonPosition.x + (xOffset * 0.5f), firstButtonPosition.y + yOffset * buttonIndex, 0);
+        Vector3 specialPositionVector = ReturnBigButtonPosition(buttonIndex);
         dialogueButtonGO.GetComponent<RectTransform>().localPosition = specialPositionVector;
 
         dialogueChoiceButtonList.Add(dialogueButtonGO);
@@ -246,16 +263,29 @@ public class NodeReader : MonoBehaviour
         dialogueButtonGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
         AddEvent(dialogueButtonGO, EventTriggerType.PointerClick, delegate { EndDialogue(); });
     }
-    private Vector3 CountButtonPosition(int index)
+    private Vector3 ReturnSmallButtonPosition(int index)
     {
         if (index > 5)
         {
-            Debug.Log("Can only make max 6 buttons");
+            Debug.Log("Can only make max 6 small buttons");
             return new Vector3(firstButtonPosition.x, firstButtonPosition.y, 0);
         }
         else
         {
             Vector3 returnVector = new Vector3(firstButtonPosition.x + xOffset * (index % 2), firstButtonPosition.y + yOffset * (index / 2), 0);
+            return returnVector;
+        }
+    }
+    private Vector3 ReturnBigButtonPosition(int index)
+    {
+        if (index > 3)
+        {
+            Debug.Log("Can only make max 3 big buttons");
+            return new Vector3(firstButtonPosition.x, firstButtonPosition.y, 0);
+        }
+        else
+        {
+            Vector3 returnVector = new Vector3(firstButtonPosition.x + (xOffset * 0.5f), firstButtonPosition.y + yOffset * index, 0);
             return returnVector;
         }
     }
@@ -304,7 +334,7 @@ public class NodeReader : MonoBehaviour
         }
         else
         {
-            Debug.Log("Next Node wasn't found - name doesn't exist");
+            Debug.Log("Next Node wasn't found - name: " + outputName + " doesn't exist");
         }
     }
     private BaseNode FindNextNodeUsingOutputPortName(BaseNode currentNode, string outputName)

@@ -16,9 +16,9 @@ public class ActionNode : BaseNode {
         string actions = "";
         foreach (string actionString in eventList)
         {
-            actions += actionString;
             actions += "/";
+            actions += actionString;
         }
-        return ("ActionNode/" + actions);
+        return ("ActionNode" + actions);
     }
 }

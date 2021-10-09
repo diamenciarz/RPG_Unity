@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 312, y: 1064}
+  position: {x: 312, y: 1464}
   ports:
     keys:
     - entry
@@ -203,7 +203,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: exit
-        node: {fileID: -1840238643205972685}
+        node: {fileID: 8429220810213011471}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -246,7 +246,136 @@ MonoBehaviour:
   Choice5: 0
   Choice6: 0
   speakerName: 1
-  dialogue: Enabled by nic nic
+  dialogue: Enabled by nic
+  choiceTextMessages:
+  - End
+--- !u!114 &-3742325500686933742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77bbd6651624d54daf74595509e8f32, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -808, y: 648}
+  ports:
+    keys:
+    - entry
+    - enablingEvents
+    - disablingEvents
+    - Choice1
+    - Choice2
+    - Choice3
+    - Choice4
+    - Choice5
+    - Choice6
+    values:
+    - _fieldName: entry
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Exit2
+        node: {fileID: 6000008790648409012}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: enablingEvents
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: disablingEvents
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: exit
+        node: {fileID: -2888601333035006049}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice1
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 3641014012705034122}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice2
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice3
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice4
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice5
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Choice6
+      _node: {fileID: -3742325500686933742}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  enablingEvents: 0
+  disablingEvents: 0
+  Choice1: 0
+  Choice2: 0
+  Choice3: 0
+  Choice4: 0
+  Choice5: 0
+  Choice6: 0
+  speakerName: Someone
+  dialogue: Something
   choiceTextMessages:
   - End
 --- !u!114 &-2951503872387602222
@@ -383,7 +512,7 @@ MonoBehaviour:
   - 1
   - 2
   - 3
---- !u!114 &-1840238643205972685
+--- !u!114 &-2888601333035006049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -396,14 +525,14 @@ MonoBehaviour:
   m_Name: Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -88, y: 1288}
+  position: {x: -1128, y: 728}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: -1840238643205972685}
+      _node: {fileID: -2888601333035006049}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
@@ -412,12 +541,12 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: -1840238643205972685}
+      _node: {fileID: -2888601333035006049}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: enablingEvents
-        node: {fileID: -7988136790645618621}
+      - fieldName: disablingEvents
+        node: {fileID: -3742325500686933742}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -426,7 +555,7 @@ MonoBehaviour:
   entry: 0
   exit: 0
   eventList:
-  - Nic
+  - 2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,10 +582,11 @@ MonoBehaviour:
   - {fileID: 6118371132239432698}
   - {fileID: -7988136790645618621}
   - {fileID: 310108302120823032}
-  - {fileID: 460103095854663879}
-  - {fileID: -1840238643205972685}
   - {fileID: 8429220810213011471}
-  currentNode: {fileID: -7988136790645618621}
+  - {fileID: -3742325500686933742}
+  - {fileID: 3641014012705034122}
+  - {fileID: -2888601333035006049}
+  currentNode: {fileID: 488039159730970683}
 --- !u!114 &310108302120823032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,50 +623,6 @@ MonoBehaviour:
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  entry: 0
-  exit: 0
-  eventList:
-  - Nic
---- !u!114 &460103095854663879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38e97e35d1f985f4b84b1a599d9780cd, type: 3}
-  m_Name: Action
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 552, y: 968}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 460103095854663879}
-      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 460103095854663879}
-      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: disablingEvents
-        node: {fileID: 6118371132239432698}
-        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -920,6 +1006,50 @@ MonoBehaviour:
   dialogue: Stuff happens!
   choiceTextMessages:
   - Wow!
+--- !u!114 &3641014012705034122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e97e35d1f985f4b84b1a599d9780cd, type: 3}
+  m_Name: Action
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -552, y: 760}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 3641014012705034122}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Choice1
+        node: {fileID: -3742325500686933742}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 3641014012705034122}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry: 0
+  exit: 0
+  eventList:
+  - 2
 --- !u!114 &5655482366599179970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1197,12 +1327,65 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -632, y: 56}
+  position: {x: -904, y: 72}
   ports:
     keys:
-    - exit
+    - Exit6
+    - Exit5
+    - Exit4
+    - Exit3
+    - Exit2
+    - Exit1
     values:
-    - _fieldName: exit
+    - _fieldName: Exit6
+      _node: {fileID: 6000008790648409012}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Exit5
+      _node: {fileID: 6000008790648409012}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Exit4
+      _node: {fileID: 6000008790648409012}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Exit3
+      _node: {fileID: 6000008790648409012}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Exit2
+      _node: {fileID: 6000008790648409012}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: -3742325500686933742}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Exit1
       _node: {fileID: 6000008790648409012}
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -1214,7 +1397,12 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  exit: 0
+  Exit1: 0
+  Exit2: 0
+  Exit3: 0
+  Exit4: 0
+  Exit5: 0
+  Exit6: 0
 --- !u!114 &6118371132239432698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,7 +1416,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 856, y: 824}
+  position: {x: 312, y: 1048}
   ports:
     keys:
     - entry
@@ -1304,7 +1492,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: exit
-        node: {fileID: 460103095854663879}
+        node: {fileID: 8429220810213011471}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -1495,7 +1683,7 @@ MonoBehaviour:
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: exit
+      - fieldName: Exit1
         node: {fileID: 6000008790648409012}
         reroutePoints: []
       _direction: 0
@@ -1608,7 +1796,7 @@ MonoBehaviour:
   m_Name: Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 8, y: 600}
+  position: {x: 616, y: 968}
   ports:
     keys:
     - entry
@@ -1630,6 +1818,12 @@ MonoBehaviour:
       connections:
       - fieldName: enablingEvents
         node: {fileID: 488039159730970683}
+        reroutePoints: []
+      - fieldName: enablingEvents
+        node: {fileID: -7988136790645618621}
+        reroutePoints: []
+      - fieldName: disablingEvents
+        node: {fileID: 6118371132239432698}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
