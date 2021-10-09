@@ -80,7 +80,7 @@ public class DialogueNode : BaseNode
             if (port.fieldName == "disablingEvents")
             {
                 ActionNode disablingEventActionNode = FindPreviousNodeUsingInputPortName(nodeToCheck, "disablingEvents") as ActionNode;
-                if (!DoesCalledEventListContainAtLeastOne(disablingEventActionNode.eventList))
+                if (DoesCalledEventListContainAtLeastOne(disablingEventActionNode.eventList))
                 {
                     Debug.Log("One disabling event too many");
                     return false;

@@ -134,6 +134,7 @@ public class NodeReader : MonoBehaviour
                     {
                         NodePort outputPortForButton = outputList[i];
                         string portName = outputPortForButton.fieldName;
+                        Debug.Log("Button index: " + GetThisPortIndex(outputPortForButton) + 3);
                         string buttonName = dialogueMessagesArray[GetThisPortIndex(outputPortForButton) + 3];
 
                         CreateBigButton(i, buttonName, portName);

@@ -246,7 +246,7 @@ MonoBehaviour:
   Choice5: 0
   Choice6: 0
   speakerName: 1
-  dialogue: 123132
+  dialogue: Enabled by nic nic
   choiceTextMessages:
   - End
 --- !u!114 &-2951503872387602222
@@ -293,7 +293,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: entry
-        node: {fileID: 6118371132239432698}
+        node: {fileID: 488039159730970683}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -305,7 +305,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: entry
-        node: {fileID: 488039159730970683}
+        node: {fileID: 6118371132239432698}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -427,7 +427,6 @@ MonoBehaviour:
   exit: 0
   eventList:
   - Nic
-  - Nic
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,7 +456,7 @@ MonoBehaviour:
   - {fileID: 460103095854663879}
   - {fileID: -1840238643205972685}
   - {fileID: 8429220810213011471}
-  currentNode: {fileID: -2951503872387602222}
+  currentNode: {fileID: -7988136790645618621}
 --- !u!114 &310108302120823032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,7 +576,7 @@ MonoBehaviour:
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: Choice2
+      - fieldName: Choice1
         node: {fileID: -2951503872387602222}
         reroutePoints: []
       _direction: 0
@@ -669,7 +668,7 @@ MonoBehaviour:
   Choice5: 0
   Choice6: 0
   speakerName: 1
-  dialogue: 12313
+  dialogue: Enabled by nic
   choiceTextMessages:
   - End
 --- !u!114 &2107010386909320987
@@ -1247,7 +1246,7 @@ MonoBehaviour:
       _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: Choice1
+      - fieldName: Choice2
         node: {fileID: -2951503872387602222}
         reroutePoints: []
       _direction: 0
@@ -1339,7 +1338,7 @@ MonoBehaviour:
   Choice5: 0
   Choice6: 0
   speakerName: 1
-  dialogue: 2312
+  dialogue: Disabled by nic
   choiceTextMessages:
   - Okey
 --- !u!114 &6890432963639349874
