@@ -79,6 +79,8 @@
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
     <Compile Include="Assets\Scripts\Prefabs\TriggerObjectController.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\Static Data Holder.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\BushController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />
