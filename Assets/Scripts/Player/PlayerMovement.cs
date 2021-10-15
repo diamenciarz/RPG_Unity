@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
         playerSpeed = defaultPlayerSpeed;
         myCollider2D = GetComponent<BoxCollider2D>();
         myRigidbody2D = GetComponent<Rigidbody2D>();
+        EventManager.TriggerEvent("SetPlayerGameObject", gameObject);
+
     }
 
 

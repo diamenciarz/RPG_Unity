@@ -6,6 +6,6 @@ public class BushController : MonoBehaviour
 {
     private void Awake()
     {
-        StaticDataHolder.dashableObjectList.Add(gameObject);
+        StaticDataHolder.AddDashableObject(gameObject);
     }
 }

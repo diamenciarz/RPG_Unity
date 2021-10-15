@@ -131,7 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40cc9ed77f749e4180226cf617805b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 5
+  defaultPlayerSpeed: 4
+  bushSpeedModifier: 0.4
+  canDash: 1
+  moveVectorThisFrame: {x: 0, y: 0, z: 0}
 --- !u!61 &6195473770567518807
 BoxCollider2D:
   m_ObjectHideFlags: 0
