@@ -10,4 +10,8 @@ public class BaseNode : Node {
     {
         return null;
     }
+    public virtual string GetValues()
+    {
+        return null;
+    }
 }

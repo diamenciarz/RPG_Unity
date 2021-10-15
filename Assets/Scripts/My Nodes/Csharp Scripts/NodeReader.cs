@@ -34,6 +34,7 @@ public class NodeReader : MonoBehaviour
     private List<GameObject> dialogueChoiceButtonList = new List<GameObject>();
     private Dictionary<GameObject, DialogueButton> dialogueButtonDictionary = new Dictionary<GameObject, DialogueButton>();
     string[] dialogueMessagesArray;
+    string[] dialogueValuesArray;
 
     private void OnEnable()
     {
@@ -77,8 +78,7 @@ public class NodeReader : MonoBehaviour
     public void ReadCurrentNode()
     {
         BaseNode baseNode = dialogueGraph.currentNode;
-        string data = baseNode.GetString();
-        dialogueMessagesArray = data.Split('/');
+        SaveNodeMessages();
         //Check, if this is the last dialogue option
         if (IsThisTheLastMessage())
         {
@@ -105,6 +105,12 @@ public class NodeReader : MonoBehaviour
             TriggerNodeActions();
             GoToNextNodeThroughOutputName("exit");
         }
+    }
+    private void SaveNodeMessages()
+    {
+        BaseNode baseNode = dialogueGraph.currentNode;
+        string data = baseNode.GetString();
+        dialogueMessagesArray = data.Split('/');
     }
     public void NextSentence(object obj)
     {
@@ -389,12 +395,34 @@ public class NodeReader : MonoBehaviour
     //Read node helper functions block Start
     private void TriggerNodeActions()
     {
+        SaveNodeTriggerValues();
+
         int actionNumber = dialogueMessagesArray.Length;
+        int valueNumber = dialogueValuesArray.Length;
         for (int i = 1; i < actionNumber; i++)
         {
             string actionName = dialogueMessagesArray[i];
+            
+            bool checkValueListLength = valueNumber > i;
+            if (checkValueListLength)
+            {
+                string triggerValue = dialogueValuesArray[i];
+                bool triggerValueNotNull = triggerValue != "-1";
+                if (triggerValueNotNull)
+                {
+                    TriggerActionByNameAndValue(actionName, triggerValue);
+                    continue;
+                }
+            }
             TriggerActionByName(actionName);
+            
         }
+    }
+    private void SaveNodeTriggerValues()
+    {
+        BaseNode baseNode = dialogueGraph.currentNode;
+        string data = baseNode.GetValues();
+        dialogueValuesArray = data.Split('/');
     }
     private void TriggerActionByName(string actionName)
     {
@@ -402,6 +430,15 @@ public class NodeReader : MonoBehaviour
         if (calledEventList.Contains(actionName) == false)
         {
             Debug.Log("Added action:" + actionName);
+            calledEventList.Add(actionName);
+        }
+    }
+    private void TriggerActionByNameAndValue(string actionName, string value)
+    {
+        EventManager.TriggerEvent(actionName, value);
+        Debug.Log("Triggered event:" + actionName);
+        if (calledEventList.Contains(actionName) == false)
+        {
             calledEventList.Add(actionName);
         }
     }
