@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Name: Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 680, y: -392}
+  position: {x: 712, y: -392}
   ports:
     keys:
     - entry
@@ -461,7 +461,7 @@ MonoBehaviour:
   - {fileID: 8429220810213011471}
   - {fileID: 5372061816389229444}
   - {fileID: -4144434935267557349}
-  currentNode: {fileID: -4144434935267557349}
+  currentNode: {fileID: 488039159730970683}
 --- !u!114 &310108302120823032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Name: Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1320, y: -56}
+  position: {x: 1240, y: -104}
   ports:
     keys:
     - entry
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 408, y: -344}
+  position: {x: 440, y: -360}
   ports:
     keys:
     - entry
@@ -1674,7 +1674,7 @@ MonoBehaviour:
   m_Name: Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 696, y: 904}
+  position: {x: 744, y: 1048}
   ports:
     keys:
     - entry

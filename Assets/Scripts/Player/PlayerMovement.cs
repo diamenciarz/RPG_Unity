@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashCooldown = 1f;
     [SerializeField] float dashDuration = 0.5f;
     [SerializeField] float dashRange = 1.5f;
-    public bool canDash = true;
     [HideInInspector]
     public float dashSpeed;
 
@@ -17,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private int forceMultiplier = 100;
     private bool shouldStopDashImmediately;
     private bool isDashing;
+    private bool canDash = true;
 
     private Vector3 dashVector;
     private Vector3 moveVectorThisFrame;
