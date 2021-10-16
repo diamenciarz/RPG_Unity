@@ -5,12 +5,14 @@ using UnityEngine;
 public class DashIconController : MonoBehaviour
 {
 
-    [SerializeField] float snapRange = 5f;
+    [SerializeField] float snapRange = 1.5f;
 
     bool isVisible = true;
-    public GameObject playerToFollow;
-    public GameObject currentClosestGameObject;
+    bool isDashAvailable = true;
+    GameObject playerToFollow;
+    GameObject currentClosestGameObject;
     SpriteRenderer mySpriteRenderer;
+    PlayerMovement playerMovement;
     // Start is called before the first frame update
     private void OnEnable()
     {
@@ -28,20 +30,31 @@ public class DashIconController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdatePosition();
-        UpdateRotation();
-        UpdateVisibility();
-    }
-    private void UpdateVisibility()
-    {
-        if (isVisible)
+        if (isDashAvailable)
         {
-            mySpriteRenderer.enabled = true;
+            UpdatePosition();
+            UpdateRotation();
+            UpdateVisibility();
         }
         else
         {
-            mySpriteRenderer.enabled = false;
+            SetVisibility(false);
         }
+    }
+    private void UpdateVisibility()
+    {
+        if (isVisible && playerMovement.CanDash())
+        {
+            SetVisibility(true);
+        }
+        else
+        {
+            SetVisibility(false);
+        }
+    }
+    private void SetVisibility(bool isTrue)
+    {
+        mySpriteRenderer.enabled = isTrue;
     }
     private void UpdateRotation()
     {
@@ -50,6 +63,8 @@ public class DashIconController : MonoBehaviour
     private void UpdatePosition()
     {
         currentClosestGameObject = FindTheClosestDashableObject();
+        StaticDataHolder.SetCurrentDashObject(currentClosestGameObject);
+
         if (currentClosestGameObject != null)
         {
             isVisible = true;
@@ -73,7 +88,7 @@ public class DashIconController : MonoBehaviour
 
         foreach (GameObject dashableObject in StaticDataHolder.GetDashableObjectList())
         {
-            float playerDistanceToGameObject = StaticDataHolder.GetPositionBetweenObjectsIn2D(dashableObject, playerToFollow);
+            float playerDistanceToGameObject = StaticDataHolder.GetDistanceBetweenObjectsIn2D(dashableObject, playerToFollow);
             //Debug.Log("Distance:" + playerDistanceToGameObject);
 
             if (playerDistanceToGameObject <= snapRange)
@@ -99,6 +114,7 @@ public class DashIconController : MonoBehaviour
         try
         {
             playerToFollow = (GameObject)inputObject;
+            playerMovement = playerToFollow.GetComponent<PlayerMovement>();
         }
         catch (System.Exception)
         {
@@ -109,5 +125,9 @@ public class DashIconController : MonoBehaviour
     public bool GetIsVisible()
     {
         return isVisible;
+    }
+    public void SetIsDashAvailable(bool isTrue)
+    {
+        isDashAvailable = isTrue;
     }
 }

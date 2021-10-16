@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 5147535588325408921}
   - component: {fileID: 6195473770939546903}
   - component: {fileID: 114496066386386624}
+  - component: {fileID: 3186074715888603841}
   m_Layer: 6
   m_Name: Player_Blue
   m_TagString: Player
@@ -133,8 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPlayerSpeed: 4
   bushSpeedModifier: 0.4
+  dashCooldown: 1
   canDash: 1
-  moveVectorThisFrame: {x: 0, y: 0, z: 0}
+  dashAnimation: {fileID: 0}
 --- !u!61 &6195473770567518807
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -212,3 +214,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 21899b4769c108544b5fae5aa86841de, type: 2}
   - {fileID: 11400000, guid: a2cfe87dbd379724b84ec41547fb47d3, type: 2}
   playerInventoryObject: {fileID: 11400000, guid: a2cfe87dbd379724b84ec41547fb47d3, type: 2}
+--- !u!95 &3186074715888603841
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770567518804}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f633c4ca7ce6fc84aaa28ec4c9b248ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

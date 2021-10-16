@@ -5,6 +5,7 @@ using UnityEngine;
 public static class StaticDataHolder
 {
     public static List<GameObject> dashableObjectList = new List<GameObject>();
+    public static GameObject currentDashObject;
 
 
     //List Methods
@@ -23,11 +24,21 @@ public static class StaticDataHolder
     {
         return dashableObjectList;
     }
-    //
+
+
+    // Dash Object Methods
+    public static void SetCurrentDashObject(GameObject setObject)
+    {
+        currentDashObject = setObject;
+    }
+    public static GameObject GetCurrentDashObject()
+    {
+        return currentDashObject;
+    }
 
 
     //Helper Methods
-    public static float GetPositionBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
+    public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
     {
         Vector3 playerPosition = firstObject.transform.position;
         playerPosition.z = 0;
@@ -35,6 +46,15 @@ public static class StaticDataHolder
         objectPosition.z = 0;
 
         return (playerPosition - objectPosition).magnitude;
+    }
+    public static Vector3 GetDeltaPositionFromToIn2D(GameObject firstObject, GameObject secondObject)
+    {
+        Vector3 myPositionVector = firstObject.transform.position;
+        myPositionVector.z = 0;
+        Vector3 targetPosition = secondObject.transform.position;
+        targetPosition.z = 0;
+
+        return (targetPosition - myPositionVector);
     }
     public static void RotateFromToGameObjectIn2D(GameObject firstObject, GameObject secondObject)
     {
