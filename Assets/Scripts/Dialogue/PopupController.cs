@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class PopupController : MonoBehaviour
 {
+    public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI nameText;
 
-    private TextMeshProUGUI popupText;
     private LayoutElement myLayoutElement;
     private Vector2 textFieldSize;
     Coroutine animateTextCoroutine;
@@ -15,23 +16,35 @@ public class PopupController : MonoBehaviour
 
     private void Awake()
     {
-        popupText = GetComponentInChildren<TextMeshProUGUI>();
+        dialogueText = GetComponentInChildren<TextMeshProUGUI>();
         myLayoutElement = GetComponentInChildren<LayoutElement>();
         textFieldSize = myLayoutElement.gameObject.GetComponent<RectTransform>().sizeDelta;
     }
-    public void ChangeDisplayText(string newText)
+    public void ChangeDialogueText(string newText)
     {
-        animateTextCoroutine = StartCoroutine(AnimateSentence(newText));
+        bool isDialogueUnchanged = dialogueText.text == newText;
+        if (!isDialogueUnchanged)
+        {
+            animateTextCoroutine = StartCoroutine(AnimateSentence(newText, dialogueText));
+        }
+    }
+    public void ChangeNameText(string newText)
+    {
+        bool isNameUnchanged = nameText.text == newText;
+        if (!isNameUnchanged)
+        {
+            StartCoroutine(AnimateSentence(newText, nameText));
+        }
     }
 
-    IEnumerator AnimateSentence(string inputSentence)
+    IEnumerator AnimateSentence(string inputSentence, TextMeshProUGUI text)
     {
         isAnimating = true;
-        popupText.text = "";
+        text.text = "";
 
         foreach (char letter in inputSentence.ToCharArray())
         {
-            popupText.text += letter;
+            text.text += letter;
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -39,10 +52,6 @@ public class PopupController : MonoBehaviour
         animateTextCoroutine = null;
     }
 
-    public bool GetIsAnimating()
-    {
-        return isAnimating;
-    }
     public void ResetPopupSize()
     {
         myLayoutElement.minWidth = 600;
@@ -65,4 +74,17 @@ public class PopupController : MonoBehaviour
         transform.position = new Vector3(xPosition, yPosition, 0);
     }
 
+    //Get values
+    public bool GetIsAnimating()
+    {
+        return isAnimating;
+    }
+    public string GetCurrentNameText()
+    {
+        return nameText.text;
+    }
+    public string GetCurrentDialogueText()
+    {
+        return dialogueText.text;
+    }
 }

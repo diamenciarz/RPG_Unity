@@ -148,7 +148,7 @@ public class NodeReader : MonoBehaviour
     private void CreateTextPopup()
     {
         GameObject popupInstance = Instantiate(smallPopupWindowPrefab, popupTransformForPlacement.position, Quaternion.identity, popupTransformForPlacement);
-        SetUpPopupValues(popupInstance);
+        SetPopupTextMessages(popupInstance);
         //Start destroy coroutine
         float destroyDelay;
         bool destroyDurationCorrect = float.TryParse(dialogueMessagesArray[1], out destroyDelay);
@@ -161,10 +161,12 @@ public class NodeReader : MonoBehaviour
             GoToNextNodeThroughOutputName("nextNode");
         }
     }
-    private void SetUpPopupValues(GameObject popupInstance)
+    private void SetPopupTextMessages(GameObject popupInstance)
     {
         PopupController popupController = popupInstance.GetComponent<PopupController>();
-        popupController.ChangeDisplayText(dialogueMessagesArray[3]);
+
+        popupController.ChangeDialogueText(dialogueMessagesArray[3]);
+        popupController.ChangeNameText(dialogueMessagesArray[2]);
     }
     IEnumerator DestroyPopupAfterTime(float delay, GameObject popup)
     {
@@ -226,7 +228,7 @@ public class NodeReader : MonoBehaviour
         }
         else
         {
-            Debug.Log("A node should never have a null amount of outputs");
+            Debug.LogError("A node should never have a null amount of outputs");
         }
     }
     private int GetThisPortIndex(NodePort portToCheck)
@@ -362,17 +364,15 @@ public class NodeReader : MonoBehaviour
     }
     private bool IsThisTheLastMessage()
     {
-        bool AreAllPortsDisconnected = true;
         foreach (NodePort nodePort in dialogueGraph.currentNode.Outputs)
         {
             bool isCurrentNodeConnected = nodePort.IsConnected == true;
             if (isCurrentNodeConnected)
             {
-                AreAllPortsDisconnected = false;
-                break;
+                return false;
             }
         }
-        return AreAllPortsDisconnected;
+        return true;
     }
     private void SetNextNodeUsingOutputPortName(string outputName)
     {
