@@ -6,6 +6,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     public DialogueGraph dialogueGraph;
     private Collider2D myCollider2D;
+    public Transform popupTransform;
 
     private void Start()
     {
@@ -15,7 +16,7 @@ public class DialogueTrigger : MonoBehaviour
     public void TriggerDialogue()
     {
         NodeReader foundClass = FindObjectOfType<NodeReader>();
-        foundClass.StartDialogue(dialogueGraph);
+        foundClass.StartDialogue(dialogueGraph, popupTransform);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

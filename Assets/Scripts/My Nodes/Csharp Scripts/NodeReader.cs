@@ -16,9 +16,12 @@ public class NodeReader : MonoBehaviour
 
     [Header("Instances")]
     public GameObject dialogueBoxGO;
+    private DialogueBoxController dialogueBoxController;
     public GameObject dialogueChoiceButtonPrefab;
     public GameObject endConversationButtonPrefab;
-    public Animator textAnimator;
+    public GameObject bigPopupWindowPrefab;
+    public GameObject smallPopupWindowPrefab;
+    public Animator textWindowAnimator;
     [Header("Button placement")]
     [SerializeField] Vector2 firstButtonPosition;
     [SerializeField] int yOffset;
@@ -29,6 +32,7 @@ public class NodeReader : MonoBehaviour
     [HideInInspector]
     public bool isDisplayingMessage = false;
     //Private variables
+    private Transform popupTransformForPlacement;
     private Coroutine textAnimationCoroutine;
     private bool isThisTheLastMessage = false;
     private List<GameObject> dialogueChoiceButtonList = new List<GameObject>();
@@ -36,6 +40,10 @@ public class NodeReader : MonoBehaviour
     string[] dialogueMessagesArray;
     string[] dialogueValuesArray;
 
+    private void Awake()
+    {
+        dialogueBoxController = dialogueBoxGO.GetComponent<DialogueBoxController>();
+    }
     private void OnEnable()
     {
         EventManager.StartListening("Next Dalogue Sentence", NextSentence);
@@ -48,13 +56,14 @@ public class NodeReader : MonoBehaviour
 
     }
     //This is called by a dialogue trigger on an NPC
-    public void StartDialogue(DialogueGraph inputDialogueGraph)
+    public void StartDialogue(DialogueGraph inputDialogueGraph, Transform popupTransform)
     {
         //Enable the dialogue box
         dialogueBoxGO.SetActive(true);
-        textAnimator.SetBool("isClosed", false);
+        textWindowAnimator.SetBool("isClosed", false);
 
         //Initialize variables
+        popupTransformForPlacement = popupTransform;
         dialogueGraph = inputDialogueGraph;
         isDisplayingMessage = true;
         isThisTheLastMessage = false;
@@ -89,16 +98,20 @@ public class NodeReader : MonoBehaviour
         {
             StartNode dialogueNode = baseNode as StartNode;
             List<NodePort> outputList = dialogueNode.GetEnabledConnectedOutputs(baseNode);
-            Debug.Log("Output count: " + outputList.Count);
+            //Debug.Log("Output count: " + outputList.Count);
             GoToRandomNextNode(outputList);
         }
         //Default option
         if (dialogueMessagesArray[0] == "DialogueNode")
         {
-            UpdateName(dialogueMessagesArray[1]);
-            UpdateText(dialogueMessagesArray[2]);
+            dialogueBoxController.UpdateName(dialogueMessagesArray[1]);
+            dialogueBoxController.UpdateText(dialogueMessagesArray[2]);
 
             CreateNewDialogueChoiceButtons();
+        }
+        if (dialogueMessagesArray[0] == "PopupNode")
+        {
+            CreateTextPopup();
         }
         if (dialogueMessagesArray[0] == "ActionNode")
         {
@@ -123,7 +136,7 @@ public class NodeReader : MonoBehaviour
     }
     private void GoToRandomNextNode(List<NodePort> outputPortList)
     {
-        int index = Random.Range(0,outputPortList.Count);
+        int index = Random.Range(0, outputPortList.Count);
         NodePort outputPortForButton = outputPortList[index];
         string portName = outputPortForButton.fieldName;
 
@@ -131,7 +144,38 @@ public class NodeReader : MonoBehaviour
     }
 
 
-    //Create buttons block Start
+    //Create text popup
+    private void CreateTextPopup()
+    {
+        GameObject popupInstance = Instantiate(smallPopupWindowPrefab, popupTransformForPlacement.position, Quaternion.identity, popupTransformForPlacement);
+        SetUpPopupValues(popupInstance);
+        //Start destroy coroutine
+        float destroyDelay;
+        bool destroyDurationCorrect = float.TryParse(dialogueMessagesArray[1], out destroyDelay);
+        if (destroyDurationCorrect)
+        {
+            DestroyPopupAfterTime(destroyDelay, popupInstance);
+        }
+        else
+        {
+            GoToNextNodeThroughOutputName("nextNode");
+        }
+    }
+    private void SetUpPopupValues(GameObject popupInstance)
+    {
+        PopupController popupController = popupInstance.GetComponent<PopupController>();
+        popupController.ChangeDisplayText(dialogueMessagesArray[3]);
+    }
+    IEnumerator DestroyPopupAfterTime(float delay, GameObject popup)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(popup);
+        GoToNextNodeThroughOutputName("nextNode");
+    }
+    //Create text popup
+
+
+    //Create buttons 
     private void CreateNewDialogueChoiceButtons()
     {
         DeletePreviousButtons();
@@ -299,10 +343,10 @@ public class NodeReader : MonoBehaviour
     {
         EventManager.TriggerEvent("Next Dalogue Sentence", obj);
     }
-    //Create buttons block End
+    //Create buttons 
 
 
-    // Go to next node block Start
+    // Go to next node 
     private void GoToNextNodeThroughOutputName(string outputName)
     {
         //Moves to a next dialogue node
@@ -364,35 +408,10 @@ public class NodeReader : MonoBehaviour
     {
         dialogueGraph.currentNode = nextNode;
     }
-    // Go to next node block End
+    // Go to next node 
 
 
-    //Display text functions block Start
-    private void UpdateName(string newName)
-    {
-        nameText.text = newName;
-    }
-    private void UpdateText(string nextSentenceToSay)
-    {
-        if (textAnimationCoroutine != null)
-        {
-            StopCoroutine(textAnimationCoroutine);
-        }
-        textAnimationCoroutine = StartCoroutine(AnimateSentence(nextSentenceToSay));
-    }
-    IEnumerator AnimateSentence(string inputSentence)
-    {
-        dialogueText.text = "";
-        foreach (char letter in inputSentence.ToCharArray())
-        {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
-    //Display text functions block End
-
-
-    //Read node helper functions block Start
+    //Read node helper functions 
     private void TriggerNodeActions()
     {
         SaveNodeTriggerValues();
@@ -402,7 +421,7 @@ public class NodeReader : MonoBehaviour
         for (int i = 1; i < actionNumber; i++)
         {
             string actionName = dialogueMessagesArray[i];
-            
+
             bool checkValueListLength = valueNumber > i;
             if (checkValueListLength)
             {
@@ -415,7 +434,7 @@ public class NodeReader : MonoBehaviour
                 }
             }
             TriggerActionByName(actionName);
-            
+
         }
     }
     private void SaveNodeTriggerValues()
@@ -444,7 +463,7 @@ public class NodeReader : MonoBehaviour
     }
     public void EndDialogue()
     {
-        textAnimator.SetBool("isClosed", true);
+        textWindowAnimator.SetBool("isClosed", true);
         isDisplayingMessage = false;
         EventManager.TriggerEvent("StartPopupCoroutine");
     }
@@ -456,10 +475,10 @@ public class NodeReader : MonoBehaviour
         eventTrigger.callback.AddListener(action);
         trigger.triggers.Add(eventTrigger);
     }
-    //Read node helper functions block End
+    //Read node helper functions 
 
 
-    //Get enabled outputs block start
+    //Get enabled outputs 
     private List<NodePort> GetEnabledConnectedOutputs(BaseNode node)
     {
         List<NodePort> outputList = GetConnectedOutputs(node);
@@ -580,7 +599,7 @@ public class NodeReader : MonoBehaviour
         DeleteDisconnectedPortsFromList(inputList);
         return inputList;
     }
-    //Get enabled outputs block end
+    //Get enabled outputs 
 
 
     public class DialogueButton

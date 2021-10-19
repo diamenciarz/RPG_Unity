@@ -215,13 +215,14 @@ GameObject:
   - component: {fileID: 65316959}
   - component: {fileID: 65316958}
   - component: {fileID: 65316960}
+  - component: {fileID: 65316961}
   m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &65316957
 RectTransform:
   m_ObjectHideFlags: 0
@@ -300,6 +301,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &65316961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65316956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093627de359dade4b8a83591ec087a45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 477154085}
+  dialogueText: {fileID: 953062346}
 --- !u!1 &70590086
 GameObject:
   m_ObjectHideFlags: 0
@@ -4736,7 +4751,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.84, y: -25.55, z: -9}
+  m_LocalPosition: {x: -5.0300007, y: -23.99, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5562,7 +5577,9 @@ MonoBehaviour:
   dialogueBoxGO: {fileID: 65316956}
   dialogueChoiceButtonPrefab: {fileID: 3677151485011163866, guid: 2991e265b2322b9499fb5751e168217d, type: 3}
   endConversationButtonPrefab: {fileID: 3677151485011163866, guid: aca9efee0d32fc0468c60e3888eacfa2, type: 3}
-  textAnimator: {fileID: 65316960}
+  bigPopupWindowPrefab: {fileID: 301017885515028378, guid: f33bc92cd5dcf084abd0ad2ff6f2e371, type: 3}
+  smallPopupWindowPrefab: {fileID: 1098409304922893859, guid: ffcfb68c8c37f994598a5e5df056cfdd, type: 3}
+  textWindowAnimator: {fileID: 65316960}
   firstButtonPosition: {x: -500, y: -200}
   yOffset: -110
   xOffset: 1000
@@ -18333,7 +18350,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682536240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.84, y: -25.55, z: -9}
+  m_LocalPosition: {x: -5.0300007, y: -23.99, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1271477547}
@@ -19080,7 +19097,7 @@ PrefabInstance:
     - target: {fileID: 6816586970343372720, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
       propertyPath: dialogueGraph
       value: 
-      objectReference: {fileID: 11400000, guid: 28104c246c1d7c44a9a04f321a357f8e, type: 2}
+      objectReference: {fileID: 11400000, guid: b0b475a9cf70b1d48ae8ef3da17da7d6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
 --- !u!1001 &6195473770939546901
@@ -19104,11 +19121,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.84
+      value: -5.03
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -25.55
+      value: -23.99
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19202,6 +19219,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8145767463229014074, guid: ebae0941706b0de44b1efc5b469baf4f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145767463592067039, guid: ebae0941706b0de44b1efc5b469baf4f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8349382235587705450, guid: ebae0941706b0de44b1efc5b469baf4f, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

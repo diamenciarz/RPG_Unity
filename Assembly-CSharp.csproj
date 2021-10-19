@@ -54,12 +54,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\Static Data Holder.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\EndNode.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryAnimator.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\BushController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\UsableItemObject.cs" />
     <Compile Include="Assets\Scripts\Dialogue\EventManager.cs" />
     <Compile Include="Assets\Scripts\My Nodes\Csharp Scripts\NodeReader.cs" />
@@ -74,14 +76,15 @@
     <Compile Include="Assets\Scripts\Inventory\Object Instances\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemDatabaseObject.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\ActionNode.cs" />
+    <Compile Include="Assets\Scripts\Player\DashIconController.cs" />
     <Compile Include="Assets\Scripts\Inventory\DynamicInterface.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\TriggerObjectController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
-    <Compile Include="Assets\Scripts\Prefabs\TriggerObjectController.cs" />
-    <Compile Include="Assets\Scripts\Prefabs\Static Data Holder.cs" />
-    <Compile Include="Assets\Scripts\Prefabs\BushController.cs" />
-    <Compile Include="Assets\Scripts\Player\DashIconController.cs" />
+    <Compile Include="Assets\Scripts\Dialogue\PopupController.cs" />
+    <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\PopupNode.cs" />
+    <Compile Include="Assets\DialogueBoxController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -4,35 +4,25 @@ using System.Linq;
 using UnityEngine;
 using XNode;
 
-public class DialogueNode : BaseNode
+public class PopupNode : BaseNode
 {
 
     [Input] public int entry;
     [Input] public int enablingEvents;
     [Input] public int disablingEvents;
     //Outputs
-    [Output] public int Choice1;
-    [Output] public int Choice2;
-    [Output] public int Choice3;
-    [Output] public int Choice4;
-    [Output] public int Choice5;
-    [Output] public int Choice6;
+    [Output] public int nextNode;
 
+    public float duration;
     public string speakerName;
     [TextArea(3, 100)]
     public string dialogue;
-    [Header("Player's Answers")]
-    public List<string> choiceTextMessages;
-
     //Private variables
 
     public override string GetString()
     {
-        string returnString = "DialogueNode/" + speakerName + "/" + dialogue;
-        foreach (string text in choiceTextMessages)
-        {
-            returnString += ("/" + text);
-        }
+        string returnString = "PopupNode/" + duration + "/" + speakerName + "/" + dialogue;
+        
         return returnString;
     }
 

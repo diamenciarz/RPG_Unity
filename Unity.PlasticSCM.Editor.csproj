@@ -178,9 +178,9 @@
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Configuration\CloudEdition\Welcome\WaitingSignInPanel.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Views\Welcome\GetInstallerTmpFileName.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\UI\UIElements\UIElementsExtensions.cs" />
-    <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Configuration\MissingEncryptionPasswordPromptHandler.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\UI\EditorDispatcher.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Views\Changesets\ChangesetsViewMenu.cs" />
+    <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Configuration\MissingEncryptionPasswordPromptHandler.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Views\History\SaveAction.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\UI\Progress\OperationProgressData.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@1.9.0\Editor\PlasticSCM\Views\IncomingChanges\Developer\IsResolved.cs" />
