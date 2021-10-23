@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 115714193680241412}
   - component: {fileID: 4373305767756633743}
   - component: {fileID: 1496557222579517298}
-  - component: {fileID: 5887229290120953359}
+  - component: {fileID: 9016048434992959904}
   m_Layer: 5
   m_Name: Popup_Window
   m_TagString: Untagged
@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 379, y: 230}
+  m_AnchoredPosition: {x: 488, y: 230}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &115714193680241412
@@ -95,17 +95,17 @@ MonoBehaviour:
     m_Left: 50
     m_Right: 50
     m_Top: 0
-    m_Bottom: -100
+    m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &5887229290120953359
+--- !u!114 &9016048434992959904
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,8 +117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 1
-  m_VerticalFit: 2
+  m_HorizontalFit: 2
+  m_VerticalFit: 1
 --- !u!1 &1685025740213843504
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8231369501580193728
 CanvasRenderer:
@@ -300,20 +300,23 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'dawd22wda 2a fa2r af2r awdwad
+  m_text: 'a
 
-    awdawdwadawdawdawdawdawdawdawdawdawdwdawd
+    wad
 
-    22wda
-    2a fa2r af2r awdwad
+    awd
 
-    awdawdwadawdawdawdawdawdawdawdawdawdwdawd
+    awda
 
+    wada
 
-    22wda
-    2a fa2r af2r awdwad
+    wad
 
-    awdawdwadawdawdawdawdawdawdawdawdawdwdawd'
+    awd
+
+    awda
+
+    wad'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cb8fe357966741c48a97d4024dc9f22c, type: 2}
   m_sharedMaterial: {fileID: 1501269635190322276, guid: cb8fe357966741c48a97d4024dc9f22c, type: 2}
@@ -376,7 +379,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 41.97668, y: 103.26422, z: 32.218483, w: 197.14423}
+  m_margin: {x: 41.97668, y: 100.687256, z: 32.218483, w: -222.5185}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -396,7 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: 600
-  m_MinHeight: 320
+  m_MinHeight: 100
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -438,7 +441,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6966740208071219823
 CanvasRenderer:
@@ -531,7 +534,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 171.18028, y: -681.3551, z: 32.218483, w: 944.0718}
+  m_margin: {x: 171.18028, y: -9.545959, z: 32.218483, w: 372.97205}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
