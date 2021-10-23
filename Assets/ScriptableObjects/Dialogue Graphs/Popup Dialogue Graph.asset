@@ -139,7 +139,11 @@ MonoBehaviour:
   nextNode: 0
   duration: 3
   speakerName: Man
-  dialogue: Hey!
+  dialogue: 'Hey!
+
+    How is yerr
+
+    wife?'
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +161,7 @@ MonoBehaviour:
   - {fileID: -7088900207460345579}
   - {fileID: -7143515665292586033}
   - {fileID: 1956727842966488485}
-  currentNode: {fileID: -7088900207460345579}
+  currentNode: {fileID: -7143515665292586033}
 --- !u!114 &1956727842966488485
 MonoBehaviour:
   m_ObjectHideFlags: 0

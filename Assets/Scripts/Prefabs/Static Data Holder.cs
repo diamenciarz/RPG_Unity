@@ -37,7 +37,6 @@ public static class StaticDataHolder
     }
 
 
-    //Helper Methods
     public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
     {
         Vector3 playerPosition = firstObject.transform.position;
@@ -68,5 +67,18 @@ public static class StaticDataHolder
         float zRotation = Mathf.Rad2Deg * Mathf.Atan(deltaPosition.y / deltaPosition.x);
 
         firstObject.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+    }
+    public static Vector3 GetMoveVectorInDirection(float speed, float zDirectionInDegrees)
+    {
+        Vector3 returnVector = speed * GetNormalizedVectorInDirection(zDirectionInDegrees);
+        return returnVector;
+
+    }
+    public static Vector3 GetNormalizedVectorInDirection(float zDirectionInDegrees)
+    {
+        float xStepMove = -Mathf.Sin(Mathf.Deg2Rad * zDirectionInDegrees);
+        float yStepMove = Mathf.Cos(Mathf.Deg2Rad * zDirectionInDegrees);
+        Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
+        return returnVector;
     }
 }
