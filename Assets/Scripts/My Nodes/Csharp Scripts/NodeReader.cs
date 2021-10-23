@@ -60,7 +60,6 @@ public class NodeReader : MonoBehaviour
     {
         //Enable the dialogue box
         dialogueBoxGO.SetActive(true);
-        textWindowAnimator.SetBool("isClosed", false);
 
         //Initialize variables
         popupTransformForPlacement = popupTransform;
@@ -86,8 +85,13 @@ public class NodeReader : MonoBehaviour
 
     public void ReadCurrentNode()
     {
-        BaseNode baseNode = dialogueGraph.currentNode;
         SaveNodeMessages();
+
+        //Check, if dialogue box should be closed
+        if (dialogueMessagesArray[0] != "DialogueNode")
+        {
+            CloseDialogueWindow();
+        }
         //Check, if this is the last dialogue option
         if (IsThisTheLastMessage())
         {
@@ -96,27 +100,25 @@ public class NodeReader : MonoBehaviour
         //Exception, when starting dialogue
         if (dialogueMessagesArray[0] == "Start")
         {
-            StartNode dialogueNode = baseNode as StartNode;
-            List<NodePort> outputList = dialogueNode.GetEnabledConnectedOutputs(baseNode);
-            //Debug.Log("Output count: " + outputList.Count);
-            GoToRandomNextNode(outputList);
+            HandleStartNode();
+            return;
         }
         //Default option
         if (dialogueMessagesArray[0] == "DialogueNode")
         {
-            dialogueBoxController.UpdateName(dialogueMessagesArray[1]);
-            dialogueBoxController.UpdateText(dialogueMessagesArray[2]);
-
-            CreateNewDialogueChoiceButtons();
+            UpdateDialogueBox();
+            return;
         }
         if (dialogueMessagesArray[0] == "PopupNode")
         {
             CreateTextPopup();
+            return;
         }
         if (dialogueMessagesArray[0] == "ActionNode")
         {
             TriggerNodeActions();
             GoToNextNodeThroughOutputName("exit");
+            return;
         }
     }
     private void SaveNodeMessages()
@@ -154,7 +156,7 @@ public class NodeReader : MonoBehaviour
         bool destroyDurationCorrect = float.TryParse(dialogueMessagesArray[1], out destroyDelay);
         if (destroyDurationCorrect)
         {
-            DestroyPopupAfterTime(destroyDelay, popupInstance);
+            StartCoroutine(DestroyPopupAfterTime(destroyDelay, popupInstance));
         }
         else
         {
@@ -165,8 +167,8 @@ public class NodeReader : MonoBehaviour
     {
         PopupController popupController = popupInstance.GetComponent<PopupController>();
 
-        popupController.ChangeDialogueText(dialogueMessagesArray[3]);
         popupController.ChangeNameText(dialogueMessagesArray[2]);
+        popupController.ChangeDialogueText(dialogueMessagesArray[3]);
     }
     IEnumerator DestroyPopupAfterTime(float delay, GameObject popup)
     {
@@ -178,6 +180,15 @@ public class NodeReader : MonoBehaviour
 
 
     //Create buttons 
+    private void UpdateDialogueBox()
+    {
+        OpenDialogueWindow();
+
+        dialogueBoxController.UpdateName(dialogueMessagesArray[1]);
+        dialogueBoxController.UpdateText(dialogueMessagesArray[2]);
+
+        CreateNewDialogueChoiceButtons();
+    }
     private void CreateNewDialogueChoiceButtons()
     {
         DeletePreviousButtons();
@@ -408,10 +419,24 @@ public class NodeReader : MonoBehaviour
     {
         dialogueGraph.currentNode = nextNode;
     }
+    private void OpenDialogueWindow()
+    {
+        if (textWindowAnimator.GetBool("isClosed"))
+        {
+            textWindowAnimator.SetBool("isClosed", false);
+        }
+    }
+    private void CloseDialogueWindow()
+    {
+        if (!textWindowAnimator.GetBool("isClosed"))
+        {
+            textWindowAnimator.SetBool("isClosed", true);
+        }
+    }
     // Go to next node 
 
 
-    //Read node helper functions 
+    //Action node
     private void TriggerNodeActions()
     {
         SaveNodeTriggerValues();
@@ -452,6 +477,8 @@ public class NodeReader : MonoBehaviour
             calledEventList.Add(actionName);
         }
     }
+
+    
     private void TriggerActionByNameAndValue(string actionName, string value)
     {
         EventManager.TriggerEvent(actionName, value);
@@ -461,6 +488,10 @@ public class NodeReader : MonoBehaviour
             calledEventList.Add(actionName);
         }
     }
+    //Action node
+
+
+    //Read node helper functions 
     public void EndDialogue()
     {
         textWindowAnimator.SetBool("isClosed", true);
@@ -476,6 +507,18 @@ public class NodeReader : MonoBehaviour
         trigger.triggers.Add(eventTrigger);
     }
     //Read node helper functions 
+
+    
+    //Start node
+    private void HandleStartNode()
+    {
+        BaseNode baseNode = dialogueGraph.currentNode;
+        StartNode dialogueNode = baseNode as StartNode;
+        List<NodePort> outputList = dialogueNode.GetEnabledConnectedOutputs(baseNode);
+        //Debug.Log("Output count: " + outputList.Count);
+        GoToRandomNextNode(outputList);
+    }
+    //Start node
 
 
     //Get enabled outputs 

@@ -16,7 +16,6 @@ public class PopupController : MonoBehaviour
 
     private void Awake()
     {
-        dialogueText = GetComponentInChildren<TextMeshProUGUI>();
         myLayoutElement = GetComponentInChildren<LayoutElement>();
         textFieldSize = myLayoutElement.gameObject.GetComponent<RectTransform>().sizeDelta;
     }
@@ -25,16 +24,14 @@ public class PopupController : MonoBehaviour
         bool isDialogueUnchanged = dialogueText.text == newText;
         if (!isDialogueUnchanged)
         {
+            //Debug.Log("New dialogue: " + newText);
+
             animateTextCoroutine = StartCoroutine(AnimateSentence(newText, dialogueText));
         }
     }
     public void ChangeNameText(string newText)
     {
-        bool isNameUnchanged = nameText.text == newText;
-        if (!isNameUnchanged)
-        {
-            StartCoroutine(AnimateSentence(newText, nameText));
-        }
+        nameText.text = newText;
     }
 
     IEnumerator AnimateSentence(string inputSentence, TextMeshProUGUI text)
