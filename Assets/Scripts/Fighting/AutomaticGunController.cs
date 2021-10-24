@@ -5,9 +5,7 @@ using UnityEngine;
 public class AutomaticGunController : MonoBehaviour
 {
     //Instances
-    ScoreCounter scoreCounter;
     GameObject theNearestEnemyGameObject;
-    WaveCreator waveCreator;
 
     [Header("Sounds")]
     //Sound
@@ -27,11 +25,12 @@ public class AutomaticGunController : MonoBehaviour
 
     [Header("Each shot")]
     [SerializeField] int howManyBulletsAtOnce;
-    [SerializeField] bool isSpreadRandom;
-    [SerializeField] float nonrandomBulletSpread;
+    [SerializeField] bool spreadProjectilesEvenly;
+    [SerializeField] float spreadDegrees;
     [SerializeField] float leftBulletSpread;
     [SerializeField] float rightBulletSpread;
     [SerializeField] bool addMySpeedToBulletSpeed;
+    [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToCreateList;
 
     [Header("Turret stats")]
     [SerializeField] float gunRotationSpeed;
@@ -60,18 +59,18 @@ public class AutomaticGunController : MonoBehaviour
 
 
     [HideInInspector]
-    public int planeTeam;
+    public int team;
     private bool enemiesInRange;
     private float lastShotTime;
     private bool isMyBulletARocket;
     private float shootingTimeBank;
+    private EntityCreator entityCreator;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        scoreCounter = FindObjectOfType<ScoreCounter>();
-        waveCreator = FindObjectOfType<WaveCreator>();
+        entityCreator = FindObjectOfType<EntityCreator>();
 
         CheckIfMyBulletIsARocket();
         lastShotTime = Time.time;
@@ -128,29 +127,7 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
-    public void SetTeam()
-    {
-        ShipDamageReceiver enemyDamageReceiver;
-        if (parentGameObject.TryGetComponent<ShipDamageReceiver>(out enemyDamageReceiver))
-        {
-            planeTeam = enemyDamageReceiver.planeTeam;
-        }
-        BulletController enemyBulletController;
-        if (parentGameObject.TryGetComponent<BulletController>(out enemyBulletController))
-        {
-            planeTeam = enemyBulletController.myTeam;
-        }
-        RocketController rocketController;
-        if (parentGameObject.TryGetComponent<RocketController>(out rocketController))
-        {
-            planeTeam = rocketController.rocketTeam;
-        }
-        PlayerMovement playerMovement;
-        if (parentGameObject.TryGetComponent<PlayerMovement>(out playerMovement))
-        {
-            planeTeam = playerMovement.planeTeam;
-        }
-    }
+
     private void CheckIfMyBulletIsARocket()
     {
         RocketController rocketController;
@@ -159,40 +136,11 @@ public class AutomaticGunController : MonoBehaviour
             isMyBulletARocket = true;
         }
     }
-    private void SetUpGunShootingZone()
-    {
-        //yield return new WaitForEndOfFrame();
-
-        GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-        //Debug.Log("Created shooting zone");
-        newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
-        //Rotacja we w³aœciwym kierunku
-        float shootingZoneRotation = leftMaxRotationLimit;
-        //newShootingZoneGo.transform.localRotation = Quaternion.Euler(0,0, shootingZoneRotation);
-
-        //Ustawia wycinek ko³a
-        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
-        //Ustawia objekt do pod¹¿ania
-        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
-        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
-        //Debug.Log("Rotator z rotation: " + newShootingZoneGo.transform.rotation.eulerAngles.z);
-    }
-    private void SetUpGunReloadingBar()
-    {
-        if (gunReloadingBarPrefab != null)
-        {
-            GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
-            gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
-            gunReloadingBarScript.SetObjectToFollow(gameObject);
-            lastShotTime = parentGameObject.GetComponent<DataScriptForAvoidance>().creationTime;
-        }
-    }
+    
     private IEnumerator AttackCoroutine()
     {
         while (true)
         {
-
             if (isControlledByMouseCursor)
             {
                 yield return new WaitUntil(() => (enemiesInRange == true) && Input.GetKey(KeyCode.Mouse0));
@@ -215,7 +163,7 @@ public class AutomaticGunController : MonoBehaviour
             {
                 if ((shootingTimeBank) >= timeBetweenEachShot)
                 {
-                    LongShot(howManyBulletsAtOnce);
+                    ShootOnce();
 
                     lastShotTime = Time.time;
                     shootingTimeBank -= timeBetweenEachShot;
@@ -227,7 +175,7 @@ public class AutomaticGunController : MonoBehaviour
             {
                 for (int i = 0; i < howManyShots; i++)
                 {
-                    LongShot(howManyBulletsAtOnce);
+                    ShootOnce();
 
                     lastShotTime = Time.time;
                     shootingTimeBank -= timeBetweenEachShot;
@@ -240,7 +188,7 @@ public class AutomaticGunController : MonoBehaviour
         {
             for (int i = 0; i < howManyShots; i++)
             {
-                LongShot(howManyBulletsAtOnce);
+                ShootOnce();
 
                 lastShotTime = Time.time;
                 shootingTimeBank -= timeBetweenEachShot;
@@ -267,12 +215,12 @@ public class AutomaticGunController : MonoBehaviour
 
         if (!isControlledByMouseCursor)
         {
-            enemyList.AddRange(FindObjectOfType<WaveCreator>().GetMyEnemyList(planeTeam));
+            enemyList.AddRange(StaticDataHolder.GetMyEnemyList(team));
 
             //Rocket launchers don't shoot at debris
             if (!isMyBulletARocket)
             {
-                enemyList.AddRange(scoreCounter.spaceDebrisList);
+                enemyList.AddRange(StaticDataHolder.obstacleList);
             }
         }
 
@@ -348,12 +296,12 @@ public class AutomaticGunController : MonoBehaviour
         else
         {
             Vector3 relativePositionFromGunToItem;
-            List<GameObject> enemyList = FindObjectOfType<WaveCreator>().GetMyEnemyList(planeTeam);
+            List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
 
             //Rocket launchers don't shoot at debris
             if (!isMyBulletARocket)
             {
-                enemyList.AddRange(scoreCounter.spaceDebrisList);
+                enemyList.AddRange(StaticDataHolder.obstacleList);
             }
 
             foreach (var item in enemyList)
@@ -454,8 +402,8 @@ public class AutomaticGunController : MonoBehaviour
     }
     private GameObject FindTheClosestEnemyInTheFrontInRange()
     {
-        List<GameObject> enemyList = waveCreator.GetMyEnemyList(planeTeam);
-        enemyList.AddRange(scoreCounter.spaceDebrisList);
+        List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
+        enemyList.AddRange(StaticDataHolder.obstacleList);
         GameObject currentClosestEnemy = null;
         Vector3 relativePositionFromGunToItem;
 
@@ -557,91 +505,70 @@ public class AutomaticGunController : MonoBehaviour
             basicGunRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
         }
     }
-    private void LongShot(int howManyBulletsAtOnce)
+    private void ShootOnce()
     {
-        //DŸwiêk strza³u
-        if (shootingSoundsList.Count != 0)
-        {
-            AudioSource.PlayClipAtPoint(shootingSoundsList[Random.Range(0, shootingSoundsList.Count)], transform.position, shootSoundVolume);
-        }
-        for (int i = 0; i < howManyBulletsAtOnce; i++)
-        {
-            Quaternion bulletRotation = transform.rotation;
-            float bulletOffset;
+        PlayShotSound();
+        CreateNewProjectiles();
+    }
 
-            if (isSpreadRandom)
+
+    //Shoot once
+    public void CreateNewProjectiles()
+    {
+        if (gameObjectsToCreateList.Count != 0)
+        {
+            for (int i = 0; i < howManyBulletsAtOnce; i++)
             {
-                bulletOffset = Random.Range(-leftBulletSpread, rightBulletSpread);
+                ShootAtNoTarget(i);
+            }
+        }
+    }
+    private void ShootAtNoTarget(int i)
+    {
+        if (spreadProjectilesEvenly)
+        {
+            ShootOnceForwardWithRegularSpread(i);
+        }
+        else
+        {
+            ShootOnceForwardWithRandomSpread(i);
+        }
+    }
+    private void ShootOnceForwardWithRandomSpread(int index)
+    {
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+
+        newBulletRotation *= transform.rotation;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+    }
+    private void ShootOnceForwardWithRegularSpread(int index)
+    {
+        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
+
+        newBulletRotation *= transform.rotation;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+    }
+
+
+    //Sounds
+    private void PlayShotSound()
+    {
+        if (StaticDataHolder.GetSoundCount() <= (StaticDataHolder.GetSoundLimit() - 8))
+        {
+            if (shootingSoundsList.Count != 0)
+            {
+                AudioSource.PlayClipAtPoint(shootingSoundsList[Random.Range(0, shootingSoundsList.Count)], transform.position, shootSoundVolume);
             }
             else
             {
-                bulletOffset = (nonrandomBulletSpread * (i - (howManyBulletsAtOnce - 1f) / 2));
-            }
-            //Teksturki nie zawsze s¹ przodem
-            bulletRotation *= Quaternion.Euler(0, 0, 180 - bulletOffset);
-            OneShot(bulletRotation);
-        }
-
-    }
-    private void OneShot(Quaternion newBulletRotation)
-    {
-        GameObject newBullet = Instantiate(enemyBullet, shootingPoint.transform.position, newBulletRotation);
-        //Ustawia dru¿ynê pocisków na dru¿ynê samolotu z dzia³kiem
-        RocketController rocketController;
-        if (newBullet.TryGetComponent<RocketController>(out rocketController))
-        {
-            GameObject target = FindTheClosestEnemyInTheFrontInRange();
-            rocketController.SetTarget(target);
-
-            rocketController.SetTeam(planeTeam, parentGameObject);
-
-            if (addMySpeedToBulletSpeed)
-            {
-                float angleBetweenMySpeedAndRocketSpeed = Mathf.DeltaAngle(newBulletRotation.eulerAngles.z, parentGameObject.transform.rotation.eulerAngles.z);
-                float newRocketSpeed = -parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.magnitude * Mathf.Cos(angleBetweenMySpeedAndRocketSpeed * Mathf.Deg2Rad);
-                Debug.Log("Vector from the ship: " + newRocketSpeed);
-                rocketController.SetCurrentRocketSpeed(newRocketSpeed + rocketController.GetTargetRocketSpeed());
-            }
-        }
-
-        BulletController enemyBulletController;
-        if (newBullet.TryGetComponent<BulletController>(out enemyBulletController))
-        {
-
-            enemyBulletController.SetBulletTeam(planeTeam);
-            scoreCounter.AddBulletToList(newBullet);
-            enemyBulletController.SetObjectThatCreatedThisProjectile(parentGameObject);
-
-            if (addMySpeedToBulletSpeed)
-            {
-                //Ustawia prêdkoœæ pocisku wylatuj¹cego z lufy samolotu
-                Vector2 bombSpeedVector = new Vector2(-enemyBulletController.directionalBulletSpeed * Mathf.Sin(newBullet.transform.rotation.eulerAngles.z * Mathf.Deg2Rad),
-                enemyBulletController.directionalBulletSpeed * Mathf.Cos(newBullet.transform.rotation.eulerAngles.z * Mathf.Deg2Rad));
-                //Modyfikuje prêdkoœæ pocisku o prêdkoœæ samolotu
-                bombSpeedVector += new Vector2(parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.x, parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.y);
-                enemyBulletController.SetVelocityVector(bombSpeedVector);
-            }
-        }
-        PiercingBulletController piercingBulletController;
-        if (newBullet.TryGetComponent<PiercingBulletController>(out piercingBulletController))
-        {
-
-            piercingBulletController.SetBulletTeam(planeTeam);
-            scoreCounter.AddBulletToList(newBullet);
-            piercingBulletController.SetObjectThatCreatedThisBullet(parentGameObject);
-
-            if (addMySpeedToBulletSpeed)
-            {
-                //Ustawia prêdkoœæ pocisku wylatuj¹cego z lufy samolotu
-                Vector2 bombSpeedVector = new Vector2(-piercingBulletController.directionalBulletSpeed * Mathf.Sin(newBullet.transform.rotation.eulerAngles.z * Mathf.Deg2Rad),
-                piercingBulletController.directionalBulletSpeed * Mathf.Cos(newBullet.transform.rotation.eulerAngles.z * Mathf.Deg2Rad));
-                //Modyfikuje prêdkoœæ pocisku o prêdkoœæ samolotu
-                bombSpeedVector += new Vector2(parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.x, parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.y);
-                piercingBulletController.SetNewBulletSpeedVector(bombSpeedVector);
+                Debug.LogError("No sounds to play: " + gameObject.name);
             }
         }
     }
 
+
+    //UI
     public void SetIsControlledByMouseCursorTo(bool isTrue)
     {
         if (isTrue)
@@ -674,5 +601,33 @@ public class AutomaticGunController : MonoBehaviour
         {
             SetUpGunShootingZone();
         }
+    }
+    private void SetUpGunShootingZone()
+    {
+        GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
+        newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
+        float shootingZoneRotation = leftMaxRotationLimit;
+
+        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
+        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
+        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+    }
+    private void SetUpGunReloadingBar()
+    {
+        if (gunReloadingBarPrefab != null)
+        {
+            GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
+            gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
+            gunReloadingBarScript.SetObjectToFollow(gameObject);
+            lastShotTime = Time.time;
+        }
+    }
+
+
+    //Set values
+    public void SetTeam(int newTeam)
+    {
+        team = newTeam;
     }
 }

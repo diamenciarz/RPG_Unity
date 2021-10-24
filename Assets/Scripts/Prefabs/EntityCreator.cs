@@ -40,7 +40,7 @@ public class EntityCreator : MonoBehaviour
         BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
-            basicProjectileController.SetBulletTeam(team);
+            basicProjectileController.SetTeam(team);
             basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);
         }
     }
@@ -61,8 +61,13 @@ public class EntityCreator : MonoBehaviour
         TrySetupEntityStartingValues(summonedEntity, team, parent);
         StaticDataHolder.entityList.Add(summonedEntity);
     }
-    private void TrySetupEntityStartingValues(GameObject summonedBullet, int team, GameObject parent)
+    private void TrySetupEntityStartingValues(GameObject summonedEntity, int team, GameObject parent)
     {
+        AutomaticGunController automaticGunController = summonedEntity.GetComponent<AutomaticGunController>();
+        if (automaticGunController != null)
+        {
+            automaticGunController.SetTeam(team);
+        }
         /*
         BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)

@@ -8,7 +8,6 @@ public class RocketController : BasicProjectileController
     public bool hurtsPlayer;
 
     [Header("Rocket Flight Settings")]
-    public float startingRocketSpeed = 2f;
     [SerializeField] float maxRocketSpeed;
     [SerializeField] float speedChangeRatePerSecond = 1f;
     public float rocketRotationSpeed; //Degrees per second
@@ -43,7 +42,7 @@ public class RocketController : BasicProjectileController
         }
         else
         {
-            currentRocketSpeed = startingRocketSpeed;
+            currentRocketSpeed = startingSpeed;
         }
     }
     protected override void Update()
@@ -58,11 +57,11 @@ public class RocketController : BasicProjectileController
     }
     protected void CheckForTarget()
     {
-        if (myTeam != 0)
+        if (team != 0)
         {
             if (targetGameObject == null)
             {
-                targetGameObject = StaticDataHolder.GetTheNearestEnemy(transform.position, myTeam);
+                targetGameObject = StaticDataHolder.GetTheNearestEnemy(transform.position, team);
             }
         }
     }
@@ -84,5 +83,16 @@ public class RocketController : BasicProjectileController
     {
         targetGameObject = target;
     }
-    
+    public float GetMaxRocketSpeed()
+    {
+        return maxRocketSpeed;
+    }
+    public float GetCurrentRocketSpeed()
+    {
+        return currentRocketSpeed;
+    }
+    public void SetCurrentRocketSpeed(float newSpeed)
+    {
+        currentRocketSpeed = newSpeed;
+    }
 }

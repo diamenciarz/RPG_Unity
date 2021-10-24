@@ -78,8 +78,8 @@ public class PlayerMovement : MonoBehaviour
     private void TryToDash()
     {
         GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
-        bool isNearDashableObject = objectToDashThrough != null;
-        if (isNearDashableObject)
+        bool isDashableObjectInRange = objectToDashThrough != null;
+        if (isDashableObjectInRange)
         {
             canDash = false;
             StartCoroutine(WaitForDashToCoolDown());

@@ -6,6 +6,8 @@ public static class StaticDataHolder
 {
     public static List<GameObject> dashableObjectList = new List<GameObject>();
     public static GameObject currentDashableObject;
+
+    public static List<GameObject> obstacleList = new List<GameObject>();
     public static List<GameObject> projectileList = new List<GameObject>();
     public static List<GameObject> playerProjectileList = new List<GameObject>();
     public static List<GameObject> entityList = new List<GameObject>();
@@ -13,8 +15,20 @@ public static class StaticDataHolder
     public static List<float> soundDurationList = new List<float>();
     public static int soundLimit = 10;
 
+    //Obstacle ListMethods
+    public static void AddObstacle(GameObject addObject)
+    {
+        obstacleList.Add(addObject);
+    }
+    public static void RemoveObstacle(GameObject removeObject)
+    {
+        if (obstacleList.Contains(removeObject))
+        {
+            obstacleList.Remove(removeObject);
+        }
+    }
 
-    //List Methods
+    //Dashable Object List Methods
     public static void AddDashableObject(GameObject addObject)
     {
         dashableObjectList.Add(addObject);
@@ -32,7 +46,7 @@ public static class StaticDataHolder
     }
 
 
-    // Dash Object Methods
+    // Dashable Object Methods
     public static void SetCurrentDashObject(GameObject setObject)
     {
         currentDashableObject = setObject;
@@ -156,12 +170,14 @@ public static class StaticDataHolder
 
 
         //Find the closest entities
+            //Enemies
     public static GameObject GetTheNearestEnemy(Vector3 positionVector, int myTeam)
     {
-        List<GameObject> possibleTargetList = new List<GameObject>();
-        possibleTargetList = RemoveAlliesFromList(entityList, myTeam);
-
-        return FindTheClosestObjectInList(possibleTargetList, positionVector);
+        return FindTheClosestObjectInList(GetMyEnemyList(myTeam), positionVector);
+    }
+    public static List<GameObject> GetMyEnemyList(int myTeam)
+    {
+        return RemoveAlliesFromList(entityList, myTeam);
     }
     public static List<GameObject> RemoveAlliesFromList(List<GameObject> inputList, int myTeam)
     {
@@ -178,13 +194,14 @@ public static class StaticDataHolder
         }
         return inputList;
     }
+            //Allies
     public static GameObject GetTheNearestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
     {
-
-        List<GameObject> possibleTargetList = new List<GameObject>();
-        possibleTargetList = RemoveMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
-
-        return FindTheClosestObjectInList(possibleTargetList, positionVector);
+        return FindTheClosestObjectInList(GetMyAllyList(myTeam,gameObjectToIgnore), positionVector);
+    }
+    public static List<GameObject> GetMyAllyList(int myTeam, GameObject gameObjectToIgnore)
+    {
+        return RemoveMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
     }
     public static List<GameObject> RemoveMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
     {
@@ -206,6 +223,9 @@ public static class StaticDataHolder
         }
         return inputList;
     }
+
+
+            //Useful
     public static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
         GameObject currentNearestTarget = null;

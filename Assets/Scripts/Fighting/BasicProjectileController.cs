@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class BasicProjectileController : MonoBehaviour
 {
     [Header("Projectile Properties")]
-    public int myTeam;
+    public int team;
     [SerializeField] protected List<Sprite> spriteList;
-    [SerializeField] protected float speed;
+    [SerializeField] protected float startingSpeed = 2f;
     [SerializeField] protected int damage;
 
     [Header("Upon Breaking")]
@@ -61,7 +61,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     protected virtual void SetupStartingValues()
     {
-        velocityVector = StaticDataHolder.GetDirectionVector(speed, transform.rotation.eulerAngles.z);
+        velocityVector = StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
     }
     protected virtual void Update()
@@ -110,13 +110,13 @@ public abstract class BasicProjectileController : MonoBehaviour
         DamageReceiver damageReceiver = collision.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
         {
-            bool hitEnemy = damageReceiver.GetTeam() != myTeam;
+            bool hitEnemy = damageReceiver.GetTeam() != team;
             if (hitEnemy)
             {
                 damageReceiver.ReceiveDamage(damage);
             }
-            bool shouldBreak = (damageReceiver.GetTeam() == myTeam && breaksOnContactWithAllies)
-            || (damageReceiver.GetTeam() != myTeam && breaksOnContactWithEnemies);
+            bool shouldBreak = (damageReceiver.GetTeam() == team && breaksOnContactWithAllies)
+            || (damageReceiver.GetTeam() != team && breaksOnContactWithEnemies);
             if (shouldBreak)
             {
                 HandleHit(damageReceiver);
@@ -130,9 +130,9 @@ public abstract class BasicProjectileController : MonoBehaviour
         BasicProjectileController basicProjectileController = collision.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
-            int otherBulletTeam = basicProjectileController.myTeam;
-            bool shouldBreak = (otherBulletTeam != myTeam && breaksOnContactWithEnemyBullets)
-                || (breaksOnContactWithAllyBullets && otherBulletTeam == myTeam);
+            int otherBulletTeam = basicProjectileController.team;
+            bool shouldBreak = (otherBulletTeam != team && breaksOnContactWithEnemyBullets)
+                || (breaksOnContactWithAllyBullets && otherBulletTeam == team);
             if (shouldBreak)
             {
                 HandleBreak();
@@ -263,7 +263,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
                 if (shootsAtEnemies == true)
                 {
-                    GameObject targetGO = StaticDataHolder.GetTheNearestEnemy(transform.position, myTeam);
+                    GameObject targetGO = StaticDataHolder.GetTheNearestEnemy(transform.position, team);
                     if (targetGO != null)
                     {
                         ShootAtTarget(targetGO.transform.position, i);
@@ -310,7 +310,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
@@ -318,7 +318,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
@@ -326,7 +326,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
     {
@@ -335,14 +335,14 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
 
 
     //Set values
-    public void SetBulletTeam(int newTeam)
+    public void SetTeam(int newTeam)
     {
-        myTeam = newTeam;
+        team = newTeam;
         SetSpriteAccordingToTeam();
     }
     public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
@@ -351,15 +351,15 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     private void SetSpriteAccordingToTeam()
     {
-        if (spriteList.Count >= myTeam && myTeam != 0)
+        if (spriteList.Count >= team && team != 0)
         {
             try
             {
-                mySpriteRenderer.sprite = spriteList[myTeam - 1];
+                mySpriteRenderer.sprite = spriteList[team - 1];
             }
             catch (System.Exception)
             {
-                Debug.LogError("Bullet sprite list out of bounds. Index: " + (myTeam - 1));
+                Debug.LogError("Bullet sprite list out of bounds. Index: " + (team - 1));
                 throw;
             }
         }
