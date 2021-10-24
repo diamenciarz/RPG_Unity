@@ -31,7 +31,7 @@ public class RocketController : BasicProjectileController
     {
         if (objectMissingIconGameObject != null)
         {
-            GameObject miaGameObject = Instantiate(objectMissingIconGameObject, transform);
+            GameObject miaGameObject = Instantiate(objectMissingIconGameObject, transform.position, Quaternion.identity);
             miaGameObject.GetComponent<ObjectMissingIcon>().TryFollowThisObject(gameObject);
         }
     }
