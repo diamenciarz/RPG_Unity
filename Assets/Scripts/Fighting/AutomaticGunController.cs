@@ -81,12 +81,12 @@ public class AutomaticGunController : MonoBehaviour
     }
     private void Update()
     {
-        CheckForTimeBankUpdate();
+        UpdateTimeBank();
         CheckForShooting();
 
         UpdateAmmoBarIfCreated();
     }
-    private void CheckForTimeBankUpdate()
+    private void UpdateTimeBank()
     {
         if ((Time.time - lastShotTime) >= (timeBetweenEachShootingChain + timeBetweenEachShot * howManyShots - shootingTimeBank))
         {

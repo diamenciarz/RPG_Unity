@@ -5,10 +5,11 @@ using UnityEngine;
 public static class StaticDataHolder
 {
     public static List<GameObject> dashableObjectList = new List<GameObject>();
-    public static GameObject currentDashObject;
+    public static GameObject currentDashableObject;
     public static List<GameObject> projectileList = new List<GameObject>();
     public static List<GameObject> playerProjectileList = new List<GameObject>();
     public static List<GameObject> entityList = new List<GameObject>();
+
     public static List<float> soundDurationList = new List<float>();
     public static int soundLimit = 10;
 
@@ -34,11 +35,11 @@ public static class StaticDataHolder
     // Dash Object Methods
     public static void SetCurrentDashObject(GameObject setObject)
     {
-        currentDashObject = setObject;
+        currentDashableObject = setObject;
     }
     public static GameObject GetCurrentDashObject()
     {
-        return currentDashObject;
+        return currentDashableObject;
     }
 
 
@@ -105,12 +106,7 @@ public static class StaticDataHolder
         //Vectors
     public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
     {
-        Vector3 playerPosition = firstObject.transform.position;
-        playerPosition.z = 0;
-        Vector3 objectPosition = secondObject.transform.position;
-        objectPosition.z = 0;
-
-        return (playerPosition - objectPosition).magnitude;
+        return GetDeltaPositionFromToIn2D(firstObject, secondObject).magnitude;
     }
     public static Vector3 GetDeltaPositionFromToIn2D(GameObject firstObject, GameObject secondObject)
     {
@@ -167,7 +163,7 @@ public static class StaticDataHolder
 
         return FindTheClosestObjectInList(possibleTargetList, positionVector);
     }
-    private static List<GameObject> RemoveAlliesFromList(List<GameObject> inputList, int myTeam)
+    public static List<GameObject> RemoveAlliesFromList(List<GameObject> inputList, int myTeam)
     {
         for (int i = inputList.Count - 1; i >= 0; i--)
         {
@@ -190,7 +186,7 @@ public static class StaticDataHolder
 
         return FindTheClosestObjectInList(possibleTargetList, positionVector);
     }
-    private static List<GameObject> RemoveMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
+    public static List<GameObject> RemoveMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
     {
         for (int i = inputList.Count - 1; i >= 0; i--)
         {
@@ -210,7 +206,7 @@ public static class StaticDataHolder
         }
         return inputList;
     }
-    private static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
+    public static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
         GameObject currentNearestTarget = null;
 
@@ -225,7 +221,7 @@ public static class StaticDataHolder
                     {
                         currentNearestTarget = item;
                     }
-                    bool currentTargetIsCloser = (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
+                    bool currentTargetIsCloser =  (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
                     if (currentTargetIsCloser)
                     {
                         currentNearestTarget = item;

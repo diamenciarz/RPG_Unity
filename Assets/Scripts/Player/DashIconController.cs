@@ -83,31 +83,17 @@ public class DashIconController : MonoBehaviour
     }
     private GameObject FindTheClosestDashableObject()
     {
-        GameObject returnObject = null;
-        float currentShortestDistance = 1f;
-
-        foreach (GameObject dashableObject in StaticDataHolder.GetDashableObjectList())
+        List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
+        Vector3 playerPosition = playerToFollow.transform.position;
+        GameObject returnObject = StaticDataHolder.FindTheClosestObjectInList(dashableObjectList, playerPosition);
+        if (StaticDataHolder.GetDistanceBetweenObjectsIn2D(playerToFollow, returnObject) <= snapRange)
         {
-            float playerDistanceToGameObject = StaticDataHolder.GetDistanceBetweenObjectsIn2D(dashableObject, playerToFollow);
-            //Debug.Log("Distance:" + playerDistanceToGameObject);
-
-            if (playerDistanceToGameObject <= snapRange)
-            {
-                if (returnObject == null)
-                {
-                    currentShortestDistance = playerDistanceToGameObject;
-                    returnObject = dashableObject;
-                    continue;
-                }
-                if (playerDistanceToGameObject < currentShortestDistance)
-                {
-                    //Debug.Log("Found: " + dashableObject);
-                    currentShortestDistance = playerDistanceToGameObject;
-                    returnObject = dashableObject;
-                }
-            }
+            return returnObject;
         }
-        return returnObject;
+        else
+        {
+            return null;
+        }
     }
     public void SetGameObjectToFollow(object inputObject)
     {
