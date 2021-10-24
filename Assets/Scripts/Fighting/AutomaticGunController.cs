@@ -30,10 +30,10 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] float leftBulletSpread;
     [SerializeField] float rightBulletSpread;
     [SerializeField] bool addMySpeedToBulletSpeed;
-    [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToCreateList;
+    [SerializeField] protected List<EntityCreator.BulletTypes> projectilesToCreateList;
 
     [Header("Turret stats")]
-    [SerializeField] float gunRotationSpeed;
+    [SerializeField] float gunRotationSpeed; //Degrees per second
     [SerializeField] float timeBetweenEachShot;
     //Ewentualnoœæ
     [SerializeField] bool hasRotationLimits;
@@ -42,7 +42,6 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] float gunTextureRotationOffset = 180f;
 
     [Header("Instances")]
-    [SerializeField] GameObject enemyBullet;
     [SerializeField] Transform shootingPoint;
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
     [SerializeField] GameObject gunReloadingBarPrefab;
@@ -81,9 +80,22 @@ public class AutomaticGunController : MonoBehaviour
     private void Update()
     {
         UpdateTimeBank();
-        CheckForShooting();
+        LookForTargets();
 
         UpdateAmmoBarIfCreated();
+    }
+
+
+    //Update variables
+    private void CheckIfMyBulletIsARocket()
+    {
+        foreach (var item in projectilesToCreateList)
+        {
+            if (entityCreator.IsThisProjectileARocket(item))
+            {
+                isMyBulletARocket = true;
+            }
+        }
     }
     private void UpdateTimeBank()
     {
@@ -97,46 +109,10 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
-    private void CheckForShooting()
-    {
-        if (shootsAtTheNearestEnemy)
-        {
-            enemiesInRange = CheckForEnemiesOnTheFrontInRange();
-            RotateOneStepTowardsTarget();
-        }
-        else
-        {
-            enemiesInRange = CheckForEnemiesInRange();
-        }
-    }
-    private void UpdateAmmoBarIfCreated()
-    {
-        if (isGunReloadingBarOn && (gunReloadingBarScript != null))
-        {
-            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
-        }
-        if (shootingZoneScript != null && isControlledByMouseCursor)
-        {
-            if (!enemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
-            {
-                shootingZoneScript.ShowBar(true);
-            }
-            else
-            {
-                shootingZoneScript.ShowBar(false);
-            }
-        }
-    }
-
-    private void CheckIfMyBulletIsARocket()
-    {
-        RocketController rocketController;
-        if (enemyBullet.TryGetComponent<RocketController>(out rocketController))
-        {
-            isMyBulletARocket = true;
-        }
-    }
     
+    
+    //Shooting
+        //Coroutines
     private IEnumerator AttackCoroutine()
     {
         while (true)
@@ -164,9 +140,6 @@ public class AutomaticGunController : MonoBehaviour
                 if ((shootingTimeBank) >= timeBetweenEachShot)
                 {
                     ShootOnce();
-
-                    lastShotTime = Time.time;
-                    shootingTimeBank -= timeBetweenEachShot;
                 }
 
                 yield return new WaitForSeconds(timeBetweenEachShot);
@@ -176,9 +149,6 @@ public class AutomaticGunController : MonoBehaviour
                 for (int i = 0; i < howManyShots; i++)
                 {
                     ShootOnce();
-
-                    lastShotTime = Time.time;
-                    shootingTimeBank -= timeBetweenEachShot;
 
                     yield return new WaitForSeconds(timeBetweenEachShot);
                 }
@@ -190,12 +160,9 @@ public class AutomaticGunController : MonoBehaviour
             {
                 ShootOnce();
 
-                lastShotTime = Time.time;
-                shootingTimeBank -= timeBetweenEachShot;
-
-                //Powoli siê obraca w tym kierunku (ruch limitowany przez maksymaln¹ prêdkoœæ k¹tow¹)
+                //Slowly rotates towards new position
                 yield return RotateTowardsUntilDone(i);
-                //Je¿eli obróci³ siê szybciej, ni¿ ma strzelaæ, to czeka
+                //If rotated faster than next shot delay, then waits
                 if (Time.time - lastShotTime < timeBetweenEachShot)
                 {
                     yield return new WaitForSeconds(timeBetweenEachShot - (Time.time - lastShotTime));
@@ -207,117 +174,98 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
-    private bool CheckForEnemiesOnTheFrontInRange()
+        //Checks
+    private void LookForTargets()
     {
-        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
-        Vector3 relativePositionFromGunToItem;
-        List<GameObject> enemyList = new List<GameObject>();
-
-        if (!isControlledByMouseCursor)
+        if (shootsAtTheNearestEnemy)
         {
-            enemyList.AddRange(StaticDataHolder.GetMyEnemyList(team));
-
-            //Rocket launchers don't shoot at debris
-            if (!isMyBulletARocket)
-            {
-                enemyList.AddRange(StaticDataHolder.obstacleList);
-            }
-        }
-
-        if (isControlledByMouseCursor)
-        {
-            Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            translatedMousePosition.z = transform.position.z;
-            relativePositionFromGunToItem = translatedMousePosition - transform.position;
-            if (maximumRangeFromMouseToShoot > relativePositionFromGunToItem.magnitude || maximumRangeFromMouseToShoot == 0)
-            {
-                if (hasRotationLimits)
-                {
-                    //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
-                    float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
-                    float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromZeroToItem);
-                    //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika, je¿eli nie ma przeciwnika w zasiêgu, to zwraca fa³sz
-                    if (zAngleFromMiddleToItem > -(rightMaxRotationLimit + 5) && zAngleFromMiddleToItem < (leftMaxRotationLimit + 5))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
+            enemiesInRange = CheckForEnemiesOnTheFrontInRange();
+            RotateOneStepTowardsTarget();
         }
         else
         {
-            foreach (var item in enemyList)
-            {
-                if (item != null)
-                {
-                    relativePositionFromGunToItem = item.transform.position - transform.position;
-                    if (maximumShootingRange > relativePositionFromGunToItem.magnitude || maximumShootingRange == 0)
-                    {
-                        if (hasRotationLimits)
-                        {
-                            //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
-                            float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
-                            float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromZeroToItem);
-                            //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika, je¿eli nie ma przeciwnika w zasiêgu, to zwraca fa³sz
-                            if (zAngleFromMiddleToItem > -rightMaxRotationLimit && zAngleFromMiddleToItem < leftMaxRotationLimit)
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+            enemiesInRange = CheckForTargetsInRange();
         }
-
-        return false;
     }
-    private bool CheckForEnemiesInRange()
+    private bool CheckForEnemiesOnTheFrontInRange()
+    {
+        if (isControlledByMouseCursor)
+        {
+            Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return IsTargetInRange(translatedMousePosition);
+        }
+        else
+        {
+            return IsEnemyInRange();
+        }
+    }
+    private bool CheckForTargetsInRange()
     {
 
         if (isControlledByMouseCursor)
         {
-            Vector3 relativePositionFromGunToItem;
             Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            translatedMousePosition.z = transform.position.z;
-            relativePositionFromGunToItem = translatedMousePosition - transform.position;
-            if (maximumRangeFromMouseToShoot > relativePositionFromGunToItem.magnitude || maximumRangeFromMouseToShoot == 0)
+            return IsTargetInRange(translatedMousePosition);
+        }
+        else
+        {
+            return IsEnemyInRange();
+        }
+    }
+    private bool IsEnemyInRange()
+    {
+        List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
+
+        //Rocket launchers don't shoot at debris
+        if (!isMyBulletARocket)
+        {
+            enemyList.AddRange(StaticDataHolder.obstacleList);
+        }
+
+        foreach (var item in enemyList)
+        {
+            if (item != null)
+            {
+                IsTargetInRange(item.transform.position);
+            }
+        }
+        return false;
+    }
+    private bool IsTargetInRange(Vector3 targetPosition)
+    {
+        targetPosition.z = transform.position.z;
+
+        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+        bool canShoot = maximumRangeFromMouseToShoot > relativePositionFromGunToItem.magnitude || maximumRangeFromMouseToShoot == 0;
+        if (canShoot)
+        {
+            if (hasRotationLimits)
+            {
+                IsTargetInCone(relativePositionFromGunToItem);
+            }
+            else
             {
                 return true;
             }
         }
-        else
+        return false;
+    }
+    private bool IsTargetInCone(Vector3 relativePositionFromGunToItem)
+    {
+        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
+
+        float angleFromUpToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
+        float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromUpToItem);
+
+        bool isCursorInCone = zAngleFromMiddleToItem > -(rightMaxRotationLimit + 5) && zAngleFromMiddleToItem < (leftMaxRotationLimit + 5);
+        if (isCursorInCone)
         {
-            Vector3 relativePositionFromGunToItem;
-            List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
-
-            //Rocket launchers don't shoot at debris
-            if (!isMyBulletARocket)
-            {
-                enemyList.AddRange(StaticDataHolder.obstacleList);
-            }
-
-            foreach (var item in enemyList)
-            {
-                if (item != null)
-                {
-                    relativePositionFromGunToItem = item.transform.position - transform.position;
-                    if (maximumShootingRange > relativePositionFromGunToItem.magnitude || maximumShootingRange == 0)
-                    {
-                        return true;
-                    }
-                }
-            }
+            return true;
         }
         return false;
     }
+    
+    //Move gun
     private void RotateOneStepTowardsTarget()
     {
         Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
@@ -400,6 +348,24 @@ public class AutomaticGunController : MonoBehaviour
             transform.rotation *= Quaternion.Euler(0, 0, degreesToRotateThisFrame);
         }
     }
+    private IEnumerator RotateTowardsUntilDone(int i)
+    {
+        //Counts the target rotation
+        float gunRotationOffset = (shootingSpread * i);
+        //Ustawia rotacjê, na pocz¹tkow¹ rotacjê startow¹
+        Quaternion targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
+        while (transform.rotation != targetRotation)
+        {
+            targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
+            const int STEPS_PER_SECOND = 30;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, gunRotationSpeed / STEPS_PER_SECOND);
+
+            yield return new WaitForSeconds(1 / STEPS_PER_SECOND);
+        }
+    }
+
+
+    //Look for targets
     private GameObject FindTheClosestEnemyInTheFrontInRange()
     {
         List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
@@ -488,34 +454,21 @@ public class AutomaticGunController : MonoBehaviour
         }
         return currentClosestEnemy;
     }
-    private IEnumerator RotateTowardsUntilDone(int i)
-    {
-        //Wylicza przesuniêcie na podstawie tego, który to strza³ z kolei oraz, o ile ma siê przesuwaæ pomiêdzy strza³ami
-        float gunRotationOffset = (shootingSpread * i);
-        //Ustawia rotacjê, na pocz¹tkow¹ rotacjê startow¹
-        Quaternion basicGunRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
-        while (transform.rotation != basicGunRotation)
-        {
-            Quaternion startingRotation = transform.rotation;
-
-
-            transform.rotation = Quaternion.RotateTowards(startingRotation, basicGunRotation, gunRotationSpeed / 60);
-
-            yield return new WaitForSeconds(1 / 60);
-            basicGunRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
-        }
-    }
     private void ShootOnce()
     {
         PlayShotSound();
         CreateNewProjectiles();
+
+        //Update time bank
+        lastShotTime = Time.time;
+        shootingTimeBank -= timeBetweenEachShot;
     }
 
 
     //Shoot once
     public void CreateNewProjectiles()
     {
-        if (gameObjectsToCreateList.Count != 0)
+        if (projectilesToCreateList.Count != 0)
         {
             for (int i = 0; i < howManyBulletsAtOnce; i++)
             {
@@ -539,7 +492,7 @@ public class AutomaticGunController : MonoBehaviour
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(projectilesToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
@@ -547,7 +500,7 @@ public class AutomaticGunController : MonoBehaviour
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(projectilesToCreateList[index], transform.position, newBulletRotation, team, gameObject);
     }
 
 
@@ -569,28 +522,6 @@ public class AutomaticGunController : MonoBehaviour
 
 
     //UI
-    public void SetIsControlledByMouseCursorTo(bool isTrue)
-    {
-        if (isTrue)
-        {
-            isControlledByMouseCursor = isTrue;
-            CreateUIOnPlayerTakesControl();
-        }
-        else
-        {
-            isControlledByMouseCursor = isTrue;
-
-            if (gunReloadingBarScript != null)
-            {
-                Destroy(gunReloadingBarScript.gameObject);
-            }
-
-            if (shootingZoneScript != null)
-            {
-                Destroy(shootingZoneScript.gameObject);
-            }
-        }
-    }
     private void CreateUIOnPlayerTakesControl()
     {
         if (isGunReloadingBarOn && (gunReloadingBarScript == null))
@@ -623,9 +554,50 @@ public class AutomaticGunController : MonoBehaviour
             lastShotTime = Time.time;
         }
     }
+    private void UpdateAmmoBarIfCreated()
+    {
+        if (isGunReloadingBarOn && (gunReloadingBarScript != null))
+        {
+            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
+        }
+        if (shootingZoneScript != null && isControlledByMouseCursor)
+        {
+            if (!enemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
+            {
+                shootingZoneScript.ShowBar(true);
+            }
+            else
+            {
+                shootingZoneScript.ShowBar(false);
+            }
+        }
+    }
+
 
 
     //Set values
+    public void SetIsControlledByMouseCursorTo(bool isTrue)
+    {
+        if (isTrue)
+        {
+            isControlledByMouseCursor = isTrue;
+            CreateUIOnPlayerTakesControl();
+        }
+        else
+        {
+            isControlledByMouseCursor = isTrue;
+
+            if (gunReloadingBarScript != null)
+            {
+                Destroy(gunReloadingBarScript.gameObject);
+            }
+
+            if (shootingZoneScript != null)
+            {
+                Destroy(shootingZoneScript.gameObject);
+            }
+        }
+    }
     public void SetTeam(int newTeam)
     {
         team = newTeam;

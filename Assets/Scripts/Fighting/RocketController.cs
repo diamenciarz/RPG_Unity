@@ -36,7 +36,7 @@ public class RocketController : BasicProjectileController
     }
     private void SetupStartingSpeed()
     {
-        if (startingRocketSpeed == -1)
+        if (startingSpeed == -1)
         {
             currentRocketSpeed = maxRocketSpeed;
         }

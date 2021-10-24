@@ -16,10 +16,13 @@ public class DamageReceiver : MonoBehaviour
     }
     private void CheckHealth()
     {
-        if (health <= 0)
+        if (!isDestroyed)
         {
-            isDestroyed = true;
-            Destroy(gameObject);
+            if (health <= 0)
+            {
+                isDestroyed = true;
+                Destroy(gameObject);
+            }
         }
     }
     public int GetCurrentHealth()

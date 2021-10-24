@@ -24,7 +24,8 @@ public class EntityCreator : MonoBehaviour
     public enum BulletTypes
     {
         Nothing,
-        Laser
+        Laser,
+        Rocket
     }
     //Projectiles
     public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
@@ -52,6 +53,16 @@ public class EntityCreator : MonoBehaviour
         }
         return null;
     }
+    public bool IsThisProjectileARocket(BulletTypes projectile)
+    {
+        if (projectile == BulletTypes.Rocket)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     //Entities
     public void SummonEntity(EntityTypes entityType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject parent)
     {
