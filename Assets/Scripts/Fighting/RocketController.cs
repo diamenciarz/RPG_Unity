@@ -32,7 +32,7 @@ public class RocketController : BasicProjectileController
         if (objectMissingIconGameObject != null)
         {
             GameObject miaGameObject = Instantiate(objectMissingIconGameObject, transform);
-            miaGameObject.GetComponent<ObjectMissingIcon>().FollowThisObject(gameObject);
+            miaGameObject.GetComponent<ObjectMissingIcon>().TryFollowThisObject(gameObject);
         }
     }
     private void SetupStartingSpeed()
