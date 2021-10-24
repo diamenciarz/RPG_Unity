@@ -92,16 +92,6 @@ public class AutomaticGunController : MonoBehaviour
         if ((Time.time - lastShotTime) >= (timeBetweenEachShootingChain + timeBetweenEachShot * howManyShots - shootingTimeBank))
         {
             shootingTimeBank = timeBetweenEachShot * howManyShots;
-            /*
-            if (isReloading)
-            {
-                isReloading = false;
-                shootingTimeBank += (Time.time - lastShotTime) - timeBetweenEachShot;
-            }
-            else
-            {
-                shootingTimeBank += Time.deltaTime;
-            }*/
 
             if (shootingTimeBank > (timeBetweenEachShot * howManyShots))
             {
@@ -129,7 +119,6 @@ public class AutomaticGunController : MonoBehaviour
         }
         if (shootingZoneScript != null && isControlledByMouseCursor)
         {
-            //
             if (!enemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
             {
                 shootingZoneScript.ShowBar(true);
