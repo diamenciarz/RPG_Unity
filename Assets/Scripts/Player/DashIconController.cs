@@ -86,14 +86,15 @@ public class DashIconController : MonoBehaviour
         List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
         Vector3 playerPosition = playerToFollow.transform.position;
         GameObject returnObject = StaticDataHolder.FindTheClosestObjectInList(dashableObjectList, playerPosition);
-        if (StaticDataHolder.GetDistanceBetweenObjectsIn2D(playerToFollow, returnObject) <= snapRange)
+        if (returnObject != null)
         {
-            return returnObject;
+            float distanceBetweenPlayerAndBush = StaticDataHolder.GetDistanceBetweenObjectsIn2D(playerToFollow, returnObject);
+            if (distanceBetweenPlayerAndBush <= snapRange)
+            {
+                return returnObject;
+            }
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
     public void SetGameObjectToFollow(object inputObject)
     {

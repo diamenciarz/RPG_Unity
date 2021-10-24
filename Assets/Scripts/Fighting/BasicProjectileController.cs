@@ -229,7 +229,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     protected void TryPlaySound(AudioClip sound)
     {
-        try
+        if (sound != null)
         {
             if (StaticDataHolder.GetSoundCount() <= (StaticDataHolder.GetSoundLimit() - 4))
             {
@@ -237,21 +237,24 @@ public abstract class BasicProjectileController : MonoBehaviour
                 StaticDataHolder.AddSoundDuration(sound.length);
             }
         }
-        catch (System.Exception)
-        {
-            Debug.LogError("Sound list empty");
-            throw;
-        }
     }
     protected AudioClip GetHitSound()
     {
         int soundIndex = Random.Range(0, hitSounds.Count);
-        return hitSounds[soundIndex];
+        if (hitSounds.Count > soundIndex)
+        {
+            return hitSounds[soundIndex];
+        }
+        return null;
     }
     protected AudioClip GetBreakSound()
     {
         int soundIndex = Random.Range(0, breakingSounds.Count);
-        return breakingSounds[soundIndex];
+        if (breakingSounds.Count > soundIndex)
+        { 
+            return breakingSounds[soundIndex];
+        }
+        return null;
     }
     //Shoot 
     public void CreateNewProjectiles()

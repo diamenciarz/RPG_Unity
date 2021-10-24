@@ -117,7 +117,7 @@ public static class StaticDataHolder
 
 
     //Helper functions -------------------------------------------------------------
-        //Vectors
+    //Vectors
     public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
     {
         return GetDeltaPositionFromToIn2D(firstObject, secondObject).magnitude;
@@ -153,7 +153,7 @@ public static class StaticDataHolder
     }
 
 
-        //Rotation
+    //Rotation
     public static Quaternion GetRotationFromToIn2D(Vector3 firstPosition, Vector3 secondPosition)
     {
         Vector3 deltaPosition = GetFromToVectorIn2D(firstPosition, secondPosition);
@@ -169,8 +169,8 @@ public static class StaticDataHolder
     }
 
 
-        //Find the closest entities
-            //Enemies
+    //Find the closest entities
+    //Enemies
     public static GameObject GetTheNearestEnemy(Vector3 positionVector, int myTeam)
     {
         return FindTheClosestObjectInList(GetMyEnemyList(myTeam), positionVector);
@@ -194,10 +194,11 @@ public static class StaticDataHolder
         }
         return inputList;
     }
-            //Allies
+
+    //Allies
     public static GameObject GetTheNearestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
     {
-        return FindTheClosestObjectInList(GetMyAllyList(myTeam,gameObjectToIgnore), positionVector);
+        return FindTheClosestObjectInList(GetMyAllyList(myTeam, gameObjectToIgnore), positionVector);
     }
     public static List<GameObject> GetMyAllyList(int myTeam, GameObject gameObjectToIgnore)
     {
@@ -225,7 +226,7 @@ public static class StaticDataHolder
     }
 
 
-            //Useful
+    //Useful
     public static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
         GameObject currentNearestTarget = null;
@@ -234,19 +235,14 @@ public static class StaticDataHolder
         {
             foreach (var item in possibleTargetList)
             {
-                DamageReceiver damageReceiver = item.GetComponent<DamageReceiver>();
-                if (damageReceiver != null)
+                if (currentNearestTarget == null)
                 {
-                    if (currentNearestTarget == null)
-                    {
-                        currentNearestTarget = item;
-                    }
-                    bool currentTargetIsCloser =  (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
-                    if (currentTargetIsCloser)
-                    {
-                        currentNearestTarget = item;
-                    }
-
+                    currentNearestTarget = item;
+                }
+                bool currentTargetIsCloser = (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
+                if (currentTargetIsCloser)
+                {
+                    currentNearestTarget = item;
                 }
             }
             return currentNearestTarget;
