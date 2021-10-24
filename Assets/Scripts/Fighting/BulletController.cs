@@ -6,33 +6,22 @@ public class BulletController : BasicProjectileController
 {
 
     [Header("Bullet Settings")]
-    // Ustawienia dla bomby
+    [SerializeField] protected bool isPiercing;
+
 
     //Private variables
-    private float originalSize;
+    protected int currentDamageLeft;
 
     protected override void Update()
     {
         base.Update();
-        SetNewSize();
     }
     protected override void SetupStartingValues()
     {
         base.SetupStartingValues();
-        originalSize = transform.localScale.x;
-    }
-    
-
-    private void SetNewSize()
-    {
-        float newSize = (Time.time - creationTime) / timeToExpire * (bombSize - originalSize) + originalSize;
-        gameObject.transform.localScale = new Vector3(newSize, newSize, 0);
-
-        if (Time.time - creationTime > timeToExpire)
+        if (isPiercing)
         {
-            gameObject.transform.localScale = new Vector3(bombSize, bombSize, 0);
-
-            DestroyProjectile();
+            currentDamageLeft = damage;
         }
     }
 }

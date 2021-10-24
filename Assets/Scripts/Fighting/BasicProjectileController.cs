@@ -4,15 +4,22 @@ using UnityEngine;
 
 public abstract class BasicProjectileController : MonoBehaviour
 {
-    [Header("Bullet Properties")]
+    [Header("Projectile Properties")]
     public int myTeam;
+    [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float speed;
     [SerializeField] protected int damage;
-    [SerializeField] protected List<Sprite> spriteList;
 
     [Header("Upon Breaking")]
     [SerializeField] protected bool turnsIntoSomething;
-    [SerializeField] protected List<EntityCreator.BulletTypes> turnsIntoGameObjects;
+    [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToCreateList;
+    [SerializeField] protected int howManyBulletsAtOnce;
+
+    [SerializeField] protected bool shootsAtEnemies; //Otherwise shoots forward
+    [SerializeField] protected bool spreadProjectilesEvenly;
+    [SerializeField] protected float spreadDegrees;
+    [SerializeField] protected float leftBulletSpread;
+    [SerializeField] protected float rightBulletSpread;
 
     [Header("Sounds")]
     [SerializeField] protected List<AudioClip> breakingSounds;
@@ -179,6 +186,10 @@ public abstract class BasicProjectileController : MonoBehaviour
     public void DestroyProjectile()
     {
         StaticDataHolder.projectileList.Remove(gameObject);
+        if (isAPlayerBullet)
+        {
+            StaticDataHolder.RemovePlayerProjectile(gameObject);
+        }
         Destroy(gameObject);
     }
     protected void HandleBreak()
@@ -190,6 +201,7 @@ public abstract class BasicProjectileController : MonoBehaviour
             if (turnsIntoSomething)
             {
                 CreateNewProjectiles();
+                DestroyProjectile();
             }
             else
             {
@@ -206,6 +218,7 @@ public abstract class BasicProjectileController : MonoBehaviour
             if (turnsIntoSomething)
             {
                 CreateNewProjectiles();
+                DestroyProjectile();
             }
             else
             {
@@ -230,100 +243,6 @@ public abstract class BasicProjectileController : MonoBehaviour
             throw;
         }
     }
-    protected void CreateNewProjectiles()
-    {
-        if (turnsIntoGameObjects != EntityCreator.BulletTypes.Nothing)
-        {
-            entityCreator.SummonProjectile(turnsIntoGameObjects, transform.position, transform.rotation, myTeam, gameObject);
-        }
-
-        DestroyProjectile();
-    }
-    public void CreateNewProjectiles(GameObject whatToInstantiate)
-    {
-        if (whatToInstantiate != null)
-        {
-            //Mo¿e strzela kilka razy?
-            for (int i = 0; i < howManyBulletsAtOnce; i++)
-            {
-
-                if (shootsAtPlayer == true)
-                {
-                    targetGameObject = scoreCounter.CheckForTheNearestEnemy(transform.position, rocketTeam, gameObject);
-                    if (targetGameObject != null)
-                    {
-                        //Policz kierunek, w którym trzeba spojrzeæ na gracza i przedstaw go, jako wektor
-                        Vector3 relativePositionToPlayer = targetGameObject.transform.position - transform.position;
-                        //Debug.Log("Relative position to Player: " + relativePositionToPlayer);
-                        // Zdefiniuj rotacjê, o zwrocie w kierunku gracza
-
-                        Quaternion newBulletRotation;
-
-                        if (relativePositionToPlayer.y >= 0)
-                        {
-                            newBulletRotation = Quaternion.Euler(0, 0, -Mathf.Atan(relativePositionToPlayer.x / relativePositionToPlayer.y) * 180 / Mathf.PI);
-
-                        }
-                        else
-                        {
-                            newBulletRotation = Quaternion.Euler(0, 0, (-Mathf.Atan(relativePositionToPlayer.x / relativePositionToPlayer.y) * 180 / Mathf.PI) + 180);
-                        }
-                        //Debug.Log("Rotation to player: " + newBulletRotation.eulerAngles);
-
-                        //Zmodyfikuj t¹ rotacjê o losow¹ wartoœæ
-                        newBulletRotation *= Quaternion.AngleAxis(Random.Range(-rightBulletSpread, leftBulletSpread), Vector3.forward);
-
-                        //Stwórz pocisk o odpowiednich w³aœciwoœciach
-                        newBullet = Instantiate(whatToInstantiate, transform.position, newBulletRotation);
-                    }
-                }
-                else
-                {
-                    Quaternion newBulletRotation = Quaternion.Euler(0, 0, Random.Range(-rightBulletSpread, leftBulletSpread));
-                    newBulletRotation *= transform.rotation;
-
-                    //Debug.Log("Created a bullet with a rotation of:" + newBulletRotation.eulerAngles);
-                    newBullet = Instantiate(whatToInstantiate, transform.position, newBulletRotation);
-                    //newBulletRotation must be in degrees
-                }
-            }
-            if (isAPlayerBullet)
-            {
-                scoreCounter.RemovePlayerBulletFromList(gameObject);
-            }
-
-            ShipDamageReceiver enemyDamageReceiver;
-            if (newBullet.TryGetComponent<ShipDamageReceiver>(out enemyDamageReceiver))
-            {
-                enemyDamageReceiver.planeTeam = rocketTeam;
-            }
-            BulletController enemyBulletController;
-            if (newBullet.TryGetComponent<BulletController>(out enemyBulletController))
-            {
-                enemyBulletController.SetBulletTeam(rocketTeam);
-                enemyBulletController.SetObjectThatCreatedThisBullet(objectThatCreatedTheRocket);
-                scoreCounter.AddBulletToList(newBullet);
-            }
-            PiercingBulletController piercingBulletController;
-            if (newBullet.TryGetComponent<PiercingBulletController>(out piercingBulletController))
-            {
-                piercingBulletController.SetBulletTeam(rocketTeam);
-                piercingBulletController.SetObjectThatCreatedThisBullet(objectThatCreatedTheRocket);
-                scoreCounter.AddBulletToList(newBullet);
-            }
-            RocketController rocketControllerScript;
-            if (newBullet.TryGetComponent<RocketController>(out rocketControllerScript))
-            {
-                if (targetGameObject != null)
-                {
-                    StartCoroutine(rocketControllerScript.SetTarget(targetGameObject));
-                }
-                rocketControllerScript.SetTeam(rocketTeam, objectThatCreatedTheRocket);
-            }
-
-        }
-        Destroy(gameObject);
-    }
     protected AudioClip GetHitSound()
     {
         int soundIndex = Random.Range(0, hitSounds.Count);
@@ -333,6 +252,90 @@ public abstract class BasicProjectileController : MonoBehaviour
     {
         int soundIndex = Random.Range(0, breakingSounds.Count);
         return breakingSounds[soundIndex];
+    }
+    //Shoot 
+    public void CreateNewProjectiles()
+    {
+        if (gameObjectsToCreateList.Count != 0)
+        {
+            for (int i = 0; i < howManyBulletsAtOnce; i++)
+            {
+
+                if (shootsAtEnemies == true)
+                {
+                    GameObject targetGO = StaticDataHolder.GetTheNearestEnemy(transform.position, myTeam);
+                    if (targetGO != null)
+                    {
+                        ShootAtTarget(targetGO.transform.position, i);
+                    }
+                    else
+                    {
+                        ShootAtNoTarget(i);
+                    }
+                }
+                else
+                {
+                    ShootAtNoTarget(i);
+                }
+            }
+        }
+    }
+
+
+    //Shoot once
+    private void ShootAtTarget(Vector3 targetPosition, int i)
+    {
+        if (spreadProjectilesEvenly)
+        {
+            ShootOnceTowardsPositionWithRegularSpread(i, targetPosition);
+        }
+        else
+        {
+            ShootOnceTowardsPositionWithRandomSpread(i, targetPosition);
+        }
+    }
+    private void ShootAtNoTarget(int i)
+    {
+        if (spreadProjectilesEvenly)
+        {
+            ShootOnceForwardWithRegularSpread(i);
+        }
+        else
+        {
+            ShootOnceForwardWithRandomSpread(i);
+        }
+    }
+    private void ShootOnceForwardWithRandomSpread(int index)
+    {
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+
+        newBulletRotation *= transform.rotation;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+    }
+    private void ShootOnceForwardWithRegularSpread(int index)
+    {
+        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
+
+        newBulletRotation *= transform.rotation;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+    }
+    private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
+    {
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
+
+        newBulletRotation *= rotationToTarget;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
+    }
+    private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
+    {
+        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
+        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
+
+        newBulletRotation *= rotationToTarget;
+        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, myTeam, gameObject);
     }
 
 
@@ -365,6 +368,8 @@ public abstract class BasicProjectileController : MonoBehaviour
     {
         velocityVector = newVelocityVector;
     }
+
+
     //Get values
     public Vector2 GetVelocityVector()
     {

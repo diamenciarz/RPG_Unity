@@ -15,12 +15,6 @@ public class RocketController : BasicProjectileController
 
     [Header("Explosion Settings")]
     public float timeToExpire;
-    [SerializeField] int howManyBulletsAtOnce;
-    [SerializeField] bool shootsAtPlayer;
-
-    [SerializeField] float leftBulletSpread;
-    [SerializeField] float rightBulletSpread;
-
 
     //Private variables
     private float currentRocketSpeed;

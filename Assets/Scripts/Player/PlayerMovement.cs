@@ -36,10 +36,14 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody2D = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         myAnimation = GetComponent<Animation>();
-        //myAnimation["Dash_Anim"].layer = 6;
+        UpdatePlayerGameObject();
+
+        StaticDataHolder.AddEntity(gameObject);
+    }
+    public void UpdatePlayerGameObject()
+    {
         EventManager.TriggerEvent("SetPlayerGameObject", gameObject);
     }
-
 
     // Update is called once per frame
     void FixedUpdate()

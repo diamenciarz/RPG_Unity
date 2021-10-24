@@ -7,6 +7,7 @@ public static class StaticDataHolder
     public static List<GameObject> dashableObjectList = new List<GameObject>();
     public static GameObject currentDashObject;
     public static List<GameObject> projectileList = new List<GameObject>();
+    public static List<GameObject> playerProjectileList = new List<GameObject>();
     public static List<GameObject> entityList = new List<GameObject>();
     public static List<float> soundDurationList = new List<float>();
     public static int soundLimit = 10;
@@ -48,7 +49,18 @@ public static class StaticDataHolder
     }
     public static void RemoveProjectile(GameObject projectile)
     {
-        projectileList.Add(projectile);
+        projectileList.Remove(projectile);
+    }
+
+
+    //Player projectile list methods
+    public static void AddPlayerProjectile(GameObject projectile)
+    {
+        playerProjectileList.Add(projectile);
+    }
+    public static void RemovePlayerProjectile(GameObject projectile)
+    {
+        playerProjectileList.Remove(projectile);
     }
 
 
@@ -59,7 +71,7 @@ public static class StaticDataHolder
     }
     public static void RemoveEntity(GameObject entity)
     {
-        entityList.Add(entity);
+        entityList.Remove(entity);
     }
 
 
@@ -109,14 +121,6 @@ public static class StaticDataHolder
 
         return (targetPosition - myPositionVector);
     }
-    public static Quaternion GetRotationFromToIn2D(Vector3 firstObject, Vector3 secondObject)
-    {
-        Vector3 deltaPosition = GetFromToVectorIn2D(firstObject, secondObject);
-
-        float zRotation = Mathf.Rad2Deg * Mathf.Atan(deltaPosition.y / deltaPosition.x);
-
-        return Quaternion.Euler(0, 0, zRotation);
-    }
     public static Vector3 GetFromToVectorIn2D(Vector3 firstPosition, Vector3 secondPosition)
     {
         firstPosition.z = 0;
@@ -136,6 +140,22 @@ public static class StaticDataHolder
         float yStepMove = Mathf.Cos(Mathf.Deg2Rad * zDirectionInDegrees);
         Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
         return returnVector.normalized;
+    }
+
+
+        //Rotation
+    public static Quaternion GetRotationFromToIn2D(Vector3 firstPosition, Vector3 secondPosition)
+    {
+        Vector3 deltaPosition = GetFromToVectorIn2D(firstPosition, secondPosition);
+
+        float zRotation = Mathf.Rad2Deg * Mathf.Atan(deltaPosition.y / deltaPosition.x);
+
+        return Quaternion.Euler(0, 0, zRotation);
+    }
+    public static Quaternion GetRandomRotationInRange(float leftSpread, float rightSpread)
+    {
+        Quaternion returnRotation = Quaternion.Euler(0, 0, Random.Range(-rightSpread, leftSpread));
+        return returnRotation;
     }
 
 
@@ -196,13 +216,15 @@ public static class StaticDataHolder
 
         if (possibleTargetList.Count != 0)
         {
-            currentNearestTarget = possibleTargetList[0];
-
             foreach (var item in possibleTargetList)
             {
                 DamageReceiver damageReceiver = item.GetComponent<DamageReceiver>();
                 if (damageReceiver != null)
                 {
+                    if (currentNearestTarget == null)
+                    {
+                        currentNearestTarget = item;
+                    }
                     bool currentTargetIsCloser = (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
                     if (currentTargetIsCloser)
                     {

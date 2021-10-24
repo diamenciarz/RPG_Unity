@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7700761372939823442}
   - component: {fileID: 7700761372939823440}
   - component: {fileID: 7700761372939823447}
+  - component: {fileID: 3278521563504507919}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7700761372939823446}
-  m_LocalRotation: {x: -0, y: -0, z: -0.67200166, w: 0.7405497}
+  m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
   m_LocalPosition: {x: -34.938457, y: -31.60448, z: 1}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
@@ -122,3 +123,40 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.13, y: 0.37}
   m_Direction: 0
+--- !u!114 &3278521563504507919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  bulletDamage: 2
+  breakingSounds: []
+  breakingSoundVolume: 1
+  hitSounds: []
+  hitSoundVolume: 1
+  breaksOnContactWithAllyBullets: 0
+  breaksOnContactWithEnemyBullets: 0
+  breaksOnContactWithAllies: 0
+  breaksOnContactWithEnemies: 1
+  breaksOnContactWithBombs: 1
+  isAPlayerBullet: 0
+  bulletTeam: 1
+  spriteList: []
+  turnsIntoGameObject: {fileID: 0}
+  turnsIntoSomething: 0
+  isABomb: 0
+  hurtsPlayer: 0
+  timeToExpire: 0
+  bombSize: 0
+  directionalBulletSpeed: 5
+  isPiercing: 0
+  isPushing: 1
+  pushingPower: 0
+  objectThatCreatedThisBullet: {fileID: 0}
