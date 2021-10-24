@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : BasicProjectileController
+public class BombController : BasicProjectileController
 {
 
-    [Header("Bullet Settings")]
+    [Header("Bomb Settings")]
     // Ustawienia dla bomby
+    public bool hurtsPlayer;
+    public float timeToExpire;
+    [SerializeField] float bombSize; // Sprite scale
 
     //Private variables
     private float originalSize;
@@ -21,7 +24,6 @@ public class BulletController : BasicProjectileController
         base.SetupStartingValues();
         originalSize = transform.localScale.x;
     }
-    
 
     private void SetNewSize()
     {

@@ -1,41 +1,66 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RocketController : BasicProjectileController
 {
-    public GameObject targetGameObject;
     [SerializeField] GameObject objectMissingIconGameObject;
     public bool hurtsPlayer;
 
     [Header("Rocket Flight Settings")]
-    public float timeToExpire;
-    [SerializeField] float targetRocketSpeed;
+    public float startingRocketSpeed = 2f;
+    [SerializeField] float maxRocketSpeed;
     [SerializeField] float speedChangeRatePerSecond = 1f;
-    public float currentRocketSpeed = -1f;
-    public float rocketRotationSpeed;
+    public float rocketRotationSpeed; //Degrees per second
 
     [Header("Explosion Settings")]
+    public float timeToExpire;
     [SerializeField] int howManyBulletsAtOnce;
     [SerializeField] bool shootsAtPlayer;
 
     [SerializeField] float leftBulletSpread;
     [SerializeField] float rightBulletSpread;
-    [SerializeField] int damage = 0;
 
+
+    //Private variables
+    private float currentRocketSpeed;
+    private GameObject targetGameObject;
     GameObject newBullet;
 
     protected void Start()
     {
         CreateMiaIcon();
-        if (currentRocketSpeed == -1)
+        SetupStartingSpeed();
+        
+    }
+    private void CreateMiaIcon()
+    {
+        if (objectMissingIconGameObject != null)
         {
-            currentRocketSpeed = targetRocketSpeed;
+            GameObject miaGameObject = Instantiate(objectMissingIconGameObject, transform);
+            miaGameObject.GetComponent<ObjectMissingIcon>().FollowThisObject(gameObject);
         }
     }
-    public void SetTarget(GameObject target)
+    private void SetupStartingSpeed()
     {
-        targetGameObject = target;
+        if (startingRocketSpeed == -1)
+        {
+            currentRocketSpeed = maxRocketSpeed;
+        }
+        else
+        {
+            currentRocketSpeed = startingRocketSpeed;
+        }
+    }
+    protected override void Update()
+    {
+        base.Update();
+        CheckForTarget();
+        ChangeSpeedTowardsTargetSpeed();
+        if (targetGameObject != null)
+        {
+            RotateTowardsTarget();
+        }
     }
     protected void CheckForTarget()
     {
@@ -47,4 +72,23 @@ public class RocketController : BasicProjectileController
             }
         }
     }
+    private void ChangeSpeedTowardsTargetSpeed()
+    {
+        if (currentRocketSpeed != maxRocketSpeed)
+        {
+            currentRocketSpeed = Mathf.MoveTowards(currentRocketSpeed, maxRocketSpeed, speedChangeRatePerSecond * Time.deltaTime);
+        }
+    }
+    
+    private void RotateTowardsTarget()
+    {
+        Quaternion newRocketRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetGameObject.transform.position);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, newRocketRotation, rocketRotationSpeed * Time.deltaTime);
+    }
+    public void SetTarget(GameObject target)
+    {
+        targetGameObject = target;
+    }
+    
 }

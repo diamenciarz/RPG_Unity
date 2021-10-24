@@ -109,31 +109,33 @@ public static class StaticDataHolder
 
         return (targetPosition - myPositionVector);
     }
-    public static void RotateFromToGameObjectIn2D(GameObject firstObject, GameObject secondObject)
+    public static Quaternion GetRotationFromToIn2D(Vector3 firstObject, Vector3 secondObject)
     {
-        Vector3 myPositionVector = firstObject.transform.position;
-        myPositionVector.z = 0;
-        Vector3 targetPosition = secondObject.transform.position;
-        targetPosition.z = 0;
-
-        Vector3 deltaPosition = targetPosition - myPositionVector;
+        Vector3 deltaPosition = GetFromToVectorIn2D(firstObject, secondObject);
 
         float zRotation = Mathf.Rad2Deg * Mathf.Atan(deltaPosition.y / deltaPosition.x);
 
-        firstObject.transform.rotation = Quaternion.Euler(0, 0, zRotation);
+        return Quaternion.Euler(0, 0, zRotation);
     }
-    public static Vector3 GetVectorRotatedInDirection(float speed, float zDirectionInDegrees)
+    public static Vector3 GetFromToVectorIn2D(Vector3 firstPosition, Vector3 secondPosition)
     {
-        Vector3 returnVector = speed * GetNormalizedVectorInDirection(zDirectionInDegrees);
+        firstPosition.z = 0;
+        secondPosition.z = 0;
+
+        return (secondPosition - firstPosition);
+    }
+    public static Vector3 GetDirectionVector(float speed, float zDirectionInDegrees)
+    {
+        Vector3 returnVector = speed * GetNormalizedDirectionVector(zDirectionInDegrees);
         return returnVector;
 
     }
-    public static Vector3 GetNormalizedVectorInDirection(float zDirectionInDegrees)
+    public static Vector3 GetNormalizedDirectionVector(float zDirectionInDegrees)
     {
         float xStepMove = -Mathf.Sin(Mathf.Deg2Rad * zDirectionInDegrees);
         float yStepMove = Mathf.Cos(Mathf.Deg2Rad * zDirectionInDegrees);
         Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
-        return returnVector;
+        return returnVector.normalized;
     }
 
 

@@ -619,7 +619,7 @@ public class AutomaticGunController : MonoBehaviour
                 enemyBulletController.directionalBulletSpeed * Mathf.Cos(newBullet.transform.rotation.eulerAngles.z * Mathf.Deg2Rad));
                 //Modyfikuje prêdkoœæ pocisku o prêdkoœæ samolotu
                 bombSpeedVector += new Vector2(parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.x, parentGameObject.GetComponent<DataScriptForAvoidance>().velocityVector.y);
-                enemyBulletController.SetNewBulletSpeedVector(bombSpeedVector);
+                enemyBulletController.SetVelocityVector(bombSpeedVector);
             }
         }
         PiercingBulletController piercingBulletController;

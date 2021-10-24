@@ -58,7 +58,7 @@ public class DashIconController : MonoBehaviour
     }
     private void UpdateRotation()
     {
-        StaticDataHolder.RotateFromToGameObjectIn2D(gameObject, playerToFollow);
+        gameObject.transform.rotation = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, playerToFollow.transform.position);
     }
     private void UpdatePosition()
     {

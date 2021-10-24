@@ -88,10 +88,11 @@
     <Compile Include="Assets\Scripts\Fighting\BasicProjectileController.cs" />
     <Compile Include="Assets\Scripts\Fighting\DamageReceiver.cs" />
     <Compile Include="Assets\Scripts\Prefabs\EntityCreator.cs" />
-    <Compile Include="Assets\Scripts\Fighting\BulletController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\BombController.cs" />
     <Compile Include="Assets\Scripts\Fighting\AutomaticGunController.cs" />
     <Compile Include="Assets\Scripts\UI\ProgressionBarController.cs" />
     <Compile Include="Assets\Scripts\Fighting\RocketController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\BulletController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />
