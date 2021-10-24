@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\Fighting\DamageReceiver.cs" />
     <Compile Include="Assets\Scripts\Prefabs\EntityCreator.cs" />
     <Compile Include="Assets\Scripts\Fighting\BulletController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\AutomaticGunController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -5,19 +5,10 @@ using UnityEngine;
 public class DamageReceiver : MonoBehaviour
 {
     [SerializeField] int health;
+    [SerializeField] int team;
 
     private bool isDestroyed = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     public void ReceiveDamage(int damage)
     {
         health -= damage;
@@ -30,5 +21,13 @@ public class DamageReceiver : MonoBehaviour
             isDestroyed = true;
             Destroy(gameObject);
         }
+    }
+    public int GetCurrentHealth()
+    {
+        return health;
+    }
+    public int GetTeam()
+    {
+        return team;
     }
 }
