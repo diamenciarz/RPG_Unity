@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class BasicProjectileController : MonoBehaviour
 {
     [Header("Bullet Properties")]
-    public int bulletTeam;
+    public int myTeam;
     [SerializeField] protected float speed;
     [SerializeField] protected int bulletDamage;
     [SerializeField] protected List<Sprite> spriteList;
@@ -26,6 +26,10 @@ public abstract class BasicProjectileController : MonoBehaviour
     public bool breaksOnContactWithAllies;
     public bool breaksOnContactWithEnemies;
     public bool breaksOnContactWithBombs = true;
+
+    [Header("Physics settings")]
+    public bool isPushing = true;
+    public float pushingPower;
 
     //Private variables
     [HideInInspector]
@@ -49,10 +53,17 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     protected virtual void SetupStartingValues()
     {
-        velocityVector = StaticDataHolder.GetMoveVectorInDirection(speed, transform.rotation.eulerAngles.z);
+        velocityVector = StaticDataHolder.GetVectorRotatedInDirection(speed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
     }
-    protected abstract void Update();
+    protected virtual void Update()
+    {
+        MoveOneStep();
+    }
+    private void MoveOneStep()
+    {
+        transform.position += new Vector3(velocityVector.x, velocityVector.y, 0) * Time.deltaTime;
+    }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
@@ -65,11 +76,11 @@ public abstract class BasicProjectileController : MonoBehaviour
         BulletController bulletController = collision.GetComponent<BulletController>();
         if (bulletController != null)
         {
-            int otherBulletTeam = bulletController.bulletTeam;
+            int otherBulletTeam = bulletController.myTeam;
             bool collidedWithABomb = false; // Implement check later
             bool shouldBreak = (collidedWithABomb && breaksOnContactWithBombs)
-                || (otherBulletTeam != bulletTeam && breaksOnContactWithEnemyBullets)
-                || (breaksOnContactWithAllyBullets && otherBulletTeam == bulletTeam);
+                || (otherBulletTeam != myTeam && breaksOnContactWithEnemyBullets)
+                || (breaksOnContactWithAllyBullets && otherBulletTeam == myTeam);
             if (shouldBreak)
             {
                 HandleBreak();
@@ -104,8 +115,8 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     protected void HandleHit(DamageReceiver collisionDamageReceiver)
     {
-        bool shouldBreak = (collisionDamageReceiver.GetTeam() == bulletTeam && breaksOnContactWithAllies)
-            || (collisionDamageReceiver.GetTeam() != bulletTeam && breaksOnContactWithEnemies);
+        bool shouldBreak = (collisionDamageReceiver.GetTeam() == myTeam && breaksOnContactWithAllies)
+            || (collisionDamageReceiver.GetTeam() != myTeam && breaksOnContactWithEnemies);
         if (shouldBreak)
         {
             if (!isDestroyed)
@@ -140,7 +151,10 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     protected void CreateNewProjectile()
     {
-        entityCreator.SummonProjectile(turnsIntoGameObject, transform.position, transform.rotation, bulletTeam, gameObject);
+        if (turnsIntoGameObject != EntityCreator.BulletTypes.Nothing)
+        {
+            entityCreator.SummonProjectile(turnsIntoGameObject, transform.position, transform.rotation, myTeam, gameObject);
+        }
 
         DestroyProjectile();
     }
@@ -159,7 +173,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     //Set values
     public void SetBulletTeam(int newTeam)
     {
-        bulletTeam = newTeam;
+        myTeam = newTeam;
         SetSpriteAccordingToTeam();
     }
     public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
@@ -168,15 +182,15 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     private void SetSpriteAccordingToTeam()
     {
-        if (spriteList.Count >= bulletTeam && bulletTeam != 0)
+        if (spriteList.Count >= myTeam && myTeam != 0)
         {
             try
             {
-                mySpriteRenderer.sprite = spriteList[bulletTeam - 1];
+                mySpriteRenderer.sprite = spriteList[myTeam - 1];
             }
             catch (System.Exception)
             {
-                Debug.LogError("Bullet sprite list out of bounds. Index: " + (bulletTeam - 1));
+                Debug.LogError("Bullet sprite list out of bounds. Index: " + (myTeam - 1));
                 throw;
             }
         }

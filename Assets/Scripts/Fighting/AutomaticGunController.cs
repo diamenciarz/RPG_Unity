@@ -74,7 +74,6 @@ public class AutomaticGunController : MonoBehaviour
         waveCreator = FindObjectOfType<WaveCreator>();
 
         CheckIfMyBulletIsARocket();
-        SetUpTeam();
         lastShotTime = Time.time;
         shootingTimeBank = 0f;
 
@@ -129,7 +128,7 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
-    private void SetUpTeam()
+    public void SetTeam()
     {
         ShipDamageReceiver enemyDamageReceiver;
         if (parentGameObject.TryGetComponent<ShipDamageReceiver>(out enemyDamageReceiver))
@@ -139,7 +138,7 @@ public class AutomaticGunController : MonoBehaviour
         BulletController enemyBulletController;
         if (parentGameObject.TryGetComponent<BulletController>(out enemyBulletController))
         {
-            planeTeam = enemyBulletController.bulletTeam;
+            planeTeam = enemyBulletController.myTeam;
         }
         RocketController rocketController;
         if (parentGameObject.TryGetComponent<RocketController>(out rocketController))

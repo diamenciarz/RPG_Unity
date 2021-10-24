@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -89,7 +89,8 @@ public static class StaticDataHolder
     }
 
 
-    //Helper functions
+    //Helper functions -------------------------------------------------------------
+        //Vectors
     public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
     {
         Vector3 playerPosition = firstObject.transform.position;
@@ -121,7 +122,7 @@ public static class StaticDataHolder
 
         firstObject.transform.rotation = Quaternion.Euler(0, 0, zRotation);
     }
-    public static Vector3 GetMoveVectorInDirection(float speed, float zDirectionInDegrees)
+    public static Vector3 GetVectorRotatedInDirection(float speed, float zDirectionInDegrees)
     {
         Vector3 returnVector = speed * GetNormalizedVectorInDirection(zDirectionInDegrees);
         return returnVector;
@@ -133,5 +134,86 @@ public static class StaticDataHolder
         float yStepMove = Mathf.Cos(Mathf.Deg2Rad * zDirectionInDegrees);
         Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
         return returnVector;
+    }
+
+
+        //Find the closest entities
+    public static GameObject GetTheNearestEnemy(Vector3 positionVector, int myTeam)
+    {
+        List<GameObject> possibleTargetList = new List<GameObject>();
+        possibleTargetList = RemoveAlliesFromList(entityList, myTeam);
+
+        return FindTheClosestObjectInList(possibleTargetList, positionVector);
+    }
+    private static List<GameObject> RemoveAlliesFromList(List<GameObject> inputList, int myTeam)
+    {
+        for (int i = inputList.Count - 1; i >= 0; i--)
+        {
+            DamageReceiver damageReceiver = inputList[i].GetComponent<DamageReceiver>();
+            if (damageReceiver != null)
+            {
+                if (damageReceiver.GetTeam() == myTeam)
+                {
+                    inputList.Remove(inputList[i]);
+                }
+            }
+        }
+        return inputList;
+    }
+    public static GameObject GetTheNearestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
+    {
+
+        List<GameObject> possibleTargetList = new List<GameObject>();
+        possibleTargetList = RemoveMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
+
+        return FindTheClosestObjectInList(possibleTargetList, positionVector);
+    }
+    private static List<GameObject> RemoveMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
+    {
+        for (int i = inputList.Count - 1; i >= 0; i--)
+        {
+            DamageReceiver damageReceiver = inputList[i].GetComponent<DamageReceiver>();
+            if (damageReceiver != null)
+            {
+                if (damageReceiver.GetTeam() != myTeam)
+                {
+                    inputList.Remove(inputList[i]);
+                }
+                //Remove itself from ally list
+                if (inputList[i] == gameObjectToIgnore)
+                {
+                    inputList.Remove(inputList[i]);
+                }
+            }
+        }
+        return inputList;
+    }
+    private static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
+    {
+        GameObject currentNearestTarget = null;
+
+        if (possibleTargetList.Count != 0)
+        {
+            currentNearestTarget = possibleTargetList[0];
+
+            foreach (var item in possibleTargetList)
+            {
+                DamageReceiver damageReceiver = item.GetComponent<DamageReceiver>();
+                if (damageReceiver != null)
+                {
+                    bool currentTargetIsCloser = (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
+                    if (currentTargetIsCloser)
+                    {
+                        currentNearestTarget = item;
+                    }
+
+                }
+            }
+            return currentNearestTarget;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

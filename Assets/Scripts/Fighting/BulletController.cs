@@ -13,15 +13,10 @@ public class BulletController : BasicProjectileController
     [SerializeField] float bombSize;
 
     public float directionalBulletSpeed = 5f;
-    [SerializeField] bool isPiercing;
-    [Header("Physics settings")]
-    public bool isPushing = true;
-    public float pushingPower;
+    
 
     //Private variables
     private float originalSize;
-    private float outOfScreenOffset = 5f;
-
     // Update is called once per frame
     protected override void Update()
     {
@@ -38,7 +33,7 @@ public class BulletController : BasicProjectileController
     }
     protected override void SetupStartingValues()
     {
-        velocityVector = StaticDataHolder.GetMoveVectorInDirection(speed, transform.rotation.eulerAngles.z);
+        velocityVector = StaticDataHolder.GetVectorRotatedInDirection(speed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
         if (isABomb)
         {
@@ -63,6 +58,10 @@ public class BulletController : BasicProjectileController
     public void SetNewBulletSpeedVector(Vector2 newVelocityVector)
     {
         velocityVector = newVelocityVector;
+    }
+    public Vector2 GetVelocityVector()
+    {
+        return velocityVector;
     }
 }
 

@@ -23,6 +23,7 @@ public class EntityCreator : MonoBehaviour
     }
     public enum BulletTypes
     {
+        Nothing,
         Laser
     }
     //Projectiles
@@ -52,15 +53,15 @@ public class EntityCreator : MonoBehaviour
         return null;
     }
     //Entities
-    public void SummonEntity(EntityTypes entityType, Vector3 summonPosition, Quaternion summonRotation, int team)
+    public void SummonEntity(EntityTypes entityType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject parent)
     {
         GameObject entityToSummon = GetEntityPrefab(entityType);
-        GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation);
+        GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation, parent.transform);
 
-        TrySetupEntityStartingValues(summonedEntity, team);
+        TrySetupEntityStartingValues(summonedEntity, team, parent);
         StaticDataHolder.entityList.Add(summonedEntity);
     }
-    private void TrySetupEntityStartingValues(GameObject summonedBullet, int team)
+    private void TrySetupEntityStartingValues(GameObject summonedBullet, int team, GameObject parent)
     {
         /*
         BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
