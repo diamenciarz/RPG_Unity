@@ -43,7 +43,7 @@ public class DashIconController : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        if (isVisible && playerMovement.CanDash())
+        if (isVisible && playerMovement.GetCanDash())
         {
             SetVisibility(true);
         }

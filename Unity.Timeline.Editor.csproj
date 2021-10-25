@@ -293,8 +293,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Window\TimelineWindow_TrackGui.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Utilities\ObjectReferenceField.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Utilities\Clipboard.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\IPropertyKeyDataSource.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\TrackGui\TimelineTrackErrorGUI.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\IPropertyKeyDataSource.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Utilities\TimeReferenceUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Window\TimelineWindow_PlayRange.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\treeview\TrackGui\TimelineTrackGUI.cs" />

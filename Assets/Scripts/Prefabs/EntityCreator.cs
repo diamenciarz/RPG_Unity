@@ -15,6 +15,7 @@ public class EntityCreator : MonoBehaviour
     }
     [Header("Projectiles")]
     public GameObject laserPrefab;
+    public GameObject splittingBulletPrefab;
     [Header("Enemies")]
     public GameObject walkerPrefab;
     public enum EntityTypes
@@ -24,6 +25,7 @@ public class EntityCreator : MonoBehaviour
     public enum BulletTypes
     {
         Nothing,
+        SplittingBullet,
         Laser,
         Rocket
     }
@@ -50,6 +52,10 @@ public class EntityCreator : MonoBehaviour
         if (bulletType == BulletTypes.Laser)
         {
             return laserPrefab;
+        }
+        if (bulletType == BulletTypes.SplittingBullet)
+        {
+            return splittingBulletPrefab;
         }
         return null;
     }

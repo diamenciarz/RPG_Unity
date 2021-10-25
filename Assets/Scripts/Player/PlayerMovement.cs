@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D myRigidbody2D;
     private BoxCollider2D myCollider2D;
-    private List<GameObject> collidingObjectsList = new List<GameObject>();
+    public List<GameObject> collidingObjectsList = new List<GameObject>();
     private Animator myAnimator;
     private Animation myAnimation;
 
@@ -161,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void AdjustMovementSpeed()
     {
-        if (IsCollidingWithABush())
+        if (StaticDataHolder.IsCollidingWithABush())
         {
             playerSpeed = defaultPlayerSpeed * bushSpeedModifier;
         }
@@ -170,42 +170,20 @@ public class PlayerMovement : MonoBehaviour
             playerSpeed = defaultPlayerSpeed;
         }
     }
-    private bool IsCollidingWithABush()
-    {
-        foreach (GameObject item in collidingObjectsList)
-        {
-            if (item.tag == "Dashable")
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
     //Collision handling
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        AddCollidingObject(collision.gameObject);
+         StaticDataHolder.AddCollidingObject(collision.gameObject);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        RemoveCollidingObject(collision.gameObject);
-    }
-    private void AddCollidingObject(GameObject objectToAdd)
-    {
-        collidingObjectsList.Add(objectToAdd);
-    }
-    private void RemoveCollidingObject(GameObject objectToAdd)
-    {
-        if (collidingObjectsList.Contains(objectToAdd))
-        {
-            collidingObjectsList.Remove(objectToAdd);
-        }
+        StaticDataHolder.RemoveCollidingObject(collision.gameObject);
     }
 
     //Get Variables
-    public bool CanDash()
+    public bool GetCanDash()
     {
         return canDash;
     }

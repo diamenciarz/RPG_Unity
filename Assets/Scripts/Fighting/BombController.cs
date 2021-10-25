@@ -34,7 +34,7 @@ public class BombController : BasicProjectileController
         {
             gameObject.transform.localScale = new Vector3(bombSize, bombSize, 0);
 
-            DestroyProjectile();
+            Destroy(gameObject);
         }
     }
 }

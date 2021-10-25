@@ -57403,6 +57403,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6195473770567518804, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
   m_PrefabInstance: {fileID: 6195473770939546901}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6195473770939546903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770939546902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a0a9fb1eb840544afbe71f743ff9c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  team: 1
 --- !u!1001 &7512425785441907623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57467,18 +57481,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
-      propertyPath: team
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
-      propertyPath: damage
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
-      propertyPath: startingSpeed
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7700761372939823443, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
       propertyPath: m_RootOrder
       value: 8

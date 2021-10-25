@@ -11,6 +11,7 @@ public static class StaticDataHolder
     public static List<GameObject> projectileList = new List<GameObject>();
     public static List<GameObject> playerProjectileList = new List<GameObject>();
     public static List<GameObject> entityList = new List<GameObject>();
+    public static List<GameObject> objectsCollidingWithPlayerList = new List<GameObject>();
 
     public static List<float> soundDurationList = new List<float>();
     public static int soundLimit = 10;
@@ -87,6 +88,38 @@ public static class StaticDataHolder
     public static void RemoveEntity(GameObject entity)
     {
         entityList.Remove(entity);
+    }
+
+
+    //Objects colliding with player list methods
+    public static void AddCollidingObject(GameObject collidingObject)
+    {
+        objectsCollidingWithPlayerList.Add(collidingObject);
+    }
+    public static void RemoveCollidingObject(GameObject collidingObject)
+    {
+        if (objectsCollidingWithPlayerList.Contains(collidingObject))
+        {
+            objectsCollidingWithPlayerList.Remove(collidingObject);
+        }
+    }
+    public static List<GameObject> GetCollidingObjectList()
+    {
+        return objectsCollidingWithPlayerList;
+    }
+    public static bool IsCollidingWithABush()
+    {
+        if (objectsCollidingWithPlayerList.Count != 0)
+        {
+            foreach (GameObject item in objectsCollidingWithPlayerList)
+            {
+                if (item.tag == "Dashable")
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -177,9 +210,9 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetMyEnemyList(int myTeam)
     {
-        return RemoveAlliesFromList(entityList, myTeam);
+        return SubtractAlliesFromList(entityList, myTeam);
     }
-    public static List<GameObject> RemoveAlliesFromList(List<GameObject> inputList, int myTeam)
+    public static List<GameObject> SubtractAlliesFromList(List<GameObject> inputList, int myTeam)
     {
         for (int i = inputList.Count - 1; i >= 0; i--)
         {
@@ -202,9 +235,9 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetMyAllyList(int myTeam, GameObject gameObjectToIgnore)
     {
-        return RemoveMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
+        return SubtractMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
     }
-    public static List<GameObject> RemoveMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
+    public static List<GameObject> SubtractMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
     {
         for (int i = inputList.Count - 1; i >= 0; i--)
         {

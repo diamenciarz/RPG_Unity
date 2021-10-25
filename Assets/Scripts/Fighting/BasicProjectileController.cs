@@ -11,9 +11,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     [SerializeField] protected int damage;
 
     [Header("Upon Breaking")]
-    [SerializeField] protected bool turnsIntoSomething;
-    [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToCreateList;
-    [SerializeField] protected int howManyBulletsAtOnce;
+    [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToTurnIntoList;
 
     [SerializeField] protected bool shootsAtEnemies; //Otherwise shoots forward
     [SerializeField] protected bool spreadProjectilesEvenly;
@@ -75,6 +73,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Collided with: " + collision.gameObject.name);
         HandleAllCollisionChecks(collision);
     }
 
@@ -183,29 +182,22 @@ public abstract class BasicProjectileController : MonoBehaviour
 
 
     //Handle destroy
-    public void DestroyProjectile()
-    {
-        StaticDataHolder.projectileList.Remove(gameObject);
-        if (isAPlayerBullet)
-        {
-            StaticDataHolder.RemovePlayerProjectile(gameObject);
-        }
-        Destroy(gameObject);
-    }
     protected void HandleBreak()
     {
         if (!isDestroyed)
         {
             isDestroyed = true;
             TryPlaySound(GetBreakSound());
-            if (turnsIntoSomething)
+
+            bool bulletSplits = gameObjectsToTurnIntoList.Count != 0;
+            if (bulletSplits)
             {
                 CreateNewProjectiles();
-                DestroyProjectile();
+                Destroy(gameObject);
             }
             else
             {
-                DestroyProjectile();
+                Destroy(gameObject);
             }
         }
     }
@@ -215,18 +207,33 @@ public abstract class BasicProjectileController : MonoBehaviour
         {
             isDestroyed = true;
             TryPlaySound(GetHitSound());
-            if (turnsIntoSomething)
+
+            bool bulletSplits = gameObjectsToTurnIntoList.Count != 0;
+            if (bulletSplits)
             {
                 CreateNewProjectiles();
-                DestroyProjectile();
+                Destroy(gameObject);
             }
             else
             {
-                DestroyProjectile();
+                Destroy(gameObject);
             }
         }
 
     }
+    private void OnDestroy()
+    {
+        StaticDataHolder.projectileList.Remove(gameObject);
+        if (isAPlayerBullet)
+        {
+            StaticDataHolder.RemovePlayerProjectile(gameObject);
+        }
+        StaticDataHolder.RemoveDashableObject(gameObject);
+        StaticDataHolder.RemoveProjectile(gameObject);
+    }
+
+
+    //Sounds
     protected void TryPlaySound(AudioClip sound)
     {
         if (sound != null)
@@ -251,7 +258,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     {
         int soundIndex = Random.Range(0, breakingSounds.Count);
         if (breakingSounds.Count > soundIndex)
-        { 
+        {
             return breakingSounds[soundIndex];
         }
         return null;
@@ -259,9 +266,9 @@ public abstract class BasicProjectileController : MonoBehaviour
     //Shoot 
     public void CreateNewProjectiles()
     {
-        if (gameObjectsToCreateList.Count != 0)
+        if (gameObjectsToTurnIntoList.Count != 0)
         {
-            for (int i = 0; i < howManyBulletsAtOnce; i++)
+            for (int i = 0; i < gameObjectsToTurnIntoList.Count; i++)
             {
 
                 if (shootsAtEnemies == true)
@@ -313,15 +320,17 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
-        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
@@ -329,16 +338,18 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
     }
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
     {
-        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget;
-        entityCreator.SummonProjectile(gameObjectsToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
     }
 
 
@@ -374,9 +385,13 @@ public abstract class BasicProjectileController : MonoBehaviour
 
 
     //Get values
-    public Vector2 GetVelocityVector()
+    public Vector2 GetVelocityVector2()
     {
         return velocityVector;
+    }
+    public Vector3 GetVelocityVector3()
+    {
+        return new Vector3(velocityVector.x, velocityVector.y, 0);
     }
     public int GetDamage()
     {
