@@ -28,6 +28,10 @@ public static class StaticDataHolder
             obstacleList.Remove(removeObject);
         }
     }
+    public static List<GameObject> GetObstacleList()
+    {
+        return obstacleList;
+    }
 
     //Dashable Object List Methods
     public static void AddDashableObject(GameObject addObject)

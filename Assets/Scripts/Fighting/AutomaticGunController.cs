@@ -214,15 +214,15 @@ public class AutomaticGunController : MonoBehaviour
     }
     private bool IsEnemyInRange()
     {
-        List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
+        List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
 
         //Rocket launchers don't shoot at debris
         if (!isMyBulletARocket)
         {
-            enemyList.AddRange(StaticDataHolder.obstacleList);
+            targetList.AddRange(StaticDataHolder.GetObstacleList());
         }
 
-        foreach (var item in enemyList)
+        foreach (var item in targetList)
         {
             if (item != null)
             {
@@ -512,10 +512,6 @@ public class AutomaticGunController : MonoBehaviour
             if (shootingSoundsList.Count != 0)
             {
                 AudioSource.PlayClipAtPoint(shootingSoundsList[Random.Range(0, shootingSoundsList.Count)], transform.position, shootSoundVolume);
-            }
-            else
-            {
-                Debug.LogError("No sounds to play: " + gameObject.name);
             }
         }
     }

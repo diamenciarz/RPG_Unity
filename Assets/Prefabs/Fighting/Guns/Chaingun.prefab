@@ -43,6 +43,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -122,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6398174230728789535}
-  - component: {fileID: 2206339328031615295}
+  - component: {fileID: 5971849208045001434}
   m_Layer: 0
   m_Name: leftGunRotator
   m_TagString: Untagged
@@ -145,7 +146,7 @@ Transform:
   m_Father: {fileID: 8207916503180753665}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2206339328031615295
+--- !u!114 &5971849208045001434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,37 +155,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 2956816195299263353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6d97df5e0b0027498c685a2c66f97f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f8a9ab8aafb4fe458d94fbeb9343148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingSoundsList:
-  - {fileID: 8300000, guid: 97cc696cfa36c0742ba3f747ae5e896e, type: 3}
-  shootSoundVolume: 0.377
-  gunBasicDirection: 180
+  shootingSoundsList: []
+  shootSoundVolume: 0
+  gunBasicDirection: 0
   shootsAtTheNearestEnemy: 0
   maximumShootingRange: 20
   maximumRangeFromMouseToShoot: 20
   howManyShots: 0
   shootingSpread: 0
   timeBetweenEachShootingChain: 0
-  howManyBulletsAtOnce: 0
-  bulletSpread: 0
-  isSpreadRandom: 0
+  spreadProjectilesEvenly: 0
+  spreadDegrees: 0
   leftBulletSpread: 0
   rightBulletSpread: 0
-  gunRotationSpeed: 10
+  projectilesToCreateList: 
+  addMySpeedToBulletSpeed: 0
+  gunRotationSpeed: 0
   timeBetweenEachShot: 0
   hasRotationLimits: 0
   leftMaxRotationLimit: 0
   rightMaxRotationLimit: 0
   gunTextureRotationOffset: 180
-  enemyBullet: {fileID: 8781623319199855395, guid: 1dc3b7ec6089dbb40915997f4a8ff97b, type: 3}
-  shootingPoint: {fileID: 7953750170628896880}
+  shootingPoint: {fileID: 0}
   parentGameObject: {fileID: 0}
-  gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
+  gunReloadingBarPrefab: {fileID: 0}
+  shootingZonePrefab: {fileID: 0}
+  theShootingZonesParent: {fileID: 0}
+  shootingZoneTransform: {fileID: 0}
   isControlledByMouseCursor: 0
-  isGunReloadingBarOn: 1
-  planeTeam: 0
+  isGunReloadingBarOn: 0
+  team: 0
 --- !u!1 &6628403074769819572
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +231,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

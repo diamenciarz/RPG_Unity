@@ -57390,8 +57390,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: howManyShots
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: spreadDegrees
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: shootingSpread
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: gunRotationSpeed
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: hasRotationLimits
@@ -57399,7 +57411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: timeBetweenEachShot
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: leftMaxRotationLimit
@@ -57422,6 +57434,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: gunTextureRotationOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
       value: 0
       objectReference: {fileID: 0}
@@ -57431,11 +57447,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: projectilesToCreateList.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: projectilesToCreateList.Array.data[1]
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: projectilesToCreateList.Array.data[2]
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3268680416828774221, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.y
