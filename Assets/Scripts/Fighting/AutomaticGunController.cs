@@ -59,35 +59,35 @@ public class AutomaticGunController : MonoBehaviour
 
     [HideInInspector]
     public int team;
-    private bool enemiesInRange;
+    private bool areEnemiesInRange;
     private float lastShotTime;
     private bool isMyBulletARocket;
     private float shootingTimeBank;
     private EntityCreator entityCreator;
 
 
-    // Start is called before the first frame update
+    // Startup
     void Start()
     {
-        entityCreator = FindObjectOfType<EntityCreator>();
+        InitializeStartingVariables();
 
-        UpdateTeam();
-        CheckIfMyBulletIsARocket();
+        CallStartingMethods();
+    }
+    private void InitializeStartingVariables()
+    {
+        entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
         shootingTimeBank = 0f;
 
+    }
+    private void CallStartingMethods()
+    {
+        UpdateTeam();
+        CheckIfMyBulletIsARocket();
+        SetIsControlledByMouseCursorTo(isControlledByMouseCursor);
+
         StartCoroutine(AttackCoroutine());
     }
-    private void Update()
-    {
-        UpdateTimeBank();
-        LookForTargets();
-
-        UpdateAmmoBarIfCreated();
-    }
-
-
-    //Update variables
     private void CheckIfMyBulletIsARocket()
     {
         foreach (var item in projectilesToCreateList)
@@ -97,6 +97,13 @@ public class AutomaticGunController : MonoBehaviour
                 isMyBulletARocket = true;
             }
         }
+    }
+    private void Update()
+    {
+        UpdateTimeBank();
+        LookForTargets();
+
+        UpdateAmmoBarIfCreated();
     }
     private void UpdateTimeBank()
     {
@@ -112,7 +119,7 @@ public class AutomaticGunController : MonoBehaviour
     }
 
 
-    //Shooting
+    //SHOOTING ------------
     //Coroutines
     private IEnumerator AttackCoroutine()
     {
@@ -120,13 +127,13 @@ public class AutomaticGunController : MonoBehaviour
         {
             if (isControlledByMouseCursor)
             {
-                yield return new WaitUntil(() => (enemiesInRange == true) && Input.GetKey(KeyCode.Mouse0));
+                yield return new WaitUntil(() => (areEnemiesInRange == true) && Input.GetKey(KeyCode.Mouse0));
             }
             else
             {
                 yield return new WaitForSeconds(timeBetweenEachShootingChain);
 
-                yield return new WaitUntil(() => (enemiesInRange == true));
+                yield return new WaitUntil(() => (areEnemiesInRange == true));
             }
 
             yield return LongShotLoop();
@@ -180,12 +187,12 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (shootsAtTheNearestEnemy)
         {
-            enemiesInRange = CheckForEnemiesOnTheFrontInRange();
+            areEnemiesInRange = CheckForEnemiesOnTheFrontInRange();
             RotateOneStepTowardsTarget();
         }
         else
         {
-            enemiesInRange = CheckForTargetsInRange();
+            areEnemiesInRange = CheckForTargetsInRange();
         }
     }
     private bool CheckForEnemiesOnTheFrontInRange()
@@ -232,6 +239,7 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
+    //Helper functions
     private bool CanShootTarget(Vector3 targetPosition)
     {
         if (hasRotationLimits)
@@ -255,7 +263,6 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
-
     private bool IsTargetInCone(Vector3 targetPosition)
     {
 
@@ -276,89 +283,10 @@ public class AutomaticGunController : MonoBehaviour
     }
 
 
+
+
+
     //Move gun
-    private void RotateOneStepTowardsTarget()
-    {
-        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
-        Vector3 relativePositionToTarget;
-        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
-        float gunRotation = startingRotation.eulerAngles.z;
-
-        while (middleZRotation > 180)
-        {
-            middleZRotation -= 360;
-        }
-        if (gunRotation > 180)
-        {
-            gunRotation -= 360;
-        }
-
-        if (!isControlledByMouseCursor)
-        {
-            theNearestEnemyGameObject = FindTheClosestEnemyInTheFrontInRange();
-        }
-
-        if (theNearestEnemyGameObject != null || isControlledByMouseCursor)
-        {
-            //Policz kierunek, w którym trzeba spojrzeæ na najbli¿szego przeciwnika w zasiêgu widzenia i przedstaw go, jako wektor
-            if (isControlledByMouseCursor)
-            {
-                Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                translatedMousePosition.z = transform.position.z;
-                relativePositionToTarget = translatedMousePosition - transform.position;
-            }
-            else
-            {
-                relativePositionToTarget = theNearestEnemyGameObject.transform.position - transform.position;
-            }
-            //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
-            float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionToTarget, Vector3.forward);
-
-            float zAngleFromGunToItem = Mathf.DeltaAngle(startingRotation.eulerAngles.z, angleFromZeroToItem);
-            float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromZeroToItem);
-
-            if (hasRotationLimits)
-            {
-                //Je¿eli cel jest poza zasiêgiem, to zajmuje najbli¿sz¹ skrajn¹ pozycjê
-                if (zAngleFromMiddleToItem < -rightMaxRotationLimit)
-                {
-                    zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
-                }
-                else
-                if (zAngleFromMiddleToItem > leftMaxRotationLimit)
-                {
-                    zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
-                }
-
-                //Je¿eli chcia³by siê obróciæ przez zakazany teren, to musi iœæ na oko³o
-                if (zAngleFromGunToItem > 0)
-                {
-                    float zRotationFromGunToLeftLimit = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
-                    if ((zRotationFromGunToLeftLimit) >= 0)
-                    {
-                        if ((zAngleFromGunToItem) > zRotationFromGunToLeftLimit)
-                        {
-                            zAngleFromGunToItem -= 360;
-                        }
-                    }
-                }
-                if (zAngleFromGunToItem < 0)
-                {
-                    float zRotationFromGunToRightLimit = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
-                    if (zRotationFromGunToRightLimit <= 0)
-                    {
-                        if ((zAngleFromGunToItem) < zRotationFromGunToRightLimit)
-                        {
-                            zAngleFromGunToItem += 360;
-                        }
-                    }
-                }
-            }
-
-            float degreesToRotateThisFrame = Mathf.Clamp(zAngleFromGunToItem, -gunRotationSpeed * Time.deltaTime, gunRotationSpeed * Time.deltaTime);
-            transform.rotation *= Quaternion.Euler(0, 0, degreesToRotateThisFrame);
-        }
-    }
     private IEnumerator RotateTowardsUntilDone(int i)
     {
         //Counts the target rotation
@@ -373,6 +301,148 @@ public class AutomaticGunController : MonoBehaviour
 
             yield return new WaitForSeconds(1 / STEPS_PER_SECOND);
         }
+    }
+    private void RotateOneStepTowardsTarget()
+    {
+        float degreesToRotateThisFrame = CountDegreesToRotateThisFrame();
+        transform.rotation *= Quaternion.Euler(0, 0, degreesToRotateThisFrame);
+    }
+    //Helper functions
+    private float CountDegreesToRotateThisFrame()
+    {
+        if (!isControlledByMouseCursor)
+        {
+            theNearestEnemyGameObject = FindTheClosestEnemyInTheFrontInRange();
+        }
+
+        if (theNearestEnemyGameObject != null || isControlledByMouseCursor)
+        {
+            //The whole angle to move
+            float zMoveAngle = CountZMoveAngleTowardsTargetPosition();
+            //Clamp to one step this frame
+            return Mathf.Clamp(zMoveAngle, -gunRotationSpeed * Time.deltaTime, gunRotationSpeed * Time.deltaTime);
+        }
+        return 0;
+    }
+    private float CountZMoveAngleTowardsTargetPosition()
+    {
+        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
+        Vector3 relativePositionToTarget = GetRelativePositionToTarget();
+
+        //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
+        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionToTarget, Vector3.forward);
+        float zAngleFromGunToItem = Mathf.DeltaAngle(startingRotation.eulerAngles.z, angleFromZeroToItem);
+        float zMoveAngle = zAngleFromGunToItem;
+
+        if (hasRotationLimits)
+        {
+            zMoveAngle = AdjustZAngleAccordingToBoundaries(zAngleFromGunToItem, relativePositionToTarget);
+        }
+        return zMoveAngle;
+    }
+    private float CountAngleFromMiddleToPosition(Vector3 targetPosition)
+    {
+        float middleZRotation = GetMiddleZRotation();
+        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+        //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
+        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
+        float zAngleFromMiddleToItem = angleFromZeroToItem - middleZRotation;
+        return zAngleFromMiddleToItem;
+    }
+    private Vector3 GetRelativePositionToTarget()
+    {
+        Vector3 relativePositionToTarget;
+        if (isControlledByMouseCursor)
+        {
+            relativePositionToTarget = GetRelativePositionToMouseVector();
+        }
+        else
+        {
+            relativePositionToTarget = theNearestEnemyGameObject.transform.position - transform.position;
+        }
+        return relativePositionToTarget;
+    }
+    private Vector3 GetRelativePositionToMouseVector()
+    {
+        Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        translatedMousePosition.z = transform.position.z;
+        Vector3 relativePositionToTarget = translatedMousePosition - transform.position;
+        return relativePositionToTarget;
+    }
+    private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
+    {
+        float zAngleToMove = IfTargetIsOutOfBoundariesSetItToMaxValue(zAngleFromGunToItem, relativePositionToTarget);
+
+        //If zAngleToMove would cross a boundary, go around it instead
+        zAngleToMove = GoAroundBoundaries(zAngleToMove);
+
+        return zAngleToMove;
+    }
+    private float IfTargetIsOutOfBoundariesSetItToMaxValue(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
+    {
+        float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget + transform.position);
+        float middleZRotation = GetMiddleZRotation();
+        float gunRotation = GetGunRotation();
+
+        if (zAngleFromMiddleToItem < -rightMaxRotationLimit)
+        {
+            zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
+        }
+        else
+                if (zAngleFromMiddleToItem > leftMaxRotationLimit)
+        {
+            zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
+        }
+        return zAngleFromGunToItem;
+    }
+    private float GoAroundBoundaries(float zAngleToMove)
+    {
+        float middleZRotation = GetMiddleZRotation();
+        float gunRotation = GetGunRotation();
+        if (zAngleToMove > 0)
+        {
+            float zRotationFromGunToLeftLimit = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
+            if ((zRotationFromGunToLeftLimit) >= 0)
+            {
+                if ((zAngleToMove) > zRotationFromGunToLeftLimit)
+                {
+                    zAngleToMove -= 360;
+                }
+            }
+        }
+        if (zAngleToMove < 0)
+        {
+            float zRotationFromGunToRightLimit = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
+            if (zRotationFromGunToRightLimit <= 0)
+            {
+                if ((zAngleToMove) < zRotationFromGunToRightLimit)
+                {
+                    zAngleToMove += 360;
+                }
+            }
+        }
+
+        return zAngleToMove;
+    }
+    private float GetMiddleZRotation()
+    {
+        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
+        while (middleZRotation > 180f)
+        {
+            middleZRotation -= 360f;
+        }
+        return middleZRotation;
+    }
+    private float GetGunRotation()
+    {
+        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
+        float gunRotation = startingRotation.eulerAngles.z;
+
+        if (gunRotation > 180)
+        {
+            gunRotation -= 360;
+        }
+        return gunRotation;
     }
 
 
@@ -395,8 +465,8 @@ public class AutomaticGunController : MonoBehaviour
             //I expect enemyList to never have a single null value
             if (CanShootTarget(item.transform.position))
             {
-                float zAngleFromMiddleToCurrentClosestEnemy = CountForwardAngleToPosition(currentClosestEnemy.transform.position);
-                float zAngleFromMiddleToItem = CountForwardAngleToPosition(item.transform.position);
+                float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromMiddleToPosition(currentClosestEnemy.transform.position);
+                float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(item.transform.position);
                 //If the found target is closer to the middle (angle wise) than the current closest target, make is the closest target
                 if ((Mathf.Abs(zAngleFromMiddleToCurrentClosestEnemy) > Mathf.Abs(zAngleFromMiddleToItem)))
                 {
@@ -406,24 +476,7 @@ public class AutomaticGunController : MonoBehaviour
         }
         return currentClosestEnemy;
     }
-    private float CountForwardAngleToPosition(Vector3 targetPosition)
-    {
-        float middleZRotation = GetMiddleZRotation();
-        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
-        //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
-        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
-        float zAngleFromMiddleToItem = angleFromZeroToItem - middleZRotation;
-        return zAngleFromMiddleToItem;
-    }
-    private float GetMiddleZRotation()
-    {
-        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
-        while (middleZRotation > 180f)
-        {
-            middleZRotation -= 360f;
-        }
-        return middleZRotation;
-    }
+
 
     //Shoot once
     private void ShootOneSalvo()
@@ -532,7 +585,7 @@ public class AutomaticGunController : MonoBehaviour
         }
         if (shootingZoneScript != null && isControlledByMouseCursor)
         {
-            if (!enemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
+            if (!areEnemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
             {
                 shootingZoneScript.ShowBar(true);
             }
