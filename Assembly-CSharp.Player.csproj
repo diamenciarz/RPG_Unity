@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,11 +53,9 @@
     <UnityVersion>2021.1.20f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
     <Compile Include="Assets\Scripts\Prefabs\StaticDataHolder.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\LaserDrawer.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\AutomaticGunController.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueBoxController.cs" />
@@ -66,6 +64,7 @@
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\PopupNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
+    <Compile Include="Assets\Scripts\Prefabs\LaserHolder.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\EndNode.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryAnimator.cs" />
@@ -97,6 +96,7 @@
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\BombController.cs" />
+    <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

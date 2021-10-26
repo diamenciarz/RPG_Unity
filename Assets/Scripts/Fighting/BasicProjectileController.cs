@@ -61,6 +61,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     {
         velocityVector = StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
+        SetSpriteAccordingToTeam();
     }
     protected virtual void Update()
     {
@@ -73,7 +74,6 @@ public abstract class BasicProjectileController : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collided with: " + collision.gameObject.name);
         HandleAllCollisionChecks(collision);
     }
 
@@ -193,11 +193,11 @@ public abstract class BasicProjectileController : MonoBehaviour
             if (bulletSplits)
             {
                 CreateNewProjectiles();
-                Destroy(gameObject);
+                DestroyProjectile();
             }
             else
             {
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
     }
@@ -212,24 +212,34 @@ public abstract class BasicProjectileController : MonoBehaviour
             if (bulletSplits)
             {
                 CreateNewProjectiles();
-                Destroy(gameObject);
+                DestroyProjectile();
             }
             else
             {
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
 
     }
-    private void OnDestroy()
+    protected void DestroyProjectile()
     {
-        StaticDataHolder.projectileList.Remove(gameObject);
+        StaticDataHolder.RemoveProjectile(gameObject);
+        StaticDataHolder.RemoveDashableObject(gameObject);
+        StaticDataHolder.RemoveProjectile(gameObject);
         if (isAPlayerBullet)
         {
             StaticDataHolder.RemovePlayerProjectile(gameObject);
         }
-        StaticDataHolder.RemoveDashableObject(gameObject);
-        StaticDataHolder.RemoveProjectile(gameObject);
+        StartCoroutine(DestroyAtTheEndOfFrame());
+    }
+    private IEnumerator DestroyAtTheEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        Destroy(gameObject);
+    }
+    private void OnDestroy()
+    {
+
     }
 
 
@@ -321,7 +331,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
         newBulletRotation *= transform.rotation;
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
@@ -330,7 +340,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
         newBulletRotation *= transform.rotation;
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
@@ -339,7 +349,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
         newBulletRotation *= rotationToTarget;
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
     {
@@ -349,7 +359,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
         newBulletRotation *= rotationToTarget;
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
 
 

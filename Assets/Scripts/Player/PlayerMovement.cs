@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D myRigidbody2D;
     private BoxCollider2D myCollider2D;
-    public List<GameObject> collidingObjectsList = new List<GameObject>();
     private Animator myAnimator;
     private Animation myAnimation;
 
@@ -176,6 +175,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
          StaticDataHolder.AddCollidingObject(collision.gameObject);
+        Debug.Log("Collided with: " + collision.gameObject.name);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

@@ -34,11 +34,11 @@ public static class StaticDataHolder
     {
         dashableObjectList.Add(addObject);
     }
-    public static void RemoveDashableObject(GameObject addObject)
+    public static void RemoveDashableObject(GameObject removeObject)
     {
-        if (dashableObjectList.Contains(addObject))
+        if (dashableObjectList.Contains(removeObject))
         {
-            dashableObjectList.Remove(addObject);
+            dashableObjectList.Remove(removeObject);
         }
     }
     public static List<GameObject> GetDashableObjectList()
@@ -121,7 +121,6 @@ public static class StaticDataHolder
         }
         return false;
     }
-
 
     //Sound list methods
     public static void AddSoundDuration(float duration)

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3268680416828774221}
   m_Layer: 6
-  m_Name: ProjectilePoint
+  m_Name: ShootingPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,6 +149,7 @@ Transform:
   m_Children:
   - {fileID: 6195473770114996538}
   - {fileID: 3268680416828774221}
+  - {fileID: 2162837043230643073}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -280,3 +281,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   team: 1
+--- !u!1 &7972713777628930325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2162837043230643073}
+  - component: {fileID: 1868578448896564811}
+  m_Layer: 6
+  m_Name: Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2162837043230643073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7972713777628930325}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6195473770567518806}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1868578448896564811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7972713777628930325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f8a9ab8aafb4fe458d94fbeb9343148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootingSoundsList: []
+  shootSoundVolume: 0
+  gunBasicDirection: 0
+  shootsAtTheNearestEnemy: 0
+  maximumShootingRange: 15
+  maximumRangeFromMouseToShoot: 0
+  howManyShots: 2
+  shootingSpread: 0
+  timeBetweenEachShootingChain: 2
+  spreadProjectilesEvenly: 0
+  spreadDegrees: 0
+  leftBulletSpread: 0
+  rightBulletSpread: 0
+  projectilesToCreateList: 01000000
+  addMySpeedToBulletSpeed: 0
+  gunRotationSpeed: 30
+  timeBetweenEachShot: 1
+  hasRotationLimits: 0
+  leftMaxRotationLimit: 0
+  rightMaxRotationLimit: 0
+  gunTextureRotationOffset: 180
+  shootingPoint: {fileID: 3268680416828774221}
+  parentGameObject: {fileID: 6195473770567518804}
+  gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
+  shootingZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
+  theShootingZonesParent: {fileID: 6195473770567518804}
+  shootingZoneTransform: {fileID: 3268680416828774221}
+  isControlledByMouseCursor: 1
+  isGunReloadingBarOn: 1
+  team: 0

@@ -10647,6 +10647,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1053627389418387313, guid: ad1aab6f61ca28a419faca3ce2b012d3, type: 3}
   m_PrefabInstance: {fileID: 899758428}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &689735320 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5617621746383904808, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+  m_PrefabInstance: {fileID: 6195473770939546901}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &799209538 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8145767463229014074, guid: ebae0941706b0de44b1efc5b469baf4f, type: 3}
@@ -57344,6 +57349,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: hasRotationLimits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: timeBetweenEachShot
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: leftMaxRotationLimit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: rightMaxRotationLimit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: theShootingZonesParent
+      value: 
+      objectReference: {fileID: 689735320}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: shootsAtTheNearestEnemy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868578448896564811, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: maximumRangeFromMouseToShoot
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268680416828774221, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.08
+      objectReference: {fileID: 0}
     - target: {fileID: 5147535588325408921, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: popupTextField
       value: 
@@ -57403,20 +57440,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6195473770567518804, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
   m_PrefabInstance: {fileID: 6195473770939546901}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6195473770939546903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6195473770939546902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30a0a9fb1eb840544afbe71f743ff9c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  team: 1
 --- !u!1001 &7512425785441907623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57481,6 +57504,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
+      propertyPath: spriteList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
+      propertyPath: spriteList.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
+    - target: {fileID: 3278521563504507919, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
+      propertyPath: spriteList.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
     - target: {fileID: 7700761372939823443, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
       propertyPath: m_RootOrder
       value: 8

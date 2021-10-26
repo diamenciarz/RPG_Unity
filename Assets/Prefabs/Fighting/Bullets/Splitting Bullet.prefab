@@ -121,12 +121,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 2
   spriteList: []
-  startingSpeed: 10
-  damage: 2
+  startingSpeed: 6
+  damage: 4
   gameObjectsToTurnIntoList: 020000000200000002000000
   shootsAtEnemies: 0
   spreadProjectilesEvenly: 1
-  spreadDegrees: 10
+  spreadDegrees: 120
   leftBulletSpread: 0
   rightBulletSpread: 0
   breakingSounds: []

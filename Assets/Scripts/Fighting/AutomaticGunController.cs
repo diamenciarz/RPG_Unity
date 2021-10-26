@@ -24,13 +24,12 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] float timeBetweenEachShootingChain;
 
     [Header("Each shot")]
-    [SerializeField] int howManyBulletsAtOnce;
     [SerializeField] bool spreadProjectilesEvenly;
     [SerializeField] float spreadDegrees;
     [SerializeField] float leftBulletSpread;
     [SerializeField] float rightBulletSpread;
-    [SerializeField] bool addMySpeedToBulletSpeed;
     [SerializeField] protected List<EntityCreator.BulletTypes> projectilesToCreateList;
+    [SerializeField] bool addMySpeedToBulletSpeed;
 
     [Header("Turret stats")]
     [SerializeField] float gunRotationSpeed; //Degrees per second
@@ -71,10 +70,11 @@ public class AutomaticGunController : MonoBehaviour
     {
         entityCreator = FindObjectOfType<EntityCreator>();
 
+        UpdateTeam();
         CheckIfMyBulletIsARocket();
         lastShotTime = Time.time;
         shootingTimeBank = 0f;
-
+        
         StartCoroutine(AttackCoroutine());
     }
     private void Update()
@@ -470,7 +470,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (projectilesToCreateList.Count != 0)
         {
-            for (int i = 0; i < howManyBulletsAtOnce; i++)
+            for (int i = 0; i < projectilesToCreateList.Count; i++)
             {
                 ShootAtNoTarget(i);
             }
@@ -496,7 +496,7 @@ public class AutomaticGunController : MonoBehaviour
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
-        float bulletOffset = (spreadDegrees * (index - (howManyBulletsAtOnce - 1f) / 2));
+        float bulletOffset = (spreadDegrees * (index - (projectilesToCreateList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
         newBulletRotation *= transform.rotation;
@@ -533,27 +533,6 @@ public class AutomaticGunController : MonoBehaviour
             SetUpGunShootingZone();
         }
     }
-    private void SetUpGunShootingZone()
-    {
-        GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-        newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
-        float shootingZoneRotation = leftMaxRotationLimit;
-
-        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
-        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
-        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
-    }
-    private void SetUpGunReloadingBar()
-    {
-        if (gunReloadingBarPrefab != null)
-        {
-            GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
-            gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
-            gunReloadingBarScript.SetObjectToFollow(gameObject);
-            lastShotTime = Time.time;
-        }
-    }
     private void UpdateAmmoBarIfCreated()
     {
         if (isGunReloadingBarOn && (gunReloadingBarScript != null))
@@ -572,8 +551,43 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
+    private void SetUpGunReloadingBar()
+    {
+        if (gunReloadingBarPrefab != null)
+        {
+            GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
+            gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
+            gunReloadingBarScript.SetObjectToFollow(gameObject);
+            lastShotTime = Time.time;
+        }
+    }
+    private void SetUpGunShootingZone()
+    {
+        GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
+        newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
+        float shootingZoneRotation = leftMaxRotationLimit;
 
+        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
+        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
+        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+    }
 
+    private void UpdateTeam()
+    {
+        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
+        if (damageReceiver != null)
+        {
+            team = damageReceiver.GetTeam();
+            return;
+        }
+        DamageReceiver damageReceiverParent = GetComponentInParent<DamageReceiver>();
+        if (damageReceiverParent != null)
+        {
+            team = damageReceiverParent.GetTeam();
+            return;
+        }
+    }
 
     //Set values
     public void SetIsControlledByMouseCursorTo(bool isTrue)
