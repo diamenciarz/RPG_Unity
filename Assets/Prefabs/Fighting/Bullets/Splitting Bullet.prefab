@@ -125,10 +125,11 @@ MonoBehaviour:
   damage: 4
   gameObjectsToTurnIntoList: 020000000200000002000000
   shootsAtEnemies: 0
+  basicDirection: 180
   spreadProjectilesEvenly: 1
-  spreadDegrees: 120
-  leftBulletSpread: 0
-  rightBulletSpread: 0
+  spreadDegrees: 60
+  leftBulletSpread: 60
+  rightBulletSpread: 60
   breakingSounds: []
   breakingSoundVolume: 1
   hitSounds: []

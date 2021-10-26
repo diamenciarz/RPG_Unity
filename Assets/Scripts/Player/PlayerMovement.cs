@@ -117,7 +117,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private void RotateTowardsMoveVector(Vector3 moveVector)
     {
-        transform.rotation = Quaternion.FromToRotation(Vector3.up, moveVector);
+        if (moveVector.magnitude != 0)
+        {
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, moveVector);
+        }
     }
     
     private void MoveIfPossibleBy(Vector3 moveVector)

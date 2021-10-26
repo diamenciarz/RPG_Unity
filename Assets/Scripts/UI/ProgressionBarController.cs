@@ -24,6 +24,7 @@ public class ProgressionBarController : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(0, 1, 0);
         //originalAlfa = healthBarImage.color.a;
+        GetComponent<Canvas>().worldCamera = Camera.main;
     }
     public void SetObjectToFollow(GameObject followGO)
     {

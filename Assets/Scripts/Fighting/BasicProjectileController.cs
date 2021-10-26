@@ -14,6 +14,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToTurnIntoList;
 
     [SerializeField] protected bool shootsAtEnemies; //Otherwise shoots forward
+    [SerializeField] protected float basicDirection;
     [SerializeField] protected bool spreadProjectilesEvenly;
     [SerializeField] protected float spreadDegrees;
     [SerializeField] protected float leftBulletSpread;
@@ -329,14 +330,14 @@ public abstract class BasicProjectileController : MonoBehaviour
     {
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
-        newBulletRotation *= transform.rotation;
+        newBulletRotation *= transform.rotation * Quaternion.Euler(0,0, basicDirection);
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
-        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
+        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset + basicDirection);
 
         newBulletRotation *= transform.rotation;
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
@@ -347,7 +348,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
-        newBulletRotation *= rotationToTarget;
+        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
@@ -357,7 +358,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
-        newBulletRotation *= rotationToTarget;
+        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], myPositionPlusOneStep, newBulletRotation, team, objectThatCreatedThisProjectile);
     }
