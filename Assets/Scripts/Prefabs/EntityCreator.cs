@@ -33,10 +33,13 @@ public class EntityCreator : MonoBehaviour
     public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
     {
         GameObject bulletToSummon = GetProjectilePrefab(bulletType);
-        GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
+        if (bulletToSummon != null)
+        {
+            GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
 
-        TrySetupProjectileStartingValues(summonedBullet, team, createdBy);
-        StaticDataHolder.projectileList.Add(summonedBullet);
+            TrySetupProjectileStartingValues(summonedBullet, team, createdBy);
+            StaticDataHolder.projectileList.Add(summonedBullet);
+        }
     }
     private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
     {

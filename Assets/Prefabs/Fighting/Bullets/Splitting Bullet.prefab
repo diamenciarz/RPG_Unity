@@ -120,7 +120,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 2
-  spriteList: []
+  spriteList:
+  - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
+  - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
   startingSpeed: 6
   damage: 4
   gameObjectsToTurnIntoList: 020000000200000002000000

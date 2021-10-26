@@ -55,8 +55,6 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] bool isControlledByMouseCursor;
     [SerializeField] bool isGunReloadingBarOn;
 
-    [SerializeField] GameObject laserPrefab;
-
     [HideInInspector]
     public int team;
     private bool areEnemiesInRange;
@@ -84,7 +82,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         UpdateTeam();
         CheckIfMyBulletIsARocket();
-        SetIsControlledByMouseCursorTo(isControlledByMouseCursor);
+        UpdateUIState();
 
         StartCoroutine(AttackCoroutine());
     }
@@ -101,26 +99,60 @@ public class AutomaticGunController : MonoBehaviour
     private void Update()
     {
         UpdateTimeBank();
-        LookForTargets();
+        UpdateUI();
 
-        UpdateAmmoBarIfCreated();
+        LookForTargets();
+        if (shootsAtTheNearestEnemy)
+        {
+            RotateOneStepTowardsTarget();
+        }
     }
     private void UpdateTimeBank()
     {
-        if ((Time.time - lastShotTime) >= (timeBetweenEachShootingChain + timeBetweenEachShot * howManyShots - shootingTimeBank))
+        float timeSinceLastShot = Time.time - lastShotTime;
+        float timeToFillMagazine = timeBetweenEachShootingChain - shootingTimeBank;
+        bool shouldFillAmmo = timeSinceLastShot >= timeToFillMagazine;
+        if (shouldFillAmmo)
         {
             shootingTimeBank = timeBetweenEachShot * howManyShots;
-
-            if (shootingTimeBank > (timeBetweenEachShot * howManyShots))
+        }
+    }
+    private void UpdateUI()
+    {
+        UpdateAmmoBar();
+        UpdateShootingZone();
+    }
+    private void UpdateAmmoBar()
+    {
+        bool ammoBarExistsAsItShould = isGunReloadingBarOn && (gunReloadingBarScript != null);
+        if (ammoBarExistsAsItShould)
+        {
+            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
+        }
+        
+    }
+    private void UpdateShootingZone()
+    {
+        bool shootingZoneExistsAsItShould = shootingZoneScript != null && isControlledByMouseCursor;
+        if (shootingZoneExistsAsItShould)
+        {
+            bool mouseButtonIsPressedOutsideOfTheShootingZone = !areEnemiesInRange && Input.GetKey(KeyCode.Mouse0);
+            bool thereIsEnoughAmmoForAShot = shootingTimeBank >= timeBetweenEachShot;
+            if (mouseButtonIsPressedOutsideOfTheShootingZone && thereIsEnoughAmmoForAShot)
             {
-                shootingTimeBank = timeBetweenEachShot * howManyShots;
+                //Make the light orange bar show up
+                shootingZoneScript.ShowBar(true);
+            }
+            else
+            {
+                shootingZoneScript.ShowBar(false);
             }
         }
     }
 
 
     //SHOOTING ------------
-    //Coroutines
+    //----Coroutines
     private IEnumerator AttackCoroutine()
     {
         while (true)
@@ -182,13 +214,12 @@ public class AutomaticGunController : MonoBehaviour
             }
         }
     }
-    //Checks
+    //----Checks
     private void LookForTargets()
     {
         if (shootsAtTheNearestEnemy)
         {
             areEnemiesInRange = CheckForEnemiesOnTheFrontInRange();
-            RotateOneStepTowardsTarget();
         }
         else
         {
@@ -200,7 +231,7 @@ public class AutomaticGunController : MonoBehaviour
         if (isControlledByMouseCursor)
         {
             Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return CanShootTarget(translatedMousePosition);
+            return CanShootTarget(translatedMousePosition, maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -209,11 +240,10 @@ public class AutomaticGunController : MonoBehaviour
     }
     private bool CheckForTargetsInRange()
     {
-
         if (isControlledByMouseCursor)
         {
             Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return CanShootTarget(translatedMousePosition);
+            return CanShootTarget(translatedMousePosition, maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -234,24 +264,24 @@ public class AutomaticGunController : MonoBehaviour
         {
             if (item != null)
             {
-                return CanShootTarget(item.transform.position);
+                return CanShootTarget(item.transform.position, maximumShootingRange);
             }
         }
         return false;
     }
-    //Helper functions
-    private bool CanShootTarget(Vector3 targetPosition)
+    //----Helper functions
+    private bool CanShootTarget(Vector3 targetPosition, float range)
     {
         if (hasRotationLimits)
         {
-            return IsTargetInCone(targetPosition);
+            return IsTargetInCone(targetPosition, range);
         }
         else
         {
-            return IsTargetInRange(targetPosition);
+            return IsTargetInRange(targetPosition, range);
         }
     }
-    private bool IsTargetInRange(Vector3 targetPosition)
+    private bool IsTargetInRange(Vector3 targetPosition, float range)
     {
         targetPosition.z = transform.position.z;
 
@@ -263,10 +293,9 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
-    private bool IsTargetInCone(Vector3 targetPosition)
+    private bool IsTargetInCone(Vector3 targetPosition, float range)
     {
-
-        if (IsTargetInRange(targetPosition))
+        if (IsTargetInRange(targetPosition, range))
         {
             float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
             Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
@@ -281,9 +310,6 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
-
-
-
 
 
     //Move gun
@@ -307,7 +333,7 @@ public class AutomaticGunController : MonoBehaviour
         float degreesToRotateThisFrame = CountDegreesToRotateThisFrame();
         transform.rotation *= Quaternion.Euler(0, 0, degreesToRotateThisFrame);
     }
-    //Helper functions
+    //----Helper functions
     private float CountDegreesToRotateThisFrame()
     {
         if (!isControlledByMouseCursor)
@@ -458,12 +484,10 @@ public class AutomaticGunController : MonoBehaviour
         }
 
         GameObject currentClosestEnemy = enemyList[0];
-        float middleZRotation = GetMiddleZRotation();
-
         foreach (var item in enemyList)
         {
             //I expect enemyList to never have a single null value
-            if (CanShootTarget(item.transform.position))
+            if (CanShootTarget(item.transform.position, maximumShootingRange))
             {
                 float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromMiddleToPosition(currentClosestEnemy.transform.position);
                 float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(item.transform.position);
@@ -577,24 +601,6 @@ public class AutomaticGunController : MonoBehaviour
 
 
     //UI
-    private void UpdateAmmoBarIfCreated()
-    {
-        if (isGunReloadingBarOn && (gunReloadingBarScript != null))
-        {
-            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
-        }
-        if (shootingZoneScript != null && isControlledByMouseCursor)
-        {
-            if (!areEnemiesInRange && Input.GetKey(KeyCode.Mouse0) && (shootingTimeBank >= timeBetweenEachShot))
-            {
-                shootingZoneScript.ShowBar(true);
-            }
-            else
-            {
-                shootingZoneScript.ShowBar(false);
-            }
-        }
-    }
     public void SetIsControlledByMouseCursorTo(bool isTrue)
     {
         isControlledByMouseCursor = isTrue;
@@ -602,16 +608,16 @@ public class AutomaticGunController : MonoBehaviour
     }
     private void CreateUIOnPlayerTakesControl()
     {
-        if (isGunReloadingBarOn && (gunReloadingBarScript == null) && (gunReloadingBarPrefab != null))
+        if (isGunReloadingBarOn && gunReloadingBarScript == null)
         {
-            SetUpGunReloadingBar();
+            CreateGunReloadingBar();
         }
-        if ((shootingZoneScript == null) && (shootingZonePrefab != null))
+        if (shootingZoneScript == null)
         {
-            SetUpGunShootingZone();
+            CreateGunShootingZone();
         }
     }
-    private void SetUpGunReloadingBar()
+    private void CreateGunReloadingBar()
     {
         if (gunReloadingBarPrefab != null)
         {
@@ -621,16 +627,20 @@ public class AutomaticGunController : MonoBehaviour
             lastShotTime = Time.time;
         }
     }
-    private void SetUpGunShootingZone()
+    private void CreateGunShootingZone()
     {
-        GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-        newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
-        float shootingZoneRotation = leftMaxRotationLimit;
+        if (shootingZonePrefab != null)
+        {
+            GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
+            newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
+            float shootingZoneRotation = leftMaxRotationLimit;
 
-        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
-        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
-        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+            shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
+            Debug.Log("Shooting zone script: " + shootingZoneScript.name);
+            shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
+            shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+            shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+        }
     }
 
 
