@@ -109,7 +109,7 @@ public class AutomaticGunController : MonoBehaviour
     private void UpdateTimeBank()
     {
         float timeSinceLastShot = Time.time - lastShotTime;
-        float timeToFillMagazine = timeBetweenEachShootingChain - shootingTimeBank;
+        float timeToFillMagazine = timeBetweenEachShootingChain + (howManyShots * timeBetweenEachShot) - shootingTimeBank;
         bool shouldFillAmmo = timeSinceLastShot >= timeToFillMagazine;
         if (shouldFillAmmo)
         {
@@ -137,11 +137,9 @@ public class AutomaticGunController : MonoBehaviour
         {
             bool mouseButtonIsPressedOutsideOfTheShootingZone = !areEnemiesInRange && Input.GetKey(KeyCode.Mouse0);
             bool thereIsEnoughAmmoForAShot = shootingTimeBank >= timeBetweenEachShot;
-            Debug.Log("There is enough ammo for a shot: " + thereIsEnoughAmmoForAShot);
             if (mouseButtonIsPressedOutsideOfTheShootingZone && thereIsEnoughAmmoForAShot)
             {
                 //Make the light orange bar show up
-                Debug.Log("Shown bar");
                 shootingZoneScript.ShowBar(true);
             }
             else
@@ -181,6 +179,7 @@ public class AutomaticGunController : MonoBehaviour
                 if ((shootingTimeBank) >= timeBetweenEachShot)
                 {
                     ShootOneSalvo();
+                    Debug.Log("Shooting time bank: " + shootingTimeBank / (timeBetweenEachShot * howManyShots));
                 }
 
                 yield return new WaitForSeconds(timeBetweenEachShot);
@@ -199,20 +198,18 @@ public class AutomaticGunController : MonoBehaviour
         {
             for (int i = 0; i < howManyShots; i++)
             {
-                ShootOneSalvo();
-
                 //Slowly rotates towards new position
                 yield return RotateTowardsUntilDone(i);
                 //If rotated faster than next shot delay, then waits
-                if (Time.time - lastShotTime < timeBetweenEachShot)
+                float timeSinceLastShot = Time.time - lastShotTime;
+                if (timeSinceLastShot < timeBetweenEachShot)
                 {
-                    yield return new WaitForSeconds(timeBetweenEachShot - (Time.time - lastShotTime));
+                    yield return new WaitForSeconds(timeBetweenEachShot - timeSinceLastShot);
                 }
-                else
-                {
-                    Debug.Log("Gun rotation speed is too low for the gun to shoot at it's shooting rate. Parent: " + parentGameObject + " ID: " + parentGameObject.GetInstanceID());
-                }
+
+                ShootOneSalvo();
             }
+            yield return new WaitForSeconds(timeBetweenEachShootingChain);
         }
     }
     //----Checks
@@ -308,7 +305,7 @@ public class AutomaticGunController : MonoBehaviour
             float angleFromUpToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
             float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromUpToItem);
 
-            bool isCursorInCone = zAngleFromMiddleToItem > -(rightMaxRotationLimit + 5) && zAngleFromMiddleToItem < (leftMaxRotationLimit + 5);
+            bool isCursorInCone = zAngleFromMiddleToItem > -(rightMaxRotationLimit + 2) && zAngleFromMiddleToItem < (leftMaxRotationLimit + 2);
             if (isCursorInCone)
             {
                 return true;
@@ -321,6 +318,7 @@ public class AutomaticGunController : MonoBehaviour
     //Move gun
     private IEnumerator RotateTowardsUntilDone(int i)
     {
+        const int STEPS_PER_SECOND = 30;
         //Counts the target rotation
         float gunRotationOffset = (shootingSpread * i);
         //Ustawia rotacjê, na pocz¹tkow¹ rotacjê startow¹
@@ -328,7 +326,6 @@ public class AutomaticGunController : MonoBehaviour
         while (transform.rotation != targetRotation)
         {
             targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
-            const int STEPS_PER_SECOND = 30;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, gunRotationSpeed / STEPS_PER_SECOND);
 
             yield return new WaitForSeconds(1 / STEPS_PER_SECOND);
@@ -416,7 +413,6 @@ public class AutomaticGunController : MonoBehaviour
     private float IfTargetIsOutOfBoundariesSetItToMaxValue(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
     {
         float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget + transform.position);
-        //Debug.Log("From middle to position: " + zAngleFromMiddleToItem);
 
         float middleZRotation = GetMiddleZRotation();
         float gunRotation = GetGunRotation();
@@ -651,7 +647,6 @@ public class AutomaticGunController : MonoBehaviour
             float shootingZoneRotation = leftMaxRotationLimit;
 
             shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-            Debug.Log("Shooting zone script: " + shootingZoneScript.name);
             shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
             shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
             shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));

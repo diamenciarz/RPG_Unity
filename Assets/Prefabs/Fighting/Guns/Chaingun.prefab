@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735378912923450362}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.35, y: -0.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6398174230728789535}
@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2680424842193200618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.04, y: -0.3, z: 0}
+  m_LocalPosition: {x: 0.034, y: -0.229, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 3058665655815099409}
@@ -139,7 +139,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2956816195299263353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.407, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3058665655815099409}
@@ -166,25 +166,24 @@ MonoBehaviour:
   maximumRangeFromMouseToShoot: 20
   howManyShots: 0
   shootingSpread: 0
-  timeBetweenEachShootingChain: 0
+  timeBetweenEachShootingChain: 1
   spreadProjectilesEvenly: 0
   spreadDegrees: 0
   leftBulletSpread: 0
   rightBulletSpread: 0
-  projectilesToCreateList: 
+  projectilesToCreateList: 02000000
   addMySpeedToBulletSpeed: 0
-  gunRotationSpeed: 0
-  timeBetweenEachShot: 0
+  gunRotationSpeed: 360
+  timeBetweenEachShot: 0.5
   hasRotationLimits: 0
-  leftMaxRotationLimit: 0
-  rightMaxRotationLimit: 0
-  gunTextureRotationOffset: 180
-  shootingPoint: {fileID: 0}
+  leftMaxRotationLimit: 30
+  rightMaxRotationLimit: 30
+  gunTextureRotationOffset: 0
+  shootingPoint: {fileID: 7953750170628896880}
   parentGameObject: {fileID: 0}
-  gunReloadingBarPrefab: {fileID: 0}
-  shootingZonePrefab: {fileID: 0}
-  theShootingZonesParent: {fileID: 0}
-  shootingZoneTransform: {fileID: 0}
+  gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
+  shootingZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
+  shootingZoneTransform: {fileID: 7953750170628896880}
   isControlledByMouseCursor: 0
   isGunReloadingBarOn: 0
   team: 0
@@ -212,14 +211,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6628403074769819572}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -0.1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 0.094, y: 0.404, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7953750170628896880}
   m_Father: {fileID: 6398174230728789535}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &1061020832522824260
 SpriteRenderer:
   m_ObjectHideFlags: 0

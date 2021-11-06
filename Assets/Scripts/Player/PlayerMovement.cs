@@ -201,7 +201,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         StaticDataHolder.AddCollidingObject(collision.gameObject);
-        Debug.Log("Collided with: " + collision.gameObject.name);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
