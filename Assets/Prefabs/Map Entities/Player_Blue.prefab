@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5617621746383904808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09, y: 0.405, z: 0}
+  m_LocalPosition: {x: 0.09, y: 1.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6195473770567518806}
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  team: 1
+  team: 2
 --- !u!1 &7972713777628930325
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,24 +442,24 @@ MonoBehaviour:
   shootingSoundsList: []
   shootSoundVolume: 0
   gunBasicDirection: 0
-  shootsAtTheNearestEnemy: 0
+  shootsAtTheNearestEnemy: 1
   maximumShootingRange: 15
   maximumRangeFromMouseToShoot: 0
-  howManyShots: 2
+  howManyShots: 3
   shootingSpread: 0
-  timeBetweenEachShootingChain: 2
-  spreadProjectilesEvenly: 0
-  spreadDegrees: 0
+  timeBetweenEachShootingChain: 0.5
+  spreadProjectilesEvenly: 1
+  spreadDegrees: 20
   leftBulletSpread: 0
   rightBulletSpread: 0
-  projectilesToCreateList: 01000000
+  projectilesToCreateList: 02000000
   addMySpeedToBulletSpeed: 0
-  gunRotationSpeed: 30
-  timeBetweenEachShot: 1
-  hasRotationLimits: 0
-  leftMaxRotationLimit: 0
-  rightMaxRotationLimit: 0
-  gunTextureRotationOffset: 180
+  gunRotationSpeed: 360
+  timeBetweenEachShot: 0.3
+  hasRotationLimits: 1
+  leftMaxRotationLimit: 30
+  rightMaxRotationLimit: 30
+  gunTextureRotationOffset: 0
   shootingPoint: {fileID: 3268680416828774221}
   parentGameObject: {fileID: 6195473770567518804}
   gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}

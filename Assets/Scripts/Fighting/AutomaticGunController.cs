@@ -47,7 +47,6 @@ public class AutomaticGunController : MonoBehaviour
     private ProgressionBarController gunReloadingBarScript;
     [Header("Shooting Zone")]
     [SerializeField] GameObject shootingZonePrefab;
-    [SerializeField] [Tooltip("For forward orientation")] GameObject theShootingZonesParent;
     [SerializeField] Transform shootingZoneTransform;
     private ProgressionBarController shootingZoneScript;
 
@@ -138,9 +137,11 @@ public class AutomaticGunController : MonoBehaviour
         {
             bool mouseButtonIsPressedOutsideOfTheShootingZone = !areEnemiesInRange && Input.GetKey(KeyCode.Mouse0);
             bool thereIsEnoughAmmoForAShot = shootingTimeBank >= timeBetweenEachShot;
+            Debug.Log("There is enough ammo for a shot: " + thereIsEnoughAmmoForAShot);
             if (mouseButtonIsPressedOutsideOfTheShootingZone && thereIsEnoughAmmoForAShot)
             {
                 //Make the light orange bar show up
+                Debug.Log("Shown bar");
                 shootingZoneScript.ShowBar(true);
             }
             else
@@ -230,8 +231,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return CanShootTarget(translatedMousePosition, maximumRangeFromMouseToShoot);
+            return CanShootTarget(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -242,13 +242,19 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return CanShootTarget(translatedMousePosition, maximumRangeFromMouseToShoot);
+            return CanShootTarget(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
         }
         else
         {
             return IsEnemyInRange();
         }
+    }
+    private Vector3 GetTranslatedMousePosition()
+    {
+        Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        returnVector.z = transform.position.z;
+        return returnVector;
+
     }
     private bool IsEnemyInRange()
     {
@@ -297,7 +303,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (IsTargetInRange(targetPosition, range))
         {
-            float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
+            float middleZRotation = GetMiddleZRotation();
             Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
             float angleFromUpToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
             float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromUpToItem);
@@ -368,11 +374,16 @@ public class AutomaticGunController : MonoBehaviour
     }
     private float CountAngleFromMiddleToPosition(Vector3 targetPosition)
     {
-        float middleZRotation = GetMiddleZRotation();
         Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
         //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
         float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
+        float middleZRotation = GetMiddleZRotation();
         float zAngleFromMiddleToItem = angleFromZeroToItem - middleZRotation;
+
+        if (zAngleFromMiddleToItem < -180)
+        {
+            zAngleFromMiddleToItem += 360;
+        }
         return zAngleFromMiddleToItem;
     }
     private Vector3 GetRelativePositionToTarget()
@@ -390,9 +401,7 @@ public class AutomaticGunController : MonoBehaviour
     }
     private Vector3 GetRelativePositionToMouseVector()
     {
-        Vector3 translatedMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        translatedMousePosition.z = transform.position.z;
-        Vector3 relativePositionToTarget = translatedMousePosition - transform.position;
+        Vector3 relativePositionToTarget = GetTranslatedMousePosition() - transform.position;
         return relativePositionToTarget;
     }
     private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
@@ -407,6 +416,8 @@ public class AutomaticGunController : MonoBehaviour
     private float IfTargetIsOutOfBoundariesSetItToMaxValue(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
     {
         float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget + transform.position);
+        //Debug.Log("From middle to position: " + zAngleFromMiddleToItem);
+
         float middleZRotation = GetMiddleZRotation();
         float gunRotation = GetGunRotation();
 
@@ -425,6 +436,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         float middleZRotation = GetMiddleZRotation();
         float gunRotation = GetGunRotation();
+
         if (zAngleToMove > 0)
         {
             float zRotationFromGunToLeftLimit = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
@@ -507,8 +519,11 @@ public class AutomaticGunController : MonoBehaviour
     {
         PlayShotSound();
         CreateNewProjectiles();
-
         //Update time bank
+        DecreaseShootingTime();
+    }
+    private void DecreaseShootingTime()
+    {
         lastShotTime = Time.time;
         shootingTimeBank -= timeBetweenEachShot;
     }
@@ -538,7 +553,7 @@ public class AutomaticGunController : MonoBehaviour
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(projectilesToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, parentGameObject);
     }
     private void SingleShotForwardWithRegularSpread(int index)
     {
@@ -546,7 +561,7 @@ public class AutomaticGunController : MonoBehaviour
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(projectilesToCreateList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, parentGameObject);
     }
 
 

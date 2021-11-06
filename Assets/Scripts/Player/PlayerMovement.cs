@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D myCollider2D;
     private Animator myAnimator;
     private Animation myAnimation;
+    private const float PLAYER_SPRITE_ROTATION = -90;
 
     // Start is called before the first frame update
     void Start()
@@ -52,12 +53,23 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
+        DoMove();
+    }
+    private void DoMove()
+    {
         AdjustMovementSpeed();
-
-        Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-        moveVectorThisFrame = ((inputVector * playerSpeed) + dashVector) * Time.deltaTime;
+        UpdateMoveVectorThisFrame();
 
         RotateTowardsMoveVector(moveVectorThisFrame);
+        CheckDashing();
+    }
+    private void UpdateMoveVectorThisFrame()
+    {
+        Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        moveVectorThisFrame = ((inputVector * playerSpeed) + dashVector) * Time.deltaTime;
+    }
+    private void CheckDashing()
+    {
         if (!isDashing)
         {
             MoveIfPossibleBy(moveVectorThisFrame);
@@ -119,10 +131,21 @@ public class PlayerMovement : MonoBehaviour
     {
         if (moveVector.magnitude != 0)
         {
-            transform.rotation = Quaternion.FromToRotation(Vector3.up, moveVector);
+            if (moveVector.normalized == Vector3.down)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+            else
+            {
+                transform.rotation = Quaternion.FromToRotation(Vector3.up, moveVector);
+            }
+            /*
+            Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, transform.position + moveVector);
+            newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
+            transform.rotation = newRotation;
+            */
         }
     }
-    
     private void MoveIfPossibleBy(Vector3 moveVector)
     {
         RaycastHit2D moveHit2D;
@@ -177,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
     //Collision handling
     private void OnTriggerEnter2D(Collider2D collision)
     {
-         StaticDataHolder.AddCollidingObject(collision.gameObject);
+        StaticDataHolder.AddCollidingObject(collision.gameObject);
         Debug.Log("Collided with: " + collision.gameObject.name);
     }
     private void OnTriggerExit2D(Collider2D collision)
