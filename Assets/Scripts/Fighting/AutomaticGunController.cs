@@ -685,16 +685,33 @@ public class AutomaticGunController : MonoBehaviour
         if (shootingZonePrefab != null)
         {
             GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-            newShootingZoneGo.transform.localScale = new Vector3(maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.x, maximumRangeFromMouseToShoot / newShootingZoneGo.transform.lossyScale.y, 1);
-            float shootingZoneRotation = leftMaxRotationLimit;
 
-            shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-            shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
-            shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
-            shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+            float xScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.x;
+            float yScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.y;
+            newShootingZoneGo.transform.localScale = new Vector3(xScale, yScale, 1);
+
+            SetupShootingZoneShape(newShootingZoneGo);
         }
     }
-
+    private float GetCurrentRange()
+    {
+        if (isControlledByMouseCursor)
+        {
+            return maximumRangeFromMouseToShoot;
+        }
+        else
+        {
+            return maximumShootingRange;
+        }
+    }
+    private void SetupShootingZoneShape(GameObject newShootingZoneGo)
+    {
+        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
+        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
+        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+        float shootingZoneRotation = leftMaxRotationLimit;
+        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+    }
 
     //Set value methods
     public void SetTeam(int newTeam)
