@@ -58,7 +58,10 @@ public class DashIconController : MonoBehaviour
     }
     private void UpdateRotation()
     {
-        gameObject.transform.rotation = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, playerToFollow.transform.position);
+        if (playerToFollow)
+        {
+            gameObject.transform.rotation = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, playerToFollow.transform.position);
+        }
     }
     private void UpdatePosition()
     {
@@ -83,15 +86,18 @@ public class DashIconController : MonoBehaviour
     }
     private GameObject FindTheClosestDashableObject()
     {
-        List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
-        Vector3 playerPosition = playerToFollow.transform.position;
-        GameObject returnObject = StaticDataHolder.FindTheClosestObjectInList(dashableObjectList, playerPosition);
-        if (returnObject != null)
+        if (playerToFollow)
         {
-            float distanceBetweenPlayerAndBush = StaticDataHolder.GetDistanceBetweenObjectsIn2D(playerToFollow, returnObject);
-            if (distanceBetweenPlayerAndBush <= snapRange)
+            List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
+            Vector3 playerPosition = playerToFollow.transform.position;
+            GameObject returnObject = StaticDataHolder.FindTheClosestObjectInList(dashableObjectList, playerPosition);
+            if (returnObject != null)
             {
-                return returnObject;
+                float distanceBetweenPlayerAndBush = StaticDataHolder.GetDistanceBetweenObjectsIn2D(playerToFollow, returnObject);
+                if (distanceBetweenPlayerAndBush <= snapRange)
+                {
+                    return returnObject;
+                }
             }
         }
         return null;

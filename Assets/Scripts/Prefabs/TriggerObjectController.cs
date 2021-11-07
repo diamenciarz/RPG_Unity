@@ -21,7 +21,7 @@ public class TriggerObjectController : MonoBehaviour
     private void OnDisable()
     {
         EventManager.StopListening(nextStateTriggerMessage, NextState);
-        EventManager.StartListening(setStateTriggerMessage, TrySetState);
+        EventManager.StopListening(setStateTriggerMessage, TrySetState);
 
     }
     public void NextState()

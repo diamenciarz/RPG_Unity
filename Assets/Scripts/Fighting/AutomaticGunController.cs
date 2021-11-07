@@ -53,6 +53,7 @@ public class AutomaticGunController : MonoBehaviour
     [Header("Mouse Steering")]
     [SerializeField] bool isControlledByMouseCursor;
     [SerializeField] bool isGunReloadingBarOn;
+    [SerializeField] bool isShootingZoneOn;
 
     [HideInInspector]
     public int team;
@@ -81,7 +82,8 @@ public class AutomaticGunController : MonoBehaviour
     {
         UpdateTeam();
         CheckIfMyBulletIsARocket();
-        UpdateUIState();
+
+        CreateUI();
 
         StartCoroutine(AttackCoroutine());
     }
@@ -128,7 +130,7 @@ public class AutomaticGunController : MonoBehaviour
         {
             gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
         }
-        
+
     }
     private void UpdateShootingZone()
     {
@@ -179,7 +181,7 @@ public class AutomaticGunController : MonoBehaviour
                 if ((shootingTimeBank) >= timeBetweenEachShot)
                 {
                     ShootOneSalvo();
-                    Debug.Log("Shooting time bank: " + shootingTimeBank / (timeBetweenEachShot * howManyShots));
+                    //Debug.Log("Shooting time bank: " + shootingTimeBank / (timeBetweenEachShot * howManyShots));
                 }
 
                 yield return new WaitForSeconds(timeBetweenEachShot);
@@ -228,7 +230,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            return CanShootTarget(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
+            return CanShootMouse(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -239,7 +241,7 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            return CanShootTarget(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
+            return CanShootMouse(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -267,24 +269,42 @@ public class AutomaticGunController : MonoBehaviour
         {
             if (item != null)
             {
-                return CanShootTarget(item.transform.position, maximumShootingRange);
+                if (CanShootTarget(item, maximumShootingRange))
+                {
+                    return true;
+                }
             }
         }
         return false;
     }
     //----Helper functions
-    private bool CanShootTarget(Vector3 targetPosition, float range)
+    private bool CanShootTarget(GameObject target, float range)
+    {
+        if (CanSeeTargetDirectly(target))
+        {
+            if (hasRotationLimits)
+            {
+                return IsPositionInCone(target.transform.position, range);
+            }
+            else
+            {
+                return IsPositionInRange(target.transform.position, range);
+            }
+        }
+        return false;
+    }
+    private bool CanShootMouse(Vector3 targetPosition, float range)
     {
         if (hasRotationLimits)
         {
-            return IsTargetInCone(targetPosition, range);
+            return IsPositionInCone(targetPosition, range);
         }
         else
         {
-            return IsTargetInRange(targetPosition, range);
+            return IsPositionInRange(targetPosition, range);
         }
     }
-    private bool IsTargetInRange(Vector3 targetPosition, float range)
+    private bool IsPositionInRange(Vector3 targetPosition, float range)
     {
         targetPosition.z = transform.position.z;
 
@@ -296,9 +316,9 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
-    private bool IsTargetInCone(Vector3 targetPosition, float range)
+    private bool IsPositionInCone(Vector3 targetPosition, float range)
     {
-        if (IsTargetInRange(targetPosition, range))
+        if (IsPositionInRange(targetPosition, range))
         {
             float middleZRotation = GetMiddleZRotation();
             Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
@@ -309,6 +329,31 @@ public class AutomaticGunController : MonoBehaviour
             if (isCursorInCone)
             {
                 return true;
+            }
+        }
+        return false;
+    }
+    private bool CanSeeTargetDirectly(GameObject target)
+    {
+        if (target)
+        {
+            int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
+            Vector2 origin = shootingPoint.transform.position;
+            Vector2 direction = target.transform.position - shootingPoint.transform.position;
+
+            Debug.DrawRay(shootingPoint.transform.position, direction * 3, Color.red, 0.5f);
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
+
+            if (raycastHit2D)
+            {
+                GameObject objectHit = raycastHit2D.collider.gameObject;
+
+                Debug.Log("Hit: " + objectHit.name);
+                bool hitTargetDirectly = objectHit == target;
+                if (hitTargetDirectly)
+                {
+                    return true;
+                }
             }
         }
         return false;
@@ -393,6 +438,7 @@ public class AutomaticGunController : MonoBehaviour
         else
         {
             relativePositionToTarget = theNearestEnemyGameObject.transform.position - transform.position;
+            relativePositionToTarget.z = 0;
         }
         return relativePositionToTarget;
     }
@@ -495,7 +541,7 @@ public class AutomaticGunController : MonoBehaviour
         foreach (var item in enemyList)
         {
             //I expect enemyList to never have a single null value
-            if (CanShootTarget(item.transform.position, maximumShootingRange))
+            if (CanShootTarget(item, maximumShootingRange))
             {
                 float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromMiddleToPosition(currentClosestEnemy.transform.position);
                 float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(item.transform.position);
@@ -589,27 +635,31 @@ public class AutomaticGunController : MonoBehaviour
             team = damageReceiverParent.GetTeam();
             return;
         }
+        Debug.LogError("Gun has no team!");
     }
     private void UpdateUIState()
     {
         if (isControlledByMouseCursor)
         {
-            CreateUIOnPlayerTakesControl();
+            CreateUI();
         }
         else
         {
-            if (gunReloadingBarScript != null)
-            {
-                Destroy(gunReloadingBarScript.gameObject);
-            }
-
-            if (shootingZoneScript != null)
-            {
-                Destroy(shootingZoneScript.gameObject);
-            }
+            DeleteUI();
         }
     }
+    private void DeleteUI()
+    {
+        if (gunReloadingBarScript != null)
+        {
+            Destroy(gunReloadingBarScript.gameObject);
+        }
 
+        if (shootingZoneScript != null)
+        {
+            Destroy(shootingZoneScript.gameObject);
+        }
+    }
 
     //UI
     public void SetIsControlledByMouseCursorTo(bool isTrue)
@@ -617,13 +667,13 @@ public class AutomaticGunController : MonoBehaviour
         isControlledByMouseCursor = isTrue;
         UpdateUIState();
     }
-    private void CreateUIOnPlayerTakesControl()
+    private void CreateUI()
     {
         if (isGunReloadingBarOn && gunReloadingBarScript == null)
         {
             CreateGunReloadingBar();
         }
-        if (shootingZoneScript == null)
+        if (isShootingZoneOn && shootingZoneScript == null)
         {
             CreateGunShootingZone();
         }
