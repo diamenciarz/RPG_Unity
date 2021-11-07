@@ -6,11 +6,11 @@ public static class StaticDataHolder
 {
     public static List<GameObject> dashableObjectList = new List<GameObject>();
 
-    public static List<GameObject> obstacleList = new List<GameObject>();
-    public static List<GameObject> projectileList = new List<GameObject>();
-    public static List<GameObject> playerProjectileList = new List<GameObject>();
-    public static List<GameObject> entityList = new List<GameObject>();
-    public static List<GameObject> objectsCollidingWithPlayerList = new List<GameObject>();
+    private static List<GameObject> obstacleList = new List<GameObject>();
+    private static List<GameObject> projectileList = new List<GameObject>();
+    private static List<GameObject> playerProjectileList = new List<GameObject>();
+    private static List<GameObject> entityList = new List<GameObject>();
+    private static List<GameObject> objectsCollidingWithPlayerList = new List<GameObject>();
 
     public static List<float> soundDurationList = new List<float>();
     public static int soundLimit = 10;
@@ -29,7 +29,7 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetObstacleList()
     {
-        return obstacleList;
+        return CloneList(obstacleList);
     }
 
     //Dashable Object List Methods
@@ -46,7 +46,7 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetDashableObjectList()
     {
-        return dashableObjectList;
+        return CloneList(dashableObjectList);
     }
 
 
@@ -79,7 +79,10 @@ public static class StaticDataHolder
     {
         projectileList.Remove(projectile);
     }
-
+    public static List<GameObject> GetProjectileList()
+    {
+        return CloneList(projectileList);
+    }
 
     //Player projectile list methods
     public static void AddPlayerProjectile(GameObject projectile)
@@ -90,7 +93,10 @@ public static class StaticDataHolder
     {
         playerProjectileList.Remove(projectile);
     }
-
+    public static List<GameObject> GetPlayerProjectileList()
+    {
+        return CloneList(playerProjectileList);
+    }
 
     //Entity list methods
     public static void AddEntity(GameObject entity)
@@ -101,7 +107,10 @@ public static class StaticDataHolder
     {
         entityList.Remove(entity);
     }
-
+    public static List<GameObject> GetEntityList()
+    {
+        return CloneList(entityList);
+    }
 
     //Objects colliding with player list methods
     public static void AddCollidingObject(GameObject collidingObject)
@@ -117,7 +126,7 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetCollidingObjectList()
     {
-        return objectsCollidingWithPlayerList;
+        return CloneList(objectsCollidingWithPlayerList);
     }
     public static bool IsCollidingWithABush()
     {
@@ -233,7 +242,7 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetMyEnemyList(int myTeam)
     {
-        return SubtractAlliesFromList(entityList, myTeam);
+        return SubtractAlliesFromList(CloneList(entityList), myTeam);
     }
     public static List<GameObject> SubtractAlliesFromList(List<GameObject> inputList, int myTeam)
     {
@@ -258,7 +267,7 @@ public static class StaticDataHolder
     }
     public static List<GameObject> GetMyAllyList(int myTeam, GameObject gameObjectToIgnore)
     {
-        return SubtractMeAndEnemiesFromList(entityList, myTeam, gameObjectToIgnore);
+        return SubtractMeAndEnemiesFromList(CloneList(entityList), myTeam, gameObjectToIgnore);
     }
     public static List<GameObject> SubtractMeAndEnemiesFromList(List<GameObject> inputList, int myTeam, GameObject gameObjectToIgnore)
     {
@@ -285,10 +294,9 @@ public static class StaticDataHolder
     //Useful
     public static GameObject FindTheClosestObjectInList(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
-        GameObject currentNearestTarget = null;
-
         if (possibleTargetList.Count != 0)
         {
+            GameObject currentNearestTarget = possibleTargetList[0];
             foreach (var item in possibleTargetList)
             {
                 if (currentNearestTarget == null)
@@ -307,5 +315,11 @@ public static class StaticDataHolder
         {
             return null;
         }
+    }
+    public static List<GameObject> CloneList(List<GameObject> inputList)
+    {
+        List<GameObject> returnList = new List<GameObject>(inputList.Count);
+        inputList.ForEach((item) => returnList.Add(item));
+        return returnList;
     }
 }

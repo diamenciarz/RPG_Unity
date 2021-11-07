@@ -19,7 +19,7 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] float maximumRangeFromMouseToShoot = 20f;
 
     [Header("Shooting chain stats")]
-    [SerializeField] int howManyShots;
+    [SerializeField] int shotAmount;
     [SerializeField] float shootingSpread;
     [SerializeField] float timeBetweenEachShootingChain;
 
@@ -111,11 +111,11 @@ public class AutomaticGunController : MonoBehaviour
     private void UpdateTimeBank()
     {
         float timeSinceLastShot = Time.time - lastShotTime;
-        float timeToFillMagazine = timeBetweenEachShootingChain + (howManyShots * timeBetweenEachShot) - shootingTimeBank;
+        float timeToFillMagazine = timeBetweenEachShootingChain + (shotAmount * timeBetweenEachShot) - shootingTimeBank;
         bool shouldFillAmmo = timeSinceLastShot >= timeToFillMagazine;
         if (shouldFillAmmo)
         {
-            shootingTimeBank = timeBetweenEachShot * howManyShots;
+            shootingTimeBank = timeBetweenEachShot * shotAmount;
         }
     }
     private void UpdateUI()
@@ -128,7 +128,7 @@ public class AutomaticGunController : MonoBehaviour
         bool ammoBarExistsAsItShould = isGunReloadingBarOn && (gunReloadingBarScript != null);
         if (ammoBarExistsAsItShould)
         {
-            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * howManyShots);
+            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * shotAmount);
         }
 
     }
@@ -164,8 +164,6 @@ public class AutomaticGunController : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(timeBetweenEachShootingChain);
-
                 yield return new WaitUntil(() => (areEnemiesInRange == true));
             }
 
@@ -176,29 +174,15 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (shootsAtTheNearestEnemy)
         {
-            if (isControlledByMouseCursor)
-            {
-                if ((shootingTimeBank) >= timeBetweenEachShot)
+                if ((shootingTimeBank) > 0)
                 {
                     ShootOneSalvo();
-                    //Debug.Log("Shooting time bank: " + shootingTimeBank / (timeBetweenEachShot * howManyShots));
                 }
-
                 yield return new WaitForSeconds(timeBetweenEachShot);
-            }
-            else
-            {
-                for (int i = 0; i < howManyShots; i++)
-                {
-                    ShootOneSalvo();
-
-                    yield return new WaitForSeconds(timeBetweenEachShot);
-                }
-            }
         }
         else
         {
-            for (int i = 0; i < howManyShots; i++)
+            for (int i = 0; i < shotAmount; i++)
             {
                 //Slowly rotates towards new position
                 yield return RotateTowardsUntilDone(i);
@@ -211,7 +195,7 @@ public class AutomaticGunController : MonoBehaviour
 
                 ShootOneSalvo();
             }
-            yield return new WaitForSeconds(timeBetweenEachShootingChain);
+            yield return new WaitForSeconds(timeBetweenEachShootingChain + timeBetweenEachShot * shotAmount);
         }
     }
     //----Checks
@@ -236,7 +220,7 @@ public class AutomaticGunController : MonoBehaviour
         }
         else
         {
-            return IsEnemyInRange();
+            return IsAnyEnemyInRange();
         }
     }
     private bool CheckForTargetsInRange()
@@ -248,10 +232,10 @@ public class AutomaticGunController : MonoBehaviour
         }
         else
         {
-            return IsEnemyInRange();
+            return IsAnyEnemyInRange();
         }
     }
-    private bool IsEnemyInRange()
+    private bool IsAnyEnemyInRange()
     {
         List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
 
@@ -406,6 +390,18 @@ public class AutomaticGunController : MonoBehaviour
         }
         return zMoveAngle;
     }
+    private float CountAngleFromGunToPosition(Vector3 targetPosition)
+    {
+        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
+        float zAngleFromGunToItem = angleFromZeroToItem - GetGunRotation();
+
+        if (zAngleFromGunToItem < -180)
+        {
+            zAngleFromGunToItem += 360;
+        }
+        return zAngleFromGunToItem;
+    }
     private float CountAngleFromMiddleToPosition(Vector3 targetPosition)
     {
         Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
@@ -507,38 +503,43 @@ public class AutomaticGunController : MonoBehaviour
     }
     private float GetGunRotation()
     {
-        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
-        float gunRotation = startingRotation.eulerAngles.z;
+        Quaternion gunRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
+        float gunZRotation = gunRotation.eulerAngles.z;
 
-        if (gunRotation > 180)
+        if (gunZRotation > 180)
         {
-            gunRotation -= 360;
+            gunZRotation -= 360;
         }
-        return gunRotation;
+        return gunZRotation;
     }
 
 
     //Look for targets
     private GameObject FindTheClosestEnemyInTheFrontInRange()
     {
-        List<GameObject> enemyList = StaticDataHolder.GetMyEnemyList(team);
-        enemyList.AddRange(StaticDataHolder.obstacleList);
+        List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
 
-        if (enemyList.Count == 0)
+        targetList.AddRange(StaticDataHolder.GetObstacleList());
+        if (targetList.Count == 0)
         {
             return null;
         }
 
-        GameObject currentClosestEnemy = enemyList[0];
-        foreach (var item in enemyList)
+        GameObject currentClosestEnemy = null;
+        foreach (var item in targetList)
         {
             //I expect enemyList to never have a single null value
             if (CanShootTarget(item, maximumShootingRange))
             {
-                float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromMiddleToPosition(currentClosestEnemy.transform.position);
-                float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(item.transform.position);
+                if (currentClosestEnemy == null)
+                {
+                    currentClosestEnemy = item;
+                }
+                float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromGunToPosition(currentClosestEnemy.transform.position);
+                float zAngleFromMiddleToItem = CountAngleFromGunToPosition(item.transform.position);
                 //If the found target is closer to the middle (angle wise) than the current closest target, make is the closest target
-                if ((Mathf.Abs(zAngleFromMiddleToCurrentClosestEnemy) > Mathf.Abs(zAngleFromMiddleToItem)))
+                bool isCloserAngleWise = Mathf.Abs(zAngleFromMiddleToCurrentClosestEnemy) > Mathf.Abs(zAngleFromMiddleToItem);
+                if (isCloserAngleWise)
                 {
                     currentClosestEnemy = item;
                 }

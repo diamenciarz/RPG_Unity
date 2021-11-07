@@ -38,7 +38,7 @@ public class EntityCreator : MonoBehaviour
             GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
 
             TrySetupProjectileStartingValues(summonedBullet, team, createdBy);
-            StaticDataHolder.projectileList.Add(summonedBullet);
+            StaticDataHolder.GetProjectileList().Add(summonedBullet);
         }
     }
     private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
@@ -79,7 +79,7 @@ public class EntityCreator : MonoBehaviour
         GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation, parent.transform);
 
         TrySetupEntityStartingValues(summonedEntity, team, parent);
-        StaticDataHolder.entityList.Add(summonedEntity);
+        StaticDataHolder.GetEntityList().Add(summonedEntity);
     }
     private void TrySetupEntityStartingValues(GameObject summonedEntity, int team, GameObject parent)
     {

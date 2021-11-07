@@ -5,13 +5,14 @@ using UnityEngine;
 public class DamageReceiver : MonoBehaviour
 {
     [SerializeField] int health;
-    [SerializeField] int team;
+    [SerializeField] int team; //An entity must be in a team
+    [SerializeField] bool isAnObstacle; //An obstacle doesn't have a team
 
     private bool isDestroyed = false;
 
     private void Start()
     {
-        StaticDataHolder.AddEntity(gameObject);
+        AddToLists();
     }
     public void ReceiveDamage(int damage)
     {
@@ -24,10 +25,32 @@ public class DamageReceiver : MonoBehaviour
         {
             if (health <= 0)
             {
+                RemoveFromLists();
                 isDestroyed = true;
-                StaticDataHolder.RemoveEntity(gameObject);
                 Destroy(gameObject);
             }
+        }
+    }
+    private void AddToLists()
+    {
+        if (isAnObstacle)
+        {
+            StaticDataHolder.AddObstacle(gameObject);
+        }
+        else
+        {
+            StaticDataHolder.AddEntity(gameObject);
+        }
+    }
+    private void RemoveFromLists()
+    {
+        if (isAnObstacle)
+        {
+            StaticDataHolder.RemoveObstacle(gameObject);
+        }
+        else
+        {
+            StaticDataHolder.RemoveEntity(gameObject);
         }
     }
     public int GetCurrentHealth()

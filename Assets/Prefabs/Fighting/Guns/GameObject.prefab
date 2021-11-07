@@ -246,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   team: 1
+  isAnObstacle: 0
 --- !u!58 &3265342980880550919
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -333,14 +334,14 @@ MonoBehaviour:
   shootsAtTheNearestEnemy: 1
   maximumShootingRange: 10
   maximumRangeFromMouseToShoot: 5
-  howManyShots: 3
+  shotAmount: 3
   shootingSpread: 0
   timeBetweenEachShootingChain: 1
   spreadProjectilesEvenly: 1
   spreadDegrees: 10
   leftBulletSpread: 0
   rightBulletSpread: 0
-  projectilesToCreateList: 020000000200000002000000
+  projectilesToCreateList: 02000000
   addMySpeedToBulletSpeed: 0
   gunRotationSpeed: 120
   timeBetweenEachShot: 0.3
@@ -354,6 +355,6 @@ MonoBehaviour:
   shootingZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
   shootingZoneTransform: {fileID: 7371173148479189348}
   isControlledByMouseCursor: 0
-  isGunReloadingBarOn: 0
+  isGunReloadingBarOn: 1
   isShootingZoneOn: 1
   team: 0

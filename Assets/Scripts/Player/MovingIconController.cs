@@ -32,7 +32,7 @@ public class MovingIconController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isAbilityAvailable)
+        if (isAbilityAvailable && objectToFollow)
         {
             UpdatePosition();
             UpdateRotation();
@@ -79,6 +79,7 @@ public class MovingIconController : MonoBehaviour
         else
         {
             isVisible = false;
+
         }
     }
     private void GoToGameObject(GameObject goTo)
