@@ -74,40 +74,43 @@ public abstract class BasicProjectileController : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Entered collision with: " + collision.gameObject.name);
-        HandleAllCollisionChecks(collision);
+        HandleAllCollisionChecks(collision.gameObject);
+    }
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        HandleAllCollisionChecks(collision.gameObject);
     }
 
 
     //Collision checks
-    private void HandleAllCollisionChecks(Collision2D collision)
+    private void HandleAllCollisionChecks(GameObject collisionObject)
     {
         //Can deal damage
-        if (CheckCollisionWithEntity(collision))
+        if (CheckCollisionWithEntity(collisionObject))
         {
             return;
         }
         //Just destroy checks
-        if (CheckCollisionWithBullet(collision))
+        if (CheckCollisionWithBullet(collisionObject))
         {
             return;
         }
-        if (CheckCollisionWithBomb(collision))
+        if (CheckCollisionWithBomb(collisionObject))
         {
             return;
         }
-        if (CheckCollisionWithRocket(collision))
+        if (CheckCollisionWithRocket(collisionObject))
         {
             return;
         }
-        if (CheckCollisionWithObstacle(collision))
+        if (CheckCollisionWithObstacle(collisionObject))
         {
             return;
         }
     }
-    private bool CheckCollisionWithEntity(Collision2D collision)
+    private bool CheckCollisionWithEntity(GameObject collision)
     {
-        DamageReceiver damageReceiver = collision.gameObject.GetComponent<DamageReceiver>();
+        DamageReceiver damageReceiver = collision.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
         {
             bool hitEnemy = damageReceiver.GetTeam() != team;
@@ -125,9 +128,9 @@ public abstract class BasicProjectileController : MonoBehaviour
         }
         return false;
     }
-    private bool CheckCollisionWithBullet(Collision2D collision)
+    private bool CheckCollisionWithBullet(GameObject collision)
     {
-        BasicProjectileController basicProjectileController = collision.gameObject.GetComponent<BasicProjectileController>();
+        BasicProjectileController basicProjectileController = collision.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
             int otherBulletTeam = basicProjectileController.team;
@@ -141,9 +144,9 @@ public abstract class BasicProjectileController : MonoBehaviour
         }
         return false;
     }
-    private bool CheckCollisionWithBomb(Collision2D collision)
+    private bool CheckCollisionWithBomb(GameObject collision)
     {
-        BombController bombController = collision.gameObject.GetComponent<BombController>();
+        BombController bombController = collision.GetComponent<BombController>();
         if (bombController != null)
         {
             if (breaksOnContactWithBombs)
@@ -154,9 +157,9 @@ public abstract class BasicProjectileController : MonoBehaviour
         }
         return false;
     }
-    private bool CheckCollisionWithRocket(Collision2D collision)
+    private bool CheckCollisionWithRocket(GameObject collision)
     {
-        RocketController rocketController = collision.gameObject.GetComponent<RocketController>();
+        RocketController rocketController = collision.GetComponent<RocketController>();
         if (rocketController != null)
         {
             if (breaksOnContactWithRockets)
@@ -167,7 +170,7 @@ public abstract class BasicProjectileController : MonoBehaviour
         }
         return false;
     }
-    private bool CheckCollisionWithObstacle(Collision2D collision)
+    private bool CheckCollisionWithObstacle(GameObject collision)
     {
         if (collision.gameObject.tag == "Obstacle")
         {

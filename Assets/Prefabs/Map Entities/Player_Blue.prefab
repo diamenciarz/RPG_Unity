@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!50 &653415217
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2705935482099847109}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 2
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5617621746383904808
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,9 +189,11 @@ MonoBehaviour:
   defaultPlayerSpeed: 4
   bushSpeedModifier: 0.4
   dashCooldown: 0.3
-  dashDuration: 0.3
+  dashLength: 2.5
   dashRange: 2.5
   dashSpeed: 0
+  isDashing: 0
+  canDash: 1
 --- !u!114 &5147535588325408921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +241,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
@@ -303,6 +326,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6195473770567518804}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: hasRotationLimits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: isGunReloadingBarOn
       value: 1
       objectReference: {fileID: 0}
@@ -312,7 +339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightMaxRotationLimit
@@ -328,7 +355,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
-      value: 5
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: projectilesToCreateList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: projectilesToCreateList.Array.data[0]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_RootOrder
@@ -394,6 +429,11 @@ PrefabInstance:
     - {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
     - {fileID: 3265342980880550919, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+--- !u!1 &2705935482099847109 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+  m_PrefabInstance: {fileID: 5390501402348444947}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3168830139761954251 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}

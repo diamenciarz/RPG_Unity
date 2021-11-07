@@ -5,7 +5,6 @@ using UnityEngine;
 public static class StaticDataHolder
 {
     public static List<GameObject> dashableObjectList = new List<GameObject>();
-    public static GameObject currentDashableObject;
 
     public static List<GameObject> obstacleList = new List<GameObject>();
     public static List<GameObject> projectileList = new List<GameObject>();
@@ -52,13 +51,22 @@ public static class StaticDataHolder
 
 
     // Dashable Object Methods
-    public static void SetCurrentDashObject(GameObject setObject)
+    public static GameObject GetTheClosestDashableObject(Vector3 position)
     {
-        currentDashableObject = setObject;
+        List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
+        return FindTheClosestObjectInList(dashableObjectList, position);
     }
-    public static GameObject GetCurrentDashObject()
+    public static GameObject GetTheClosestDashableObject(Vector3 position, float range)
     {
-        return currentDashableObject;
+        List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
+        GameObject dashableObject = FindTheClosestObjectInList(dashableObjectList, position);
+
+        float distance = (dashableObject.transform.position - position).magnitude;
+        if (distance <= range)
+        {
+            return dashableObject;
+        }
+        return null;
     }
 
 

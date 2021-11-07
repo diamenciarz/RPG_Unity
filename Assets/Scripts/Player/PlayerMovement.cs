@@ -7,14 +7,15 @@ public class PlayerMovement : MonoBehaviour
     public float defaultPlayerSpeed = 10f;
     [SerializeField] float bushSpeedModifier = 0.4f;
     [SerializeField] float dashCooldown = 1f;
-    [SerializeField] float dashRange = 2f;
+    [SerializeField] float dashLength = 2f;
+    public float dashRange = 3f;
+    private float dashDuration = 0.5f;
     [HideInInspector]
     public float dashSpeed;
 
     private float playerSpeed;
-    private bool shouldStopDashImmediately;
-    public bool isDashing;
-    public bool canDash = true;
+    private bool isDashing;
+    private bool canDash = true;
 
     private Vector3 dashDirection;
     private Vector3 moveVectorThisFrame;
@@ -25,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     private Animator myAnimator;
     private Animation myAnimation;
     private const float PLAYER_SPRITE_ROTATION = -90;
-    private float dashDuration = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     public void UpdatePlayerGameObject()
     {
         EventManager.TriggerEvent("SetPlayerGameObject", gameObject);
+        EventManager.TriggerEvent("UpdateDashSnapRange", dashRange);
     }
 
     // Update is called once per frame
@@ -73,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 inputVector = GetInputVector();
         const float rangeMultiplier = 2.6f; //Scales dash range to one map unit
-        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashRange;
+        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashLength;
         Vector2 newVelocity = (inputVector * playerSpeed) + dashVector;
 
         myRigidbody2D.velocity = newVelocity;
@@ -101,15 +102,16 @@ public class PlayerMovement : MonoBehaviour
         if (IsDashableObjectInRange())
         {
             canDash = false;
+            EventManager.TriggerEvent("UpdateDashIcon", false);
             StartCoroutine(DashCooldownCoroutine());
 
-            GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
+            GameObject objectToDashThrough = StaticDataHolder.GetTheClosestDashableObject(transform.position, dashRange);
             DashThroughObject(objectToDashThrough);
         }
     }
     private bool IsDashableObjectInRange()
     {
-        GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
+        GameObject objectToDashThrough = StaticDataHolder.GetTheClosestDashableObject(transform.position, dashRange);
         return objectToDashThrough != null;
     }
     private void DashThroughObject(GameObject dashGO)
@@ -130,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+        EventManager.TriggerEvent("UpdateDashIcon", true);
     }
     private void RotateTowardsMouseCursor()
     {
@@ -155,65 +158,6 @@ public class PlayerMovement : MonoBehaviour
     public bool GetCanDash()
     {
         return canDash;
-    }
-
-    //Unused
-    private void RotateTowardsMoveVector(Vector3 moveVector)
-    {
-        if (moveVector.magnitude != 0)
-        {
-            if (moveVector.normalized == Vector3.down)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-            }
-            else
-            {
-                transform.rotation = Quaternion.FromToRotation(Vector3.up, moveVector);
-            }
-            /*
-            Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, transform.position + moveVector);
-            newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
-            transform.rotation = newRotation;
-            */
-        }
-    }
-    private void MoveIfPossibleBy(Vector3 moveVector)
-    {
-        RaycastHit2D moveHit2D;
-        float moveDistance = moveVector.magnitude;
-
-        bool movedHorizontally = false;
-        //Check for collisions on the X-axis
-        moveHit2D = Physics2D.BoxCast(transform.position, myCollider2D.size, 0, new Vector2(moveVector.x, 0), moveDistance, LayerMask.GetMask("Actors", "Obstacles"));
-        if (CanMove(moveHit2D))
-        {
-            movedHorizontally = true;
-            transform.position += new Vector3(moveVector.x, 0, 0);
-        }
-
-        //Check for collisions on theY-axis
-        moveHit2D = Physics2D.BoxCast(transform.position, myCollider2D.size, 0, new Vector2(0, moveVector.y), moveDistance, LayerMask.GetMask("Actors", "Obstacles"));
-        if (CanMove(moveHit2D))
-        {
-            transform.position += new Vector3(0, moveVector.y, 0);
-        }
-        else
-        {
-            if (!movedHorizontally)
-            {
-                shouldStopDashImmediately = true;
-            }
-        }
-    }
-    private bool CanMove(RaycastHit2D moveHit2D)
-    {
-        bool canMove = moveHit2D.collider == null || moveHit2D.collider.tag == "Dashable";
-
-        if (canMove)
-        {
-            shouldStopDashImmediately = false;
-        }
-        return canMove;
     }
     private void BounceOffWalls()
     {
