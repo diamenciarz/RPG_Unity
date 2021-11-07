@@ -37,8 +37,6 @@ public class PlayerMovement : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myAnimation = GetComponent<Animation>();
         UpdatePlayerGameObject();
-
-        StaticDataHolder.AddEntity(gameObject);
     }
     public void UpdatePlayerGameObject()
     {

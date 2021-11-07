@@ -8,6 +8,9 @@ public class PopupPositionController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = playerGameObject.transform.position;
+        if (playerGameObject)
+        {
+            transform.position = playerGameObject.transform.position;
+        }
     }
 }
