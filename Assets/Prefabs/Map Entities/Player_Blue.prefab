@@ -123,8 +123,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6195473770567518806}
   - component: {fileID: 6195473770567518801}
-  - component: {fileID: 6195473770567518807}
   - component: {fileID: 5147535588325408921}
+  - component: {fileID: 651507064208136242}
   - component: {fileID: 6195473770939546903}
   - component: {fileID: 114496066386386624}
   - component: {fileID: 3186074715888603841}
@@ -171,32 +171,6 @@ MonoBehaviour:
   dashDuration: 0.3
   dashRange: 2.5
   dashSpeed: 0
---- !u!61 &6195473770567518807
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6195473770567518804}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3}
-  m_EdgeRadius: 0
 --- !u!114 &5147535588325408921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +185,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupTextField: {fileID: 0}
   dialogueTriggerList: []
+--- !u!58 &651507064208136242
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770567518804}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01291275, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.21592331
 --- !u!50 &6195473770939546903
 Rigidbody2D:
   serializedVersion: 4
@@ -317,8 +307,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: leftMaxRotationLimit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: rightMaxRotationLimit
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shootingZoneTransform

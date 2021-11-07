@@ -15,10 +15,10 @@ public class PlayerMovement : MonoBehaviour
     private float playerSpeed;
     private int forceMultiplier = 100;
     private bool shouldStopDashImmediately;
-    private bool isDashing;
-    private bool canDash = true;
+    public bool isDashing;
+    public bool canDash = true;
 
-    private Vector3 dashVector;
+    private Vector3 dashDirection;
     private Vector3 moveVectorThisFrame;
     private Coroutine dashCoroutine;
 
@@ -44,34 +44,46 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        //MoveUsingPhysics();
-        //BounceOffWalls();
-    }
     private void Update()
+    {
+        CheckDash();
+
+        RotateTowardsMouseCursor();
+    }
+    void FixedUpdate()
     {
         DoMove();
     }
     private void DoMove()
     {
         AdjustMovementSpeed();
-        UpdateMoveVectorThisFrame();
-
-        RotateTowardsMoveVector(moveVectorThisFrame);
-        CheckDashing();
+        UpdateVelocity();
     }
-    private void UpdateMoveVectorThisFrame()
+    private void AdjustMovementSpeed()
     {
-        Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-        moveVectorThisFrame = ((inputVector * playerSpeed) + dashVector) * Time.deltaTime;
-    }
-    private void CheckDashing()
-    {
-        if (!isDashing)
+        if (StaticDataHolder.IsCollidingWithABush())
         {
-            MoveIfPossibleBy(moveVectorThisFrame);
+            playerSpeed = defaultPlayerSpeed * bushSpeedModifier;
         }
+        else
+        {
+            playerSpeed = defaultPlayerSpeed;
+        }
+    }
+    private void UpdateVelocity()
+    {
+        Vector3 inputVector = GetInputVector();
+        Vector3 dashVector = dashDirection * dashSpeed;
+        Vector2 newVelocity = (inputVector * playerSpeed) + dashVector;
+
+        myRigidbody2D.velocity = newVelocity;
+    }
+    private Vector3 GetInputVector()
+    {
+        return new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+    }
+    private void CheckDash()
+    {
         if (canDash && !isDashing)
         {
             CheckDashInput();
@@ -86,14 +98,19 @@ public class PlayerMovement : MonoBehaviour
     }
     private void TryToDash()
     {
-        GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
-        bool isDashableObjectInRange = objectToDashThrough != null;
-        if (isDashableObjectInRange)
+        if (IsDashableObjectInRange())
         {
             canDash = false;
-            StartCoroutine(WaitForDashToCoolDown());
+            StartCoroutine(DashCooldownCoroutine());
+
+            GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
             DashThroughObject(objectToDashThrough);
         }
+    }
+    private bool IsDashableObjectInRange()
+    {
+        GameObject objectToDashThrough = StaticDataHolder.GetCurrentDashObject();
+        return objectToDashThrough != null;
     }
     private void DashThroughObject(GameObject dashGO)
     {
@@ -103,28 +120,55 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator DashCoroutine(Vector3 dashDirection)
     {
-        Debug.DrawRay(transform.position, dashDirection, Color.red);
+        myAnimator.SetBool("isDashing", true);
+        yield return new WaitForSeconds(dashDuration);
+
+        /*
         float totalTime = 0;
         float stepDuration = (1f / 30f); //In seconds
         int stepAmount = Mathf.FloorToInt(dashDuration / stepDuration);
-        myAnimator.SetBool("isDashing", true);
-
         while ((totalTime < dashDuration) && !shouldStopDashImmediately)
         {
-            Vector3 moveThisStep = dashDirection.normalized * dashSpeed * dashRange / stepAmount;
-            MoveIfPossibleBy(moveThisStep);
+            this.dashDirection = dashDirection.normalized * dashSpeed * dashRange / stepAmount;
             yield return new WaitForSeconds(stepDuration);
             totalTime += stepDuration;
         }
-
+        */
         myAnimator.SetBool("isDashing", false);
         isDashing = false;
     }
-    private IEnumerator WaitForDashToCoolDown()
+    private IEnumerator DashCooldownCoroutine()
     {
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+    private void RotateTowardsMouseCursor()
+    {
+        Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+        Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, mousePosition);
+        Debug.DrawRay(transform.position, StaticDataHolder.GetDirectionVector(2, newRotation.eulerAngles.z),Color.red, 0.5f);
+        newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
+        transform.rotation = newRotation;
+    }
+
+
+    //Collision handling
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        StaticDataHolder.AddCollidingObject(collision.gameObject);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        StaticDataHolder.RemoveCollidingObject(collision.gameObject);
+    }
+
+    //Get Variables
+    public bool GetCanDash()
+    {
+        return canDash;
+    }
+
+    //Unused
     private void RotateTowardsMoveVector(Vector3 moveVector)
     {
         if (moveVector.magnitude != 0)
@@ -181,40 +225,6 @@ public class PlayerMovement : MonoBehaviour
             shouldStopDashImmediately = false;
         }
         return canMove;
-    }
-    private void AdjustMovementSpeed()
-    {
-        if (StaticDataHolder.IsCollidingWithABush())
-        {
-            playerSpeed = defaultPlayerSpeed * bushSpeedModifier;
-        }
-        else
-        {
-            playerSpeed = defaultPlayerSpeed;
-        }
-    }
-
-
-    //Collision handling
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        StaticDataHolder.AddCollidingObject(collision.gameObject);
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        StaticDataHolder.RemoveCollidingObject(collision.gameObject);
-    }
-
-    //Get Variables
-    public bool GetCanDash()
-    {
-        return canDash;
-    }
-
-    //Unused
-    private void MoveUsingPhysics()
-    {
-        myRigidbody2D.AddForce(new Vector2(moveVectorThisFrame.x * Time.deltaTime * playerSpeed * forceMultiplier, moveVectorThisFrame.y * Time.deltaTime * playerSpeed * forceMultiplier));
     }
     private void BounceOffWalls()
     {

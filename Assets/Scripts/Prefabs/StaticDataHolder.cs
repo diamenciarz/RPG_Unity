@@ -187,22 +187,34 @@ public static class StaticDataHolder
         Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
         return returnVector.normalized;
     }
+    public static Vector3 GetTranslatedMousePosition(Vector3 position)
+    {
+        Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        returnVector.z = position.z;
+        return returnVector;
 
+    }
 
     //Rotation
     public static Quaternion GetRotationFromToIn2D(Vector3 firstPosition, Vector3 secondPosition)
     {
         Vector3 deltaPosition = GetFromToVectorIn2D(firstPosition, secondPosition);
 
-        float zRotation = Mathf.Rad2Deg * Mathf.Atan(deltaPosition.y / deltaPosition.x);
+        float ratio = deltaPosition.y / deltaPosition.x;
+        float zRotation = Mathf.Rad2Deg * Mathf.Atan(ratio);
 
+        if (deltaPosition.x <= 0)
+        {
+            zRotation += 180;
+        }
         return Quaternion.Euler(0, 0, zRotation);
     }
-    public static Quaternion GetRandomRotationInRange(float leftSpread, float rightSpread)
+    public static Quaternion GetRandomRotationInRangeZ(float leftSpread, float rightSpread)
     {
         Quaternion returnRotation = Quaternion.Euler(0, 0, Random.Range(-rightSpread, leftSpread));
         return returnRotation;
     }
+
 
 
     //Find the closest entities

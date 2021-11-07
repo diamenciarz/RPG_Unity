@@ -328,7 +328,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     private void ShootOnceForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0,0, basicDirection);
         Vector3 myPositionPlusOneStep = transform.position + (GetVelocityVector3() * Time.deltaTime);
@@ -345,7 +345,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
         Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);

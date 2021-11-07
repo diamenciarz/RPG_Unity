@@ -230,7 +230,9 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            return CanShootMouse(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
+
+            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+            return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
         else
         {
@@ -241,19 +243,13 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (isControlledByMouseCursor)
         {
-            return CanShootMouse(GetTranslatedMousePosition(), maximumRangeFromMouseToShoot);
+            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+            return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
         else
         {
             return IsEnemyInRange();
         }
-    }
-    private Vector3 GetTranslatedMousePosition()
-    {
-        Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        returnVector.z = transform.position.z;
-        return returnVector;
-
     }
     private bool IsEnemyInRange()
     {
@@ -304,18 +300,6 @@ public class AutomaticGunController : MonoBehaviour
             return IsPositionInRange(targetPosition, range);
         }
     }
-    private bool IsPositionInRange(Vector3 targetPosition, float range)
-    {
-        targetPosition.z = transform.position.z;
-
-        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
-        bool canShoot = maximumRangeFromMouseToShoot > relativePositionFromGunToItem.magnitude || maximumRangeFromMouseToShoot == 0;
-        if (canShoot)
-        {
-            return true;
-        }
-        return false;
-    }
     private bool IsPositionInCone(Vector3 targetPosition, float range)
     {
         if (IsPositionInRange(targetPosition, range))
@@ -333,6 +317,16 @@ public class AutomaticGunController : MonoBehaviour
         }
         return false;
     }
+    private bool IsPositionInRange(Vector3 targetPosition, float range)
+    {
+        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+        bool canShoot = range > relativePositionFromGunToItem.magnitude || range == 0;
+        if (canShoot)
+        {
+            return true;
+        }
+        return false;
+    }
     private bool CanSeeTargetDirectly(GameObject target)
     {
         if (target)
@@ -341,14 +335,12 @@ public class AutomaticGunController : MonoBehaviour
             Vector2 origin = shootingPoint.transform.position;
             Vector2 direction = target.transform.position - shootingPoint.transform.position;
 
-            Debug.DrawRay(shootingPoint.transform.position, direction * 3, Color.red, 0.5f);
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
 
             if (raycastHit2D)
             {
                 GameObject objectHit = raycastHit2D.collider.gameObject;
 
-                Debug.Log("Hit: " + objectHit.name);
                 bool hitTargetDirectly = objectHit == target;
                 if (hitTargetDirectly)
                 {
@@ -444,7 +436,7 @@ public class AutomaticGunController : MonoBehaviour
     }
     private Vector3 GetRelativePositionToMouseVector()
     {
-        Vector3 relativePositionToTarget = GetTranslatedMousePosition() - transform.position;
+        Vector3 relativePositionToTarget = StaticDataHolder.GetTranslatedMousePosition(transform.position) - transform.position;
         return relativePositionToTarget;
     }
     private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
@@ -592,7 +584,7 @@ public class AutomaticGunController : MonoBehaviour
     }
     private void SingleShotForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation;
         entityCreator.SummonProjectile(projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, parentGameObject);
