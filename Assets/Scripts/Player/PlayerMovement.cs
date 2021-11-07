@@ -7,13 +7,11 @@ public class PlayerMovement : MonoBehaviour
     public float defaultPlayerSpeed = 10f;
     [SerializeField] float bushSpeedModifier = 0.4f;
     [SerializeField] float dashCooldown = 1f;
-    [SerializeField] float dashDuration = 0.5f;
-    [SerializeField] float dashRange = 1.5f;
+    [SerializeField] float dashRange = 2f;
     [HideInInspector]
     public float dashSpeed;
 
     private float playerSpeed;
-    private int forceMultiplier = 100;
     private bool shouldStopDashImmediately;
     public bool isDashing;
     public bool canDash = true;
@@ -27,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator myAnimator;
     private Animation myAnimation;
     private const float PLAYER_SPRITE_ROTATION = -90;
+    private float dashDuration = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateVelocity()
     {
         Vector3 inputVector = GetInputVector();
-        Vector3 dashVector = dashDirection * dashSpeed;
+        const float rangeMultiplier = 2.6f; //Scales dash range to one map unit
+        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashRange;
         Vector2 newVelocity = (inputVector * playerSpeed) + dashVector;
 
         myRigidbody2D.velocity = newVelocity;
@@ -115,25 +115,14 @@ public class PlayerMovement : MonoBehaviour
     private void DashThroughObject(GameObject dashGO)
     {
         isDashing = true;
-        Vector3 dashDirection = StaticDataHolder.GetDeltaPositionFromToIn2D(gameObject, dashGO);
-        dashCoroutine = StartCoroutine(DashCoroutine(dashDirection));
+        dashDirection = StaticDataHolder.GetDeltaPositionFromToIn2D(gameObject, dashGO).normalized;
+        dashCoroutine = StartCoroutine(DashCoroutine());
     }
-    private IEnumerator DashCoroutine(Vector3 dashDirection)
+    private IEnumerator DashCoroutine()
     {
         myAnimator.SetBool("isDashing", true);
         yield return new WaitForSeconds(dashDuration);
 
-        /*
-        float totalTime = 0;
-        float stepDuration = (1f / 30f); //In seconds
-        int stepAmount = Mathf.FloorToInt(dashDuration / stepDuration);
-        while ((totalTime < dashDuration) && !shouldStopDashImmediately)
-        {
-            this.dashDirection = dashDirection.normalized * dashSpeed * dashRange / stepAmount;
-            yield return new WaitForSeconds(stepDuration);
-            totalTime += stepDuration;
-        }
-        */
         myAnimator.SetBool("isDashing", false);
         isDashing = false;
     }
@@ -146,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
         Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, mousePosition);
-        Debug.DrawRay(transform.position, StaticDataHolder.GetDirectionVector(2, newRotation.eulerAngles.z),Color.red, 0.5f);
+
         newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
         transform.rotation = newRotation;
     }

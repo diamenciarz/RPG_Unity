@@ -50,7 +50,6 @@ public abstract class BasicProjectileController : MonoBehaviour
     public GameObject objectThatCreatedThisProjectile;
 
 
-
     protected virtual void Awake()
     {
         mySpriteRenderer = FindObjectOfType<SpriteRenderer>();
@@ -73,14 +72,15 @@ public abstract class BasicProjectileController : MonoBehaviour
         transform.position += new Vector3(velocityVector.x, velocityVector.y, 0) * Time.deltaTime;
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Entered collision with: " + collision.gameObject.name);
         HandleAllCollisionChecks(collision);
     }
 
 
     //Collision checks
-    private void HandleAllCollisionChecks(Collider2D collision)
+    private void HandleAllCollisionChecks(Collision2D collision)
     {
         //Can deal damage
         if (CheckCollisionWithEntity(collision))
@@ -105,9 +105,9 @@ public abstract class BasicProjectileController : MonoBehaviour
             return;
         }
     }
-    private bool CheckCollisionWithEntity(Collider2D collision)
+    private bool CheckCollisionWithEntity(Collision2D collision)
     {
-        DamageReceiver damageReceiver = collision.GetComponent<DamageReceiver>();
+        DamageReceiver damageReceiver = collision.gameObject.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
         {
             bool hitEnemy = damageReceiver.GetTeam() != team;
@@ -119,15 +119,15 @@ public abstract class BasicProjectileController : MonoBehaviour
             || (damageReceiver.GetTeam() != team && breaksOnContactWithEnemies);
             if (shouldBreak)
             {
-                HandleHit(damageReceiver);
+                HandleHit();
             }
             return true;
         }
         return false;
     }
-    private bool CheckCollisionWithBullet(Collider2D collision)
+    private bool CheckCollisionWithBullet(Collision2D collision)
     {
-        BasicProjectileController basicProjectileController = collision.GetComponent<BasicProjectileController>();
+        BasicProjectileController basicProjectileController = collision.gameObject.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
             int otherBulletTeam = basicProjectileController.team;
@@ -140,11 +140,10 @@ public abstract class BasicProjectileController : MonoBehaviour
             return true;
         }
         return false;
-
     }
-    private bool CheckCollisionWithBomb(Collider2D collision)
+    private bool CheckCollisionWithBomb(Collision2D collision)
     {
-        BombController bombController = collision.GetComponent<BombController>();
+        BombController bombController = collision.gameObject.GetComponent<BombController>();
         if (bombController != null)
         {
             if (breaksOnContactWithBombs)
@@ -154,11 +153,10 @@ public abstract class BasicProjectileController : MonoBehaviour
             return true;
         }
         return false;
-
     }
-    private bool CheckCollisionWithRocket(Collider2D collision)
+    private bool CheckCollisionWithRocket(Collision2D collision)
     {
-        RocketController rocketController = collision.GetComponent<RocketController>();
+        RocketController rocketController = collision.gameObject.GetComponent<RocketController>();
         if (rocketController != null)
         {
             if (breaksOnContactWithRockets)
@@ -168,17 +166,15 @@ public abstract class BasicProjectileController : MonoBehaviour
             return true;
         }
         return false;
-
     }
-    private bool CheckCollisionWithObstacle(Collider2D collision)
+    private bool CheckCollisionWithObstacle(Collision2D collision)
     {
-        if (collision.tag == "Obstacle")
+        if (collision.gameObject.tag == "Obstacle")
         {
             HandleBreak();
             return true;
         }
         return false;
-
     }
 
 
@@ -202,7 +198,7 @@ public abstract class BasicProjectileController : MonoBehaviour
             }
         }
     }
-    protected void HandleHit(DamageReceiver collisionDamageReceiver)
+    protected void HandleHit()
     {
         if (!isDestroyed)
         {

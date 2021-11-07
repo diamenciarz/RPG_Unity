@@ -18,7 +18,6 @@ public class RocketController : BasicProjectileController
     //Private variables
     private float currentRocketSpeed;
     private GameObject targetGameObject;
-    GameObject newBullet;
 
     protected void Start()
     {
