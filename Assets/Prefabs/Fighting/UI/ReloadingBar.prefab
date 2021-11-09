@@ -270,7 +270,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5084526107050442707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
   useGradient: 1
   barColorGradient:
     serializedVersion: 2
-    key0: {r: 0.7169812, g: 0.5918477, b: 0, a: 1}
+    key0: {r: 0.5849056, g: 0.4974864, b: 0.08497684, a: 1}
     key1: {r: 0.9528302, g: 0.83274585, b: 0.10247413, a: 1}
     key2: {r: 0.9150943, g: 0.8434096, b: 0.3142399, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}

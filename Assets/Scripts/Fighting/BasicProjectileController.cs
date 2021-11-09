@@ -83,7 +83,7 @@ public abstract class BasicProjectileController : MonoBehaviour
 
 
     //Collision checks
-    private void HandleAllCollisionChecks(GameObject collisionObject)
+    protected virtual void HandleAllCollisionChecks(GameObject collisionObject)
     {
         //Can deal damage
         if (CheckCollisionWithEntity(collisionObject))
@@ -160,6 +160,7 @@ public abstract class BasicProjectileController : MonoBehaviour
     private bool CheckCollisionWithRocket(GameObject collision)
     {
         RocketController rocketController = collision.GetComponent<RocketController>();
+        Debug.Log("Rocket controller script: " + rocketController);
         if (rocketController != null)
         {
             if (breaksOnContactWithRockets)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6537271912519148142}
   - component: {fileID: 7266462052977259521}
   m_Layer: 0
-  m_Name: FriendlyRocketMissingIcon
+  m_Name: RocketMissingIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: cb54d4c977ca1464c9533f41f0ceea4d, type: 3}
-  m_Color: {r: 0.40943396, g: 0.48099315, b: 1, a: 1}
+  m_Color: {r: 0.40784317, g: 0.48235297, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -102,5 +102,5 @@ MonoBehaviour:
   spriteScale: 1
   screenEdgeOffset: 0
   deltaRotation: 0
-  allyColor: {r: 0, g: 0, b: 0, a: 0}
-  enemyColor: {r: 0, g: 0, b: 0, a: 0}
+  allyColor: {r: 0.40784317, g: 0.48235297, b: 1, a: 0}
+  enemyColor: {r: 1, g: 0, b: 0.007843138, a: 0}

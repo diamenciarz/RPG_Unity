@@ -16,6 +16,9 @@ public class EntityCreator : MonoBehaviour
     [Header("Projectiles")]
     public GameObject laserPrefab;
     public GameObject splittingBulletPrefab;
+    public GameObject rocketPrefab;
+    public GameObject bombPrefab;
+    public GameObject explosionPrefab;
     [Header("Enemies")]
     public GameObject walkerPrefab;
     public enum EntityTypes
@@ -27,7 +30,9 @@ public class EntityCreator : MonoBehaviour
         Nothing,
         SplittingBullet,
         Laser,
-        Rocket
+        Rocket,
+        Bomb,
+        Explosion
     }
     //Projectiles
     public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
@@ -59,6 +64,18 @@ public class EntityCreator : MonoBehaviour
         if (bulletType == BulletTypes.SplittingBullet)
         {
             return splittingBulletPrefab;
+        }
+        if (bulletType == BulletTypes.Rocket)
+        {
+            return rocketPrefab;
+        }
+        if (bulletType == BulletTypes.Bomb)
+        {
+            return bombPrefab;
+        }
+        if (bulletType == BulletTypes.Explosion)
+        {
+            return explosionPrefab;
         }
         return null;
     }

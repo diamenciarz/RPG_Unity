@@ -75,14 +75,14 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: cb4345a7aae7cd843a6f6ffd6a089fa3, type: 3}
-  m_Color: {r: 1, g: 0.23009272, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.23137257, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.42, y: 0.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1437697990563623582
@@ -103,8 +103,8 @@ MonoBehaviour:
   spriteScale: 1
   screenEdgeOffset: 0
   deltaRotation: 0
-  allyColor: {r: 0, g: 0, b: 0, a: 0}
-  enemyColor: {r: 0, g: 0, b: 0, a: 0}
+  allyColor: {r: 0.40784317, g: 0.48235297, b: 1, a: 0}
+  enemyColor: {r: 1, g: 0.23137257, b: 0, a: 0}
 --- !u!1 &6263192383216903975
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +185,6 @@ SpriteRenderer:
   m_Size: {x: 0.46, y: 0.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

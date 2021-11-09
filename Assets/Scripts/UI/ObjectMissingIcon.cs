@@ -29,6 +29,7 @@ public class ObjectMissingIcon : MonoBehaviour
 
     void Start()
     {
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main;
         xMin = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + screenEdgeOffset;
         xMax = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - screenEdgeOffset;

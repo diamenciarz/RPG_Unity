@@ -174,11 +174,11 @@ public class AutomaticGunController : MonoBehaviour
     {
         if (shootsAtTheNearestEnemy)
         {
-                if ((shootingTimeBank) > 0)
-                {
-                    ShootOneSalvo();
-                }
-                yield return new WaitForSeconds(timeBetweenEachShot);
+            if ((shootingTimeBank) > 0)
+            {
+                ShootOneSalvo();
+            }
+            yield return new WaitForSeconds(timeBetweenEachShot);
         }
         else
         {
@@ -316,8 +316,9 @@ public class AutomaticGunController : MonoBehaviour
         if (target)
         {
             int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
-            Vector2 origin = shootingPoint.transform.position;
-            Vector2 direction = target.transform.position - shootingPoint.transform.position;
+            Vector2 origin = transform.position;
+            Vector2 direction = target.transform.position - transform.position;
+            Debug.DrawRay(origin, direction, Color.red, 0.5f);
 
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
 

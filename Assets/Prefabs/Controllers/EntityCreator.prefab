@@ -45,4 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserPrefab: {fileID: 7700761372939823446, guid: a1b6a1d6531737d49b58551e6c098d5d, type: 3}
   splittingBulletPrefab: {fileID: 7700761372939823446, guid: cc93754eedd18624abe077a4da38f20a, type: 3}
+  rocketPrefab: {fileID: 7700761372939823446, guid: 4b4acace6b210024c9affacb4b2c1458, type: 3}
+  bombPrefab: {fileID: 7700761372939823446, guid: 3310d3b3d1fa1bd439eadd2ffab47daa, type: 3}
+  explosionPrefab: {fileID: 7700761372939823446, guid: 1428b67571a4351489122ebc7c8a429d, type: 3}
   walkerPrefab: {fileID: 600636572777390012, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}

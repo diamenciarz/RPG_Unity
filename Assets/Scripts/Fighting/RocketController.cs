@@ -11,6 +11,7 @@ public class RocketController : BasicProjectileController
     [SerializeField] float maxRocketSpeed;
     [SerializeField] float speedChangeRatePerSecond = 1f;
     public float rocketRotationSpeed; //Degrees per second
+    public float spriteDeltaRotation = -90;
 
     [Header("Explosion Settings")]
     public float timeToExpire;
@@ -23,7 +24,6 @@ public class RocketController : BasicProjectileController
     {
         CreateMiaIcon();
         SetupStartingSpeed();
-        
     }
     private void CreateMiaIcon()
     {
@@ -51,7 +51,7 @@ public class RocketController : BasicProjectileController
         ChangeSpeedTowardsTargetSpeed();
         if (targetGameObject != null)
         {
-            RotateTowardsTarget();
+            TurnTowardsTarget();
         }
     }
     protected void CheckForTarget()
@@ -71,12 +71,15 @@ public class RocketController : BasicProjectileController
             currentRocketSpeed = Mathf.MoveTowards(currentRocketSpeed, maxRocketSpeed, speedChangeRatePerSecond * Time.deltaTime);
         }
     }
-    
-    private void RotateTowardsTarget()
-    {
-        Quaternion newRocketRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetGameObject.transform.position);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, newRocketRotation, rocketRotationSpeed * Time.deltaTime);
+    private void TurnTowardsTarget()
+    {
+        Quaternion targetRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetGameObject.transform.position) * Quaternion.Euler(0, 0, spriteDeltaRotation);
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rocketRotationSpeed * Time.deltaTime);
+        Vector2 newVelocity = StaticDataHolder.GetNormalizedDirectionVector(newRotation.eulerAngles.z) * currentRocketSpeed;
+
+        transform.rotation = newRotation;
+        SetVelocityVector(newVelocity);
     }
     public void SetTarget(GameObject target)
     {
@@ -93,5 +96,14 @@ public class RocketController : BasicProjectileController
     public void SetCurrentRocketSpeed(float newSpeed)
     {
         currentRocketSpeed = newSpeed;
+    }
+
+    protected override void HandleAllCollisionChecks(GameObject collision)
+    {
+        float lifeTime = Time.time - creationTime;
+        if (lifeTime > 0.1f)
+        {
+            base.HandleAllCollisionChecks(collision);
+        }
     }
 }

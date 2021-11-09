@@ -30,6 +30,10 @@ public class ProgressionBarController : MonoBehaviour
     {
         objectToFollow = followGO;
     }
+    public void SetRotateSameAsParent(bool input)
+    {
+        rotateSameAsParent = input;
+    }
     public void SetDeltaPositionToObject(Vector3 newDeltaPosition)
     {
         deltaPositionToObject = newDeltaPosition;
