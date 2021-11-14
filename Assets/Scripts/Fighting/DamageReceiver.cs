@@ -5,10 +5,15 @@ using UnityEngine;
 public class DamageReceiver : MonoBehaviour
 {
     [Header("Basic Stats")]
+    [SerializeField] int team;
     [SerializeField] int health;
     [SerializeField] bool isAnObstacle; //Every team can damage an obstacle
     [SerializeField] GameObject healthBarPrefab;
     [SerializeField] bool turnHealthBarOn;
+    [SerializeField] bool canBePushed;
+
+    [Header("Add to lists")]
+    [SerializeField] List<AddToLists> putInLists = new List<AddToLists>();
 
     [Header("Sounds")]
     [SerializeField] protected List<AudioClip> breakingSounds;
@@ -16,32 +21,88 @@ public class DamageReceiver : MonoBehaviour
     [SerializeField] protected List<AudioClip> hitSounds;
     [SerializeField] [Range(0, 1)] protected float hitSoundVolume = 1f;
 
+    public enum AddToLists
+    {
+        Projectile,
+        PlayerProjectile,
+        Entity,
+        Obstacle,
+        DashableObject
+    }
+
     private GameObject healthBarInstance;
     private bool isDestroyed = false;
-    private int team;
-    private IEntityData myEntityData;
+    private ICollidingEntityData myEntityData;
 
     private void Start()
     {
-        myEntityData = GetComponent<IEntityData>();
-        UpdateTeam();
-
+        UpdateStartingVariables();
         if (turnHealthBarOn)
         {
             CreateHealthBar();
         }
     }
-    private void UpdateTeam()
+    private void OnEnable()
     {
-        team = -1;
-        if (myEntityData != null)
+        AddObjectToLists();
+    }
+    private void OnDisable()
+    {
+        RemoveObjectFromLists();
+    }
+
+
+    //Modify lists
+    protected void AddObjectToLists()
+    {
+        if (putInLists.Contains(AddToLists.Projectile))
         {
-            team = myEntityData.GetTeam();
+            StaticDataHolder.AddProjectile(gameObject);
         }
-        else
+        if (putInLists.Contains(AddToLists.PlayerProjectile))
         {
-            Debug.LogError("Entity has no team component");
+            StaticDataHolder.AddPlayerProjectile(gameObject);
         }
+        if (putInLists.Contains(AddToLists.Obstacle))
+        {
+            StaticDataHolder.AddObstacle(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.Entity))
+        {
+            StaticDataHolder.AddEntity(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.DashableObject))
+        {
+            StaticDataHolder.AddDashableObject(gameObject);
+        }
+    }
+    protected void RemoveObjectFromLists()
+    {
+        if (putInLists.Contains(AddToLists.Projectile))
+        {
+            StaticDataHolder.RemoveProjectile(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.PlayerProjectile))
+        {
+            StaticDataHolder.RemovePlayerProjectile(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.Obstacle))
+        {
+            StaticDataHolder.RemoveObstacle(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.Entity))
+        {
+            StaticDataHolder.RemoveEntity(gameObject);
+        }
+        if (putInLists.Contains(AddToLists.DashableObject))
+        {
+            StaticDataHolder.RemoveDashableObject(gameObject);
+        }
+    }
+
+    private void UpdateStartingVariables()
+    {
+        myEntityData = GetComponent<ICollidingEntityData>();
     }
 
 
@@ -51,6 +112,11 @@ public class DamageReceiver : MonoBehaviour
         health -= damage;
         CheckHealth();
     }
+    /// <summary>
+    /// Deal damage and try to push object
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="gameObject"></param>
     public void DealDamage(int damage, GameObject gameObject)
     {
         health -= damage;
@@ -58,28 +124,31 @@ public class DamageReceiver : MonoBehaviour
 
         ModifyVelocity(gameObject);
     }
-    private void ModifyVelocity(GameObject gameObject)
+    private void ModifyVelocity(GameObject damagingObject)
     {
-        IEntityData iEntityData = gameObject.GetComponent<IEntityData>();
-        IDamage iDamage = gameObject.GetComponent<IDamage>();
-        iEntityData.ModifyVelocityVector3(iDamage.GetPushVector());
+        if (myEntityData != null)
+        {
+            IDamage iDamage = damagingObject.GetComponent<IDamage>();
+            if (canBePushed && iDamage.GetIsPushing())
+            {
+                myEntityData.ModifyVelocityVector3(iDamage.GetPushVector());
+            }
+        }
     }
     private void CheckHealth()
     {
         if (health <= 0)
         {
-            if (!isDestroyed)
-            {
-                isDestroyed = true;
-                HandleBreak();
-            }
+            HandleBreak();
         }
         else
         {
             HandleHit();
         }
     }
+    #region MyRegion
 
+    #endregion
 
     //Break methods
     protected void HandleBreak()
@@ -96,12 +165,20 @@ public class DamageReceiver : MonoBehaviour
     {
         StaticDataHolder.TryPlaySound(GetHitSound(), transform.position, hitSoundVolume);
     }
-    private void DestroyObject()
+
+
+    //Destroy methods
+    public void DestroyObject()
     {
-        TriggerOnDeath triggerOnDeath = GetComponent<TriggerOnDeath>();
-        if (triggerOnDeath != null)
+        RemoveObjectFromLists();
+
+        TriggerOnDeath[] triggerOnDeath = GetComponentsInChildren<TriggerOnDeath>();
+        if (triggerOnDeath.Length != 0)
         {
-            triggerOnDeath.DestroyObject();
+            foreach (TriggerOnDeath item in triggerOnDeath)
+            {
+                item.ObjectDestroyed();
+            }
         }
         else
         {
@@ -146,6 +223,14 @@ public class DamageReceiver : MonoBehaviour
         {
             progressionBarController.SetObjectToFollow(gameObject);
         }
+    }
+
+
+    //Set methods
+    public void SetTeam(int newTeam)
+    {
+        team = newTeam;
+        EventManager.TriggerEvent("ChangedObjectTeam", gameObject);
     }
 
 

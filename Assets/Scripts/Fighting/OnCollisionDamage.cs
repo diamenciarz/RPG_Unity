@@ -2,44 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnCollisionDamage : MonoBehaviour, IDamage
+public class OnCollisionDamage : TeamUpdater, IDamage
 {
     [Header("Basic Stats")]
     [SerializeField] int damage;
+    [SerializeField] bool isPiercing;
 
     [Header("Damage type")]
     public List<TypeOfDamage> damageTypes = new List<TypeOfDamage>();
 
     [Header("Physics settings")]
-    public bool isPushing = true;
+    public bool isPushing = false;
     public float pushingPower;
 
     public enum TypeOfDamage
     {
-        Bullet,
+        Projectile,
         Explosion,
         Rocket
     }
 
-    private IEntityData entityData;
-    private int team;
+    private ICollidingEntityData entityData;
+    private int currentDamageLeft;
 
-    private void Start()
+    protected override void Start()
     {
-        entityData = GetComponent<IEntityData>();
-        UpdateTeam();
+        base.Start();
+        SetupStartingValues();
     }
-    private void UpdateTeam()
+    private void SetupStartingValues()
     {
-        team = -1;
-        if (entityData != null)
-        {
-            team = entityData.GetTeam();
-        }
-        else
-        {
-            Debug.LogError("Entity has no team component");
-        }
+        entityData = GetComponent<ICollidingEntityData>();
+        currentDamageLeft = damage;
     }
 
 
@@ -57,19 +51,47 @@ public class OnCollisionDamage : MonoBehaviour, IDamage
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
         {
-            damageReceiver.DealDamage(damage, gameObject);
+            DealDamageToObject(damageReceiver);
         }
+    }
+    private void DealDamageToObject(DamageReceiver damageReceiver)
+    {
+        int collisionHP = damageReceiver.GetCurrentHealth();
+        damageReceiver.DealDamage(currentDamageLeft, gameObject);
+        if (isPiercing)
+        {
+            currentDamageLeft -= collisionHP;
+            if (currentDamageLeft < 0)
+            {
+                currentDamageLeft = 0;
+                DestroyObject();
+            }
+        }
+    }
+    private void DestroyObject()
+    {
+        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
+        if (damageReceiver != null)
+        {
+            damageReceiver.DestroyObject();
+        }
+        else
+        {
+            Debug.Log("No Damage Receiver found");
+            StartCoroutine(DestroyAtTheEndOfFrame());
+        }
+    }
+    private IEnumerator DestroyAtTheEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        Destroy(gameObject);
     }
 
 
     //Accessor methods
     public int GetDamage()
     {
-        return damage;
-    }
-    public int GetTeam()
-    {
-        return team;
+        return currentDamageLeft;
     }
     public List<TypeOfDamage> GetDamageTypes()
     {

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerOnDeath : MonoBehaviour
+public class TriggerOnDeath : TeamUpdater
 {
-    [Header("Add to lists")]
-    [SerializeField] List<AddToLists> putInLists = new List<AddToLists>();
 
     [Header("Upon Breaking")]
     [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToTurnIntoList;
@@ -17,115 +15,28 @@ public class TriggerOnDeath : MonoBehaviour
     [SerializeField] protected float leftBulletSpread;
     [SerializeField] protected float rightBulletSpread;
 
-    public enum AddToLists
-    {
-        Projectile,
-        PlayerProjectile,
-        Entity,
-        Obstacle,
-        DashableObject
-    }
-
-    private IEntityData entityData;
-
-
+    
+    private ICollidingEntityData entityData;
     protected EntityCreator entityCreator;
-    private int team;
+    private bool isDestroyed;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         entityCreator = FindObjectOfType<EntityCreator>();
-        entityData = GetComponent<IEntityData>();
-        UpdateTeam();
-    }
-    private void UpdateTeam()
-    {
-        team = -1;
-        if (entityData != null)
-        {
-            team = entityData.GetTeam();
-        }
-        else
-        {
-            Debug.LogError("Entity has no team component");
-        }
-    }
-
-
-    private void OnEnable()
-    {
-        AddObjectToLists();
-    }
-    private void OnDisable()
-    {
-        RemoveObjectFromLists();
-    }
-
-
-    //Destroy methods
-    public void DestroyObject()
-    {
-        RemoveObjectFromLists();
-        CreateNewProjectiles();
-        StartCoroutine(DestroyAtTheEndOfFrame());
-    }
-    private IEnumerator DestroyAtTheEndOfFrame()
-    {
-        yield return new WaitForEndOfFrame();
-        Destroy(gameObject);
-    }
-
-
-    //Modify lists
-    protected void AddObjectToLists()
-    {
-        if (putInLists.Contains(AddToLists.Projectile))
-        {
-            StaticDataHolder.AddProjectile(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.PlayerProjectile))
-        {
-            StaticDataHolder.AddPlayerProjectile(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.Obstacle))
-        {
-            StaticDataHolder.AddObstacle(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.Entity))
-        {
-            StaticDataHolder.AddEntity(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.DashableObject))
-        {
-            StaticDataHolder.AddDashableObject(gameObject);
-        }
-    }
-    protected void RemoveObjectFromLists()
-    {
-        if (putInLists.Contains(AddToLists.Projectile))
-        {
-            StaticDataHolder.RemoveProjectile(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.PlayerProjectile))
-        {
-            StaticDataHolder.RemovePlayerProjectile(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.Obstacle))
-        {
-            StaticDataHolder.RemoveObstacle(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.Entity))
-        {
-            StaticDataHolder.RemoveEntity(gameObject);
-        }
-        if (putInLists.Contains(AddToLists.DashableObject))
-        {
-            StaticDataHolder.RemoveDashableObject(gameObject);
-        }
+        entityData = GetComponent<ICollidingEntityData>();
     }
 
 
     //Death summon
+    public void ObjectDestroyed()
+    {
+        if (!isDestroyed)
+        {
+            isDestroyed = true;
+            CreateNewProjectiles();
+        }
+    }
     private void CreateNewProjectiles()
     {
         if (gameObjectsToTurnIntoList.Count != 0)

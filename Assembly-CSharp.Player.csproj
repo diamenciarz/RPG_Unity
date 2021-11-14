@@ -101,7 +101,8 @@
     <Compile Include="Assets\Scripts\Fighting\DamageReceiver.cs" />
     <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamage.cs" />
     <Compile Include="Assets\Scripts\Fighting\TriggerOnDeath.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Interfaces\IEntityData.cs" />
+    <Compile Include="Assets\Scripts\Fighting\TeamUpdater.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Interfaces\ICollidingEntityData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

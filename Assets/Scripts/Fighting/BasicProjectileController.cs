@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BasicProjectileController : MonoBehaviour, IEntityData
+public abstract class BasicProjectileController : TeamUpdater, ICollidingEntityData
 {
     [Header("Projectile Properties")]
-    [SerializeField] protected int team;
     [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float startingSpeed = 2f;
-    [SerializeField] protected int damage;
 
     [Header("Physics settings")]
     public bool isPushing = true;
@@ -37,7 +35,13 @@ public abstract class BasicProjectileController : MonoBehaviour, IEntityData
     {
         velocityVector = StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
+        UpdateTeam();
         SetSpriteAccordingToTeam();
+    }
+    private void UpdateTeam()
+    {
+        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
+        SetTeam(damageReceiver.GetTeam());
     }
     protected virtual void Update()
     {
@@ -90,14 +94,6 @@ public abstract class BasicProjectileController : MonoBehaviour, IEntityData
     public Vector3 GetVelocityVector3()
     {
         return new Vector3(velocityVector.x, velocityVector.y, 0);
-    }
-    public int GetDamage()
-    {
-        return damage;
-    }
-    public int GetTeam()
-    {
-        return team;
     }
     public GameObject GetObjectThatCreatedThisProjectile()
     {

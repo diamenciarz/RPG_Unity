@@ -154,9 +154,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7005096668549435608}
   - component: {fileID: 4689928297431880230}
-  - component: {fileID: 8693045397556622520}
   - component: {fileID: 3265342980880550919}
   - component: {fileID: -3073141782379355119}
+  - component: {fileID: 6269684437887618048}
+  - component: {fileID: 2547267131883073091}
   m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
@@ -232,21 +233,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8693045397556622520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8017394203629097686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30a0a9fb1eb840544afbe71f743ff9c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 10
-  team: 1
-  isAnObstacle: 0
 --- !u!58 &3265342980880550919
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -284,6 +270,47 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6269684437887618048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017394203629097686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e72e9ba4e45cf4bab3528c6f197f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  isAnObstacle: 0
+  healthBarPrefab: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
+  turnHealthBarOn: 1
+  canBePushed: 0
+  breakingSounds: []
+  breakingSoundVolume: 1
+  hitSounds: []
+  hitSoundVolume: 1
+--- !u!114 &2547267131883073091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017394203629097686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 0200000004000000
+  gameObjectsToTurnIntoList: 
+  shootsAtEnemies: 0
+  basicDirection: 0
+  spreadProjectilesEvenly: 0
+  spreadDegrees: 0
+  leftBulletSpread: 0
+  rightBulletSpread: 0
 --- !u!1 &8630683373646473597
 GameObject:
   m_ObjectHideFlags: 0

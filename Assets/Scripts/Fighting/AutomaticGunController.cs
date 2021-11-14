@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutomaticGunController : MonoBehaviour
+public class AutomaticGunController : TeamUpdater
 {
     //Instances
     GameObject theNearestEnemyGameObject;
@@ -56,7 +56,6 @@ public class AutomaticGunController : MonoBehaviour
     [SerializeField] bool isShootingZoneOn;
 
     [HideInInspector]
-    public int team;
     private bool areEnemiesInRange;
     private float lastShotTime;
     private bool isMyBulletARocket;
@@ -65,7 +64,7 @@ public class AutomaticGunController : MonoBehaviour
 
 
     // Startup
-    void Start()
+    protected override void Start()
     {
         InitializeStartingVariables();
 
@@ -76,11 +75,9 @@ public class AutomaticGunController : MonoBehaviour
         entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
         shootingTimeBank = 0f;
-
     }
     private void CallStartingMethods()
     {
-        UpdateTeam();
         CheckIfMyBulletIsARocket();
 
         CreateUI();
@@ -615,22 +612,6 @@ public class AutomaticGunController : MonoBehaviour
 
 
     //Update states
-    private void UpdateTeam()
-    {
-        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
-        if (damageReceiver != null)
-        {
-            team = damageReceiver.GetTeam();
-            return;
-        }
-        DamageReceiver damageReceiverParent = GetComponentInParent<DamageReceiver>();
-        if (damageReceiverParent != null)
-        {
-            team = damageReceiverParent.GetTeam();
-            return;
-        }
-        Debug.LogError("Gun has no team!");
-    }
     private void UpdateUIState()
     {
         if (isControlledByMouseCursor)
@@ -713,11 +694,5 @@ public class AutomaticGunController : MonoBehaviour
         shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
         float shootingZoneRotation = leftMaxRotationLimit;
         shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
-    }
-
-    //Set value methods
-    public void SetTeam(int newTeam)
-    {
-        team = newTeam;
     }
 }

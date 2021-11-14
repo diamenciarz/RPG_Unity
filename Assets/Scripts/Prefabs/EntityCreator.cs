@@ -100,18 +100,14 @@ public class EntityCreator : MonoBehaviour
     }
     private void TrySetupEntityStartingValues(GameObject summonedEntity, int team, GameObject parent)
     {
-        AutomaticGunController automaticGunController = summonedEntity.GetComponent<AutomaticGunController>();
-        if (automaticGunController != null)
+        TeamUpdater[] damageReceivers = summonedEntity.GetComponentsInChildren<TeamUpdater>();
+        if (damageReceivers.Length != 0)
         {
-            automaticGunController.SetTeam(team);
+            foreach (TeamUpdater item in damageReceivers)
+            {
+                item.SetTeam(team);
+            }
         }
-        /*
-        BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
-        if (basicProjectileController != null)
-        {
-            basicProjectileController.SetBulletTeam(team);
-            basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);
-        }*/
     }
     private GameObject GetEntityPrefab(EntityTypes entityType)
     {

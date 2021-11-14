@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakOnCollision : MonoBehaviour
+public class BreakOnCollision : TeamUpdater
 {
     [Header("Collision Settings")]
     public List<BreaksImmediatelyOnContactWith> breakEnum = new List<BreaksImmediatelyOnContactWith>();
@@ -23,33 +23,17 @@ public class BreakOnCollision : MonoBehaviour
     }
 
     private bool isDestroyed = false;
-    private int team;
     private float creationTime;
-    private IEntityData entityData;
     private bool isARocket;
-
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         UpdateStartingVariables();
     }
     private void UpdateStartingVariables()
     {
-        UpdateTeam();
-        entityData = GetComponent<IEntityData>();
         creationTime = Time.time;
         CheckRocket();
-    }
-    private void UpdateTeam()
-    {
-        team = -1;
-        if (entityData != null)
-        {
-            team = entityData.GetTeam();
-        }
-        else
-        {
-            Debug.LogError("Entity has no team component");
-        }
     }
     private void CheckRocket()
     {
@@ -87,12 +71,12 @@ public class BreakOnCollision : MonoBehaviour
         int collisionTeam = iDamage.GetTeam();
         bool areTeamsEqual = collisionTeam == team;
 
-        bool breaksOnAllyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Bullet) && areTeamsEqual;
+        bool breaksOnAllyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && areTeamsEqual;
         if (breaksOnAllyBullet)
         {
             return true;
         }
-        bool breaksOnEnemyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Bullet) && !areTeamsEqual;
+        bool breaksOnEnemyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && !areTeamsEqual;
         if (breaksOnEnemyBullet)
         {
             return true;
@@ -131,8 +115,8 @@ public class BreakOnCollision : MonoBehaviour
         }
         return false;
     }
-    
-    
+
+
     //Break methods
     protected void HandleBreak()
     {
@@ -146,10 +130,13 @@ public class BreakOnCollision : MonoBehaviour
     }
     private void DestroyObject()
     {
-        TriggerOnDeath triggerOnDeath = GetComponent<TriggerOnDeath>();
-        if (triggerOnDeath != null)
+        TriggerOnDeath[] triggerOnDeath = GetComponentsInChildren<TriggerOnDeath>();
+        if (triggerOnDeath.Length != 0)
         {
-            triggerOnDeath.DestroyObject();
+            foreach (TriggerOnDeath item in triggerOnDeath)
+            {
+                item.ObjectDestroyed();
+            }
         }
         else
         {
