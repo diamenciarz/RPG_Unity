@@ -48,7 +48,7 @@ public class TeamUpdater : MonoBehaviour
 
 
     //Set methods
-    public void SetTeam(int newTeam)
+    public virtual void SetTeam(int newTeam)
     {
         team = newTeam;
         EventManager.TriggerEvent("ChangedObjectTeam", gameObject);

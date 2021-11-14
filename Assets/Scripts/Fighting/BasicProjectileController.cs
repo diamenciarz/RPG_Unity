@@ -53,9 +53,9 @@ public abstract class BasicProjectileController : TeamUpdater, ICollidingEntityD
     }
 
     //Set values
-    public void SetTeam(int newTeam)
+    public override void SetTeam(int newTeam)
     {
-        team = newTeam;
+        base.SetTeam(newTeam);
         SetSpriteAccordingToTeam();
     }
     public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)

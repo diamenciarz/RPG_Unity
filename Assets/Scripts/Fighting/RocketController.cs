@@ -20,8 +20,9 @@ public class RocketController : BasicProjectileController
     private float currentRocketSpeed;
     private GameObject targetGameObject;
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         CreateMiaIcon();
         SetupStartingSpeed();
     }
