@@ -28,12 +28,6 @@ public abstract class ItemObject : ScriptableObject
     [TextArea(15,20)]
     public string itemDescription;
     public ItemBuff[] itemBuffs;
-
-    public ItemDataForSlots CreateNewItem()
-    {
-        ItemDataForSlots returnItem = new ItemDataForSlots(this);
-        return returnItem;
-    }
 }
 [System.Serializable]
 public class ItemDataForSlots

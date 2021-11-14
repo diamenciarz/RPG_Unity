@@ -56762,7 +56762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_RootOrder
@@ -58181,11 +58181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22.53
+      value: -32.35
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.24
+      value: 2.48
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_LocalPosition.z

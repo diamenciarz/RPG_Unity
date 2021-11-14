@@ -70,12 +70,12 @@ public class ObjectMissingIcon : MonoBehaviour
         basicProjectileController = objectToFollow.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
-            if (basicProjectileController.team == 1)
+            if (basicProjectileController.GetTeam() == 1)
             {
                 GetComponent<SpriteRenderer>().color = allyColor;
                 return;
             }
-            if (basicProjectileController.team == 2)
+            if (basicProjectileController.GetTeam() == 2)
             {
                 GetComponent<SpriteRenderer>().color = enemyColor;
                 return;

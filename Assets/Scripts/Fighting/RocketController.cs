@@ -97,13 +97,4 @@ public class RocketController : BasicProjectileController
     {
         currentRocketSpeed = newSpeed;
     }
-
-    protected override void HandleAllCollisionChecks(GameObject collision)
-    {
-        float lifeTime = Time.time - creationTime;
-        if (lifeTime > 0.1f)
-        {
-            base.HandleAllCollisionChecks(collision);
-        }
-    }
 }

@@ -168,7 +168,6 @@ public static class StaticDataHolder
         return soundLimit;
     }
 
-
     //Helper functions -------------------------------------------------------------
     //Vectors
     public static float GetDistanceBetweenObjectsIn2D(GameObject firstObject, GameObject secondObject)
@@ -321,5 +320,16 @@ public static class StaticDataHolder
         List<GameObject> returnList = new List<GameObject>(inputList.Count);
         inputList.ForEach((item) => returnList.Add(item));
         return returnList;
+    }
+    public static void TryPlaySound(AudioClip sound, Vector3 soundPosition, float volume)
+    {
+        if (sound != null)
+        {
+            if (GetSoundCount() <= (GetSoundLimit() - 4))
+            {
+                AudioSource.PlayClipAtPoint(sound, soundPosition, volume);
+                AddSoundDuration(sound.length);
+            }
+        }
     }
 }

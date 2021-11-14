@@ -17,14 +17,22 @@ MonoBehaviour:
   itemDatabase: {fileID: 11400000, guid: 522f9f0b38524a24e9d18220e32e675a, type: 2}
   inventory:
     inventorySlotArray:
-    - allowedItemTypes: 
+    - allowedItemTypes: 00000000
       displayGameObject: {fileID: 0}
       parent: {fileID: 0}
       amount: 0
       item:
         itemName: 
         itemID: -1
-        itemBuffs: []
+        itemBuffs:
+        - itemAttributesEnumerator: 0
+          attributeValue: 0
+          minValue: 0
+          maxValue: 0
+        - itemAttributesEnumerator: 2
+          attributeValue: 0
+          minValue: 0
+          maxValue: 0
     - allowedItemTypes: 
       displayGameObject: {fileID: 0}
       parent: {fileID: 0}
