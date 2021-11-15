@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BasicProjectileController : TeamUpdater, ICollidingEntityData
+public abstract class BasicProjectileController : OnCollisionDamage, ICollidingEntityData
 {
     [Header("Projectile Properties")]
+
+    public new int team;
     [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float startingSpeed = 2f;
 
-    [Header("Physics settings")]
-    public bool isPushing = true;
-    public float pushingPower;
-
+    
     //Private variables
-    [HideInInspector]
-    public bool isAPlayerBullet = false;
     protected bool isDestroyed = false;
     protected Vector2 velocityVector;
     protected float creationTime;
@@ -24,24 +21,19 @@ public abstract class BasicProjectileController : TeamUpdater, ICollidingEntityD
     protected GameObject objectThatCreatedThisProjectile;
 
 
-    protected virtual void Awake()
+    protected override void Start()
+    {
+        base.Start();
+        SetupStartingValues();
+    }
+    private void SetupStartingValues()
     {
         mySpriteRenderer = FindObjectOfType<SpriteRenderer>();
         entityCreator = FindObjectOfType<EntityCreator>();
-
-        SetupStartingValues();
-    }
-    protected virtual void SetupStartingValues()
-    {
+        
         velocityVector = StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
-        UpdateTeam();
         SetSpriteAccordingToTeam();
-    }
-    private void UpdateTeam()
-    {
-        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
-        SetTeam(damageReceiver.GetTeam());
     }
     protected virtual void Update()
     {
@@ -90,10 +82,6 @@ public abstract class BasicProjectileController : TeamUpdater, ICollidingEntityD
     public Vector2 GetVelocityVector2()
     {
         return velocityVector;
-    }
-    public Vector3 GetVelocityVector3()
-    {
-        return new Vector3(velocityVector.x, velocityVector.y, 0);
     }
     public GameObject GetObjectThatCreatedThisProjectile()
     {

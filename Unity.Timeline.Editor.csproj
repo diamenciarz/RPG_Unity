@@ -93,8 +93,8 @@
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Animation\AnimationPlayableAssetEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Window\TimelineMarkerHeaderGUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\ControlTrack\ControlPlayableAssetEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Window\TimelineWindow_Duration.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Animation\TimelineAnimationUtilities.cs" />
+    <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Window\TimelineWindow_Duration.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Tooltip.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\inspectors\TimelineInspectorUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.timeline@1.5.6\Editor\Manipulators\Sequence\SelectAndMoveItem.cs" />

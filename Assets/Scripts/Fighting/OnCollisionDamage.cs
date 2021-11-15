@@ -6,6 +6,7 @@ public class OnCollisionDamage : TeamUpdater, IDamage
 {
     [Header("Basic Stats")]
     [SerializeField] int damage;
+    [SerializeField] protected bool hurtsAllies;
     [SerializeField] bool isPiercing;
 
     [Header("Damage type")]
@@ -29,6 +30,7 @@ public class OnCollisionDamage : TeamUpdater, IDamage
     {
         base.Start();
         SetupStartingValues();
+        Debug.Log("OnCollisionDamage team:" + team);
     }
     private void SetupStartingValues()
     {
@@ -51,15 +53,22 @@ public class OnCollisionDamage : TeamUpdater, IDamage
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
         {
-            DealDamageToObject(damageReceiver);
+            if (damageReceiver.GetTeam() != team || hurtsAllies)
+            {
+                DealDamageToObject(damageReceiver);
+            }
         }
     }
     private void DealDamageToObject(DamageReceiver damageReceiver)
     {
-        int collisionHP = damageReceiver.GetCurrentHealth();
-        damageReceiver.DealDamage(currentDamageLeft, gameObject);
+        damageReceiver.DealDamage(this);
+        HandlePiercing(damageReceiver);
+    }
+    private void HandlePiercing(DamageReceiver damageReceiver)
+    {
         if (isPiercing)
         {
+            int collisionHP = damageReceiver.GetCurrentHealth();
             currentDamageLeft -= collisionHP;
             if (currentDamageLeft < 0)
             {

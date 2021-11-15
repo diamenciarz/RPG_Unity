@@ -14,17 +14,22 @@ public class BombController : BasicProjectileController
     //Private variables
     private float originalSize;
 
+    protected override void Start()
+    {
+        base.Start();
+        SetupStartingValues();
+    }
     protected override void Update()
     {
         base.Update();
         SetNewSize();
     }
-    protected override void SetupStartingValues()
+
+
+    private void SetupStartingValues()
     {
-        base.SetupStartingValues();
         originalSize = transform.localScale.x;
     }
-
     private void SetNewSize()
     {
         float newSize = (Time.time - creationTime) / timeToExpire * (bombSize - originalSize) + originalSize;

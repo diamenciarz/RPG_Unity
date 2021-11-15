@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 7700761372939823440}
   - component: {fileID: 8776004092663047426}
   - component: {fileID: 3278521563504507919}
-  - component: {fileID: -699328918805176252}
   - component: {fileID: -3439466637142825356}
   - component: {fileID: 1082129703195348843}
+  - component: {fileID: -9017002736609849446}
+  - component: {fileID: -553088433232255719}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -138,31 +139,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 2
-  spriteList:
-  - {fileID: 21300000, guid: 8f1c4fe59212bd34ca8036985f1ffaeb, type: 3}
-  - {fileID: 21300000, guid: c560136ccd162704f82f7a9609a5fb69, type: 3}
-  startingSpeed: 6
-  isPushing: 0
-  pushingPower: 0
-  isAPlayerBullet: 0
---- !u!114 &-699328918805176252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 719c7603275c7f94f90398eee574026a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
+  damage: 2
+  hurtsAllies: 0
   isPiercing: 0
   damageTypes: 00000000
   isPushing: 0
   pushingPower: 0
+  spriteList:
+  - {fileID: 21300000, guid: 8f1c4fe59212bd34ca8036985f1ffaeb, type: 3}
+  - {fileID: 21300000, guid: c560136ccd162704f82f7a9609a5fb69, type: 3}
+  startingSpeed: 6
 --- !u!114 &-3439466637142825356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  putInLists: 00000000
   gameObjectsToTurnIntoList: 05000000
   shootsAtEnemies: 0
   basicDirection: 0
@@ -198,3 +183,38 @@ MonoBehaviour:
   spreadDegrees: 0
   leftBulletSpread: 0
   rightBulletSpread: 0
+--- !u!114 &-9017002736609849446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e72e9ba4e45cf4bab3528c6f197f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 00000000
+  team: 0
+  health: 0
+  healthBarPrefab: {fileID: 0}
+  turnHealthBarOn: 0
+  canBePushed: 0
+  breakingSounds: []
+  breakingSoundVolume: 1
+  hitSounds: []
+  hitSoundVolume: 1
+--- !u!114 &-553088433232255719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 00000000

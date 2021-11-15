@@ -20,6 +20,7 @@ public class TriggerOnDeath : TeamUpdater
     protected EntityCreator entityCreator;
     private bool isDestroyed;
 
+
     protected override void Start()
     {
         base.Start();
@@ -35,6 +36,7 @@ public class TriggerOnDeath : TeamUpdater
         {
             isDestroyed = true;
             CreateNewProjectiles();
+            StartCoroutine(DestroyAtTheEndOfFrame());
         }
     }
     private void CreateNewProjectiles()
@@ -63,9 +65,15 @@ public class TriggerOnDeath : TeamUpdater
             }
         }
     }
+    private IEnumerator DestroyAtTheEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        Destroy(gameObject);
+    }
 
 
     //Shoot once
+    #region OneShot
     private void ShootAtTarget(Vector3 targetPosition, int i)
     {
         if (spreadProjectilesEvenly)
@@ -120,4 +128,5 @@ public class TriggerOnDeath : TeamUpdater
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, entityData.GetObjectThatCreatedThisProjectile());
     }
+    #endregion
 }

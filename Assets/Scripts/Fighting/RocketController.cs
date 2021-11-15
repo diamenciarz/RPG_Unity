@@ -5,7 +5,6 @@ using UnityEngine;
 public class RocketController : BasicProjectileController
 {
     [SerializeField] GameObject objectMissingIconGameObject;
-    public bool hurtsPlayer;
 
     [Header("Rocket Flight Settings")]
     [SerializeField] float maxRocketSpeed;
