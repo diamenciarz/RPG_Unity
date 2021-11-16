@@ -23,9 +23,9 @@ public class BreakOnCollision : TeamUpdater
     }
 
     private bool isDestroyed = false;
-    private float creationTime;
+    protected float creationTime;
     private bool isARocket;
-    private void Start()
+    protected virtual void Awake()
     {
         UpdateStartingVariables();
     }

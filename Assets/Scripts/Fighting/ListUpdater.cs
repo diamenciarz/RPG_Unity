@@ -17,11 +17,11 @@ public class ListUpdater : MonoBehaviour
     }
 
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         AddObjectToLists();
     }
-    private void OnDisable()
+    protected void OnDisable()
     {
         RemoveObjectFromLists();
     }

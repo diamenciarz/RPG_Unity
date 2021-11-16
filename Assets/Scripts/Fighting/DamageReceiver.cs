@@ -25,7 +25,7 @@ public class DamageReceiver : ListUpdater
     private bool isDestroyed = false;
     private ICollidingEntityData myEntityData;
 
-    private void Start()
+    protected void Start()
     {
         UpdateStartingVariables();
         if (turnHealthBarOn)
@@ -110,7 +110,7 @@ public class DamageReceiver : ListUpdater
         }
         else
         {
-            Debug.Log("No TriggerOnDeath found");
+            //Debug.Log("No TriggerOnDeath found");
             StartCoroutine(DestroyAtTheEndOfFrame());
         }
     }

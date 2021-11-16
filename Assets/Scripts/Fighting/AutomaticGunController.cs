@@ -95,7 +95,7 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
             }
         }
     }
-    private void Update()
+    protected void Update()
     {
         UpdateTimeBank();
         UpdateUI();

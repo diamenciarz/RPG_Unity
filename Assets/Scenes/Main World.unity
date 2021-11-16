@@ -58292,6 +58292,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1636227628771600716, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5147535588325408921, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: popupTextField
       value: 
@@ -58348,7 +58356,9 @@ PrefabInstance:
       propertyPath: putInLists.Array.size
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6864085969068039333, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+    - {fileID: 2147245810128998675, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
 --- !u!1 &6195473770939546902 stripped
 GameObject:

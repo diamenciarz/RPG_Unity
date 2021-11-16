@@ -11,29 +11,33 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     
     //Private variables
     protected Vector2 velocityVector;
-    protected float creationTime;
     //Objects
     protected EntityCreator entityCreator;
-    protected SpriteRenderer mySpriteRenderer;
     protected GameObject objectThatCreatedThisProjectile;
+    //Components
+    protected SpriteRenderer mySpriteRenderer;
+    protected Rigidbody2D myRigidbody2D;
 
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingValues();
     }
     private void SetupStartingValues()
     {
         mySpriteRenderer = FindObjectOfType<SpriteRenderer>();
         entityCreator = FindObjectOfType<EntityCreator>();
+        myRigidbody2D = GetComponent<Rigidbody2D>();
         
-        velocityVector = StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z);
         creationTime = Time.time;
+
+        SetVelocityVector(StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
         SetSpriteAccordingToTeam();
     }
-    private void Update()
+    protected virtual void Update()
     {
-        MoveOneStep();
+        //MoveOneStep(); //now moving through rigidbody2D
     }
     private void MoveOneStep()
     {
@@ -63,6 +67,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     public void SetVelocityVector(Vector2 newVelocityVector)
     {
         velocityVector = newVelocityVector;
+        myRigidbody2D.velocity = newVelocityVector;
     }
     public void ModifyVelocityVector3(Vector3 deltaVector)
     {

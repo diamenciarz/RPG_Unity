@@ -136,7 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakEnum: 060000000500000001000000
+  team: -1
+  breakEnum: 06000000050000000100000004000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2

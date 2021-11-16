@@ -26,10 +26,10 @@ public class OnCollisionDamage : BreakOnCollision, IDamage
     private ICollidingEntityData entityData;
     private int currentDamageLeft;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingValues();
-        Debug.Log("OnCollisionDamage team:" + team);
     }
     private void SetupStartingValues()
     {

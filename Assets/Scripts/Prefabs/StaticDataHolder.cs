@@ -192,11 +192,11 @@ public static class StaticDataHolder
     }
     public static Vector3 GetDirectionVector(float speed, float zDirectionInDegrees)
     {
-        Vector3 returnVector = speed * GetNormalizedDirectionVector(zDirectionInDegrees);
+        Vector3 returnVector = speed * GetDirectionVectorNormalized(zDirectionInDegrees);
         return returnVector;
 
     }
-    public static Vector3 GetNormalizedDirectionVector(float zDirectionInDegrees)
+    public static Vector3 GetDirectionVectorNormalized(float zDirectionInDegrees)
     {
         float xStepMove = -Mathf.Sin(Mathf.Deg2Rad * zDirectionInDegrees);
         float yStepMove = Mathf.Cos(Mathf.Deg2Rad * zDirectionInDegrees);

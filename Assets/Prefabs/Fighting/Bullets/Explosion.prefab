@@ -135,6 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ebd032f4f5b13540ae023ed67610dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: -1
+  breakEnum: 
+  breakingSounds: []
+  breakingSoundVolume: 1
   damage: 5
   hurtsAllies: 1
   isPiercing: 0
@@ -144,7 +148,7 @@ MonoBehaviour:
   spriteList:
   - {fileID: 21300000, guid: 8e8c61de88de7a34483bf5aa1f8f0a2a, type: 3}
   - {fileID: 21300000, guid: 99fd9373b80084848bd102b122ed3bda, type: 3}
-  startingSpeed: 2
+  startingSpeed: 0
   hurtsPlayer: 1
   timeToExpire: 0.2
   bombSize: 5

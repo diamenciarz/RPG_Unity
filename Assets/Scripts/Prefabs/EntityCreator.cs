@@ -60,7 +60,6 @@ public class EntityCreator : MonoBehaviour
         {
             foreach (TeamUpdater item in teamUpdaters)
             {
-                Debug.Log("Set team of " + item.name + " to " + team);
                 item.SetTeam(team);
             }
         }
