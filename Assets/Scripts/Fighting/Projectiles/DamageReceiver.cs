@@ -31,21 +31,28 @@ public class DamageReceiver : ListUpdater
     {
         UpdateStartingVariables();
     }
-    protected void Update()
-    {
-        if (turnHealthBarOn)
-        {
-            healthBarScript.IsVisible(true);
-        }
-        else
-        {
-            healthBarScript.IsVisible(false);
-        }
-    }
     private void UpdateStartingVariables()
     {
         myEntityData = GetComponent<ICollidingEntityData>();
         maxHP = health;
+    }
+    protected void Update()
+    {
+        UpdateHealthBarVisibility();
+    }
+    private void UpdateHealthBarVisibility()
+    {
+        if (healthBarScript)
+        {
+            if (turnHealthBarOn)
+            {
+                healthBarScript.IsVisible(true);
+            }
+            else
+            {
+                healthBarScript.IsVisible(false);
+            }
+        }
     }
 
     #region Receive Damage

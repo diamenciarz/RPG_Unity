@@ -57,8 +57,8 @@
     <Compile Include="Assets\Scripts\Prefabs\StaticDataHolder.cs" />
     <Compile Include="Assets\Scripts\Prefabs\LaserDrawer.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
-    <Compile Include="Assets\Scripts\Fighting\AutomaticGunController.cs" />
-    <Compile Include="Assets\Scripts\Fighting\DamageReceiver.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Guns\AutomaticGunRotator.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\DamageReceiver.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueBoxController.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupController.cs" />
     <Compile Include="Assets\Scripts\UI\ObjectMissingIcon.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="Assets\Scripts\Fighting\Interfaces\ICollidingEntityData.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
-    <Compile Include="Assets\Scripts\Fighting\TeamUpdater.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\TeamUpdater.cs" />
     <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamage.cs" />
     <Compile Include="Assets\Scripts\Prefabs\LaserHolder.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\EndNode.cs" />
@@ -78,12 +78,12 @@
     <Compile Include="Assets\Scripts\My Nodes\Csharp Scripts\NodeReader.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupPositionController.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueGraph.cs" />
-    <Compile Include="Assets\Scripts\Fighting\TriggerOnDeath.cs" />
-    <Compile Include="Assets\Scripts\Fighting\BasicProjectileController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\TriggerOnDeath.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\BasicProjectileController.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueTrigger.cs" />
     <Compile Include="Assets\Scripts\Inventory\UserInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\ToolItemObject.cs" />
-    <Compile Include="Assets\Scripts\Fighting\RocketController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\RocketController.cs" />
     <Compile Include="Assets\Scripts\Prefabs\EntityCreator.cs" />
     <Compile Include="Assets\Scripts\UI\ProgressionBarController.cs" />
     <Compile Include="Assets\Scripts\Dialogue\Dialogue.cs" />
@@ -91,19 +91,20 @@
     <Compile Include="Assets\Scripts\Inventory\StaticInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemDatabaseObject.cs" />
-    <Compile Include="Assets\Scripts\Fighting\OnCollisionBreak.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\OnCollisionBreak.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\ActionNode.cs" />
     <Compile Include="Assets\Scripts\Player\MovingIconController.cs" />
     <Compile Include="Assets\Scripts\Inventory\DynamicInterface.cs" />
-    <Compile Include="Assets\Scripts\Fighting\OnCollisionDamage.cs" />
-    <Compile Include="Assets\Scripts\Fighting\BulletController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\OnCollisionDamage.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\BulletController.cs" />
     <Compile Include="Assets\Scripts\Prefabs\TriggerObjectController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
-    <Compile Include="Assets\Scripts\Fighting\BombController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\BombController.cs" />
     <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
-    <Compile Include="Assets\Scripts\Fighting\ListUpdater.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Projectiles\ListUpdater.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Guns\ShootingController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

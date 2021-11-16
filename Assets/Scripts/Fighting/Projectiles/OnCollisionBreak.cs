@@ -83,8 +83,8 @@ public class OnCollisionBreak : TeamUpdater
     {
         bool isAProjectile = IsObjectAProjectile(collisionObject);
         bool areTeamsEqual = team == GetObjectTeam(collisionObject);
-        Debug.Log("Is a projectile: "+ IsObjectAProjectile(collisionObject));
-        Debug.Log("Team: "+ GetObjectTeam(collisionObject));
+        //Debug.Log("Is a projectile: "+ IsObjectAProjectile(collisionObject));
+        //Debug.Log("Team: "+ GetObjectTeam(collisionObject));
         bool breaksOnAlly = false;
         if (Time.time - creationTime > 0.1f || !isARocket)
         {

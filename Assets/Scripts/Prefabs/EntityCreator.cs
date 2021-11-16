@@ -47,13 +47,9 @@ public class EntityCreator : MonoBehaviour
     private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
     {
         BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
-        if (basicProjectileController != null)
+        if (basicProjectileController != null && createdBy != null)
         {
             basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);
-        }
-        else
-        {
-            Debug.Log("Did not find BasicProjectileController script");
         }
         TeamUpdater[] teamUpdaters = summonedBullet.GetComponentsInChildren<TeamUpdater>();
         if (teamUpdaters.Length != 0)

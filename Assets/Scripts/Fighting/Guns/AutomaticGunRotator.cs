@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceiver
+public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 {
     //Instances
     GameObject theNearestEnemyGameObject;
@@ -70,7 +70,7 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
 
         CallStartingMethods();
     }
-    
+
     private void InitializeStartingVariables()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
@@ -245,12 +245,9 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
 
         foreach (var item in targetList)
         {
-            if (item != null)
+            if (CanShootTarget(item, maximumShootingRange))
             {
-                if (CanShootTarget(item, maximumShootingRange))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -311,24 +308,21 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
     }
     private bool CanSeeTargetDirectly(GameObject target)
     {
-        if (target)
+        int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
+        Vector2 origin = transform.position;
+        Vector2 direction = target.transform.position - transform.position;
+        Debug.DrawRay(origin, direction, Color.red, 0.5f);
+
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
+
+        if (raycastHit2D)
         {
-            int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
-            Vector2 origin = transform.position;
-            Vector2 direction = target.transform.position - transform.position;
-            //Debug.DrawRay(origin, direction, Color.red, 0.5f);
+            GameObject objectHit = raycastHit2D.collider.gameObject;
 
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
-
-            if (raycastHit2D)
+            bool hitTargetDirectly = objectHit == target;
+            if (hitTargetDirectly)
             {
-                GameObject objectHit = raycastHit2D.collider.gameObject;
-
-                bool hitTargetDirectly = objectHit == target;
-                if (hitTargetDirectly)
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -455,7 +449,7 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
             zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
         }
         else
-                if (zAngleFromMiddleToItem > leftMaxRotationLimit)
+        if (zAngleFromMiddleToItem > leftMaxRotationLimit)
         {
             zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
         }
@@ -649,7 +643,7 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
         {
             CreateGunReloadingBar();
         }
-        if (isShootingZoneOn && shootingZoneScript == null)
+        if (isShootingZoneOn && hasRotationLimits && shootingZoneScript == null)
         {
             CreateGunShootingZone();
         }
