@@ -26,6 +26,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     }
     protected virtual void Start()
     {
+        SetVelocityVector(StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
         SetSpriteAccordingToTeam();
     }
     private void SetupStartingValues()
@@ -35,8 +36,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         myRigidbody2D = GetComponent<Rigidbody2D>();
         
         creationTime = Time.time;
-
-        SetVelocityVector(StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
     }
     protected virtual void Update()
     {

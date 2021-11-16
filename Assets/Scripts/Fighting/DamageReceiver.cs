@@ -11,7 +11,7 @@ public class DamageReceiver : ListUpdater
     [SerializeField] bool turnHealthBarOn;
     [SerializeField] bool canBePushed;
 
-    
+
 
     [Header("Sounds")]
     [SerializeField] protected List<AudioClip> breakingSounds;
@@ -19,27 +19,42 @@ public class DamageReceiver : ListUpdater
     [SerializeField] protected List<AudioClip> hitSounds;
     [SerializeField] [Range(0, 1)] protected float hitSoundVolume = 1f;
 
-    
+
 
     private GameObject healthBarInstance;
+    private int maxHP;
     private bool isDestroyed = false;
     private ICollidingEntityData myEntityData;
+    protected ProgressionBarController healthBarScript;
 
-    protected void Start()
+    protected void Awake()
     {
         UpdateStartingVariables();
+    }
+    protected void Update()
+    {
         if (turnHealthBarOn)
         {
-            CreateHealthBar();
+            healthBarScript.IsVisible(true);
+        }
+        else
+        {
+            healthBarScript.IsVisible(false);
         }
     }
     private void UpdateStartingVariables()
     {
         myEntityData = GetComponent<ICollidingEntityData>();
+        maxHP = health;
     }
 
-
+    #region Receive Damage
     //Receive damage
+    /// <summary>
+    /// Deal damage
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="gameObject"></param>
     public void DealDamage(int damage)
     {
         health -= damage;
@@ -53,6 +68,7 @@ public class DamageReceiver : ListUpdater
     public void DealDamage(IDamage iDamage)
     {
         health -= iDamage.GetDamage();
+        UpdateHealthBar();
         CheckHealth();
 
         ModifyVelocity(iDamage);
@@ -78,7 +94,7 @@ public class DamageReceiver : ListUpdater
             HandleHit();
         }
     }
-    
+    #endregion
 
     //Break methods
     protected void HandleBreak()
@@ -95,7 +111,7 @@ public class DamageReceiver : ListUpdater
     {
         StaticDataHolder.TryPlaySound(GetHitSound(), transform.position, hitSoundVolume);
     }
-    //Destroy methods
+    //Destroy game object methods
     public void DestroyObject()
     {
         RemoveObjectFromLists();
@@ -120,8 +136,7 @@ public class DamageReceiver : ListUpdater
         Destroy(gameObject);
     }
 
-
-    //Sounds
+    #region Sounds
     protected AudioClip GetHitSound()
     {
         int soundIndex = Random.Range(0, hitSounds.Count);
@@ -140,20 +155,25 @@ public class DamageReceiver : ListUpdater
         }
         return null;
     }
-
+    #endregion
 
     //Other stuff
     public void CreateHealthBar()
     {
         healthBarInstance = Instantiate(healthBarPrefab, transform.position, transform.rotation);
-        ProgressionBarController progressionBarController = healthBarInstance.GetComponent<ProgressionBarController>();
-        if (progressionBarController)
+        healthBarScript = healthBarInstance.GetComponent<ProgressionBarController>();
+        healthBarScript.SetObjectToFollow(gameObject);
+    }
+    private void UpdateHealthBar()
+    {
+        if (healthBarScript == null)
         {
-            progressionBarController.SetObjectToFollow(gameObject);
+            CreateHealthBar();
         }
+        healthBarScript.UpdateProgressionBar(health, maxHP);
     }
 
-
+    #region Team
     //Set methods
     public virtual void SetTeam(int newTeam)
     {
@@ -182,12 +202,14 @@ public class DamageReceiver : ListUpdater
         team = newTeam;
     }
     //Accessor methods
-    public int GetCurrentHealth()
-    {
-        return health;
-    }
     public int GetTeam()
     {
         return team;
+    }
+    #endregion
+
+    public int GetCurrentHealth()
+    {
+        return health;
     }
 }

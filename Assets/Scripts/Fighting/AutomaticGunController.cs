@@ -140,11 +140,11 @@ public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceive
             if (mouseButtonIsPressedOutsideOfTheShootingZone && thereIsEnoughAmmoForAShot)
             {
                 //Make the light orange bar show up
-                shootingZoneScript.ShowBar(true);
+                shootingZoneScript.IsVisible(true);
             }
             else
             {
-                shootingZoneScript.ShowBar(false);
+                shootingZoneScript.IsVisible(false);
             }
         }
     }

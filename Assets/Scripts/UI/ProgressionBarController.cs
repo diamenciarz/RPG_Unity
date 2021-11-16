@@ -5,20 +5,23 @@ using UnityEngine.UI;
 
 public class ProgressionBarController : MonoBehaviour
 {
+    [Header("Instances")]
     [SerializeField] Image healthBarImage;
     [SerializeField] GameObject objectToFollow;
+    [Header("Display Settings")]
     [SerializeField] Vector3 deltaPositionToObject;
     [SerializeField] bool useGradient = true;
     [SerializeField] Gradient barColorGradient;
-
     [SerializeField] [Range(0, 1)] float originalAlfa = 1f;
+    [SerializeField] protected float hideOverTime = 0.5f;
+
+    [Header("Transform Settings")]
     [SerializeField] bool destroyWithoutParent = true;
     [SerializeField] bool rotateSameAsParent;
     private Quaternion deltaRotationFromParent;
     private bool isDestroyed;
     Color currentColor;
     private bool isShown = true;
-    private float hideOverTime = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -105,7 +108,7 @@ public class ProgressionBarController : MonoBehaviour
             }
         }
     }
-    public void ShowBar(bool isTrue)
+    public void IsVisible(bool isTrue)
     {
         isShown = isTrue;
     }
@@ -113,29 +116,24 @@ public class ProgressionBarController : MonoBehaviour
     {
         if (isShown)
         {
-            float colorAlfa = healthBarImage.color.a;
-            if (colorAlfa != originalAlfa)
-            {
-                float changeThisFrame = originalAlfa * Time.deltaTime / hideOverTime;
-                colorAlfa = Mathf.MoveTowards(colorAlfa, originalAlfa, changeThisFrame);
-
-                Color newColor = currentColor;
-                newColor.a = colorAlfa;
-                healthBarImage.color = newColor;
-            }
+            ChangeAlfaTowards(originalAlfa);
         }
         else
         {
-            float colorAlfa = healthBarImage.color.a;
-            if (colorAlfa != 0)
-            {
-                float changeThisFrame = originalAlfa * Time.deltaTime / hideOverTime;
-                colorAlfa = Mathf.MoveTowards(colorAlfa, 0, changeThisFrame);
+            ChangeAlfaTowards(0);
+        }
+    }
+    private void ChangeAlfaTowards(float alfa)
+    {
+        float colorAlfa = healthBarImage.color.a;
+        if (colorAlfa != alfa)
+        {
+            float changeThisFrame = alfa * Time.deltaTime / hideOverTime;
+            colorAlfa = Mathf.MoveTowards(colorAlfa, alfa, changeThisFrame);
 
-                Color newColor = currentColor;
-                newColor.a = colorAlfa;
-                healthBarImage.color = newColor;
-            }
+            Color newColor = currentColor;
+            newColor.a = colorAlfa;
+            healthBarImage.color = newColor;
         }
     }
 }

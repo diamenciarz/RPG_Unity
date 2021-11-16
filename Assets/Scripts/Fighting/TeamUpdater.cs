@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour
 {
-    public int team = -1;
+    protected int team = -1;
 
 
     //Set methods

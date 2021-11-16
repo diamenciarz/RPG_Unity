@@ -334,5 +334,6 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   originalAlfa: 1
+  hideOverTime: 0.1
   destroyWithoutParent: 1
   rotateSameAsParent: 0

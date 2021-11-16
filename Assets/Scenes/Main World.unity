@@ -58300,6 +58300,10 @@ PrefabInstance:
       propertyPath: team
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1636227628771600716, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: projectilesToCreateList.Array.data[0]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: team
       value: 1
@@ -58377,6 +58381,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6195473770567518804, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
   m_PrefabInstance: {fileID: 6195473770939546901}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6195473770939546903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770939546902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: -1
+  gameObjectsToTurnIntoList: 01000000010000000100000001000000
+  shootsAtEnemies: 0
+  basicDirection: 0
+  spreadProjectilesEvenly: 1
+  spreadDegrees: 90
+  leftBulletSpread: 0
+  rightBulletSpread: 0
 --- !u!1001 &7512425785441907623
 PrefabInstance:
   m_ObjectHideFlags: 0
