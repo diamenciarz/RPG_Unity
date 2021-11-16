@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityCreator : MonoBehaviour
@@ -7,6 +5,7 @@ public class EntityCreator : MonoBehaviour
     private void OnEnable()
     {
         //EventManager.StartListening("SummonProjectile", SummonProjectile);
+        //This was a proble, because there were too many inputs for the create method to puth through an object
     }
     private void OnDisable()
     {
@@ -43,7 +42,6 @@ public class EntityCreator : MonoBehaviour
             GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
 
             TrySetupProjectileStartingValues(summonedBullet, team, createdBy);
-            StaticDataHolder.GetProjectileList().Add(summonedBullet);
         }
     }
     private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
@@ -51,8 +49,20 @@ public class EntityCreator : MonoBehaviour
         BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
         if (basicProjectileController != null)
         {
-            basicProjectileController.SetTeam(team);
             basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);
+        }
+        else
+        {
+            Debug.Log("Did not find BasicProjectileController script");
+        }
+        TeamUpdater[] teamUpdaters = summonedBullet.GetComponentsInChildren<TeamUpdater>();
+        if (teamUpdaters.Length != 0)
+        {
+            foreach (TeamUpdater item in teamUpdaters)
+            {
+                Debug.Log("Set team of " + item.name + " to " + team);
+                item.SetTeam(team);
+            }
         }
     }
     private GameObject GetProjectilePrefab(BulletTypes bulletType)
@@ -96,14 +106,13 @@ public class EntityCreator : MonoBehaviour
         GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation, parent.transform);
 
         TrySetupEntityStartingValues(summonedEntity, team, parent);
-        StaticDataHolder.GetEntityList().Add(summonedEntity);
     }
     private void TrySetupEntityStartingValues(GameObject summonedEntity, int team, GameObject parent)
     {
-        TeamUpdater[] damageReceivers = summonedEntity.GetComponentsInChildren<TeamUpdater>();
-        if (damageReceivers.Length != 0)
+        TeamUpdater[] teamUpdaters = summonedEntity.GetComponentsInChildren<TeamUpdater>();
+        if (teamUpdaters.Length != 0)
         {
-            foreach (TeamUpdater item in damageReceivers)
+            foreach (TeamUpdater item in teamUpdaters)
             {
                 item.SetTeam(team);
             }

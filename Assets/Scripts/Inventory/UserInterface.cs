@@ -86,10 +86,6 @@ public abstract class UserInterface : MonoBehaviour
             textToModify.text = "";
         }
     }
-    private void UpdateDisplayGameObject(GameObject displayGameObject, InventorySlot inventorySlot)
-    {
-        
-    }
     public abstract void CreateSlots();
     public abstract void AssignDisplayGameObjectsToSlots();
     //Slot events

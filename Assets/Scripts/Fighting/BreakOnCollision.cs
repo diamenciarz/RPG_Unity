@@ -25,9 +25,8 @@ public class BreakOnCollision : TeamUpdater
     private bool isDestroyed = false;
     private float creationTime;
     private bool isARocket;
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         UpdateStartingVariables();
     }
     private void UpdateStartingVariables()
@@ -54,7 +53,7 @@ public class BreakOnCollision : TeamUpdater
     {
         HandleCollision(collision.gameObject);
     }
-    protected virtual void HandleCollision(GameObject collisionObject)
+    private void HandleCollision(GameObject collisionObject)
     {
         IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
         if (damageReceiver != null)

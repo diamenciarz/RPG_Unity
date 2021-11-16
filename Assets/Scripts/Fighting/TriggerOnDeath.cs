@@ -21,9 +21,8 @@ public class TriggerOnDeath : TeamUpdater
     private bool isDestroyed;
 
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         entityCreator = FindObjectOfType<EntityCreator>();
         entityData = GetComponent<ICollidingEntityData>();
     }

@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 114496066386386624}
   - component: {fileID: 3186074715888603841}
   - component: {fileID: 1778642163727842126}
+  - component: {fileID: 2636912656255608970}
   m_Layer: 6
   m_Name: Player_Blue
   m_TagString: Player
@@ -290,8 +291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53e72e9ba4e45cf4bab3528c6f197f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
-  isAnObstacle: 0
+  putInLists: 
+  team: 1
+  health: 100
   healthBarPrefab: {fileID: 0}
   turnHealthBarOn: 0
   canBePushed: 0
@@ -299,6 +301,19 @@ MonoBehaviour:
   breakingSoundVolume: 1
   hitSounds: []
   hitSoundVolume: 1
+--- !u!114 &2636912656255608970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770567518804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 02000000
 --- !u!1001 &5390501402348444947
 PrefabInstance:
   m_ObjectHideFlags: 0

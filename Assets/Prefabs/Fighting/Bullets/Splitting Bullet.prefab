@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7700761372939823440}
   - component: {fileID: 8776004092663047426}
   - component: {fileID: 3278521563504507919}
-  - component: {fileID: -1121449013072175122}
   - component: {fileID: -1566152343811300086}
+  - component: {fileID: 5411452294418001787}
   m_Layer: 0
   m_Name: Splitting Bullet
   m_TagString: Untagged
@@ -137,6 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  breakEnum: 040000000100000005000000
+  breakingSounds: []
+  breakingSoundVolume: 1
   damage: 1
   hurtsAllies: 0
   isPiercing: 0
@@ -147,21 +150,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
   - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
   startingSpeed: 6
---- !u!114 &-1121449013072175122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 024f51e916ed2c646bab669f41dd4746, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  breakEnum: 0400000001000000
-  breakingSounds: []
-  breakingSoundVolume: 1
 --- !u!114 &-1566152343811300086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,3 +169,16 @@ MonoBehaviour:
   spreadDegrees: 15
   leftBulletSpread: 0
   rightBulletSpread: 0
+--- !u!114 &5411452294418001787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 00000000

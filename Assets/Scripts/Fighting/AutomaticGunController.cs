@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutomaticGunController : TeamUpdater
+public class AutomaticGunController : TeamUpdater, ISerializationCallbackReceiver
 {
     //Instances
     GameObject theNearestEnemyGameObject;
@@ -64,12 +64,13 @@ public class AutomaticGunController : TeamUpdater
 
 
     // Startup
-    protected override void Start()
+    protected void Start()
     {
         InitializeStartingVariables();
 
         CallStartingMethods();
     }
+    
     private void InitializeStartingVariables()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
@@ -315,7 +316,7 @@ public class AutomaticGunController : TeamUpdater
             int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
             Vector2 origin = transform.position;
             Vector2 direction = target.transform.position - transform.position;
-            Debug.DrawRay(origin, direction, Color.red, 0.5f);
+            //Debug.DrawRay(origin, direction, Color.red, 0.5f);
 
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
 
@@ -695,4 +696,20 @@ public class AutomaticGunController : TeamUpdater
         float shootingZoneRotation = leftMaxRotationLimit;
         shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
     }
+
+    #region Serialization
+    public void OnBeforeSerialize()
+    {
+        DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
+        if (damageReceiver)
+        {
+            team = damageReceiver.GetTeam();
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+
+    }
+    #endregion
 }

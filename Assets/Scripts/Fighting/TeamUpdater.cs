@@ -4,56 +4,40 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour
 {
-    protected int team;
-
-    protected virtual void Start()
-    {
-        UpdateTeam();
-    }
-    private void OnEnable()
-    {
-        EventManager.StartListening("ChangedObjectTeam", CheckTeamChange);
-    }
-    private void OnDisable()
-    {
-        EventManager.StopListening("ChangedObjectTeam", CheckTeamChange);
-    }
-    private void CheckTeamChange(object changedObject)
-    {
-        if ((GameObject)changedObject == gameObject)
-        {
-            UpdateTeam();
-        }
-    }
-    private void UpdateTeam()
-    {
-        team = -1;
-        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
-        if (damageReceiver != null)
-        {
-            team = damageReceiver.GetTeam();
-            return;
-        }
-        DamageReceiver damageReceiverInParent = GetComponentInParent<DamageReceiver>();
-        if (damageReceiverInParent != null)
-        {
-            team = damageReceiverInParent.GetTeam();
-            return;
-        }
-        else
-        {
-            Debug.LogError("Entity has no team component");
-        }
-    }
+    public int team = -1;
 
 
     //Set methods
+    /// <summary>
+    /// Change team of the whole gameObject. Use ChangeTeamTo() to change team of this script
+    /// </summary>
+    /// <param name="newTeam"></param>
     public virtual void SetTeam(int newTeam)
     {
         team = newTeam;
-        EventManager.TriggerEvent("ChangedObjectTeam", gameObject);
+        UpdateTeam(newTeam);
     }
-
+    private void UpdateTeam(int newTeam)
+    {
+        TeamUpdater[] teamUpdater = GetComponentsInChildren<TeamUpdater>();
+        foreach (TeamUpdater item in teamUpdater)
+        {
+            item.ChangeTeamTo(newTeam);
+        }
+        DamageReceiver[] damageReceivers = GetComponentsInChildren<DamageReceiver>();
+        foreach (DamageReceiver item in damageReceivers)
+        {
+            item.ChangeTeamTo(newTeam);
+        }
+    }
+    /// <summary>
+    /// Change team of this script. Use SetTeam() to change team of the whole gameObject
+    /// </summary>
+    /// <param name="newTeam"></param>
+    public void ChangeTeamTo(int newTeam)
+    {
+        team = newTeam;
+    }
 
     //Accessor Methods
     public int GetTeam()

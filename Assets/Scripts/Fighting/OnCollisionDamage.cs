@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnCollisionDamage : TeamUpdater, IDamage
+public class OnCollisionDamage : BreakOnCollision, IDamage
 {
     [Header("Basic Stats")]
     [SerializeField] int damage;
@@ -26,9 +26,8 @@ public class OnCollisionDamage : TeamUpdater, IDamage
     private ICollidingEntityData entityData;
     private int currentDamageLeft;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         SetupStartingValues();
         Debug.Log("OnCollisionDamage team:" + team);
     }
@@ -40,15 +39,17 @@ public class OnCollisionDamage : TeamUpdater, IDamage
 
 
     //Collision methods
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
+        base.OnCollisionEnter2D(collision);
         HandleCollision(collision.gameObject);
     }
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
+        base.OnTriggerEnter2D(collision);
         HandleCollision(collision.gameObject);
     }
-    protected virtual void HandleCollision(GameObject collisionObject)
+    private void HandleCollision(GameObject collisionObject)
     {
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
         if (damageReceiver != null)

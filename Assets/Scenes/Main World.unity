@@ -10903,6 +10903,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: health
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shotAmount
       value: 3
@@ -10918,6 +10926,10 @@ PrefabInstance:
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: leftBulletSpread
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: hasRotationLimits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightBulletSpread
@@ -56732,6 +56744,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: health
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shotAmount
       value: 3
@@ -56950,6 +56970,14 @@ PrefabInstance:
     - target: {fileID: 3265342980880550919, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: health
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shotAmount
@@ -58143,6 +58171,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: health
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shotAmount
       value: 3
@@ -58307,6 +58343,10 @@ PrefabInstance:
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864085969068039333, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: putInLists.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}

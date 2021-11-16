@@ -33,8 +33,6 @@ public class DamageReceiver : ListUpdater
             CreateHealthBar();
         }
     }
-    
-
     private void UpdateStartingVariables()
     {
         myEntityData = GetComponent<ICollidingEntityData>();
@@ -157,10 +155,31 @@ public class DamageReceiver : ListUpdater
 
 
     //Set methods
-    public void SetTeam(int newTeam)
+    public virtual void SetTeam(int newTeam)
     {
         team = newTeam;
-        EventManager.TriggerEvent("ChangedObjectTeam", gameObject);
+        UpdateTeam(newTeam);
+    }
+    private void UpdateTeam(int newTeam)
+    {
+        TeamUpdater[] teamUpdater = GetComponentsInChildren<TeamUpdater>();
+        foreach (TeamUpdater item in teamUpdater)
+        {
+            item.ChangeTeamTo(newTeam);
+        }
+        DamageReceiver[] damageReceivers = GetComponentsInChildren<DamageReceiver>();
+        foreach (DamageReceiver item in damageReceivers)
+        {
+            item.ChangeTeamTo(newTeam);
+        }
+    }
+    /// <summary>
+    /// Change team of this script. Use SetTeam() to change team of the whole gameObject
+    /// </summary>
+    /// <param name="newTeam"></param>
+    public void ChangeTeamTo(int newTeam)
+    {
+        team = newTeam;
     }
     //Accessor methods
     public int GetCurrentHealth()

@@ -14,14 +14,12 @@ public class BombController : BasicProjectileController
     //Private variables
     private float originalSize;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         SetupStartingValues();
     }
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
         SetNewSize();
     }
 

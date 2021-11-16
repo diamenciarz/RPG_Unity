@@ -5,14 +5,11 @@ using UnityEngine;
 public abstract class BasicProjectileController : OnCollisionDamage, ICollidingEntityData
 {
     [Header("Projectile Properties")]
-
-    public new int team;
     [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float startingSpeed = 2f;
 
     
     //Private variables
-    protected bool isDestroyed = false;
     protected Vector2 velocityVector;
     protected float creationTime;
     //Objects
@@ -21,9 +18,8 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     protected GameObject objectThatCreatedThisProjectile;
 
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         SetupStartingValues();
     }
     private void SetupStartingValues()
@@ -35,7 +31,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         creationTime = Time.time;
         SetSpriteAccordingToTeam();
     }
-    protected virtual void Update()
+    private void Update()
     {
         MoveOneStep();
     }
@@ -45,18 +41,13 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     }
 
     //Set values
-    public override void SetTeam(int newTeam)
-    {
-        base.SetTeam(newTeam);
-        SetSpriteAccordingToTeam();
-    }
     public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
     {
         objectThatCreatedThisProjectile = parentGameObject;
     }
     private void SetSpriteAccordingToTeam()
     {
-        if (spriteList.Count >= team && team != 0)
+        if (spriteList.Count >= team && team > 0)
         {
             try
             {
