@@ -8,7 +8,7 @@ public class BombController : BasicProjectileController
     [Header("Bomb Settings")]
     // Ustawienia dla bomby
     public float timeToExpire;
-    [SerializeField] float bombSize; // Sprite scale
+    [SerializeField] float expandPercentage; // Sprite scale
     [SerializeField] float rotateDuringLifetime;
 
     //Private variables
@@ -41,7 +41,7 @@ public class BombController : BasicProjectileController
     }
     private void UpdateScale(float lifetimePercentage)
     {
-        float newSize = lifetimePercentage * (bombSize - originalSize) + originalSize;
+        float newSize = lifetimePercentage * expandPercentage * originalSize;
         gameObject.transform.localScale = new Vector3(newSize, newSize, 0);
     }
     private void UpdateRotation(float lifetimePercentage)
@@ -53,7 +53,7 @@ public class BombController : BasicProjectileController
     {
         if (Time.time - creationTime > timeToExpire)
         {
-            gameObject.transform.localScale = new Vector3(bombSize, bombSize, 0);
+            gameObject.transform.localScale = new Vector3(expandPercentage * originalSize, expandPercentage * originalSize, 0);
 
             Destroy(gameObject);
         }
