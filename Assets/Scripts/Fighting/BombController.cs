@@ -7,7 +7,6 @@ public class BombController : BasicProjectileController
 
     [Header("Bomb Settings")]
     // Ustawienia dla bomby
-    public bool hurtsPlayer;
     public float timeToExpire;
     [SerializeField] float bombSize; // Sprite scale
     [SerializeField] float rotateDuringLifetime;

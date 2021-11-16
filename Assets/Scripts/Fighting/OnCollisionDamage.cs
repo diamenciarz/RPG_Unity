@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnCollisionDamage : BreakOnCollision, IDamage
+public class OnCollisionDamage : OnCollisionBreak, IDamage
 {
     [Header("Basic Stats")]
     [SerializeField] int damage;

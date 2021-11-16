@@ -157,11 +157,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 0600000003000000040000000100000005000000
+  breakEnum: 06000000030000000400000001000000050000000000000002000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 5
-  hurtsAllies: 0
+  hurtsAllies: 1
   isPiercing: 0
   damageTypes: 02000000
   isPushing: 0

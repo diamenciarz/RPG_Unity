@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakOnCollision : TeamUpdater
+public class OnCollisionBreak : TeamUpdater
 {
     [Header("Collision Settings")]
     public List<BreaksImmediatelyOnContactWith> breakEnum = new List<BreaksImmediatelyOnContactWith>();
@@ -55,15 +55,80 @@ public class BreakOnCollision : TeamUpdater
     }
     private void HandleCollision(GameObject collisionObject)
     {
+        if (BreaksOnObstacle(collisionObject))
+        {
+            Break();
+            return;
+        }
+
+        if (BreaksOnProjectile(collisionObject))
+        {
+            Break();
+            return;
+        }
+
+        if (BreaksOnAllyOrEnemy(collisionObject))
+        {
+            Break();
+            return;
+        }
+    }
+
+    #region Break Checks
+    private bool BreaksOnObstacle(GameObject collisionObject)
+    { 
+        return (collisionObject.tag == "Obstacle") && BreaksOnContactWith(BreaksImmediatelyOnContactWith.Obstacles);
+    }
+    private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
+    {
+        bool isAProjectile = IsObjectAProjectile(collisionObject);
+        bool areTeamsEqual = team == GetObjectTeam(collisionObject);
+        Debug.Log("Is a projectile: "+ IsObjectAProjectile(collisionObject));
+        Debug.Log("Team: "+ GetObjectTeam(collisionObject));
+        bool breaksOnAlly = false;
+        if (Time.time - creationTime > 0.1f || !isARocket)
+        {
+            breaksOnAlly = areTeamsEqual && !isAProjectile && BreaksOnContactWith(BreaksImmediatelyOnContactWith.Allies);
+        }
+        bool breaksOnEnemy = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Enemies) && !isAProjectile && !areTeamsEqual;
+        return (breaksOnAlly || breaksOnEnemy);
+    }
+    private bool IsObjectAProjectile(GameObject collisionObject)
+    {
+        bool isAProjectile = false;
         IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
         if (damageReceiver != null)
         {
-            bool shouldBreak = (collisionObject.tag == "Obstacle" && BreaksOnContactWith(BreaksImmediatelyOnContactWith.Obstacles)) || ShouldBreak(damageReceiver);
-            if (shouldBreak)
+            isAProjectile = damageReceiver.IsAProjectile();
+        }
+        return isAProjectile;
+    }
+    private int GetObjectTeam(GameObject collisionObject)
+    {
+        int returnTeam = -1;
+        DamageReceiver damageReceiver = collisionObject.GetComponentInChildren<DamageReceiver>();
+        if (damageReceiver)
+        {
+            returnTeam = damageReceiver.GetTeam();
+        }
+        else
+        {
+            TeamUpdater teamUpdater = collisionObject.GetComponentInChildren<TeamUpdater>();
+            if (teamUpdater)
             {
-                HandleBreak();
+                returnTeam = teamUpdater.GetTeam();
             }
         }
+        return returnTeam;
+    }
+    private bool BreaksOnProjectile(GameObject collisionObject)
+    {
+        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        if (damageReceiver != null && ShouldBreak(damageReceiver))
+        {
+            return true;
+        }
+        return false;
     }
     private bool ShouldBreak(IDamage iDamage)
     {
@@ -80,28 +145,6 @@ public class BreakOnCollision : TeamUpdater
         {
             return true;
         }
-        bool breaksOnAlly = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Allies) && !iDamage.IsAProjectile() && areTeamsEqual;
-        if (breaksOnAlly)
-        {
-            if (Time.time - creationTime > 0.1f)
-            {
-                return true;
-            }
-            else
-            {
-                if (isARocket)
-                {
-                    return false;
-                }
-                return true;
-
-            }
-        }
-        bool breaksOnEnemy = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Enemies) && !iDamage.IsAProjectile() && !areTeamsEqual;
-        if (breaksOnEnemy)
-        {
-            return true;
-        }
         bool breaksOnExplosion = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Explosions) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Explosion);
         if (breaksOnExplosion)
         {
@@ -114,10 +157,10 @@ public class BreakOnCollision : TeamUpdater
         }
         return false;
     }
-
+    #endregion
 
     //Break methods
-    protected void HandleBreak()
+    protected void Break()
     {
         if (!isDestroyed)
         {
@@ -139,7 +182,7 @@ public class BreakOnCollision : TeamUpdater
         }
         else
         {
-            Debug.Log("No TriggerOnDeath found");
+            //Debug.Log("No TriggerOnDeath found");
             StartCoroutine(DestroyAtTheEndOfFrame());
         }
     }

@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: -1
   breakEnum: 0600000003000000040000000100000005000000
   breakingSounds: []
   breakingSoundVolume: 1
@@ -162,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: -1
   gameObjectsToTurnIntoList: 05000000
   shootsAtEnemies: 0
   basicDirection: 0

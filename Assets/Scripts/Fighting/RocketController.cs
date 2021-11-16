@@ -23,8 +23,12 @@ public class RocketController : BasicProjectileController
     protected override void Awake()
     {
         base.Awake();
-        CreateMiaIcon();
         SetupStartingSpeed();
+    }
+    protected override void Start()
+    {
+        base.Start();
+        CreateMiaIcon();
     }
     private void CreateMiaIcon()
     {

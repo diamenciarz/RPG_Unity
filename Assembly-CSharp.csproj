@@ -91,7 +91,7 @@
     <Compile Include="Assets\Scripts\Inventory\StaticInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemDatabaseObject.cs" />
-    <Compile Include="Assets\Scripts\Fighting\BreakOnCollision.cs" />
+    <Compile Include="Assets\Scripts\Fighting\OnCollisionBreak.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\ActionNode.cs" />
     <Compile Include="Assets\Scripts\Player\MovingIconController.cs" />
     <Compile Include="Assets\Scripts\Inventory\DynamicInterface.cs" />

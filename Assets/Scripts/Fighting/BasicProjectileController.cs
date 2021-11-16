@@ -24,6 +24,10 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         base.Awake();
         SetupStartingValues();
     }
+    protected virtual void Start()
+    {
+        SetSpriteAccordingToTeam();
+    }
     private void SetupStartingValues()
     {
         mySpriteRenderer = FindObjectOfType<SpriteRenderer>();
@@ -33,7 +37,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         creationTime = Time.time;
 
         SetVelocityVector(StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
-        SetSpriteAccordingToTeam();
     }
     protected virtual void Update()
     {
