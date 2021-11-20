@@ -321,7 +321,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Texxt
+  m_text: 'dwadaw
+
+    d
+
+    awd
+
+
+    awd
+
+    awd
+
+    awddawd
+
+    awdawd'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cb8fe357966741c48a97d4024dc9f22c, type: 2}
   m_sharedMaterial: {fileID: 1501269635190322276, guid: cb8fe357966741c48a97d4024dc9f22c, type: 2}

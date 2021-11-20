@@ -10810,7 +10810,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.25, y: -13.69, z: -9}
+  m_LocalPosition: {x: -58.28, y: -11.64, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11001,7 +11001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: isShootingZoneOn
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: leftBulletSpread
@@ -11009,7 +11009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: hasRotationLimits
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightBulletSpread
@@ -11029,7 +11029,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightMaxRotationLimit
@@ -11045,7 +11045,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: timeBetweenEachShootingChain
@@ -11121,6 +11121,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isControlledByMouseCursor
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
@@ -56830,7 +56834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: health
@@ -56866,7 +56870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: isControlledByMouseCursor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
@@ -56934,6 +56938,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isControlledByMouseCursor
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
@@ -57080,6 +57092,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: hasRotationLimits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: isGunReloadingBarOn
       value: 1
       objectReference: {fileID: 0}
@@ -57101,7 +57117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_RootOrder
@@ -57165,6 +57181,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isControlledByMouseCursor
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
@@ -57244,7 +57264,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682536240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.25, y: -13.69, z: -9}
+  m_LocalPosition: {x: -58.28, y: -11.64, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1271477547}
@@ -58293,7 +58313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightMaxRotationLimit
@@ -58306,6 +58326,10 @@ PrefabInstance:
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: rotatesTowardsTheNearestEnemy
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_RootOrder
@@ -58367,6 +58391,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: salvo
+      value: 
+      objectReference: {fileID: 11400000, guid: 214c8fdc5719d414c85514cee9a6c601, type: 2}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: basicGunRotation
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isControlledByMouseCursor
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: team
       value: 2
@@ -58388,25 +58424,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1636227628771600716, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: team
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1636227628771600716, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: projectilesToCreateList.Array.data[0]
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: team
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: healthBarPrefab
-      value: 
-      objectReference: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
-    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: turnHealthBarOn
-      value: 1
+    - target: {fileID: 2710557999228141452, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: reloadAllAtOnce
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5147535588325408921, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: popupTextField
@@ -58422,11 +58442,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -49.25
+      value: -58.28
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.69
+      value: -11.64
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -58460,39 +58480,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6864085969068039333, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-      propertyPath: putInLists.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6864085969068039333, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
-    - {fileID: 2147245810128998675, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
 --- !u!1 &6195473770939546902 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6195473770567518804, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
   m_PrefabInstance: {fileID: 6195473770939546901}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6195473770939546903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6195473770939546902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: -1
-  gameObjectsToTurnIntoList: 01000000010000000100000001000000
-  shootsAtEnemies: 0
-  basicDirection: 0
-  spreadProjectilesEvenly: 1
-  spreadDegrees: 90
-  leftBulletSpread: 0
-  rightBulletSpread: 0
 --- !u!1001 &7512425785441907623
 PrefabInstance:
   m_ObjectHideFlags: 0

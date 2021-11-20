@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour
 {
+    //[HideInInspector]
+
     public int team = -1;
 
 
@@ -44,4 +46,27 @@ public class TeamUpdater : MonoBehaviour
     {
         return team;
     }
+
+    #region Serialization
+    public void OnBeforeSerialize()
+    {
+        DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
+        if (damageReceiver)
+        {
+            team = damageReceiver.GetTeam();
+            return;
+
+        }
+        BasicProjectileController basicProjectileController = GetComponentInParent<BasicProjectileController>();
+        if (basicProjectileController)
+        {
+            team = basicProjectileController.GetTeam();
+            return;
+        }
+    }
+    public void OnAfterDeserialize()
+    {
+
+    }
+    #endregion
 }

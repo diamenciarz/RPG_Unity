@@ -14,7 +14,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 
     [Header("Gun stats")]
     [SerializeField] float gunBasicDirection;
-    [SerializeField] bool shootsAtTheNearestEnemy;
+    [SerializeField] bool rotatesTowardsTheNearestEnemy = true;
     [SerializeField] float maximumShootingRange = 20f;
     [SerializeField] float maximumRangeFromMouseToShoot = 20f;
 
@@ -23,13 +23,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] float shootingSpread;
     [SerializeField] float timeBetweenEachShootingChain;
 
-    [Header("Each shot")]
-    [SerializeField] bool spreadProjectilesEvenly;
-    [SerializeField] float spreadDegrees;
-    [SerializeField] float leftBulletSpread;
-    [SerializeField] float rightBulletSpread;
-    [SerializeField] protected List<EntityCreator.BulletTypes> projectilesToCreateList;
-    [SerializeField] bool addMySpeedToBulletSpeed;
 
     [Header("Turret stats")]
     [SerializeField] float gunRotationSpeed; //Degrees per second
@@ -43,8 +36,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [Header("Instances")]
     [SerializeField] Transform shootingPoint;
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
-    [SerializeField] GameObject gunReloadingBarPrefab;
-    private ProgressionBarController gunReloadingBarScript;
+    [SerializeField] ShootingController[] shootingControllers;
     [Header("Shooting Zone")]
     [SerializeField] GameObject shootingZonePrefab;
     [SerializeField] Transform shootingZoneTransform;
@@ -52,15 +44,12 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 
     [Header("Mouse Steering")]
     [SerializeField] bool isControlledByMouseCursor;
-    [SerializeField] bool isGunReloadingBarOn;
     [SerializeField] bool isShootingZoneOn;
 
-    [HideInInspector]
     private bool areEnemiesInRange;
     private float lastShotTime;
-    private bool isMyBulletARocket;
-    private float shootingTimeBank;
-    private EntityCreator entityCreator;
+    private float invisibleTargetRotation;
+    private Coroutine randomRotationCoroutine;
 
 
     // Startup
@@ -73,71 +62,66 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 
     private void InitializeStartingVariables()
     {
-        entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
-        shootingTimeBank = 0f;
     }
     private void CallStartingMethods()
     {
-        CheckIfMyBulletIsARocket();
-
         CreateUI();
-
-        StartCoroutine(AttackCoroutine());
-    }
-    private void CheckIfMyBulletIsARocket()
-    {
-        foreach (var item in projectilesToCreateList)
-        {
-            if (entityCreator.IsThisProjectileARocket(item))
-            {
-                isMyBulletARocket = true;
-            }
-        }
     }
     protected void Update()
     {
-        UpdateTimeBank();
         UpdateUI();
 
         LookForTargets();
-        if (shootsAtTheNearestEnemy)
+        Rotate();
+        CheckShooting();
+    }
+    private void Rotate()
+    {
+        if (rotatesTowardsTheNearestEnemy)
         {
-            RotateOneStepTowardsTarget();
+            if (areEnemiesInRange)
+            {
+                StopRandomRotationCoroutine();
+            }
+            else
+            {
+                CreateRandomRotationCoroutine();
+            }
+        }
+        else
+        {
+            CreateRandomRotationCoroutine();
+        }
+        RotateOneStepTowardsTarget();
+    }
+    private void CreateRandomRotationCoroutine()
+    {
+        if (randomRotationCoroutine == null)
+        {
+            randomRotationCoroutine = StartCoroutine(RotateRandomly());
         }
     }
-    private void UpdateTimeBank()
+    private void StopRandomRotationCoroutine()
     {
-        float timeSinceLastShot = Time.time - lastShotTime;
-        float timeToFillMagazine = timeBetweenEachShootingChain + (shotAmount * timeBetweenEachShot) - shootingTimeBank;
-        bool shouldFillAmmo = timeSinceLastShot >= timeToFillMagazine;
-        if (shouldFillAmmo)
+        if (randomRotationCoroutine != null)
         {
-            shootingTimeBank = timeBetweenEachShot * shotAmount;
+            invisibleTargetRotation = GetGunAngle();
+            StopCoroutine(randomRotationCoroutine);
+            randomRotationCoroutine = null;
         }
     }
     private void UpdateUI()
     {
-        UpdateAmmoBar();
         UpdateShootingZone();
-    }
-    private void UpdateAmmoBar()
-    {
-        bool ammoBarExistsAsItShould = isGunReloadingBarOn && (gunReloadingBarScript != null);
-        if (ammoBarExistsAsItShould)
-        {
-            gunReloadingBarScript.UpdateProgressionBar(shootingTimeBank, timeBetweenEachShot * shotAmount);
-        }
-
     }
     private void UpdateShootingZone()
     {
-        bool shootingZoneExistsAsItShould = shootingZoneScript != null && isControlledByMouseCursor;
-        if (shootingZoneExistsAsItShould)
+        if (shootingZoneScript != null)
         {
-            bool mouseButtonIsPressedOutsideOfTheShootingZone = !areEnemiesInRange && Input.GetKey(KeyCode.Mouse0);
-            bool thereIsEnoughAmmoForAShot = shootingTimeBank >= timeBetweenEachShot;
-            if (mouseButtonIsPressedOutsideOfTheShootingZone && thereIsEnoughAmmoForAShot)
+            //bool mouseButtonIsPressedOutsideOfTheShootingZone = !areEnemiesInRange && Input.GetKey(KeyCode.Mouse0);
+            //bool thereIsEnoughAmmoForAShot = true; // shootingTimeBank >= timeBetweenEachShot;
+            if (areEnemiesInRange)
             {
                 //Make the light orange bar show up
                 shootingZoneScript.IsVisible(true);
@@ -151,6 +135,26 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 
 
     //SHOOTING ------------
+    private void CheckShooting()
+    {
+        if (areEnemiesInRange)
+        {
+            if (isControlledByMouseCursor)
+            {
+                if (Input.GetKey(KeyCode.Mouse0))
+                {
+                    SetShoot(true);
+                    return;
+                }
+            }
+            else
+            {
+                SetShoot(true);
+                return;
+            }
+        }
+        SetShoot(false);
+    }
     //----Coroutines
     private IEnumerator AttackCoroutine()
     {
@@ -166,16 +170,14 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             }
 
             yield return LongShotLoop();
+            SetShoot(false);
         }
     }
     public IEnumerator LongShotLoop()
     {
-        if (shootsAtTheNearestEnemy)
+        if (rotatesTowardsTheNearestEnemy)
         {
-            if ((shootingTimeBank) > 0)
-            {
-                ShootOneSalvo();
-            }
+            SetShoot(true);
             yield return new WaitForSeconds(timeBetweenEachShot);
         }
         else
@@ -191,15 +193,24 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
                     yield return new WaitForSeconds(timeBetweenEachShot - timeSinceLastShot);
                 }
 
-                ShootOneSalvo();
+                //ShootOneSalvo();
             }
             yield return new WaitForSeconds(timeBetweenEachShootingChain + timeBetweenEachShot * shotAmount);
         }
     }
+    private void SetShoot(bool shoot)
+    {
+        foreach (var item in shootingControllers)
+        {
+            item.shoot = shoot;
+        }
+    }
+
+    #region CanShoot
     //----Checks
     private void LookForTargets()
     {
-        if (shootsAtTheNearestEnemy)
+        if (rotatesTowardsTheNearestEnemy)
         {
             areEnemiesInRange = CheckForEnemiesOnTheFrontInRange();
         }
@@ -212,7 +223,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (isControlledByMouseCursor)
         {
-
             Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
             return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
@@ -237,11 +247,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
 
-        //Rocket launchers don't shoot at debris
-        if (!isMyBulletARocket)
-        {
-            targetList.AddRange(StaticDataHolder.GetObstacleList());
-        }
+        targetList.AddRange(StaticDataHolder.GetObstacleList());
 
         foreach (var item in targetList)
         {
@@ -252,6 +258,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return false;
     }
+
     //----Helper functions
     private bool CanShootTarget(GameObject target, float range)
     {
@@ -283,7 +290,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (IsPositionInRange(targetPosition, range))
         {
-            float middleZRotation = GetMiddleZRotation();
+            float middleZRotation = GetMiddleAngle();
             Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
             float angleFromUpToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
             float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromUpToItem);
@@ -327,8 +334,9 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return false;
     }
+    #endregion
 
-
+    #region Movement
     //Move gun
     private IEnumerator RotateTowardsUntilDone(int i)
     {
@@ -347,68 +355,184 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private void RotateOneStepTowardsTarget()
     {
-        float degreesToRotateThisFrame = CountDegreesToRotateThisFrame();
-        transform.rotation *= Quaternion.Euler(0, 0, degreesToRotateThisFrame);
+        float degreesToRotateThisFrame = CountAngleToRotateThisFrameBy();
+        RotateBy(degreesToRotateThisFrame);
     }
-    //----Helper functions
-    private float CountDegreesToRotateThisFrame()
+    private IEnumerator RotateRandomly()
     {
-        if (!isControlledByMouseCursor)
+        invisibleTargetRotation = GetGunAngle();
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(1, 4));
+            GenerateNewInvisibleTargetAngle();
+        }
+    }
+    private void GenerateNewInvisibleTargetAngle()
+    {
+        invisibleTargetRotation = Random.Range(-leftMaxRotationLimit, rightMaxRotationLimit);
+        /*
+        while (CountMoveTowardsInvisibleTarget() < 2)
+        {
+            invisibleTargetRotation = Random.Range(-leftMaxRotationLimit, rightMaxRotationLimit);
+        }
+        */
+    }
+    private void RotateBy(float angle)
+    {
+        transform.rotation *= Quaternion.Euler(0, 0, angle);
+    }
+    #endregion
+
+    #region Movement Helper Methods
+    //----Helper functions
+    private float CountAngleToRotateThisFrameBy()
+    {
+        float zMoveAngle = GetTargetAngle();
+        //Clamp by gun rotation speed and frame rate
+        float degreesToRotateThisFrame = Mathf.Clamp(zMoveAngle, -gunRotationSpeed * Time.deltaTime, gunRotationSpeed * Time.deltaTime);
+        return degreesToRotateThisFrame;
+    }
+    private float GetTargetAngle()
+    {
+        if (areEnemiesInRange)
+        {
+            return CountAngleFromDeltaPosition();
+        }
+        else
+        {
+            return CountMoveTowardsInvisibleTarget();
+        }
+    }
+    private float CountAngleFromDeltaPosition()
+    {
+        Vector3 deltaPositionToEnemy;
+        float deltaAngle;
+        if (isControlledByMouseCursor)
+        {
+            deltaPositionToEnemy = GetRelativePositionToMouseVector();
+            deltaAngle = CountAngleFromGunToPosition(deltaPositionToEnemy + transform.position);
+        }
+        else
         {
             theNearestEnemyGameObject = FindTheClosestEnemyInTheFrontInRange();
-        }
+            deltaPositionToEnemy = theNearestEnemyGameObject.transform.position - transform.position;
+            deltaAngle = CountAngleFromGunToPosition(theNearestEnemyGameObject.transform.position);
 
-        if (theNearestEnemyGameObject != null || isControlledByMouseCursor)
-        {
-            //The whole angle to move
-            float zMoveAngle = CountZMoveAngleTowardsTargetPosition();
-            //Clamp to one step this frame
-            return Mathf.Clamp(zMoveAngle, -gunRotationSpeed * Time.deltaTime, gunRotationSpeed * Time.deltaTime);
         }
-        return 0;
-    }
-    private float CountZMoveAngleTowardsTargetPosition()
-    {
-        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
-        Vector3 relativePositionToTarget = GetRelativePositionToTarget();
-
-        //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
-        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionToTarget, Vector3.forward);
-        float zAngleFromGunToItem = Mathf.DeltaAngle(startingRotation.eulerAngles.z, angleFromZeroToItem);
-        float zMoveAngle = zAngleFromGunToItem;
 
         if (hasRotationLimits)
         {
-            zMoveAngle = AdjustZAngleAccordingToBoundaries(zAngleFromGunToItem, relativePositionToTarget);
+            deltaAngle = AdjustZAngleAccordingToBoundaries(deltaAngle, deltaPositionToEnemy);
         }
-        return zMoveAngle;
+        return deltaAngle;
+    }
+    private float CountMoveTowardsInvisibleTarget()
+    {
+        float deltaAngleFromTheMiddle = GetGunAngle() - GetMiddleAngle();
+        float angleFromGunToItem = Mathf.DeltaAngle(deltaAngleFromTheMiddle, invisibleTargetRotation);
+        return angleFromGunToItem;
     }
     private float CountAngleFromGunToPosition(Vector3 targetPosition)
     {
         Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
         float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
-        float zAngleFromGunToItem = angleFromZeroToItem - GetGunRotation();
+        float angleFromGunToItem = angleFromZeroToItem - GetGunAngle();
 
-        if (zAngleFromGunToItem < -180)
+        if (angleFromGunToItem < -180)
         {
-            zAngleFromGunToItem += 360;
+            angleFromGunToItem += 360;
         }
-        return zAngleFromGunToItem;
+        return angleFromGunToItem;
+    }
+    private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 deltaPositionToTarget)
+    {
+        float angleToMove = IfTargetIsOutOfBoundariesSetItToMaxValue(zAngleFromGunToItem, deltaPositionToTarget);
+
+        //If zAngleToMove would cross a boundary, go around it instead
+        angleToMove = GoAroundBoundaries(angleToMove);
+
+        return angleToMove;
+    }
+    private float IfTargetIsOutOfBoundariesSetItToMaxValue(float angleFromGunToItem, Vector3 relativePositionToTarget)
+    {
+        float angleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget + transform.position);
+
+        float middleAngle = GetMiddleAngle();
+        float gunRotation = GetGunAngle();
+
+        if (angleFromMiddleToItem < -rightMaxRotationLimit)
+        {
+            angleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleAngle - rightMaxRotationLimit);
+        }
+        else
+        if (angleFromMiddleToItem > leftMaxRotationLimit)
+        {
+            angleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleAngle + leftMaxRotationLimit);
+        }
+        return angleFromGunToItem;
+    }
+    private float GoAroundBoundaries(float angleToMove)
+    {
+        float middleAngle = GetMiddleAngle();
+        float gunRotation = GetGunAngle();
+
+        if (angleToMove > 0)
+        {
+            float angleFromGunToLeftLimit = Mathf.DeltaAngle(gunRotation, middleAngle + leftMaxRotationLimit);
+            if ((angleFromGunToLeftLimit) >= 0)
+            {
+                if ((angleToMove) > angleFromGunToLeftLimit)
+                {
+                    angleToMove -= 360;
+                }
+            }
+        }
+        if (angleToMove < 0)
+        {
+            float zRotationFromGunToRightLimit = Mathf.DeltaAngle(gunRotation, middleAngle - rightMaxRotationLimit);
+            if (zRotationFromGunToRightLimit <= 0)
+            {
+                if ((angleToMove) < zRotationFromGunToRightLimit)
+                {
+                    angleToMove += 360;
+                }
+            }
+        }
+
+        return angleToMove;
     }
     private float CountAngleFromMiddleToPosition(Vector3 targetPosition)
     {
         Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
         //Wylicza k¹t od aktualnego kierunku do najbli¿szego przeciwnika.
         float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
-        float middleZRotation = GetMiddleZRotation();
-        float zAngleFromMiddleToItem = angleFromZeroToItem - middleZRotation;
+        float middleZRotation = GetMiddleAngle();
+        float angleFromMiddleToItem = angleFromZeroToItem - middleZRotation;
 
-        if (zAngleFromMiddleToItem < -180)
+        if (angleFromMiddleToItem < -180)
         {
-            zAngleFromMiddleToItem += 360;
+            angleFromMiddleToItem += 360;
         }
-        return zAngleFromMiddleToItem;
+        return angleFromMiddleToItem;
     }
+
+
+    private float CountZMoveAngleTowardsTargetPosition()
+    {
+        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
+        Vector3 relativePositionToTarget = GetRelativePositionToTarget();
+
+        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionToTarget, Vector3.forward);
+        float angleFromGunToItem = Mathf.DeltaAngle(startingRotation.eulerAngles.z, angleFromZeroToItem);
+        float moveAngle = angleFromGunToItem;
+
+        if (hasRotationLimits)
+        {
+            moveAngle = AdjustZAngleAccordingToBoundaries(angleFromGunToItem, relativePositionToTarget);
+        }
+        return moveAngle;
+    }
+
     private Vector3 GetRelativePositionToTarget()
     {
         Vector3 relativePositionToTarget;
@@ -423,89 +547,95 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return relativePositionToTarget;
     }
+
     private Vector3 GetRelativePositionToMouseVector()
     {
         Vector3 relativePositionToTarget = StaticDataHolder.GetTranslatedMousePosition(transform.position) - transform.position;
         return relativePositionToTarget;
     }
-    private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
+    #region GetValues
+    private float GetMiddleAngle()
     {
-        float zAngleToMove = IfTargetIsOutOfBoundariesSetItToMaxValue(zAngleFromGunToItem, relativePositionToTarget);
-
-        //If zAngleToMove would cross a boundary, go around it instead
-        zAngleToMove = GoAroundBoundaries(zAngleToMove);
-
-        return zAngleToMove;
+        float middleAngle = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
+        while (middleAngle > 180f)
+        {
+            middleAngle -= 360f;
+        }
+        return middleAngle;
     }
-    private float IfTargetIsOutOfBoundariesSetItToMaxValue(float zAngleFromGunToItem, Vector3 relativePositionToTarget)
-    {
-        float zAngleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget + transform.position);
-
-        float middleZRotation = GetMiddleZRotation();
-        float gunRotation = GetGunRotation();
-
-        if (zAngleFromMiddleToItem < -rightMaxRotationLimit)
-        {
-            zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
-        }
-        else
-        if (zAngleFromMiddleToItem > leftMaxRotationLimit)
-        {
-            zAngleFromGunToItem = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
-        }
-        return zAngleFromGunToItem;
-    }
-    private float GoAroundBoundaries(float zAngleToMove)
-    {
-        float middleZRotation = GetMiddleZRotation();
-        float gunRotation = GetGunRotation();
-
-        if (zAngleToMove > 0)
-        {
-            float zRotationFromGunToLeftLimit = Mathf.DeltaAngle(gunRotation, middleZRotation + leftMaxRotationLimit);
-            if ((zRotationFromGunToLeftLimit) >= 0)
-            {
-                if ((zAngleToMove) > zRotationFromGunToLeftLimit)
-                {
-                    zAngleToMove -= 360;
-                }
-            }
-        }
-        if (zAngleToMove < 0)
-        {
-            float zRotationFromGunToRightLimit = Mathf.DeltaAngle(gunRotation, middleZRotation - rightMaxRotationLimit);
-            if (zRotationFromGunToRightLimit <= 0)
-            {
-                if ((zAngleToMove) < zRotationFromGunToRightLimit)
-                {
-                    zAngleToMove += 360;
-                }
-            }
-        }
-
-        return zAngleToMove;
-    }
-    private float GetMiddleZRotation()
-    {
-        float middleZRotation = parentGameObject.transform.rotation.eulerAngles.z + gunBasicDirection;
-        while (middleZRotation > 180f)
-        {
-            middleZRotation -= 360f;
-        }
-        return middleZRotation;
-    }
-    private float GetGunRotation()
+    private float GetGunAngle()
     {
         Quaternion gunRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
-        float gunZRotation = gunRotation.eulerAngles.z;
+        float gunAngle = gunRotation.eulerAngles.z;
 
-        if (gunZRotation > 180)
+        if (gunAngle > 180)
         {
-            gunZRotation -= 360;
+            gunAngle -= 360;
         }
-        return gunZRotation;
+        return gunAngle;
+    }
+    #endregion
+
+    #endregion
+
+    #region UI
+    //Update states
+    private void UpdateUIState()
+    {
+        if (isControlledByMouseCursor)
+        {
+            CreateUI();
+        }
+        else
+        {
+            DeleteUI();
+        }
+    }
+    private void DeleteUI()
+    {
+        if (shootingZoneScript != null)
+        {
+            Destroy(shootingZoneScript.gameObject);
+        }
     }
 
+    //UI
+    private void CreateUI()
+    {
+        if (isShootingZoneOn && shootingZoneScript == null)
+        {
+            CreateGunShootingZone();
+        }
+    }
+    private void CreateGunShootingZone()
+    {
+        if (shootingZonePrefab != null)
+        {
+            GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
+
+            float xScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.x;
+            float yScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.y;
+            newShootingZoneGo.transform.localScale = new Vector3(xScale, yScale, 1);
+
+            SetupShootingZoneShape(newShootingZoneGo);
+        }
+    }
+    private void SetupShootingZoneShape(GameObject newShootingZoneGo)
+    {
+        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
+        if (hasRotationLimits)
+        {
+            shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
+        }
+        else
+        {
+            shootingZoneScript.UpdateProgressionBar(1, 1);
+        }
+        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+        float shootingZoneRotation = leftMaxRotationLimit;
+        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
+    }
+    #endregion
 
     //Look for targets
     private GameObject FindTheClosestEnemyInTheFrontInRange()
@@ -540,136 +670,10 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return currentClosestEnemy;
     }
-
-
-    //Shoot once
-    private void ShootOneSalvo()
-    {
-        PlayShotSound();
-        CreateNewProjectiles();
-        //Update time bank
-        DecreaseShootingTime();
-    }
-    private void DecreaseShootingTime()
-    {
-        lastShotTime = Time.time;
-        shootingTimeBank -= timeBetweenEachShot;
-    }
-    public void CreateNewProjectiles()
-    {
-        if (projectilesToCreateList.Count != 0)
-        {
-            for (int i = 0; i < projectilesToCreateList.Count; i++)
-            {
-                SingleShotForward(i);
-            }
-        }
-    }
-    private void SingleShotForward(int i)
-    {
-        if (spreadProjectilesEvenly)
-        {
-            SingleShotForwardWithRegularSpread(i);
-        }
-        else
-        {
-            SingleShotForwardWithRandomSpread(i);
-        }
-    }
-    private void SingleShotForwardWithRandomSpread(int index)
-    {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
-
-        newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, parentGameObject);
-    }
-    private void SingleShotForwardWithRegularSpread(int index)
-    {
-        float bulletOffset = (spreadDegrees * (index - (projectilesToCreateList.Count - 1f) / 2));
-        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
-
-        newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, parentGameObject);
-    }
-
-
-    //Sounds
-    private void PlayShotSound()
-    {
-        if (StaticDataHolder.GetSoundCount() <= (StaticDataHolder.GetSoundLimit() - 8))
-        {
-            if (shootingSoundsList.Count != 0)
-            {
-                AudioSource.PlayClipAtPoint(shootingSoundsList[Random.Range(0, shootingSoundsList.Count)], transform.position, shootSoundVolume);
-            }
-        }
-    }
-
-
-    //Update states
-    private void UpdateUIState()
-    {
-        if (isControlledByMouseCursor)
-        {
-            CreateUI();
-        }
-        else
-        {
-            DeleteUI();
-        }
-    }
-    private void DeleteUI()
-    {
-        if (gunReloadingBarScript != null)
-        {
-            Destroy(gunReloadingBarScript.gameObject);
-        }
-
-        if (shootingZoneScript != null)
-        {
-            Destroy(shootingZoneScript.gameObject);
-        }
-    }
-
-    //UI
     public void SetIsControlledByMouseCursorTo(bool isTrue)
     {
         isControlledByMouseCursor = isTrue;
         UpdateUIState();
-    }
-    private void CreateUI()
-    {
-        if (isGunReloadingBarOn && gunReloadingBarScript == null)
-        {
-            CreateGunReloadingBar();
-        }
-        if (isShootingZoneOn && hasRotationLimits && shootingZoneScript == null)
-        {
-            CreateGunShootingZone();
-        }
-    }
-    private void CreateGunReloadingBar()
-    {
-        if (gunReloadingBarPrefab != null)
-        {
-            GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
-            gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
-            gunReloadingBarScript.SetObjectToFollow(gameObject);
-            lastShotTime = Time.time;
-        }
-    }
-    private void CreateGunShootingZone()
-    {
-        if (shootingZonePrefab != null)
-        {
-            GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-
-            float xScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.x;
-            float yScale = GetCurrentRange() / newShootingZoneGo.transform.lossyScale.y;
-            newShootingZoneGo.transform.localScale = new Vector3(xScale, yScale, 1);
-
-            SetupShootingZoneShape(newShootingZoneGo);
-        }
     }
     private float GetCurrentRange()
     {
@@ -682,28 +686,5 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             return maximumShootingRange;
         }
     }
-    private void SetupShootingZoneShape(GameObject newShootingZoneGo)
-    {
-        shootingZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-        shootingZoneScript.UpdateProgressionBar((leftMaxRotationLimit + rightMaxRotationLimit), 360);
-        shootingZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
-        float shootingZoneRotation = leftMaxRotationLimit;
-        shootingZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
-    }
 
-    #region Serialization
-    public void OnBeforeSerialize()
-    {
-        DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
-        if (damageReceiver)
-        {
-            team = damageReceiver.GetTeam();
-        }
-    }
-
-    public void OnAfterDeserialize()
-    {
-
-    }
-    #endregion
 }

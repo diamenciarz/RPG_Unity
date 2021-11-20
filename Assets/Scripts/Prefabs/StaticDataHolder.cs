@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class StaticDataHolder
 {
+    [SerializeField] static AudioClip[] soundArray;
+
     public static List<GameObject> dashableObjectList = new List<GameObject>();
 
     private static List<GameObject> obstacleList = new List<GameObject>();
@@ -203,10 +205,17 @@ public static class StaticDataHolder
         Vector3 returnVector = new Vector3(xStepMove, yStepMove, 0);
         return returnVector.normalized;
     }
-    public static Vector3 GetTranslatedMousePosition(Vector3 position)
+    public static Vector3 GetTranslatedMousePosition(float zCoordinate)
     {
         Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        returnVector.z = position.z;
+        returnVector.z = zCoordinate;
+        return returnVector;
+
+    }
+    public static Vector3 GetTranslatedMousePosition(Vector3 zCoordinateVector)
+    {
+        Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        returnVector.z = zCoordinateVector.z;
         return returnVector;
 
     }
@@ -321,11 +330,28 @@ public static class StaticDataHolder
         inputList.ForEach((item) => returnList.Add(item));
         return returnList;
     }
+    /// <summary>
+    /// maxSoundCount is currently from 1-10. The higher the count, the higher the priority, so more sounds can play in total.
+    /// </summary>
+    /// <param name="sound"></param>
+    /// <param name="soundPosition"></param>
+    /// <param name="volume"></param>
+    public static void TryPlaySound(AudioClip sound, Vector3 soundPosition, float volume,int maxSoundCount)
+    {
+        if (sound != null)
+        {
+            if (GetSoundCount() <= (GetSoundLimit() - GetSoundCount() + maxSoundCount))
+            {
+                AudioSource.PlayClipAtPoint(sound, soundPosition, volume);
+                AddSoundDuration(sound.length);
+}
+        }
+    }
     public static void TryPlaySound(AudioClip sound, Vector3 soundPosition, float volume)
     {
         if (sound != null)
         {
-            if (GetSoundCount() <= (GetSoundLimit() - 4))
+            if (GetSoundCount() <= GetSoundLimit())
             {
                 AudioSource.PlayClipAtPoint(sound, soundPosition, volume);
                 AddSoundDuration(sound.length);

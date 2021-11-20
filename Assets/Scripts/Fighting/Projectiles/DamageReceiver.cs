@@ -103,6 +103,7 @@ public class DamageReceiver : ListUpdater
     }
     #endregion
 
+    #region Collision Handling
     //Break methods
     protected void HandleBreak()
     {
@@ -142,6 +143,7 @@ public class DamageReceiver : ListUpdater
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
     }
+    #endregion
 
     #region Sounds
     protected AudioClip GetHitSound()
@@ -164,6 +166,7 @@ public class DamageReceiver : ListUpdater
     }
     #endregion
 
+    #region UI
     //Other stuff
     public void CreateHealthBar()
     {
@@ -179,6 +182,7 @@ public class DamageReceiver : ListUpdater
         }
         healthBarScript.UpdateProgressionBar(health, maxHP);
     }
+    #endregion
 
     #region Team
     //Set methods

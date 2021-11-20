@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 114496066386386624}
   - component: {fileID: 3186074715888603841}
   - component: {fileID: 1778642163727842126}
-  - component: {fileID: 2636912656255608970}
+  - component: {fileID: 4461451869934177596}
   m_Layer: 6
   m_Name: Player_Blue
   m_TagString: Player
@@ -291,17 +291,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53e72e9ba4e45cf4bab3528c6f197f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  putInLists: 
+  putInLists: 02000000
   team: 1
-  health: 100
-  healthBarPrefab: {fileID: 0}
-  turnHealthBarOn: 0
+  health: 25
+  healthBarPrefab: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
+  turnHealthBarOn: 1
   canBePushed: 0
   breakingSounds: []
   breakingSoundVolume: 1
   hitSounds: []
   hitSoundVolume: 1
---- !u!114 &2636912656255608970
+--- !u!114 &4461451869934177596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -310,10 +310,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6195473770567518804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
+  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  putInLists: 02000000
+  team: 1
+  gameObjectsToTurnIntoList: 01000000010000000100000001000000
+  shootsAtEnemies: 0
+  basicDirection: 0
+  spreadProjectilesEvenly: 1
+  spreadDegrees: 90
+  leftBulletSpread: 0
+  rightBulletSpread: 0
 --- !u!1001 &5390501402348444947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -338,9 +345,17 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shootingPoint
       value: 
       objectReference: {fileID: 2145031471764681487}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isShootingZoneOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: parentGameObject
       value: 
@@ -375,6 +390,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: rotatesTowardsTheNearestEnemy
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
@@ -441,6 +460,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: salvo
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a6c3aa3430480f439354bf5093508c6, type: 2}
     - target: {fileID: 8630683373646473597, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -448,6 +475,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8693045397556622520, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
     - {fileID: 3265342980880550919, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+    - {fileID: 6269684437887618048, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
 --- !u!1 &2705935482099847109 stripped
 GameObject:

@@ -164,11 +164,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  gameObjectsToTurnIntoList: 020000000200000002000000
+  gameObjectsToTurnIntoList: 0200000002000000000000000200000002000000
   shootsAtEnemies: 0
   basicDirection: 0
   spreadProjectilesEvenly: 1
-  spreadDegrees: 15
+  spreadDegrees: 45
   leftBulletSpread: 0
   rightBulletSpread: 0
 --- !u!114 &5411452294418001787
