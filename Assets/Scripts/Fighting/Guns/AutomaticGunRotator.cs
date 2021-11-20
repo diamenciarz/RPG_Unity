@@ -17,12 +17,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] bool rotatesTowardsTheNearestEnemy = true;
     [SerializeField] float maximumShootingRange = 20f;
     [SerializeField] float maximumRangeFromMouseToShoot = 20f;
-
-    [Header("Shooting chain stats")]
-    [SerializeField] int shotAmount;
-    [SerializeField] float shootingSpread;
-    [SerializeField] float timeBetweenEachShootingChain;
-
+    [SerializeField] float deltaTurretRotation = 15f;
 
     [Header("Turret stats")]
     [SerializeField] float gunRotationSpeed; //Degrees per second
@@ -47,7 +42,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] bool isShootingZoneOn;
 
     private bool areEnemiesInRange;
-    private float lastShotTime;
     private float invisibleTargetRotation;
     private Coroutine randomRotationCoroutine;
 
@@ -62,7 +56,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
 
     private void InitializeStartingVariables()
     {
-        lastShotTime = Time.time;
+
     }
     private void CallStartingMethods()
     {
@@ -154,49 +148,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             }
         }
         SetShoot(false);
-    }
-    //----Coroutines
-    private IEnumerator AttackCoroutine()
-    {
-        while (true)
-        {
-            if (isControlledByMouseCursor)
-            {
-                yield return new WaitUntil(() => (areEnemiesInRange == true) && Input.GetKey(KeyCode.Mouse0));
-            }
-            else
-            {
-                yield return new WaitUntil(() => (areEnemiesInRange == true));
-            }
-
-            yield return LongShotLoop();
-            SetShoot(false);
-        }
-    }
-    public IEnumerator LongShotLoop()
-    {
-        if (rotatesTowardsTheNearestEnemy)
-        {
-            SetShoot(true);
-            yield return new WaitForSeconds(timeBetweenEachShot);
-        }
-        else
-        {
-            for (int i = 0; i < shotAmount; i++)
-            {
-                //Slowly rotates towards new position
-                yield return RotateTowardsUntilDone(i);
-                //If rotated faster than next shot delay, then waits
-                float timeSinceLastShot = Time.time - lastShotTime;
-                if (timeSinceLastShot < timeBetweenEachShot)
-                {
-                    yield return new WaitForSeconds(timeBetweenEachShot - timeSinceLastShot);
-                }
-
-                //ShootOneSalvo();
-            }
-            yield return new WaitForSeconds(timeBetweenEachShootingChain + timeBetweenEachShot * shotAmount);
-        }
     }
     private void SetShoot(bool shoot)
     {
@@ -342,7 +293,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         const int STEPS_PER_SECOND = 30;
         //Counts the target rotation
-        float gunRotationOffset = (shootingSpread * i);
+        float gunRotationOffset = (deltaTurretRotation * i);
         //Ustawia rotacjê, na pocz¹tkow¹ rotacjê startow¹
         Quaternion targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + gunBasicDirection + parentGameObject.transform.rotation.eulerAngles.z);
         while (transform.rotation != targetRotation)
@@ -514,38 +465,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             angleFromMiddleToItem += 360;
         }
         return angleFromMiddleToItem;
-    }
-
-
-    private float CountZMoveAngleTowardsTargetPosition()
-    {
-        Quaternion startingRotation = transform.rotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
-        Vector3 relativePositionToTarget = GetRelativePositionToTarget();
-
-        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionToTarget, Vector3.forward);
-        float angleFromGunToItem = Mathf.DeltaAngle(startingRotation.eulerAngles.z, angleFromZeroToItem);
-        float moveAngle = angleFromGunToItem;
-
-        if (hasRotationLimits)
-        {
-            moveAngle = AdjustZAngleAccordingToBoundaries(angleFromGunToItem, relativePositionToTarget);
-        }
-        return moveAngle;
-    }
-
-    private Vector3 GetRelativePositionToTarget()
-    {
-        Vector3 relativePositionToTarget;
-        if (isControlledByMouseCursor)
-        {
-            relativePositionToTarget = GetRelativePositionToMouseVector();
-        }
-        else
-        {
-            relativePositionToTarget = theNearestEnemyGameObject.transform.position - transform.position;
-            relativePositionToTarget.z = 0;
-        }
-        return relativePositionToTarget;
     }
 
     private Vector3 GetRelativePositionToMouseVector()

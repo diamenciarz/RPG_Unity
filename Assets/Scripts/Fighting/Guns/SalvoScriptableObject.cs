@@ -6,7 +6,8 @@ using UnityEngine;
 public class SalvoScriptableObject : ScriptableObject, ISerializationCallbackReceiver
 {
     public SingleShotScriptableObject[] shots;
-    public float[] delayAfterEachShot;
+    public List<float> delayAfterEachShot;
+    public List<float> reloadDelays;
 
     public float additionalReloadTime;
 
@@ -18,7 +19,22 @@ public class SalvoScriptableObject : ScriptableObject, ISerializationCallbackRec
 
     public void OnBeforeSerialize()
     {
-
+        if (delayAfterEachShot.Count < shots.Length)
+        {
+            delayAfterEachShot.Add(0);
+        }
+        if (reloadDelays.Count < shots.Length)
+        {
+            reloadDelays.Add(0);
+        }
+        if (reloadDelays.Count > shots.Length)
+        {
+            reloadDelays.RemoveAt(reloadDelays.Count -1);
+        }
+        if (delayAfterEachShot.Count > shots.Length)
+        {
+            delayAfterEachShot.RemoveAt(delayAfterEachShot.Count - 1);
+        }
     }
     #endregion
 }

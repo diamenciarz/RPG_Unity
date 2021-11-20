@@ -25,10 +25,10 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     private ProgressionBarController gunReloadingBarScript;
     private EntityCreator entityCreator;
     private SingleShotScriptableObject currentShotSO;
-    private float shootingTimeBank;
-    private float currentTimeBetweenEachShot;
+    public float shootingTimeBank;
+    public float currentTimeBetweenEachShot;
     private float lastShotTime;
-    private int shotIndex;
+    public int shotIndex;
     private bool canShoot;
     private int shotAmount;
 
@@ -43,7 +43,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
         parentGameObject = gameObject.transform.parent.gameObject;
         entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
-        shootingTimeBank = 0f;
+        shootingTimeBank = GetSalvoTimeSum();
         shotAmount = salvo.shots.Length;
         canShoot = true;
         shotIndex = 0;
@@ -69,7 +69,6 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
                 DoOneShot(shotIndex);
                 canShoot = false;
                 StartCoroutine(WaitForNextShotCooldown(shotIndex));
-                //
                 shotIndex++;
                 UpdateTimeBetweenEachShot();
             }
@@ -101,10 +100,11 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     {
         if (shotIndex > 0)
         {
-            float previousShotDelay = salvo.delayAfterEachShot[shotIndex - 1];
+            float previousShotDelay = salvo.reloadDelays[shotIndex - 1];
             float reloadCooldown = salvo.additionalReloadTime + previousShotDelay;
             float timeSinceLastShot = Time.time - lastShotTime;
-            if (timeSinceLastShot >= reloadCooldown && (shotIndex > 0))
+
+            if ((timeSinceLastShot >= reloadCooldown) && (shotIndex > 0))
             {
                 shootingTimeBank += previousShotDelay;
                 shotIndex--;
@@ -115,8 +115,8 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     }
     IEnumerator WaitForNextShotCooldown(int index)
     {
-        index = ClampInputIndex(index);
-        yield return new WaitForSeconds(salvo.delayAfterEachShot[index]);
+        float delay = salvo.delayAfterEachShot[index];
+        yield return new WaitForSeconds(delay);
         canShoot = true;
     }
     IEnumerator ShootSalvo()
@@ -172,7 +172,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
         float bulletOffset = (currentShotSO.spreadDegrees * (index - (currentShotSO.projectilesToCreateList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
 
-        newBulletRotation *= transform.rotation * Quaternion.Euler(0,0, basicGunRotation);
+        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
         //Parent game object should be the owner of the gun
         entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, gameObject);
     }
@@ -194,7 +194,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     public float GetSalvoTimeSum()
     {
         float timeSum = 0;
-        foreach (var item in salvo.delayAfterEachShot)
+        foreach (var item in salvo.reloadDelays)
         {
             timeSum += item;
         }
@@ -213,7 +213,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
 
         for (int i = 0; i < amount; i++)
         {
-            timeSum += salvo.delayAfterEachShot[i];
+            timeSum += salvo.reloadDelays[i];
         }
         return timeSum;
     }
@@ -238,9 +238,9 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     }
     private void UpdateTimeBetweenEachShot()
     {
-        if (shotIndex < salvo.delayAfterEachShot.Length)
+        if (shotIndex < salvo.reloadDelays.Count)
         {
-            currentTimeBetweenEachShot = salvo.delayAfterEachShot[shotIndex];
+            currentTimeBetweenEachShot = salvo.reloadDelays[shotIndex];
         }
         else
         {
