@@ -225,6 +225,18 @@ public static class StaticDataHolder
     {
         Vector3 deltaPosition = GetFromToVectorIn2D(firstPosition, secondPosition);
 
+        if (deltaPosition.x == 0)
+        {
+            if (deltaPosition.y >= 0)
+            {
+                return Quaternion.Euler(0,0,90);
+            }
+            else
+            {
+                return Quaternion.Euler(0,0,-90);
+            }
+        }
+
         float ratio = deltaPosition.y / deltaPosition.x;
         float zRotation = Mathf.Rad2Deg * Mathf.Atan(ratio);
 

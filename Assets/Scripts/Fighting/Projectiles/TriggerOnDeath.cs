@@ -16,7 +16,6 @@ public class TriggerOnDeath : TeamUpdater
     [SerializeField] protected float rightBulletSpread;
 
     
-    private ICollidingEntityData entityData;
     protected EntityCreator entityCreator;
     private bool isDestroyed;
 
@@ -24,7 +23,6 @@ public class TriggerOnDeath : TeamUpdater
     private void Start()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
-        entityData = GetComponent<ICollidingEntityData>();
     }
 
 

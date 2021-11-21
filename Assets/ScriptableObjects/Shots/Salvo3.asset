@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: Salvo3
   m_EditorClassIdentifier: 
   shots:
-  - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
+  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
   - {fileID: 11400000, guid: 7316fcd2ef34fa949804ead99678a42f, type: 2}
   - {fileID: 11400000, guid: 7316fcd2ef34fa949804ead99678a42f, type: 2}
   - {fileID: 11400000, guid: 3a3cb1f76348b324fb33364ea2535af1, type: 2}
   delayAfterEachShot:
   - 0.5
   - 0.2
-  - 0.2
+  - 0.5
   - 1
+  reloadDelays:
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
   additionalReloadTime: 2

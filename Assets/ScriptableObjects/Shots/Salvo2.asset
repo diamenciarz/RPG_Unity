@@ -22,4 +22,9 @@ MonoBehaviour:
   - 0.2
   - 0.2
   - 1
+  reloadDelays:
+  - 0.3
+  - 0.3
+  - 0.5
+  - 1
   additionalReloadTime: 2

@@ -83,6 +83,8 @@ public class PlayerMovement : MonoBehaviour
     {
         return new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
     }
+
+    #region Dash
     private void CheckDash()
     {
         if (canDash && !isDashing)
@@ -134,6 +136,8 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
         EventManager.TriggerEvent("UpdateDashIcon", true);
     }
+    #endregion
+
     private void RotateTowardsMouseCursor()
     {
         Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
@@ -142,7 +146,6 @@ public class PlayerMovement : MonoBehaviour
         newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
         transform.rotation = newRotation;
     }
-
 
     //Collision handling
     private void OnTriggerEnter2D(Collider2D collision)

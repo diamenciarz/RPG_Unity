@@ -137,6 +137,9 @@ MonoBehaviour:
   isControlledByMouseCursor: 1
   isGunReloadingBarOn: 1
   shoot: 0
+  shootingTimeBank: 0
+  currentTimeBetweenEachShot: 0
+  shotIndex: 0
 --- !u!1 &7725359952001599400
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,8 +181,9 @@ GameObject:
   - component: {fileID: 7005096668549435608}
   - component: {fileID: 4689928297431880230}
   - component: {fileID: 3265342980880550919}
-  - component: {fileID: -3073141782379355119}
   - component: {fileID: 6269684437887618048}
+  - component: {fileID: 7021969156245597980}
+  - component: {fileID: 6493010151437119125}
   m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
@@ -271,27 +275,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.13
---- !u!50 &-3073141782379355119
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8017394203629097686}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 2
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &6269684437887618048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +297,47 @@ MonoBehaviour:
   breakingSoundVolume: 1
   hitSounds: []
   hitSoundVolume: 1
+--- !u!114 &7021969156245597980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017394203629097686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: -1
+  gameObjectsToTurnIntoList: 02000000020000000200000002000000
+  shootsAtEnemies: 0
+  basicDirection: 0
+  spreadProjectilesEvenly: 0
+  spreadDegrees: 90
+  leftBulletSpread: 0
+  rightBulletSpread: 0
+--- !u!50 &6493010151437119125
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017394203629097686}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 2
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &8630683373646473597
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,9 +389,7 @@ MonoBehaviour:
   rotatesTowardsTheNearestEnemy: 1
   maximumShootingRange: 10
   maximumRangeFromMouseToShoot: 5
-  shotAmount: 3
-  shootingSpread: 0
-  timeBetweenEachShootingChain: 1
+  deltaTurretRotation: 15
   gunRotationSpeed: 120
   timeBetweenEachShot: 0.3
   hasRotationLimits: 1
