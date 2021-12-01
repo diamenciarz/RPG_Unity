@@ -129,7 +129,6 @@ public class ProgressionBarController : MonoBehaviour
         if (colorAlfa != alfa)
         {
             float changeThisFrame = originalAlfa * Time.deltaTime / hideOverTime;
-            Debug.Log("Change this frame: "+ changeThisFrame);
             colorAlfa = Mathf.MoveTowards(colorAlfa, alfa, changeThisFrame);
 
             Color newColor = currentColor;

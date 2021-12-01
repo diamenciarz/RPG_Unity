@@ -140,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void RotateTowardsMouseCursor()
     {
-        Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+        Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
         Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, mousePosition);
 
         newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);

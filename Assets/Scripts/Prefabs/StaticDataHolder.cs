@@ -185,6 +185,13 @@ public static class StaticDataHolder
 
         return (targetPosition - myPositionVector);
     }
+    public static Vector3 GetDeltaPositionFromToIn2D(Vector3 myPositionVector, Vector3 targetPosition)
+    {
+        myPositionVector.z = 0;
+        targetPosition.z = 0;
+
+        return (targetPosition - myPositionVector);
+    }
     public static Vector3 GetFromToVectorIn2D(Vector3 firstPosition, Vector3 secondPosition)
     {
         firstPosition.z = 0;
@@ -212,7 +219,7 @@ public static class StaticDataHolder
         return returnVector;
 
     }
-    public static Vector3 GetTranslatedMousePosition(Vector3 zCoordinateVector)
+    public static Vector3 GetTranslatedMousePositionIn2D(Vector3 zCoordinateVector)
     {
         Vector3 returnVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         returnVector.z = zCoordinateVector.z;

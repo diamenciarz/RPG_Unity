@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{0D01BF4A-5440-84ED-6602-8D39AE7BE85C}</ProjectGuid>
+    <ProjectGuid>{0BC8F935-A675-DD00-B5E7-F3D57357489B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Unity.2D.IK.Editor</AssemblyName>
+    <AssemblyName>PackageToolsEditor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -56,17 +56,12 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\IKEditorManager.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Inspectors\CCDSolver2DEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Inspectors\IKManager2DEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Inspectors\LimbSolver2DEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\IKGizmos.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Inspectors\Solver2DEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Inspectors\FabrikSolver2DEditor.cs" />
+    <Compile Include="Assets\Packages\AstarPathfindingProject\PackageTools\Editor\EditorBase.cs" />
+    <Compile Include="Assets\Packages\AstarPathfindingProject\PackageTools\Editor\EnumFlagDrawer.cs" />
+    <Compile Include="Assets\Packages\AstarPathfindingProject\PackageTools\Editor\EditorGUIx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\com.unity.2d.animation@6.0.5\IK\Editor\Unity.2D.IK.Editor.asmdef" />
+    <None Include="Assets\Packages\AstarPathfindingProject\PackageTools\Editor\PackageToolsEditor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -680,29 +675,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Unity.InternalAPIEditorBridge.001.csproj">
-      <Project>{EAF24FB5-D15E-EA06-804F-A9835A97AE98}</Project>
-      <Name>Unity.InternalAPIEditorBridge.001</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.InternalAPIEngineBridge.001.csproj">
-      <Project>{6469652D-D443-7115-73C4-A054FE4B0BC7}</Project>
-      <Name>Unity.InternalAPIEngineBridge.001</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Common.Editor.csproj">
-      <Project>{134D9B62-AF07-6574-410F-E91D3758CADB}</Project>
-      <Name>Unity.2D.Common.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Common.Runtime.csproj">
-      <Project>{F3A06E89-FFF8-664E-341F-82DC04AEB9BF}</Project>
-      <Name>Unity.2D.Common.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.IK.Runtime.csproj">
-      <Project>{DB76EAA0-D0FE-4975-A174-A66541274565}</Project>
-      <Name>Unity.2D.IK.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Animation.Editor.csproj">
-      <Project>{37DD7C70-4869-A1FF-C073-6644036DF9A0}</Project>
-      <Name>Unity.2D.Animation.Editor</Name>
+    <ProjectReference Include="AstarPathfindingProject.csproj">
+      <Project>{5F605F95-2F08-81CF-9BEC-121F8B8F68B6}</Project>
+      <Name>AstarPathfindingProject</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{2A558AD0-A73C-4D6A-D03B-87ECEE2B988F}</Project>

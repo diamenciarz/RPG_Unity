@@ -102,8 +102,8 @@
     <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\IMGUI\GUIFramework\CommandAction.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\EditablePath\EditablePathExtensions.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\IMGUI\GUIFramework\LayoutData.cs" />
-    <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\EditablePath\ControlPoint.cs" />
     <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\IMGUI\GUIFramework\GUISystem.cs" />
+    <Compile Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\EditablePath\ControlPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.2d.path@5.0.0\Editor\Unity.2D.Path.Editor.asmdef" />
@@ -354,6 +354,9 @@
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.9.0\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+      <HintPath>Assets\Packages\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.9.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>

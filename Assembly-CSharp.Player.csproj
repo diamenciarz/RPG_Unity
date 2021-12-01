@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Inventory\StaticInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemDatabaseObject.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\OnCollisionBreak.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\ActionNode.cs" />
     <Compile Include="Assets\Scripts\Player\MovingIconController.cs" />
@@ -335,6 +336,9 @@
     </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.20f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+      <HintPath>Assets\Packages\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="clipper_library">
       <HintPath>Library\PackageCache\com.unity.cinemachine@2.7.8\Runtime\ThirdParty\clipper_library.dll</HintPath>
@@ -725,6 +729,10 @@
     <ProjectReference Include="Cinemachine.csproj">
       <Project>{748590E4-F4BE-77BB-E5CD-2C0909D3A7B5}</Project>
       <Name>Cinemachine</Name>
+    </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProject.csproj">
+      <Project>{5F605F95-2F08-81CF-9BEC-121F8B8F68B6}</Project>
+      <Name>AstarPathfindingProject</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Animation.Triangle.Runtime.csproj">
       <Project>{D2847408-9B6F-F88D-7636-1C0E13269227}</Project>

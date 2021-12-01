@@ -64,8 +64,8 @@
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\bool2.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\float4x4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int3.gen.cs" />
-    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\Noise\common.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\uint4x4.gen.cs" />
+    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\Noise\common.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int4x2.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\half2.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\bool3x2.gen.cs" />
@@ -94,8 +94,8 @@
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\Noise\classicnoise4D.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\math.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\double4x3.gen.cs" />
-    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int4x4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\double2.gen.cs" />
+    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int4x4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\double2x3.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int3x4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\Noise\cellular2D.cs" />
@@ -128,9 +128,9 @@
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\float2x4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\double4.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\Properties\AssemblyInfo.cs" />
-    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\math_unity_conversion.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\float2x2.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int3x3.gen.cs" />
+    <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\math_unity_conversion.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\bool4x2.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\bool3x3.gen.cs" />
     <Compile Include="Library\PackageCache\com.unity.mathematics@1.2.1\Unity.Mathematics\int4x3.gen.cs" />
@@ -343,6 +343,9 @@
     </Reference>
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.20f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+      <HintPath>Assets\Packages\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="clipper_library">
       <HintPath>Library\PackageCache\com.unity.cinemachine@2.7.8\Runtime\ThirdParty\clipper_library.dll</HintPath>

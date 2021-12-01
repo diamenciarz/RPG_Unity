@@ -26,7 +26,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] bool hasRotationLimits;
     [SerializeField] float leftMaxRotationLimit;
     [SerializeField] float rightMaxRotationLimit;
-    [SerializeField] float gunTextureRotationOffset = 180f;
+    [Tooltip("The delta rotation of the gun sprite to an enemy's position")]
+    [SerializeField] float gunTextureRotationOffset = -90f;
 
     [Header("Instances")]
     [SerializeField] Transform shootingPoint;
@@ -46,6 +47,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     private static bool debugZoneOn = true;
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
+    private bool lastRotationLimitValue;
 
 
     // Startup
@@ -91,6 +93,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         RotateOneStepTowardsTarget();
     }
+
+    #region RandomRotation
     private void CreateRandomRotationCoroutine()
     {
         if (randomRotationCoroutine == null)
@@ -108,6 +112,29 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             randomRotationCoroutine = null;
         }
     }
+    private IEnumerator RotateRandomly()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(3, 8));
+            if (!areEnemiesInRange)
+            {
+                GenerateNewInvisibleTargetAngle();
+            }
+        }
+    }
+    private void GenerateNewInvisibleTargetAngle()
+    {
+        invisibleTargetRotation = Random.Range(-leftMaxRotationLimit, rightMaxRotationLimit);
+    }
+    private float CountMoveTowardsInvisibleTarget()
+    {
+        float deltaAngleFromTheMiddle = GetGunDeltaAngleFromTheMiddle();
+        float angleFromGunToItem = Mathf.DeltaAngle(deltaAngleFromTheMiddle, invisibleTargetRotation);
+        return angleFromGunToItem;
+    }
+    #endregion
+
     private void UpdateUI()
     {
         UpdateUIState();
@@ -161,7 +188,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
             return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
         else
@@ -173,7 +200,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePosition(transform.position);
+            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
             return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
         else
@@ -229,7 +256,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         if (IsPositionInRange(targetPosition, range))
         {
             float middleZRotation = GetMiddleAngle();
-            Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+            Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(targetPosition, transform.position);
             float angleFromUpToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
             float zAngleFromMiddleToItem = Mathf.DeltaAngle(middleZRotation, angleFromUpToItem);
 
@@ -243,7 +270,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private bool IsPositionInRange(Vector3 targetPosition, float range)
     {
-        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
+        Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(targetPosition, transform.position);
         bool canShoot = range > relativePositionFromGunToItem.magnitude || range == 0;
         if (canShoot)
         {
@@ -296,27 +323,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         float degreesToRotateThisFrame = CountAngleToRotateThisFrameBy();
         RotateBy(degreesToRotateThisFrame);
     }
-    private IEnumerator RotateRandomly()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(3, 8));
-            if (!areEnemiesInRange)
-            {
-                GenerateNewInvisibleTargetAngle();
-            }
-        }
-    }
-    private void GenerateNewInvisibleTargetAngle()
-    {
-        invisibleTargetRotation = Random.Range(-leftMaxRotationLimit, rightMaxRotationLimit);
-        /*
-        while (CountMoveTowardsInvisibleTarget() < 2)
-        {
-            invisibleTargetRotation = Random.Range(-leftMaxRotationLimit, rightMaxRotationLimit);
-        }
-        */
-    }
+
     private void RotateBy(float angle)
     {
         transform.rotation *= Quaternion.Euler(0, 0, angle);
@@ -336,125 +343,83 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (areEnemiesInRange)
         {
-            return CountAngleFromDeltaPosition();
+            return CountEnemyTargetAngle();
         }
         else
         {
             return CountMoveTowardsInvisibleTarget();
         }
     }
-    private float CountAngleFromDeltaPosition()
+    private float CountEnemyTargetAngle()
     {
-        Vector3 deltaPositionToEnemy;
-        float deltaAngle;
+        float deltaAngle = CountDeltaAngleToEnemy();
+
+        if (hasRotationLimits)
+        {
+            deltaAngle = AdjustZAngleAccordingToBoundaries(deltaAngle, CountDeltaPositionToEnemy());
+            Debug.Log("Gun to left limit: " + CountAngleFromGunToLeftLimit());
+        }
+
+        UpdateDebugZone(GetGunAngleFromZero(), GetGunAngleFromZero() + deltaAngle);
+        return deltaAngle;
+    }
+    private float CountDeltaAngleToEnemy()
+    {
         if (isControlledByMouseCursor)
         {
-            deltaPositionToEnemy = GetRelativePositionToMouseVector();
-            deltaAngle = CountAngleFromGunToPosition(deltaPositionToEnemy + transform.position);
+            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
+            return CountAngleFromGunToPosition(mousePosition);
         }
         else
         {
             theNearestEnemyGameObject = FindTheClosestEnemyInTheFrontInRange();
-            deltaAngle = CountAngleFromGunToPosition(theNearestEnemyGameObject.transform.position);
+            return CountAngleFromGunToPosition(theNearestEnemyGameObject.transform.position);
         }
-        //Delta angle // <-360;360>
-        if (hasRotationLimits)
-        {
-            //deltaAngle = AdjustZAngleAccordingToBoundaries(deltaAngle, deltaPositionToEnemy);
-        }
-        UpdateDebugZone(GetGunAngle(), GetGunAngle() + deltaAngle);
-        return deltaAngle;
     }
-    private float CountMoveTowardsInvisibleTarget()
+    private Vector3 CountDeltaPositionToEnemy()
     {
-        float deltaAngleFromTheMiddle = GetGunDeltaAngleFromTheMiddle();
-        float angleFromGunToItem = Mathf.DeltaAngle(deltaAngleFromTheMiddle, invisibleTargetRotation);
-        return angleFromGunToItem;
+        if (isControlledByMouseCursor)
+        {
+            return GetRelativePositionToMouseVector();
+        }
+        else
+        {
+            Vector3 relativePositionToEnemy = StaticDataHolder.GetDeltaPositionFromToIn2D(theNearestEnemyGameObject.transform.position, transform.position);
+            return relativePositionToEnemy;
+        }
     }
+
     private float CountAngleFromGunToPosition(Vector3 targetPosition)
     {
-        Vector3 relativePositionFromGunToItem = targetPosition - transform.position;
-        relativePositionFromGunToItem.z = 0;
+        Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(targetPosition, transform.position);
 
-        float angleFromZeroToItem = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetPosition).eulerAngles.z;
-        float angleFromGunToItem = Mathf.DeltaAngle(GetGunAngle(), angleFromZeroToItem);
-        //Debug.Log("Delta angle from gun to item : " + angleFromGunToItem);
+        float angleFromZeroToItem = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetPosition).eulerAngles.z + gunTextureRotationOffset;
+        float angleFromGunToItem = Mathf.DeltaAngle(GetGunAngleFromZero(), angleFromZeroToItem);
         return angleFromGunToItem;
     }
     private float AdjustZAngleAccordingToBoundaries(float zAngleFromGunToItem, Vector3 deltaPositionToTarget)
     {
-        //Would only work, if the gun could see targets outside of its rotation limit
-        float angleToMove = IfTargetIsOutOfBoundariesSetItToMaxValue(zAngleFromGunToItem, deltaPositionToTarget);
+        float angleToMove = zAngleFromGunToItem;
+        //Should only work, if the gun can see targets outside of its rotation limit
+        angleToMove = IfTargetIsOutOfBoundariesSetItToMaxValue(zAngleFromGunToItem, deltaPositionToTarget);
 
         //If angleToMove would cross a boundary, go around it instead
-        angleToMove = GoAroundBoundaries(angleToMove);
+        //angleToMove = GoAroundBoundaries(angleToMove);
         return angleToMove;
     }
     private float IfTargetIsOutOfBoundariesSetItToMaxValue(float angleFromGunToItem, Vector3 relativePositionToTarget)
     {
         float angleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionToTarget); // <-180;180>
-
-        float middleAngle = GetMiddleAngle(); // <-180;180>
-        float gunAngle = GetGunAngle(); // <-180;180>
-
-        if (angleFromMiddleToItem <= -rightMaxRotationLimit)
+        if (angleFromGunToItem <= -rightMaxRotationLimit)
         {
-            Debug.Log("Set angle to right limit");
-            angleFromGunToItem = Mathf.DeltaAngle(gunAngle, middleAngle - rightMaxRotationLimit);
+            angleFromGunToItem = -rightMaxRotationLimit - angleFromMiddleToItem;
         }
         else
-        if (angleFromMiddleToItem >= leftMaxRotationLimit)
+        if (angleFromGunToItem >= leftMaxRotationLimit)
         {
-            Debug.Log("Set angle to left limit");
-            angleFromGunToItem = Mathf.DeltaAngle(gunAngle, middleAngle + leftMaxRotationLimit);
+            angleFromGunToItem = leftMaxRotationLimit - angleFromMiddleToItem;
         }
         return angleFromGunToItem;
-    }
-    private float GoAroundBoundaries(float angleToMove)
-    {
-        if (angleToMove > 0)
-        {
-            return GoAroundLeftBoundary(angleToMove);
-        }
-        if (angleToMove < 0)
-        {
-            return GoAroundRightBoundary(angleToMove);
-        }
-        return angleToMove;
-    }
-    private float GoAroundLeftBoundary(float angleToMove)
-    {
-        float angleFromGunToLeftLimit = CountAngleFromGunToLeftLimit();
-        if (angleFromGunToLeftLimit > 0)
-        {
-            if (angleToMove > angleFromGunToLeftLimit)
-            {
-                Debug.Log("Went around left boundary");
-                return (angleToMove - 360);
-            }
-        }
-        return angleToMove;
-    }
-    private float GoAroundRightBoundary(float angleToMove)
-    {
-        float angleFromGunToRightLimit = CountAngleFromGunToRightLimit();
-        if (angleFromGunToRightLimit < 0)
-        {
-            if (angleToMove < angleFromGunToRightLimit)
-            {
-                Debug.Log("Went around right boundary");
-                return (angleToMove + 360);
-            }
-        }
-        return angleToMove;
-    }
-    private float CountAngleFromGunToRightLimit()
-    {
-        return Mathf.DeltaAngle(GetGunAngle(), GetMiddleAngle() - rightMaxRotationLimit);
-    }
-    private float CountAngleFromGunToLeftLimit()
-    {
-        return Mathf.DeltaAngle(GetGunAngle(), GetMiddleAngle() + leftMaxRotationLimit);
     }
     private float CountAngleFromMiddleToPosition(Vector3 targetPosition)
     {
@@ -470,16 +435,77 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return angleFromMiddleToItem;
     }
-
+    #region Go Around Boundaries
+    private float GoAroundBoundaries(float angleToMove)
+    {
+        if (angleToMove > 0)
+        {
+            return GoAroundLeftBoundary(angleToMove);
+        }
+        if (angleToMove < 0)
+        {
+            return GoAroundRightBoundary(angleToMove);
+        }
+        return angleToMove;
+    }
+    private float GoAroundLeftBoundary(float angleToMove)
+    {
+        float angleFromGunToLeftLimit = CountAngleFromGunToLeftLimit();
+        Debug.Log("From gun to left limit: " + angleFromGunToLeftLimit);
+        if (angleFromGunToLeftLimit > 0)
+        {
+            if (angleToMove >= angleFromGunToLeftLimit)
+            {
+                return (angleToMove - 360);
+            }
+        }
+        return angleToMove;
+    }
+    private float GoAroundRightBoundary(float angleToMove)
+    {
+        float angleFromGunToRightLimit = CountAngleFromGunToRightLimit();
+        Debug.Log("From gun to right limit: " + angleFromGunToRightLimit);
+        if (angleFromGunToRightLimit < 0)
+        {
+            if (angleToMove <= angleFromGunToRightLimit)
+            {
+                return (angleToMove + 360);
+            }
+        }
+        return angleToMove;
+    }
+    private float CountAngleFromGunToLeftLimit()
+    {
+        float angleFromGunToLeftLimit = (GetMiddleAngle() + leftMaxRotationLimit) - (GetGunAngleFromZero());
+        if (angleFromGunToLeftLimit > 360)
+        {
+            angleFromGunToLeftLimit -= 360;
+        }
+        return angleFromGunToLeftLimit;
+        //return Mathf.DeltaAngle(GetGunAngle() - gunTextureRotationOffset, GetMiddleAngle() + leftMaxRotationLimit);
+    }
+    private float CountAngleFromGunToRightLimit()
+    {
+        float angleFromGunToRightLimit = (GetMiddleAngle() - rightMaxRotationLimit) - (GetGunAngleFromZero());
+        if (angleFromGunToRightLimit < -360)
+        {
+            angleFromGunToRightLimit += 360;
+        }
+        return angleFromGunToRightLimit;
+        //return Mathf.DeltaAngle(GetGunAngle() - gunTextureRotationOffset, GetMiddleAngle() - rightMaxRotationLimit);
+    }
+    #endregion
     private Vector3 GetRelativePositionToMouseVector()
     {
-        Vector3 relativePositionToTarget = StaticDataHolder.GetTranslatedMousePosition(transform.position) - transform.position;
+        Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
+            
+        Vector3 relativePositionToTarget = StaticDataHolder.GetDeltaPositionFromToIn2D(mousePosition, transform.position);
         return relativePositionToTarget;
     }
     #region GetValues
     private float GetGunDeltaAngleFromTheMiddle()
     {
-        return GetGunAngle() - GetMiddleAngle();
+        return GetGunAngleFromZero() - GetMiddleAngle();
     }
     private float GetMiddleAngle()
     {
@@ -494,14 +520,16 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return middleAngle;
     }
-    private float GetGunAngle()
+    private float GetGunAngleFromZero()
     {
-        Quaternion gunRotation = transform.localRotation * Quaternion.Euler(0, 0, -gunTextureRotationOffset);
+        Quaternion gunRotation = transform.rotation; //* Quaternion.Euler(0, 0, gunTextureRotationOffset);
         float gunAngle = gunRotation.eulerAngles.z;
+        
         if (gunAngle > 180)
         {
             gunAngle -= 360;
         }
+        
         return gunAngle;
     }
     #endregion
@@ -512,18 +540,19 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     //Update states
     private void UpdateDebugZone(float startAngle, float endAngle)
     {
+        float parentAngle = parentGameObject.transform.rotation.eulerAngles.z;
         float angleSize = startAngle - endAngle;
         //Debug.Log(startAngle + ", " + endAngle);
         if (angleSize < 0)
         {
             debugZoneScript.UpdateProgressionBar(-angleSize, 360);
-            float shootingZoneRotation = endAngle;
+            float shootingZoneRotation = endAngle - parentAngle - gunTextureRotationOffset;
             debugZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
         }
         else
         {
             debugZoneScript.UpdateProgressionBar(angleSize, 360);
-            float shootingZoneRotation = startAngle;
+            float shootingZoneRotation = startAngle - parentAngle - gunTextureRotationOffset;
             debugZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
         }
 
@@ -557,8 +586,15 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         {
             CreateDebugZone();
         }
+        if (lastRotationLimitValue != hasRotationLimits)
+        {
+            lastRotationLimitValue = hasRotationLimits;
+            DeleteGunShootingZone();
+            CreateGunShootingZone();
+        }
     }
     #endregion
+
     #region Create/Destroy UI
     //UI
     private void CreateDebugZone()

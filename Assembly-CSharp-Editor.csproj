@@ -305,6 +305,9 @@
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.9.0\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+      <HintPath>Assets\Packages\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.9.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
@@ -719,6 +722,10 @@
       <Project>{A91B0CAF-CADE-22BE-E330-728E39EB748C}</Project>
       <Name>Unity.Timeline</Name>
     </ProjectReference>
+    <ProjectReference Include="PackageToolsEditor.csproj">
+      <Project>{0BC8F935-A675-DD00-B5E7-F3D57357489B}</Project>
+      <Name>PackageToolsEditor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
       <Project>{547CD652-35FE-5744-7987-ED9586608E07}</Project>
       <Name>Unity.TextMeshPro</Name>
@@ -783,6 +790,10 @@
       <Project>{DA5F96D9-A037-4129-F4A0-24D54F9C485C}</Project>
       <Name>com.unity.cinemachine.editor</Name>
     </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProject.csproj">
+      <Project>{5F605F95-2F08-81CF-9BEC-121F8B8F68B6}</Project>
+      <Name>AstarPathfindingProject</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.2D.Animation.Triangle.Runtime.csproj">
       <Project>{D2847408-9B6F-F88D-7636-1C0E13269227}</Project>
       <Name>Unity.2D.Animation.Triangle.Runtime</Name>
@@ -810,6 +821,10 @@
     <ProjectReference Include="Unity.2D.Common.Runtime.csproj">
       <Project>{F3A06E89-FFF8-664E-341F-82DC04AEB9BF}</Project>
       <Name>Unity.2D.Common.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
+      <Project>{C0B21C86-1D46-C368-BE17-FD3FD55640C6}</Project>
+      <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.SpriteShape.Editor.csproj">
       <Project>{9D5475A4-2E15-F008-93EC-6C6450E48C1F}</Project>

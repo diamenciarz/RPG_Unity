@@ -11,8 +11,9 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] GameObject parentGameObject;
     [SerializeField] GameObject gunReloadingBarPrefab;
     [Header("Settings")]
-    [Tooltip("True - the gun waits the full time to reload all ammo at once. False - the ammo reolads slowly")]
+    [Tooltip("True - the gun waits the full time to reload all ammo at once. False - the ammo reolads gradually")]
     public bool reloadAllAtOnce;
+    [Tooltip("The direction of bullets coming out of the gun pipe")]
     [SerializeField] float basicGunRotation;
     [Header("Mouse Steering")]
     [SerializeField] bool isControlledByMouseCursor;
