@@ -291,6 +291,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 443922278}
     m_Modifications:
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2126861151389459072, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -11312,7 +11320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: salvo
@@ -11842,6 +11850,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 443922278}
     m_Modifications:
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2126861151389459072, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -35209,6 +35225,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 443922278}
     m_Modifications:
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666056466725876461, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: putInLists.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2126861151389459072, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -35256,6 +35280,10 @@ PrefabInstance:
     - target: {fileID: 2126861151389459075, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
       propertyPath: m_Name
       value: Bush (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2126861151389459075, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab3c42751b1155241b3df5e98f5836d6, type: 3}
@@ -57070,7 +57098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: leftMaxRotationLimit
-      value: 120
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
@@ -57078,7 +57106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightMaxRotationLimit
-      value: 120
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: gunTextureRotationOffset
@@ -57086,7 +57114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: isControlledByMouseCursor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumRangeFromMouseToShoot
@@ -57425,7 +57453,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: salvo
@@ -58619,7 +58647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: salvo
@@ -58673,6 +58701,14 @@ PrefabInstance:
     - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: health
       value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: putInLists.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778642163727842126, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: putInLists.Array.data[1]
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2705935482099847109, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_IsActive

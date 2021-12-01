@@ -19,18 +19,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
   - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
   - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
+  - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
+  - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
   delayAfterEachShot:
-  - 0.5
-  - 0.4
   - 0.3
   - 0.2
+  - 0.2
   - 0.1
-  - 0.05
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0
   reloadDelays:
+  - 0.4
   - 0.2
   - 0.2
   - 0.2
-  - 0.2
+  - 0.1
+  - 0.1
   - 0.1
   - 0.1
   additionalReloadTime: 2

@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2126861151389459072}
   - component: {fileID: 2126861151389459086}
   - component: {fileID: 2126861151389459073}
-  - component: {fileID: 2126861151389459087}
-  m_Layer: 7
+  - component: {fileID: 1666056466725876461}
+  - component: {fileID: 4861561774547078375}
+  m_Layer: 0
   m_Name: Small Bush
-  m_TagString: Dashable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,7 +119,7 @@ PolygonCollider2D:
       - {x: 0.5, y: -0.390625}
       - {x: 0.5, y: 0.421875}
       - {x: 0.4375, y: 0.5}
---- !u!114 &2126861151389459087
+--- !u!114 &1666056466725876461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,6 +128,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2126861151389459075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53ba9bed16b9e724d9369d2f5e887b52, type: 3}
+  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  putInLists: 04000000
+--- !u!114 &4861561774547078375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126861151389459075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94b7a1e725af4b4f8aa7819f922fcd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowingEffect: 0.4

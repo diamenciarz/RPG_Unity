@@ -25,6 +25,10 @@ public class ListUpdater : MonoBehaviour
     {
         RemoveObjectFromLists();
     }
+    protected void OnDestroy()
+    {
+        RemoveObjectFromLists();
+    }
 
 
     //Modify lists
@@ -72,6 +76,18 @@ public class ListUpdater : MonoBehaviour
         if (putInLists.Contains(AddToLists.DashableObject))
         {
             StaticDataHolder.RemoveDashableObject(gameObject);
+        }
+    }
+
+    public bool ListContains(AddToLists element)
+    {
+        if (putInLists.Contains(element))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

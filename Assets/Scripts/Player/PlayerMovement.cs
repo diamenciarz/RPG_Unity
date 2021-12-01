@@ -61,21 +61,13 @@ public class PlayerMovement : MonoBehaviour
     }
     private void AdjustMovementSpeed()
     {
-        if (StaticDataHolder.IsCollidingWithABush())
-        {
-            playerSpeed = defaultPlayerSpeed * bushSpeedModifier;
-        }
-        else
-        {
-            playerSpeed = defaultPlayerSpeed;
-        }
+        playerSpeed = defaultPlayerSpeed * StaticDataHolder.GetHighestSlowEffect();
     }
     private void UpdateVelocity()
     {
         Vector3 inputVector = GetInputVector();
-        const float rangeMultiplier = 2.6f; //Scales dash range to one map unit
-        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashLength;
-        Vector2 newVelocity = (inputVector * playerSpeed) + dashVector;
+        
+        Vector2 newVelocity = (inputVector * playerSpeed) + CountDashVector();
 
         myRigidbody2D.velocity = newVelocity;
     }
@@ -85,6 +77,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #region Dash
+    private Vector3 CountDashVector()
+    {
+        const float rangeMultiplier = 2.6f; //Scales dash range to one map unit
+        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashLength;
+        return dashVector;
+    }
     private void CheckDash()
     {
         if (canDash && !isDashing)

@@ -5,13 +5,13 @@ using UnityEngine;
 public class OnCollisionBreak : TeamUpdater
 {
     [Header("Collision Settings")]
-    public List<BreaksImmediatelyOnContactWith> breakEnum = new List<BreaksImmediatelyOnContactWith>();
+    public List<BreaksOn> breakEnum = new List<BreaksOn>();
 
     [Header("Sounds")]
     [SerializeField] protected List<AudioClip> breakingSounds;
     [SerializeField] [Range(0, 1)] protected float breakingSoundVolume = 1f;
 
-    public enum BreaksImmediatelyOnContactWith
+    public enum BreaksOn
     {
         Allies,
         Enemies,
@@ -76,21 +76,28 @@ public class OnCollisionBreak : TeamUpdater
 
     #region Break Checks
     private bool BreaksOnObstacle(GameObject collisionObject)
-    { 
-        return (collisionObject.tag == "Obstacle") && BreaksOnContactWith(BreaksImmediatelyOnContactWith.Obstacles);
+    {
+        bool isAnObstacle = false;
+        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
+        if (listUpdater)
+        {
+            isAnObstacle = listUpdater.ListContains(ListUpdater.AddToLists.Obstacle);
+        }
+        isAnObstacle = isAnObstacle || collisionObject.tag == "Obstacle";
+        return isAnObstacle && BreaksOnContactWith(BreaksOn.Obstacles);
     }
     private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
     {
-        bool isAProjectile = IsObjectAProjectile(collisionObject);
         bool areTeamsEqual = team == GetObjectTeam(collisionObject);
+
         //Debug.Log("Is a projectile: "+ IsObjectAProjectile(collisionObject));
         //Debug.Log("Team: "+ GetObjectTeam(collisionObject));
         bool breaksOnAlly = false;
         if (Time.time - creationTime > 0.1f || !isARocket)
         {
-            breaksOnAlly = areTeamsEqual && !isAProjectile && BreaksOnContactWith(BreaksImmediatelyOnContactWith.Allies);
+            breaksOnAlly = areTeamsEqual && IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
         }
-        bool breaksOnEnemy = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Enemies) && !isAProjectile && !areTeamsEqual;
+        bool breaksOnEnemy = BreaksOnContactWith(BreaksOn.Enemies) && IsObjectAnEntity(collisionObject) && !areTeamsEqual;
         return (breaksOnAlly || breaksOnEnemy);
     }
     private bool IsObjectAProjectile(GameObject collisionObject)
@@ -103,9 +110,18 @@ public class OnCollisionBreak : TeamUpdater
         }
         return isAProjectile;
     }
+    private bool IsObjectAnEntity(GameObject collisionObject)
+    {
+        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
+        if (listUpdater)
+        {
+            return listUpdater.ListContains(ListUpdater.AddToLists.Entity);
+        }
+        return false;
+    }
     private int GetObjectTeam(GameObject collisionObject)
     {
-        int returnTeam = -1;
+        int returnTeam = -2;
         DamageReceiver damageReceiver = collisionObject.GetComponentInChildren<DamageReceiver>();
         if (damageReceiver)
         {
@@ -135,22 +151,22 @@ public class OnCollisionBreak : TeamUpdater
         int collisionTeam = iDamage.GetTeam();
         bool areTeamsEqual = collisionTeam == team;
 
-        bool breaksOnAllyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && areTeamsEqual;
+        bool breaksOnAllyBullet = BreaksOnContactWith(BreaksOn.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && areTeamsEqual;
         if (breaksOnAllyBullet)
         {
             return true;
         }
-        bool breaksOnEnemyBullet = BreaksOnContactWith(BreaksImmediatelyOnContactWith.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && !areTeamsEqual;
+        bool breaksOnEnemyBullet = BreaksOnContactWith(BreaksOn.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && !areTeamsEqual;
         if (breaksOnEnemyBullet)
         {
             return true;
         }
-        bool breaksOnExplosion = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Explosions) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Explosion);
+        bool breaksOnExplosion = BreaksOnContactWith(BreaksOn.Explosions) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Explosion);
         if (breaksOnExplosion)
         {
             return true;
         }
-        bool breaksOnRocket = BreaksOnContactWith(BreaksImmediatelyOnContactWith.Rockets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Rocket);
+        bool breaksOnRocket = BreaksOnContactWith(BreaksOn.Rockets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Rocket);
         if (breaksOnRocket)
         {
             return true;
@@ -206,7 +222,7 @@ public class OnCollisionBreak : TeamUpdater
 
 
     //Accessor methods
-    public bool BreaksOnContactWith(BreaksImmediatelyOnContactWith contact)
+    public bool BreaksOnContactWith(BreaksOn contact)
     {
         if (breakEnum.Contains(contact))
         {

@@ -130,19 +130,25 @@ public static class StaticDataHolder
     {
         return CloneList(objectsCollidingWithPlayerList);
     }
-    public static bool IsCollidingWithABush()
+    public static float GetHighestSlowEffect()
     {
         if (objectsCollidingWithPlayerList.Count != 0)
         {
+            float maxSlowEffect = 1;
             foreach (GameObject item in objectsCollidingWithPlayerList)
             {
-                if (item.tag == "Dashable")
+                EntityProperties entityProperties = item.GetComponent<EntityProperties>();
+                if (entityProperties)
                 {
-                    return true;
+                    if (entityProperties.slowingEffect < maxSlowEffect)
+                    {
+                        maxSlowEffect = entityProperties.slowingEffect;
+                    }
                 }
             }
+            return maxSlowEffect;
         }
-        return false;
+        return 1;
     }
 
     //Sound list methods
