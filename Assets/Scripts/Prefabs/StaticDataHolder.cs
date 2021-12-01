@@ -259,6 +259,12 @@ public static class StaticDataHolder
         return returnRotation;
     }
 
+    public static float GetDeltaAngleFromZeroToPosition(Vector3 myPosition, Vector3 targetPosition)
+    {
+        Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(myPosition, targetPosition);
+        float angleFromZeroToItem = Vector3.SignedAngle(Vector3.up, relativePositionFromGunToItem, Vector3.forward);
+        return angleFromZeroToItem;
+    }
 
 
     //Find the closest entities

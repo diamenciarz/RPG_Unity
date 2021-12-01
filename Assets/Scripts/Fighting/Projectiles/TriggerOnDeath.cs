@@ -111,7 +111,7 @@ public class TriggerOnDeath : TeamUpdater
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
         Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
-        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
+        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
@@ -120,7 +120,7 @@ public class TriggerOnDeath : TeamUpdater
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
-        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(gameObject.transform.position, shootAtPosition);
+        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
