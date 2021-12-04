@@ -64,7 +64,7 @@ public class MovingIconController : MonoBehaviour
         {
             Vector3 myPosition = gameObject.transform.position;
             Vector3 otherPosition = objectToFollow.transform.position;
-            gameObject.transform.rotation = StaticDataHolder.GetRotationFromToIn2D(myPosition, otherPosition);
+            gameObject.transform.rotation = HelperMethods.RotationFromTo(myPosition, otherPosition);
         }
     }
     private void UpdatePosition()

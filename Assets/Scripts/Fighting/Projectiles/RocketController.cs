@@ -66,7 +66,7 @@ public class RocketController : BasicProjectileController
         {
             if (targetGameObject == null)
             {
-                targetGameObject = StaticDataHolder.GetTheNearestEnemy(transform.position, team);
+                targetGameObject = StaticDataHolder.GetNearestEnemy(transform.position, team);
             }
         }
     }
@@ -79,7 +79,7 @@ public class RocketController : BasicProjectileController
     }
     private void UpdateSpeed()
     {
-        Vector2 newVelocity = StaticDataHolder.GetDirectionVectorNormalized(zRotation) * currentRocketSpeed;
+        Vector2 newVelocity = HelperMethods.DirectionVectorNormalized(zRotation) * currentRocketSpeed;
         SetVelocityVector(newVelocity);
     }
     private void TurnTowardsTarget()
@@ -87,7 +87,7 @@ public class RocketController : BasicProjectileController
         if (targetGameObject != null)
         {
             const int DELTA_ROTATION = -90; //I don't understand, why it's necessary. Something is programmed wrong, but this fixes it
-            Quaternion targetRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetGameObject.transform.position) * Quaternion.Euler(0, 0, DELTA_ROTATION);
+            Quaternion targetRotation = HelperMethods.RotationFromTo(transform.position, targetGameObject.transform.position) * Quaternion.Euler(0, 0, DELTA_ROTATION);
             Quaternion newRotation = Quaternion.RotateTowards(transform.rotation * GetRocketSpriteCounterRotation(), targetRotation, rocketRotationSpeed * Time.deltaTime);
             //Debug.DrawRay(transform.position, StaticDataHolder.GetFromToVectorIn2D(transform.position, targetGameObject.transform.position), Color.red, 0.1f);
             zRotation = newRotation.eulerAngles.z;

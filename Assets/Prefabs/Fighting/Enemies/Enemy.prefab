@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -941003956043371612}
   - component: {fileID: 54129496}
   - component: {fileID: 374548467}
+  - component: {fileID: 9056610446592022234}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -128,7 +129,7 @@ MonoBehaviour:
   repathRateCompatibility: NaN
   canSearchCompability: 0
   orientation: 1
-  enableRotation: 1
+  enableRotation: 0
   autoRepath:
     mode: 2
     interval: 0.5
@@ -138,9 +139,9 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 720
-  slowdownDistance: 0.6
+  slowdownDistance: 1.2
   pickNextWaypointDist: 0.1
-  endReachedDistance: 0.2
+  endReachedDistance: 0.8
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 0
   whenCloseToDestination: 0
@@ -181,6 +182,18 @@ MonoBehaviour:
   breakingSoundVolume: 1
   hitSounds: []
   hitSoundVolume: 1
+--- !u!114 &9056610446592022234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600636572777390012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c91b68ce49a78f144b09987ea4d6b6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8145874865722057385
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,15 +289,23 @@ PrefabInstance:
       value: -0.095
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: isShootingZoneOn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: leftMaxRotationLimit
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: maximumShootingRange
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: rightMaxRotationLimit
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: maximumRangeFromMouseToShoot
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7005096668549435608, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}

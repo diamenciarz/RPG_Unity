@@ -110,14 +110,14 @@ public class DamageReceiver : ListUpdater
         if (!isDestroyed)
         {
             isDestroyed = true;
-            StaticDataHolder.TryPlaySound(GetBreakSound(), transform.position, breakingSoundVolume);
+            StaticDataHolder.PlaySound(GetBreakSound(), transform.position, breakingSoundVolume);
 
             DestroyObject();
         }
     }
     protected void HandleHit()
     {
-        StaticDataHolder.TryPlaySound(GetHitSound(), transform.position, hitSoundVolume);
+        StaticDataHolder.PlaySound(GetHitSound(), transform.position, hitSoundVolume);
     }
     //Destroy game object methods
     public void DestroyObject()

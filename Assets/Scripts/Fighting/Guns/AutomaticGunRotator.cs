@@ -15,7 +15,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [Header("Gun stats")]
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
-    [SerializeField] bool rotatesTowardsTheNearestEnemy = true;
     [SerializeField] float maximumShootingRange = 5f;
     [SerializeField] float maximumRangeFromMouseToShoot = 5f;
 
@@ -41,7 +40,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] bool isControlledByMouseCursor;
     [SerializeField] bool isShootingZoneOn;
 
-    private bool areEnemiesInRange;
+    private bool areTargetsInRange;
     public float invisibleTargetRotation;
     private static bool debugZoneOn = true;
     private Coroutine randomRotationCoroutine;
@@ -75,16 +74,9 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private void Rotate()
     {
-        if (rotatesTowardsTheNearestEnemy)
+        if (areTargetsInRange)
         {
-            if (areEnemiesInRange)
-            {
-                StopRandomRotationCoroutine();
-            }
-            else
-            {
-                CreateRandomRotationCoroutine();
-            }
+            StopRandomRotationCoroutine();
         }
         else
         {
@@ -116,7 +108,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(3, 8));
-            if (!areEnemiesInRange)
+            if (!areTargetsInRange)
             {
                 GenerateNewInvisibleTargetAngle();
             }
@@ -144,7 +136,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     //SHOOTING ------------
     private void CheckShooting()
     {
-        if (areEnemiesInRange)
+        if (areTargetsInRange)
         {
             if (isControlledByMouseCursor)
             {
@@ -174,32 +166,13 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     //----Checks
     private void LookForTargets()
     {
-        if (rotatesTowardsTheNearestEnemy)
-        {
-            areEnemiesInRange = CheckForEnemiesOnTheFrontInRange();
-        }
-        else
-        {
-            areEnemiesInRange = CheckForTargetsInRange();
-        }
+        areTargetsInRange = AreTargetsInRange();
     }
-    private bool CheckForEnemiesOnTheFrontInRange()
+    private bool AreTargetsInRange()
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
-            return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
-        }
-        else
-        {
-            return IsAnyEnemyInRange();
-        }
-    }
-    private bool CheckForTargetsInRange()
-    {
-        if (isControlledByMouseCursor)
-        {
-            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
+            Vector3 mousePosition = HelperMethods.TranslatedMousePosition(transform.position);
             return CanShootMouse(mousePosition, maximumRangeFromMouseToShoot);
         }
         else
@@ -209,7 +182,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private bool IsAnyEnemyInRange()
     {
-        List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
+        List<GameObject> targetList = StaticDataHolder.GetEnemyList(team);
 
         targetList.AddRange(StaticDataHolder.GetObstacleList());
 
@@ -255,7 +228,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (IsPositionInRange(targetPosition, range))
         {
-            float angleFromZeroToItem = StaticDataHolder.GetDeltaAngleFromZeroToPosition(transform.position, targetPosition);
+            float angleFromZeroToItem = HelperMethods.AngleFromUpToPosition(transform.position, targetPosition);
             float angleFromMiddleToItem = Mathf.DeltaAngle(GetMiddleAngle(), angleFromZeroToItem);
 
             bool isCursorInCone = angleFromMiddleToItem > -(rightMaxRotationLimit) && angleFromMiddleToItem < (leftMaxRotationLimit);
@@ -268,7 +241,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private bool IsPositionInRange(Vector3 targetPosition, float range)
     {
-        Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(transform.position, targetPosition);
+        Vector3 relativePositionFromGunToItem = HelperMethods.DeltaPosition(transform.position, targetPosition);
         bool canShoot = range > relativePositionFromGunToItem.magnitude || range == 0;
         if (canShoot)
         {
@@ -322,7 +295,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private float GetTargetAngle()
     {
-        if (areEnemiesInRange)
+        if (areTargetsInRange)
         {
             return CountEnemyTargetAngle();
         }
@@ -348,7 +321,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (isControlledByMouseCursor)
         {
-            Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
+            Vector3 mousePosition = HelperMethods.TranslatedMousePosition(transform.position);
             return CountAngleFromGunToEnemyPosition(mousePosition);
         }
         else
@@ -359,13 +332,14 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private float CountAngleFromGunToPosition(Vector3 targetPosition)
     {
-        float angleFromZeroToItem = StaticDataHolder.GetRotationFromToIn2D(transform.position, targetPosition).eulerAngles.z + gunTextureRotationOffset;
+        float angleFromZeroToItem = HelperMethods.RotationFromTo(transform.position, targetPosition).eulerAngles.z + gunTextureRotationOffset;
         float angleFromGunToItem = Mathf.DeltaAngle(GetGunAngle(), angleFromZeroToItem);
 
         return angleFromGunToItem;
     }
-    private float CountAngleFromGunToEnemyPosition(Vector3 targetPosition){
-        Vector3 relativePositionFromGunToItem = StaticDataHolder.GetDeltaPositionFromToIn2D(transform.position, targetPosition);
+    private float CountAngleFromGunToEnemyPosition(Vector3 targetPosition)
+    {
+        Vector3 relativePositionFromGunToItem = HelperMethods.DeltaPosition(transform.position, targetPosition);
         float angleFromMiddleToItem = CountAngleFromMiddleToPosition(relativePositionFromGunToItem);
         if (hasRotationLimits)
         {
@@ -382,7 +356,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         {
             angleFromMiddleToItem = -rightMaxRotationLimit;
         }
-        if (angleFromMiddleToItem> leftMaxRotationLimit)
+        if (angleFromMiddleToItem > leftMaxRotationLimit)
         {
             angleFromMiddleToItem = leftMaxRotationLimit;
         }
@@ -452,7 +426,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private float CountAngleFromGunToRightLimit()
     {
-        float angleFromGunToRightLimit = - (rightMaxRotationLimit + GetGunDeltaMiddleAngle());
+        float angleFromGunToRightLimit = -(rightMaxRotationLimit + GetGunDeltaMiddleAngle());
         if (angleFromGunToRightLimit < -180)
         {
             angleFromGunToRightLimit += 360;
@@ -533,7 +507,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     {
         if (shootingZoneScript != null)
         {
-            if (areEnemiesInRange)
+            if (areTargetsInRange)
             {
                 //Make the light orange bar show up
                 shootingZoneScript.IsVisible(true);
@@ -624,7 +598,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     //Look for targets
     private GameObject FindTheClosestEnemyInTheFrontInRange()
     {
-        List<GameObject> targetList = StaticDataHolder.GetMyEnemyList(team);
+        List<GameObject> targetList = StaticDataHolder.GetEnemyList(team);
 
         targetList.AddRange(StaticDataHolder.GetObstacleList());
         if (targetList.Count == 0)

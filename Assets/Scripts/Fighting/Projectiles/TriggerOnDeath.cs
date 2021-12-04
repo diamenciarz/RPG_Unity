@@ -45,7 +45,7 @@ public class TriggerOnDeath : TeamUpdater
 
                 if (shootsAtEnemies == true)
                 {
-                    GameObject targetGO = StaticDataHolder.GetTheNearestEnemy(transform.position, team);
+                    GameObject targetGO = StaticDataHolder.GetNearestEnemy(transform.position, team);
                     if (targetGO != null)
                     {
                         ShootAtTarget(targetGO.transform.position, i);
@@ -95,7 +95,7 @@ public class TriggerOnDeath : TeamUpdater
     }
     private void ShootOnceForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
+        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
@@ -110,8 +110,8 @@ public class TriggerOnDeath : TeamUpdater
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(leftBulletSpread, rightBulletSpread);
-        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(transform.position, shootAtPosition);
+        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        Quaternion rotationToTarget = HelperMethods.RotationFromTo(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
@@ -120,7 +120,7 @@ public class TriggerOnDeath : TeamUpdater
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
-        Quaternion rotationToTarget = StaticDataHolder.GetRotationFromToIn2D(transform.position, shootAtPosition);
+        Quaternion rotationToTarget = HelperMethods.RotationFromTo(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);

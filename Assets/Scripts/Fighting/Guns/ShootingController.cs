@@ -163,7 +163,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     }
     private void SingleShotForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = StaticDataHolder.GetRandomRotationInRangeZ(currentShotSO.leftBulletSpread, currentShotSO.rightBulletSpread);
+        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(currentShotSO.leftBulletSpread, currentShotSO.rightBulletSpread);
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
         entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, gameObject);
@@ -186,7 +186,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
         if (currentShotSO.shotSounds.Length != 0)
         {
             AudioClip sound = currentShotSO.shotSounds[Random.Range(0, currentShotSO.shotSounds.Length)];
-            StaticDataHolder.TryPlaySound(sound, transform.position, currentShotSO.shotSoundVolume);
+            StaticDataHolder.PlaySound(sound, transform.position, currentShotSO.shotSoundVolume);
         }
     }
     #endregion

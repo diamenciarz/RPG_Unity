@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float defaultPlayerSpeed = 10f;
-    [SerializeField] float bushSpeedModifier = 0.4f;
     [SerializeField] float dashCooldown = 1f;
     [SerializeField] float dashLength = 2f;
     public float dashRange = 3f;
@@ -117,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
     private void DashThroughObject(GameObject dashGO)
     {
         isDashing = true;
-        dashDirection = StaticDataHolder.GetDeltaPositionFromToIn2D(gameObject, dashGO).normalized;
+        dashDirection = HelperMethods.DeltaPosition(gameObject, dashGO).normalized;
         dashCoroutine = StartCoroutine(DashCoroutine());
     }
     private IEnumerator DashCoroutine()
@@ -138,8 +137,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void RotateTowardsMouseCursor()
     {
-        Vector3 mousePosition = StaticDataHolder.GetTranslatedMousePositionIn2D(transform.position);
-        Quaternion newRotation = StaticDataHolder.GetRotationFromToIn2D(transform.position, mousePosition);
+        Vector3 mousePosition = HelperMethods.TranslatedMousePosition(transform.position);
+        Quaternion newRotation = HelperMethods.RotationFromTo(transform.position, mousePosition);
 
         newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
         transform.rotation = newRotation;

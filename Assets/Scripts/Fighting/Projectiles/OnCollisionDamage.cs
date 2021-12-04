@@ -129,7 +129,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     }
     public Vector3 GetPushVector()
     {
-        return StaticDataHolder.GetDirectionVector(pushingPower, transform.rotation.eulerAngles.z);
+        return HelperMethods.DirectionVector(pushingPower, transform.rotation.eulerAngles.z);
     }
 
 }

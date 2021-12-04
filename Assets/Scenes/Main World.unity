@@ -11211,6 +11211,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6664170954889180255, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: shotAmount
       value: 3
       objectReference: {fileID: 0}
@@ -11368,6 +11372,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8021823894982714015, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
@@ -58777,6 +58785,10 @@ PrefabInstance:
     - target: {fileID: 2710557999228141452, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: reloadAllAtOnce
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710557999228141452, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: isGunReloadingBarOn
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3151925768770941455, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: team

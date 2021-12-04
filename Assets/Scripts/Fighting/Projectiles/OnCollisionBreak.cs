@@ -181,7 +181,7 @@ public class OnCollisionBreak : TeamUpdater
         if (!isDestroyed)
         {
             isDestroyed = true;
-            StaticDataHolder.TryPlaySound(GetBreakSound(), transform.position, breakingSoundVolume);
+            StaticDataHolder.PlaySound(GetBreakSound(), transform.position, breakingSoundVolume);
 
             DestroyObject();
         }

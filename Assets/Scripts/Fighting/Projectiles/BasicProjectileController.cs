@@ -26,7 +26,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     }
     protected virtual void Start()
     {
-        SetVelocityVector(StaticDataHolder.GetDirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
+        SetVelocityVector(HelperMethods.DirectionVector(startingSpeed, transform.rotation.eulerAngles.z));
         SetSpriteAccordingToTeam();
     }
     private void SetupStartingValues()
