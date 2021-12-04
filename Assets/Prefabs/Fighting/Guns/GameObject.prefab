@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3262107606098936230}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7005096668549435608}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6275599121277092949
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,8 +134,8 @@ MonoBehaviour:
   gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
   reloadAllAtOnce: 1
   basicGunRotation: 180
-  isControlledByMouseCursor: 1
-  isGunReloadingBarOn: 1
+  isControlledByMouseCursor: 0
+  isGunReloadingBarOn: 0
   shoot: 0
   shootingTimeBank: 0
   currentTimeBetweenEachShot: 0
@@ -385,13 +385,11 @@ MonoBehaviour:
   team: 2
   shootingSoundsList: []
   shootSoundVolume: 0
-  gunBasicDirection: 0
+  basicGunDirection: 0
   rotatesTowardsTheNearestEnemy: 1
-  maximumShootingRange: 10
+  maximumShootingRange: 5
   maximumRangeFromMouseToShoot: 5
-  deltaTurretRotation: 15
   gunRotationSpeed: 120
-  timeBetweenEachShot: 0.3
   hasRotationLimits: 1
   leftMaxRotationLimit: 90
   rightMaxRotationLimit: 90
@@ -404,3 +402,4 @@ MonoBehaviour:
   shootingZoneTransform: {fileID: 7371173148479189348}
   isControlledByMouseCursor: 0
   isShootingZoneOn: 1
+  invisibleTargetRotation: 0

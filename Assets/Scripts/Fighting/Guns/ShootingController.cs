@@ -16,7 +16,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     [Tooltip("The direction of bullets coming out of the gun pipe")]
     [SerializeField] float basicGunRotation;
     [Header("Mouse Steering")]
-    [SerializeField] bool isControlledByMouseCursor;
+    bool isControlledByMouseCursor;
     [SerializeField] bool isGunReloadingBarOn;
 
     //The gun tries to shoot, if this is set to true
@@ -52,7 +52,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     }
     public void CallStartingMethods()
     {
-        CreateUI();
+        UpdateUIState();
     }
     protected void Update()
     {
@@ -254,7 +254,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     //Update states
     private void UpdateUIState()
     {
-        if (isControlledByMouseCursor)
+        if (isControlledByMouseCursor || isGunReloadingBarOn)
         {
             CreateUI();
         }
@@ -263,20 +263,18 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
             DeleteUI();
         }
     }
-    private void DeleteUI()
-    {
-        if (gunReloadingBarScript != null && !isGunReloadingBarOn)
-        {
-            Destroy(gunReloadingBarScript.gameObject);
-        }
-    }
-
-    //UI
     private void CreateUI()
     {
-        if (isGunReloadingBarOn && gunReloadingBarScript == null)
+        if (gunReloadingBarScript == null)
         {
             CreateGunReloadingBar();
+        }
+    }
+    private void DeleteUI()
+    {
+        if (gunReloadingBarScript != null)
+        {
+            Destroy(gunReloadingBarScript.gameObject);
         }
     }
     private void CreateGunReloadingBar()

@@ -16,9 +16,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
     [SerializeField] bool rotatesTowardsTheNearestEnemy = true;
-    [SerializeField] float maximumShootingRange = 20f;
-    [SerializeField] float maximumRangeFromMouseToShoot = 20f;
-    [SerializeField] float deltaTurretRotation = 15f;
+    [SerializeField] float maximumShootingRange = 5f;
+    [SerializeField] float maximumRangeFromMouseToShoot = 5f;
 
     [Header("Turret stats")]
     [Tooltip("In degrees per second")]
@@ -301,22 +300,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     #endregion
 
     #region Movement
-    //Move gun
-    private IEnumerator RotateTowardsUntilDone(int i)
-    {
-        const int STEPS_PER_SECOND = 30;
-        //Counts the target rotation
-        float gunRotationOffset = (deltaTurretRotation * i);
-        //Ustawia rotacjê, na pocz¹tkow¹ rotacjê startow¹
-        Quaternion targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + basicGunDirection + parentGameObject.transform.rotation.eulerAngles.z);
-        while (transform.rotation != targetRotation)
-        {
-            targetRotation = Quaternion.Euler(0, 0, gunRotationOffset + basicGunDirection + parentGameObject.transform.rotation.eulerAngles.z);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, gunRotationSpeed / STEPS_PER_SECOND);
-
-            yield return new WaitForSeconds(1 / STEPS_PER_SECOND);
-        }
-    }
     private void RotateOneStepTowardsTarget()
     {
         float degreesToRotateThisFrame = CountAngleToRotateThisFrameBy();
