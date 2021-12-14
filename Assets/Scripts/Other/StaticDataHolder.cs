@@ -64,10 +64,10 @@ public static class StaticDataHolder
     }
     public static GameObject GetTheClosestDashableObject(Vector3 position, float range)
     {
-        List<GameObject> dashableObjectList = StaticDataHolder.GetDashableObjectList();
-        GameObject dashableObject = GetClosestObject(dashableObjectList, position);
+        List<GameObject> clonedDashableObjectList = StaticDataHolder.GetDashableObjectList();
+        GameObject dashableObject = GetClosestObject(clonedDashableObjectList, position);
 
-        float distance = (dashableObject.transform.position - position).magnitude;
+        float distance = HelperMethods.Distance(dashableObject.transform.position, position);
         if (distance <= range)
         {
             return dashableObject;
@@ -201,7 +201,7 @@ public static class StaticDataHolder
     {
         return SubtractAllies(GetEntityList(), myTeam);
     }
-    
+
     //Allies
     public static GameObject GetNearestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
     {
@@ -211,7 +211,7 @@ public static class StaticDataHolder
     {
         return SubtractMeAndEnemies(GetEntityList(), myTeam, gameObjectToIgnore);
     }
-    
+
     //Generic
     public static GameObject GetClosestObject(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
@@ -224,7 +224,7 @@ public static class StaticDataHolder
                 {
                     currentNearestTarget = item;
                 }
-                bool currentTargetIsCloser = (positionVector - item.transform.position).magnitude < (positionVector - currentNearestTarget.transform.position).magnitude;
+                bool currentTargetIsCloser = HelperMethods.Distance(positionVector, item.transform.position) < HelperMethods.Distance(positionVector, currentNearestTarget.transform.position);
                 if (currentTargetIsCloser)
                 {
                     currentNearestTarget = item;

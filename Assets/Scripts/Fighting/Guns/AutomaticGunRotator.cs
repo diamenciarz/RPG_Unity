@@ -241,8 +241,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private bool IsPositionInRange(Vector3 targetPosition, float range)
     {
-        Vector3 relativePositionFromGunToItem = HelperMethods.DeltaPosition(transform.position, targetPosition);
-        bool canShoot = range > relativePositionFromGunToItem.magnitude || range == 0;
+        float distanceToTarget = HelperMethods.Distance(transform.position, targetPosition);
+        bool canShoot = range > distanceToTarget || range == 0;
         if (canShoot)
         {
             return true;
@@ -332,7 +332,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
     private float CountAngleFromGunToPosition(Vector3 targetPosition)
     {
-        float angleFromZeroToItem = HelperMethods.RotationFromTo(transform.position, targetPosition).eulerAngles.z + gunTextureRotationOffset;
+        float angleFromZeroToItem = HelperMethods.DeltaPositionRotation(transform.position, targetPosition).eulerAngles.z + gunTextureRotationOffset;
         float angleFromGunToItem = Mathf.DeltaAngle(GetGunAngle(), angleFromZeroToItem);
 
         return angleFromGunToItem;

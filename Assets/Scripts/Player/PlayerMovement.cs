@@ -53,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
     {
         DoMove();
     }
+
+    #region Movement
     private void DoMove()
     {
         AdjustMovementSpeed();
@@ -60,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void AdjustMovementSpeed()
     {
-        playerSpeed = defaultPlayerSpeed * StaticDataHolder.GetHighestSlowEffect();
+        playerSpeed = defaultPlayerSpeed * StaticDataHolder.GetHighestSlowEffect() * countMSModifier();
     }
     private void UpdateVelocity()
     {
@@ -74,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
     {
         return new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
     }
+    #endregion
 
     #region Dash
     private Vector3 CountDashVector()
@@ -135,16 +138,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    private void RotateTowardsMouseCursor()
-    {
-        Vector3 mousePosition = HelperMethods.TranslatedMousePosition(transform.position);
-        Quaternion newRotation = HelperMethods.RotationFromTo(transform.position, mousePosition);
-
-        newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
-        transform.rotation = newRotation;
-    }
-
-    //Collision handling
+    #region Collisions
     private void OnTriggerEnter2D(Collider2D collision)
     {
         StaticDataHolder.AddCollidingObject(collision.gameObject);
@@ -153,25 +147,75 @@ public class PlayerMovement : MonoBehaviour
     {
         StaticDataHolder.RemoveCollidingObject(collision.gameObject);
     }
+    #endregion
 
-    //Get Variables
+    #region Rotation
+    private void RotateTowardsMouseCursor()
+    {
+        Vector3 mousePosition = HelperMethods.TranslatedMousePosition(transform.position);
+        Quaternion newRotation = HelperMethods.DeltaPositionRotation(transform.position, mousePosition);
+
+        newRotation *= Quaternion.Euler(0, 0, PLAYER_SPRITE_ROTATION);
+        transform.rotation = newRotation;
+    }
+
+    /// <summary>
+    /// The player walks slower, when not facing the movement direction. Actually it caps at min 60% of total speed
+    /// </summary>
+    /// <returns></returns>
+    private float countMSModifier()
+    {
+        float deltaAngle = GetMoveRotAngle();
+        //Don't modify the speed, if facing nearly forward
+        deltaAngle = ModifyMSAngle(deltaAngle);
+        float MAX_SLOWDOWN = 0.4f;
+        // "deltaAngle / 2" to get the sin <0;1>
+        float speedModifier = 1 - (MAX_SLOWDOWN * Mathf.Sin(deltaAngle / 2 * Mathf.Deg2Rad));
+        Debug.Log("Modifier: " + speedModifier);
+        return speedModifier;
+    }
+    /// <summary>
+    /// Counts the angle between the move vector and the forward foration of the sprite
+    /// </summary>
+    /// <returns></returns>
+    private float GetMoveRotAngle()
+    {
+        Vector3 inputVector = GetInputVector();
+        Vector3 directionVector = HelperMethods.DirectionVectorNormalized(GetRotation().eulerAngles.z);
+
+        //This angle is in degrees
+        float deltaAngle = Vector3.SignedAngle(inputVector, directionVector, Vector3.forward);
+        return Mathf.Abs(deltaAngle);
+    }
+    /// <summary>
+    /// A cone at the front has no effect
+    /// </summary>
+    /// <param name="deltaAngle"></param>
+    /// <returns></returns>
+    private float ModifyMSAngle(float deltaAngle)
+    {
+        float CONE = 45f; // Must be in range <0,180)
+        if (deltaAngle < CONE)
+        {
+            deltaAngle = 0;
+        }
+        else
+        {
+            deltaAngle -= CONE;
+        }
+        float scaledAngle = deltaAngle * 180 / (180 - CONE);
+        return scaledAngle;
+    }
+    #endregion
+
+    #region Accessor methods
     public bool GetCanDash()
     {
         return canDash;
     }
-    private void BounceOffWalls()
+    public Quaternion GetRotation()
     {
-        RaycastHit2D moveHit2D;
-        float moveDistanceThisFrame = moveVectorThisFrame.magnitude;
-
-        moveHit2D = Physics2D.BoxCast(transform.position, myCollider2D.size, 0, new Vector2(moveVectorThisFrame.x, 0), moveDistanceThisFrame, LayerMask.GetMask("Actors", "Obstacles"));
-        if (moveHit2D.collider != null)
-        {
-            myRigidbody2D.velocity = new Vector2(-myRigidbody2D.velocity.x, myRigidbody2D.velocity.y);
-        }
-        if (moveHit2D.collider != null)
-        {
-            myRigidbody2D.velocity = new Vector2(myRigidbody2D.velocity.x, -myRigidbody2D.velocity.y);
-        }
+        return transform.rotation;
     }
+    #endregion
 }

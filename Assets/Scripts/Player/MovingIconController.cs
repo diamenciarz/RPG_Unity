@@ -64,7 +64,7 @@ public class MovingIconController : MonoBehaviour
         {
             Vector3 myPosition = gameObject.transform.position;
             Vector3 otherPosition = objectToFollow.transform.position;
-            gameObject.transform.rotation = HelperMethods.RotationFromTo(myPosition, otherPosition);
+            gameObject.transform.rotation = HelperMethods.DeltaPositionRotation(myPosition, otherPosition);
         }
     }
     private void UpdatePosition()
@@ -85,7 +85,7 @@ public class MovingIconController : MonoBehaviour
     private void GoToGameObject(GameObject goTo)
     {
         Vector3 objectPosition = goTo.transform.position;
-        objectPosition.z = 0;
+        objectPosition.z = transform.position.z;
         transform.position = objectPosition;
     }
     public void SetGameObjectToFollow(object inputObject)
