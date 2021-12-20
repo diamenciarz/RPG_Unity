@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashCooldown = 1f;
     [SerializeField] float dashLength = 2f;
     public float dashRange = 3f;
+
+    [SerializeField] bool rotationSlowdown = false;
     private float dashDuration = 0.5f;
     [HideInInspector]
     public float dashSpeed;
@@ -17,13 +19,11 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
 
     private Vector3 dashDirection;
-    private Vector3 moveVectorThisFrame;
     private Coroutine dashCoroutine;
 
     private Rigidbody2D myRigidbody2D;
     private BoxCollider2D myCollider2D;
     private Animator myAnimator;
-    private Animation myAnimation;
     private const float PLAYER_SPRITE_ROTATION = -90;
 
     // Start is called before the first frame update
@@ -33,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
         myCollider2D = GetComponent<BoxCollider2D>();
         myRigidbody2D = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
-        myAnimation = GetComponent<Animation>();
         UpdatePlayerGameObject();
     }
     public void UpdatePlayerGameObject()
@@ -62,7 +61,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void AdjustMovementSpeed()
     {
-        playerSpeed = defaultPlayerSpeed * StaticDataHolder.GetHighestSlowEffect() * countMSModifier();
+        playerSpeed = defaultPlayerSpeed * StaticDataHolder.GetHighestSlowEffect();
+        if (rotationSlowdown)
+        {
+            playerSpeed *= countMSModifier();
+        }
     }
     private void UpdateVelocity()
     {
@@ -171,7 +174,6 @@ public class PlayerMovement : MonoBehaviour
         float MAX_SLOWDOWN = 0.4f;
         // "deltaAngle / 2" to get the sin <0;1>
         float speedModifier = 1 - (MAX_SLOWDOWN * Mathf.Sin(deltaAngle / 2 * Mathf.Deg2Rad));
-        Debug.Log("Modifier: " + speedModifier);
         return speedModifier;
     }
     /// <summary>

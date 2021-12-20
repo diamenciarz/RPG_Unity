@@ -47,13 +47,13 @@ public class OnCollisionBreak : TeamUpdater
     //Collision methods
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        HandleCollision(collision.gameObject);
+        BreakChecks(collision.gameObject);
     }
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        HandleCollision(collision.gameObject);
+        BreakChecks(collision.gameObject);
     }
-    private void HandleCollision(GameObject collisionObject)
+    private void BreakChecks(GameObject collisionObject)
     {
         if (BreaksOnObstacle(collisionObject))
         {

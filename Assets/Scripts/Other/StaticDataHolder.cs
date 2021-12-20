@@ -193,7 +193,11 @@ public static class StaticDataHolder
 
     #region Get Contents
     //Enemies
-    public static GameObject GetNearestEnemy(Vector3 positionVector, int myTeam)
+    public static GameObject GetClosestEnemyInSight(Vector3 positionVector, int myTeam)
+    {
+        return GetClosestObjectInSight(GetEnemyList(myTeam), positionVector);
+    }
+    public static GameObject GetClosestEnemy(Vector3 positionVector, int myTeam)
     {
         return GetClosestObject(GetEnemyList(myTeam), positionVector);
     }
@@ -203,7 +207,11 @@ public static class StaticDataHolder
     }
 
     //Allies
-    public static GameObject GetNearestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
+    public static GameObject GetClosestAllyInSight(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
+    {
+        return GetClosestObjectInSight(GetAllyList(myTeam, gameObjectToIgnore), positionVector);
+    }
+    public static GameObject GetClosestAlly(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
     {
         return GetClosestObject(GetAllyList(myTeam, gameObjectToIgnore), positionVector);
     }
@@ -220,14 +228,38 @@ public static class StaticDataHolder
             GameObject currentNearestTarget = possibleTargetList[0];
             foreach (var item in possibleTargetList)
             {
-                if (currentNearestTarget == null)
-                {
-                    currentNearestTarget = item;
-                }
                 bool currentTargetIsCloser = HelperMethods.Distance(positionVector, item.transform.position) < HelperMethods.Distance(positionVector, currentNearestTarget.transform.position);
                 if (currentTargetIsCloser)
                 {
                     currentNearestTarget = item;
+                }
+            }
+            return currentNearestTarget;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public static GameObject GetClosestObjectInSight(List<GameObject> possibleTargetList, Vector3 positionVector)
+    {
+        if (possibleTargetList.Count != 0)
+        {
+            GameObject currentNearestTarget = null;
+            foreach (var item in possibleTargetList)
+            {
+                if (HelperMethods.CanSeeTargetDirectly(positionVector, item))
+                {
+                    if (currentNearestTarget == null)
+                    {
+                        currentNearestTarget = item;
+                        continue;
+                    }
+                    bool currentTargetIsCloser = HelperMethods.Distance(positionVector, item.transform.position) < HelperMethods.Distance(positionVector, currentNearestTarget.transform.position);
+                    if (currentTargetIsCloser)
+                    {
+                        currentNearestTarget = item;
+                    }
                 }
             }
             return currentNearestTarget;

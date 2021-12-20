@@ -199,7 +199,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     //----Helper functions
     private bool CanShootTarget(GameObject target, float range)
     {
-        if (CanSeeTargetDirectly(target))
+        if (HelperMethods.CanSeeTargetDirectly(transform.position, target))
         {
             if (hasRotationLimits)
             {
@@ -246,27 +246,6 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         if (canShoot)
         {
             return true;
-        }
-        return false;
-    }
-    private bool CanSeeTargetDirectly(GameObject target)
-    {
-        int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
-        Vector2 origin = transform.position;
-        Vector2 direction = target.transform.position - transform.position;
-        Debug.DrawRay(origin, direction, Color.red, 0.5f);
-
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, Mathf.Infinity, obstacleLayerMask);
-
-        if (raycastHit2D)
-        {
-            GameObject objectHit = raycastHit2D.collider.gameObject;
-
-            bool hitTargetDirectly = objectHit == target;
-            if (hitTargetDirectly)
-            {
-                return true;
-            }
         }
         return false;
     }

@@ -8,7 +8,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float startingSpeed = 2f;
 
-    
+
     //Private variables
     protected Vector2 velocityVector;
     //Objects
@@ -34,19 +34,11 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         mySpriteRenderer = FindObjectOfType<SpriteRenderer>();
         entityCreator = FindObjectOfType<EntityCreator>();
         myRigidbody2D = GetComponent<Rigidbody2D>();
-        
+
         creationTime = Time.time;
     }
-    protected virtual void Update()
-    {
-        //MoveOneStep(); //now moving through rigidbody2D
-    }
-    private void MoveOneStep()
-    {
-        transform.position += new Vector3(velocityVector.x, velocityVector.y, 0) * Time.deltaTime;
-    }
 
-    //Set values
+    #region Mutator methods
     public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
     {
         objectThatCreatedThisProjectile = parentGameObject;
@@ -66,23 +58,30 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
             }
         }
     }
-    public void SetVelocityVector(Vector2 newVelocityVector)
+    public void SetVelocityVector(Vector3 newVelocityVector)
     {
         velocityVector = newVelocityVector;
         myRigidbody2D.velocity = newVelocityVector;
+        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + newVelocityVector) * Quaternion.Euler(0, 0, 90);
     }
     public void ModifyVelocityVector3(Vector3 deltaVector)
     {
         SetVelocityVector(GetVelocityVector3() + deltaVector);
     }
+    #endregion
 
-    //Accessor methods
+    #region Accessor methods
     public Vector2 GetVelocityVector2()
     {
         return velocityVector;
+    }
+    public override Vector3 GetVelocityVector3()
+    {
+        return myRigidbody2D.velocity;
     }
     public GameObject GetObjectThatCreatedThisProjectile()
     {
         return objectThatCreatedThisProjectile;
     }
+    #endregion
 }

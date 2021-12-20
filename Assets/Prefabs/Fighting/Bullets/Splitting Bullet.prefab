@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 7700761372939823446}
   m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
   m_LocalPosition: {x: -34.938457, y: -31.60448, z: 1}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -151,6 +151,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
   - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
   startingSpeed: 6
+  bounceOffObstacles: 0
+  destroyDelay: 5
+  maxBounces: 5
+  timeToAdd: 2
 --- !u!114 &-1566152343811300086
 MonoBehaviour:
   m_ObjectHideFlags: 0

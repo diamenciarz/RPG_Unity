@@ -153,7 +153,7 @@ public static class HelperMethods
         return returnRotation;
     }
     #endregion
-    
+
     #region Angles
     /// <summary>
     /// Returns a delta angle in degrees from vector "up" (0,1,0) to delta position between given vectors
@@ -186,6 +186,77 @@ public static class HelperMethods
         List<GameObject> returnList = new List<GameObject>(inputList.Count);
         inputList.ForEach((item) => returnList.Add(item));
         return returnList;
+    }
+    #endregion
+
+    #region LineOfSight
+    /// <summary>
+    /// Checks, if the target is visible from the specified position. The default layer names are "Actors" and "Obstacles".
+    /// </summary>
+    /// <param name="originalPos"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public static bool CanSeeTargetDirectly(Vector3 originalPos, GameObject target)
+    {
+        if (target != null)
+        {
+            int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
+            Vector2 direction = target.transform.position - originalPos;
+            //Debug.DrawRay(originalPos, direction, Color.red, 0.5f);
+
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, Mathf.Infinity, obstacleLayerMask);
+
+            if (raycastHit2D)
+            {
+                GameObject objectHit = raycastHit2D.collider.gameObject;
+
+                bool hitTargetDirectly = objectHit == target;
+                if (hitTargetDirectly)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    /// <summary>
+    /// Checks, if the target is visible from the specified position.
+    /// </summary>
+    /// <param name="originalPos"></param>
+    /// <param name="target"></param>
+    /// <param name="layerNames"></param>
+    /// <returns></returns>
+    public static bool CanSeeTargetDirectly(Vector3 originalPos, GameObject target, string[] layerNames)
+    {
+        if (target != null)
+        {
+            int obstacleLayerMask = LayerMask.GetMask(layerNames);
+            Vector2 direction = target.transform.position - originalPos;
+            //Debug.DrawRay(originalPos, direction, Color.red, 0.5f);
+
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, Mathf.Infinity, obstacleLayerMask);
+
+            if (raycastHit2D)
+            {
+                GameObject objectHit = raycastHit2D.collider.gameObject;
+
+                bool hitTargetDirectly = objectHit == target;
+                if (hitTargetDirectly)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else
+        {
+            Debug.LogError("The target was null");
+            return false;
+        }
     }
     #endregion
 }

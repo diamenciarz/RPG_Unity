@@ -37,19 +37,18 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
         currentDamageLeft = damage;
     }
 
-
-    //Collision methods
+    #region Collisions
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
-        HandleCollision(collision.gameObject);
+        DamageCheck(collision.gameObject);
     }
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        HandleCollision(collision.gameObject);
+        DamageCheck(collision.gameObject);
     }
-    private void HandleCollision(GameObject collisionObject)
+    private void DamageCheck(GameObject collisionObject)
     {
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
         if (damageReceiver != null)
@@ -78,7 +77,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
             }
         }
     }
-    private void DestroyObject()
+    protected void DestroyObject()
     {
         DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
         if (damageReceiver != null)
@@ -96,9 +95,13 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
     }
+    #endregion
 
-
-    //Accessor methods
+    #region Accessor methods
+    public virtual Vector3 GetVelocityVector3()
+    {
+        return entityData.GetVelocityVector3();
+    }
     public int GetDamage()
     {
         return currentDamageLeft;
@@ -119,10 +122,6 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     {
         return damageTypes.Count != 0;
     }
-    public Vector3 GetVelocityVector3()
-    {
-        return entityData.GetVelocityVector3();
-    }
     public bool GetIsPushing()
     {
         return isPushing;
@@ -131,5 +130,5 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     {
         return HelperMethods.DirectionVector(pushingPower, transform.rotation.eulerAngles.z);
     }
-
+    #endregion
 }

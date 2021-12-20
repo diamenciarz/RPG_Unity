@@ -27,9 +27,8 @@ public class BombController : BasicProjectileController
     }
 
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         UpdateTransform();
         CheckLifetime();
     }

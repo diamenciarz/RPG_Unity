@@ -45,7 +45,7 @@ public class TriggerOnDeath : TeamUpdater
 
                 if (shootsAtEnemies == true)
                 {
-                    GameObject targetGO = StaticDataHolder.GetNearestEnemy(transform.position, team);
+                    GameObject targetGO = StaticDataHolder.GetClosestEnemy(transform.position, team);
                     if (targetGO != null)
                     {
                         ShootAtTarget(targetGO.transform.position, i);

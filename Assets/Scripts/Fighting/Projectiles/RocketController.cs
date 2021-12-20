@@ -52,9 +52,8 @@ public class RocketController : BasicProjectileController
     #endregion
 
     #region Every Frame
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         CheckForTarget();
         TurnTowardsTarget();
         IncreaseSpeed();
@@ -66,7 +65,7 @@ public class RocketController : BasicProjectileController
         {
             if (targetGameObject == null)
             {
-                targetGameObject = StaticDataHolder.GetNearestEnemy(transform.position, team);
+                targetGameObject = StaticDataHolder.GetClosestEnemy(transform.position, team);
             }
         }
     }
@@ -79,7 +78,7 @@ public class RocketController : BasicProjectileController
     }
     private void UpdateSpeed()
     {
-        Vector2 newVelocity = HelperMethods.DirectionVectorNormalized(zRotation) * currentRocketSpeed;
+        Vector3 newVelocity = HelperMethods.DirectionVectorNormalized(zRotation) * currentRocketSpeed;
         SetVelocityVector(newVelocity);
     }
     private void TurnTowardsTarget()

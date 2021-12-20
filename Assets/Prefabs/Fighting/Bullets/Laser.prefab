@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4741006506434280758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8989033578331711026}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8989033578331711026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4741006506434280758}
+  m_LocalRotation: {x: -0, y: -0, z: 0.6719985, w: 0.7405525}
+  m_LocalPosition: {x: -0.014057435, y: 0.009966377, z: 0.008831501}
+  m_LocalScale: {x: 0.50000006, y: 0.50000006, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7700761372939823443}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7700761372939823446
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,8 +60,9 @@ Transform:
   m_GameObject: {fileID: 7700761372939823446}
   m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
   m_LocalPosition: {x: -34.938457, y: -31.60448, z: 1}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_Children: []
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8989033578331711026}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -84.443}
@@ -104,7 +135,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 2
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -137,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 06000000050000000100000004000000
+  breakEnum: 00000000050000000100000004000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2
@@ -150,6 +181,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 76282dc5313948f4895b9dd54857a55a, type: 3}
   - {fileID: 21300000, guid: 2716a4593a30a3346ab2c3aef4d3d22d, type: 3}
   startingSpeed: 10
+  bounceOffObstacles: 1
+  destroyDelay: 5
+  maxBounces: 10
+  timeToAdd: 2
 --- !u!114 &5534843798056116234
 MonoBehaviour:
   m_ObjectHideFlags: 0

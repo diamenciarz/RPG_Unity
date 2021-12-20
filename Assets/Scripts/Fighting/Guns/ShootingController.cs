@@ -60,7 +60,6 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
         Shoot();
         UpdateAmmoBar();
     }
-
     public void Shoot()
     {
         if (shoot)
