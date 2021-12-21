@@ -2,22 +2,15 @@ using UnityEngine;
 
 public class EntityCreator : MonoBehaviour
 {
-    private void OnEnable()
-    {
-        //EventManager.StartListening("SummonProjectile", SummonProjectile);
-        //This was a proble, because there were too many inputs for the create method to puth through an object
-    }
-    private void OnDisable()
-    {
-        //EventManager.StopListening("SummonProjectile", SummonProjectile);
-
-    }
     [Header("Projectiles")]
     public GameObject laserPrefab;
     public GameObject splittingBulletPrefab;
     public GameObject rocketPrefab;
     public GameObject bombPrefab;
-    public GameObject explosionPrefab;
+    public GameObject bombExplosionPrefab;
+    public GameObject grenadePrefab;
+    public GameObject grenadeExplosionPrefab;
+    public GameObject bouncyLaserPrefab;
     [Header("Enemies")]
     public GameObject walkerPrefab;
     public enum EntityTypes
@@ -31,7 +24,10 @@ public class EntityCreator : MonoBehaviour
         Laser,
         Rocket,
         Bomb,
-        Explosion
+        BombExplosion,
+        Grenade,
+        GrenadeExplosion,
+        BouncyLaser
     }
     //Projectiles
     public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
@@ -78,9 +74,21 @@ public class EntityCreator : MonoBehaviour
         {
             return bombPrefab;
         }
-        if (bulletType == BulletTypes.Explosion)
+        if (bulletType == BulletTypes.BombExplosion)
         {
-            return explosionPrefab;
+            return bombExplosionPrefab;
+        }
+        if (bulletType == BulletTypes.Grenade)
+        {
+            return grenadePrefab;
+        }
+        if (bulletType == BulletTypes.GrenadeExplosion)
+        {
+            return grenadeExplosionPrefab;
+        }
+        if (bulletType == BulletTypes.BouncyLaser)
+        {
+            return bouncyLaserPrefab;
         }
         return null;
     }

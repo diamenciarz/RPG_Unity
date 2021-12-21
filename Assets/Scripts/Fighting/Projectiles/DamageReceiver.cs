@@ -119,30 +119,7 @@ public class DamageReceiver : ListUpdater
     {
         StaticDataHolder.PlaySound(GetHitSound(), transform.position, hitSoundVolume);
     }
-    //Destroy game object methods
-    public void DestroyObject()
-    {
-        RemoveObjectFromLists();
-
-        TriggerOnDeath[] triggerOnDeath = GetComponentsInChildren<TriggerOnDeath>();
-        if (triggerOnDeath.Length != 0)
-        {
-            foreach (TriggerOnDeath item in triggerOnDeath)
-            {
-                item.ObjectDestroyed();
-            }
-        }
-        else
-        {
-            //Debug.Log("No TriggerOnDeath found");
-            StartCoroutine(DestroyAtTheEndOfFrame());
-        }
-    }
-    private IEnumerator DestroyAtTheEndOfFrame()
-    {
-        yield return new WaitForEndOfFrame();
-        Destroy(gameObject);
-    }
+    
     #endregion
 
     #region Sounds
@@ -185,7 +162,6 @@ public class DamageReceiver : ListUpdater
     #endregion
 
     #region Team
-    //Set methods
     public virtual void SetTeam(int newTeam)
     {
         team = newTeam;

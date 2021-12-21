@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class BulletController : BasicProjectileController
 {
-    [Header("Wall bouncing")]
-    [SerializeField] bool bounceOffObstacles = false;
+    [Header("Timed destroy")]
+    [SerializeField] bool timedDestroy = false;
+    [Tooltip("Destroy the bullet after it has existed for this long. -1 for infinity")]
     [SerializeField] float destroyDelay = 5f;
-    [SerializeField] int maxBounces = 3;
-    [Tooltip("How much time to add to the bullet's lifetime after a bounce")]
+    [Tooltip("Destroy the bullet after it has travelled this much distance. -1 for infinity")]
+    [SerializeField] float destroyDistance = 1;
+
+    [Header("Wall bouncing")]
+    public List<BreaksOn> bounceEnum = new List<BreaksOn>();
+    [Tooltip("Min angle from the collision's normal to reflect")]
+    [SerializeField] float minAngleToReflect = 45;
+    [Tooltip("-1 for infinite bounces")]
+    [SerializeField] int maxReflections = 3;
+    [Tooltip("How much time to add to the bullet's lifetime after a reflection")]
     [SerializeField] float timeToAdd = 2f;
 
     private float destroyTime;
@@ -21,10 +30,13 @@ public class BulletController : BasicProjectileController
         base.Start();
 
         SetupStartingVariables();
-        StartCoroutine(CheckDestroyDelay());
-        StartCoroutine(FirstFrameCollisionCheck());
+        if (timedDestroy)
+        {
+            StartCoroutine(CheckDestroyDelay());
+        }
+        FirstFrameCollisionCheck();
     }
-    protected void FixedUpdate()
+    protected void Update()
     {
         UpdateCollisionNormal();
     }
@@ -37,50 +49,85 @@ public class BulletController : BasicProjectileController
     #region Destroy
     private void SetupDestroyTime()
     {
-        destroyTime = Time.time + destroyDelay;
+        if (timedDestroy)
+        {
+            float destroyDistanceDelay = CountDistanceDelay();
+            bool distanceDelayExists = destroyDistanceDelay != -1;
+            bool destroyTimeExists = destroyDelay != -1;
+            destroyTime = Time.time;
+
+            if (destroyTimeExists && distanceDelayExists)
+            {
+                if (destroyDistanceDelay < destroyDelay)
+                {
+                    destroyTime += destroyDistanceDelay;
+                }
+                else
+                {
+                    destroyTime += destroyDelay;
+                }
+                return;
+            }
+            if (destroyTimeExists)
+            {
+                destroyTime += destroyDelay;
+                return;
+            }
+            if (distanceDelayExists)
+            {
+                destroyTime += destroyDistanceDelay;
+                return;
+            }
+            destroyTime += 100;
+        }
+    }
+    private float CountDistanceDelay()
+    {
+        if (destroyDistance != -1)
+        {
+            return destroyDistance / myRigidbody2D.velocity.magnitude;
+        }
+        else
+        {
+            return -1;
+        }
+
     }
     private IEnumerator CheckDestroyDelay()
     {
         yield return new WaitUntil(() => destroyTime < Time.time);
-        Destroy(gameObject);
-    }
-    private bool AddBounceTime()
-    {
-        if (bounces < maxBounces)
-        {
-            bounces++;
-            destroyTime += timeToAdd;
-            return true;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return false;
-        }
+        DestroyObject();
     }
     #endregion
 
     #region Collisions
-    private IEnumerator FirstFrameCollisionCheck()
+    /// <summary>
+    /// Checks, if the bullet was created inside of a wall
+    /// </summary>
+    private void FirstFrameCollisionCheck()
     {
-        yield return new WaitForEndOfFrame();
-        if (myCollider2D.IsTouchingLayers(-1))
+        LayerMask layerMask = LayerMask.GetMask("Obstacles");
+        float dir = transform.rotation.eulerAngles.z;
+        float distance = GetVelocityVector3().magnitude * Time.deltaTime;
+        Vector2 pos = transform.position;
+
+        RaycastHit2D hit = Physics2D.CapsuleCast(pos, myCollider2D.size, CapsuleDirection2D.Vertical, dir, GetVelocityVector3(), distance, layerMask);
+        if (hit)
         {
-            Debug.Log("Is touching");
             DestroyObject();
         }
     }
+    /// <summary>
+    /// Measures the possible normal, if a collision were to occur
+    /// </summary>
     private void UpdateCollisionNormal()
     {
         RaycastHit2D hit2D = Physics2D.Raycast(transform.position, GetVelocityVector3(), GetVelocityVector3().magnitude);
         if (hit2D.collider)
         {
             collisionNormal = hit2D.normal;
-            Debug.DrawRay(transform.position, GetVelocityVector3() * hit2D.fraction, Color.red, 0.1f);
         }
     }
-
-    #region OnCollisionEnter
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
@@ -88,15 +135,80 @@ public class BulletController : BasicProjectileController
     }
     private void BounceCheck(Collider2D collision)
     {
-        if (BouncesOffObstacle(collision.gameObject))
+        GameObject collisionObject = collision.gameObject;
+        if (ReflectsOffObstacle(collisionObject))
         {
-            if (AddBounceTime())
-            {
-                Bounce();
-            }
+            TryReflect(-collisionNormal);
+            return;
+        }
+        if (BouncesOffAllyOrEnemy(collisionObject))
+        {
+            TryReflect(-collisionNormal);
+            return;
+        }
+        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        if (BouncesOffProjectile(damageReceiver))
+        {
+            Vector3 projectileVelocity = damageReceiver.GetPushVector();
+            Bounce(projectileVelocity);
+            return;
         }
     }
-    private bool BouncesOffObstacle(GameObject collisionObject)
+
+    #region Reflect
+    private void TryReflect(Vector3 normal)
+    {
+        if (ShouldReflect(normal))
+        {
+            Reflect(normal);
+        }
+        else
+        {
+            DestroyObject();
+        }
+    }
+    private bool ShouldReflect(Vector3 normal)
+    {
+        float hitAngle = Vector3.Angle(GetVelocityVector3(), normal);
+        Debug.Log("Angle: " + Mathf.Abs(hitAngle));
+        bool isAngleRight = Mathf.Abs(hitAngle) >= minAngleToReflect;
+        bool areBouncesLeft = maxReflections == -1 || bounces < maxReflections;
+
+        return areBouncesLeft && isAngleRight;
+    }
+    private void Reflect(Vector3 normal)
+    {
+        //Modify bullet state
+        bounces++;
+        destroyTime += timeToAdd;
+        //Modify bullet velocity
+        Vector3 newVelocity = Vector3.Reflect(GetVelocityVector3(), normal);
+        SetVelocityVector(newVelocity);
+    }
+    #endregion
+
+    #region Bounce
+    private void Bounce(Vector3 incomingMomentum)
+    {
+        Vector3 myMomentum = GetVelocityVector3().normalized * pushingPower;
+        Vector3 outcomeVelocity = incomingMomentum + myMomentum;
+        
+        //Modify bullet velocity
+        SetVelocityVector(outcomeVelocity);
+    }
+    #endregion
+
+    #region Bounce checks
+    /// <summary>
+    /// Checks, if the colliding object is an obstacle and can be bounced off of
+    /// </summary>
+    /// <param name="collisionObject"></param>
+    /// <returns></returns>
+    private bool ReflectsOffObstacle(GameObject collisionObject)
+    {
+        return IsAnObstacle(collisionObject) && BouncesOnContactWith(BreaksOn.Obstacles);
+    }
+    private bool IsAnObstacle(GameObject collisionObject)
     {
         bool isAnObstacle = false;
         ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
@@ -106,14 +218,69 @@ public class BulletController : BasicProjectileController
             isAnObstacle = listUpdater.ListContains(ListUpdater.AddToLists.Obstacle);
         }
 
-        isAnObstacle = isAnObstacle || collisionObject.tag == "Obstacle";
-        return isAnObstacle && bounceOffObstacles;
+        return isAnObstacle || collisionObject.tag == "Obstacle";
     }
-    private void Bounce()
+    /// <summary>
+    /// Checks, if the angle of the hit is correct for a bounce and if there are enough bounces left
+    /// </summary>
+    /// <returns></returns>
+    private bool BouncesOffAllyOrEnemy(GameObject collisionObject)
     {
-        transform.position -= GetVelocityVector3() * Time.deltaTime;
-        Vector3 newVelocity = Vector3.Reflect(GetVelocityVector3(), collisionNormal);
-        SetVelocityVector(newVelocity);
+        bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
+        bool bouncesOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BouncesOnContactWith(BreaksOn.Allies);
+        if (bouncesOnAlly)
+        {
+            return true;
+        }
+        bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
+        return bouncesOnEnemy;
+    }
+    private bool BouncesOffProjectile(IDamage damageReceiver)
+    {
+        if (damageReceiver != null && ProjectileCheck(damageReceiver))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool ProjectileCheck(IDamage iDamage)
+    {
+        if (!iDamage.GetIsPushing())
+        {
+            return false;
+        }
+        int collisionTeam = iDamage.GetTeam();
+        bool areTeamsEqual = collisionTeam == team;
+
+        bool breaksOnAllyBullet = BouncesOnContactWith(BreaksOn.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && areTeamsEqual;
+        if (breaksOnAllyBullet)
+        {
+            return true;
+        }
+        bool breaksOnEnemyBullet = BouncesOnContactWith(BreaksOn.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && !areTeamsEqual;
+        if (breaksOnEnemyBullet)
+        {
+            return true;
+        }
+        bool breaksOnExplosion = BouncesOnContactWith(BreaksOn.Explosions) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Explosion);
+        if (breaksOnExplosion)
+        {
+            return true;
+        }
+        bool breaksOnRocket = BouncesOnContactWith(BreaksOn.Rockets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Rocket);
+        if (breaksOnRocket)
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool BouncesOnContactWith(BreaksOn contact)
+    {
+        if (bounceEnum.Contains(contact))
+        {
+            return true;
+        }
+        return false;
     }
     #endregion
 

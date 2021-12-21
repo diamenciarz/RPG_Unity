@@ -259,4 +259,44 @@ public static class HelperMethods
         }
     }
     #endregion
+
+    #region Object checks
+    public static bool IsObjectAProjectile(GameObject collisionObject)
+    {
+        bool isAProjectile = false;
+        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        if (damageReceiver != null)
+        {
+            isAProjectile = damageReceiver.IsAProjectile();
+        }
+        return isAProjectile;
+    }
+    public static bool IsObjectAnEntity(GameObject collisionObject)
+    {
+        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
+        if (listUpdater)
+        {
+            return listUpdater.ListContains(ListUpdater.AddToLists.Entity);
+        }
+        return false;
+    }
+    public static int GetObjectTeam(GameObject collisionObject)
+    {
+        int returnTeam = -2;
+        DamageReceiver damageReceiver = collisionObject.GetComponentInChildren<DamageReceiver>();
+        if (damageReceiver)
+        {
+            returnTeam = damageReceiver.GetTeam();
+        }
+        else
+        {
+            TeamUpdater teamUpdater = collisionObject.GetComponentInChildren<TeamUpdater>();
+            if (teamUpdater)
+            {
+                returnTeam = teamUpdater.GetTeam();
+            }
+        }
+        return returnTeam;
+    }
+    #endregion
 }

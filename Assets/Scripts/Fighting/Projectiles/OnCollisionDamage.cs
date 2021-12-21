@@ -79,14 +79,8 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     }
     protected void DestroyObject()
     {
-        DamageReceiver damageReceiver = GetComponent<DamageReceiver>();
-        if (damageReceiver != null)
+        if (!StaticDataHolder.CallAllTriggers(gameObject))
         {
-            damageReceiver.DestroyObject();
-        }
-        else
-        {
-            Debug.Log("No Damage Receiver found");
             StartCoroutine(DestroyAtTheEndOfFrame());
         }
     }
@@ -128,7 +122,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     }
     public Vector3 GetPushVector()
     {
-        return HelperMethods.DirectionVector(pushingPower, transform.rotation.eulerAngles.z);
+        return entityData.GetVelocityVector3().normalized * pushingPower;
     }
     #endregion
 }

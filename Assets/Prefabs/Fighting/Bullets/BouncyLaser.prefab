@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8989033578331711026}
-  - component: {fileID: 5399962572158842332}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -24,20 +23,56 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4741006506434280758}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.6719985, w: 0.7405525}
+  m_LocalPosition: {x: -0.014057435, y: 0.009966377, z: 0.008831501}
+  m_LocalScale: {x: 0.50000006, y: 0.50000006, z: 1}
   m_Children: []
   m_Father: {fileID: 7700761372939823443}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5399962572158842332
+--- !u!1 &7700761372939823446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7700761372939823443}
+  - component: {fileID: 7700761372939823442}
+  - component: {fileID: 7700761372939823440}
+  - component: {fileID: 7700761372939823447}
+  - component: {fileID: 3278521563504507919}
+  - component: {fileID: 5534843798056116234}
+  m_Layer: 0
+  m_Name: BouncyLaser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7700761372939823443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
+  m_LocalPosition: {x: -34.938457, y: -31.60448, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8989033578331711026}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -84.443}
+--- !u!212 &7700761372939823442
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4741006506434280758}
+  m_GameObject: {fileID: 7700761372939823446}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -72,7 +107,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -51
-  m_Sprite: {fileID: 21300000, guid: 76282dc5313948f4895b9dd54857a55a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e025619e4b3cd044b839e8942134089, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -83,88 +118,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &7700761372939823446
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7700761372939823443}
-  - component: {fileID: 3632203342257642947}
-  - component: {fileID: 5329267400732313886}
-  - component: {fileID: 8884412361962455790}
-  - component: {fileID: 7426536192320844466}
-  m_Layer: 0
-  m_Name: Laser
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7700761372939823443
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 8989033578331711026}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3632203342257642947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: -1
-  breakEnum: 05000000010000000400000006000000
-  breakingSounds: []
-  breakingSoundVolume: 1
-  damage: 2
-  hurtsAllies: 0
-  isPiercing: 0
-  damageTypes: 00000000
-  isPushing: 1
-  pushingPower: 0.5
-  spriteList:
-  - {fileID: 21300000, guid: 76282dc5313948f4895b9dd54857a55a, type: 3}
-  - {fileID: 21300000, guid: 2716a4593a30a3346ab2c3aef4d3d22d, type: 3}
-  startingSpeed: 10
-  timedDestroy: 0
-  destroyDelay: 5
-  destroyDistance: 1
-  bounceEnum: 
-  minAngleToReflect: 45
-  maxReflections: 3
-  timeToAdd: 2
---- !u!114 &5329267400732313886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  putInLists: 00000000
---- !u!50 &8884412361962455790
+--- !u!50 &7700761372939823440
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -185,7 +139,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &7426536192320844466
+--- !u!70 &7700761372939823447
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,3 +155,49 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.13, y: 0.37}
   m_Direction: 0
+--- !u!114 &3278521563504507919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: -1
+  breakEnum: 050000000100000004000000
+  breakingSounds: []
+  breakingSoundVolume: 1
+  damage: 2
+  hurtsAllies: 0
+  isPiercing: 0
+  damageTypes: 00000000
+  isPushing: 1
+  pushingPower: 0.25
+  spriteList:
+  - {fileID: 21300000, guid: 6e025619e4b3cd044b839e8942134089, type: 3}
+  - {fileID: 21300000, guid: 6b19e11560449224b95b80fcd03fe592, type: 3}
+  startingSpeed: 10
+  timedDestroy: 0
+  destroyDelay: 5
+  destroyDistance: -1
+  bounceEnum: 00000000
+  minAngleToReflect: 45
+  maxReflections: 3
+  timeToAdd: 2
+--- !u!114 &5534843798056116234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 00000000

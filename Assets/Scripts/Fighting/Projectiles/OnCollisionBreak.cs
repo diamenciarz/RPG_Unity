@@ -43,8 +43,7 @@ public class OnCollisionBreak : TeamUpdater
         }
     }
 
-
-    //Collision methods
+    #region Collisions
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         BreakChecks(collision.gameObject);
@@ -88,54 +87,14 @@ public class OnCollisionBreak : TeamUpdater
     }
     private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
     {
-        bool areTeamsEqual = team == GetObjectTeam(collisionObject);
-
-        //Debug.Log("Is a projectile: "+ IsObjectAProjectile(collisionObject));
-        //Debug.Log("Team: "+ GetObjectTeam(collisionObject));
-        bool breaksOnAlly = false;
-        if (Time.time - creationTime > 0.1f || !isARocket)
+        bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
+        bool breaksOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
+        if (breaksOnAlly)
         {
-            breaksOnAlly = areTeamsEqual && IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
+            return true;
         }
-        bool breaksOnEnemy = BreaksOnContactWith(BreaksOn.Enemies) && IsObjectAnEntity(collisionObject) && !areTeamsEqual;
-        return (breaksOnAlly || breaksOnEnemy);
-    }
-    private bool IsObjectAProjectile(GameObject collisionObject)
-    {
-        bool isAProjectile = false;
-        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
-        if (damageReceiver != null)
-        {
-            isAProjectile = damageReceiver.IsAProjectile();
-        }
-        return isAProjectile;
-    }
-    private bool IsObjectAnEntity(GameObject collisionObject)
-    {
-        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
-        if (listUpdater)
-        {
-            return listUpdater.ListContains(ListUpdater.AddToLists.Entity);
-        }
-        return false;
-    }
-    private int GetObjectTeam(GameObject collisionObject)
-    {
-        int returnTeam = -2;
-        DamageReceiver damageReceiver = collisionObject.GetComponentInChildren<DamageReceiver>();
-        if (damageReceiver)
-        {
-            returnTeam = damageReceiver.GetTeam();
-        }
-        else
-        {
-            TeamUpdater teamUpdater = collisionObject.GetComponentInChildren<TeamUpdater>();
-            if (teamUpdater)
-            {
-                returnTeam = teamUpdater.GetTeam();
-            }
-        }
-        return returnTeam;
+        bool breaksOnEnemy = !areTeamsEqual && BreaksOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
+        return breaksOnEnemy;
     }
     private bool BreaksOnProjectile(GameObject collisionObject)
     {
@@ -175,7 +134,9 @@ public class OnCollisionBreak : TeamUpdater
     }
     #endregion
 
-    //Break methods
+    #endregion
+    
+    #region Destroy
     protected void Break()
     {
         if (!isDestroyed)
@@ -188,17 +149,8 @@ public class OnCollisionBreak : TeamUpdater
     }
     private void DestroyObject()
     {
-        TriggerOnDeath[] triggerOnDeath = GetComponentsInChildren<TriggerOnDeath>();
-        if (triggerOnDeath.Length != 0)
+        if (!StaticDataHolder.CallAllTriggers(gameObject))
         {
-            foreach (TriggerOnDeath item in triggerOnDeath)
-            {
-                item.ObjectDestroyed();
-            }
-        }
-        else
-        {
-            //Debug.Log("No TriggerOnDeath found");
             StartCoroutine(DestroyAtTheEndOfFrame());
         }
     }
@@ -207,7 +159,7 @@ public class OnCollisionBreak : TeamUpdater
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
     }
-
+    #endregion
 
     //Sounds
     protected AudioClip GetBreakSound()
@@ -219,7 +171,6 @@ public class OnCollisionBreak : TeamUpdater
         }
         return null;
     }
-
 
     //Accessor methods
     public bool BreaksOnContactWith(BreaksOn contact)

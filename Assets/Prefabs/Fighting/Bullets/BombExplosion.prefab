@@ -11,12 +11,10 @@ GameObject:
   - component: {fileID: 7700761372939823443}
   - component: {fileID: 7700761372939823442}
   - component: {fileID: 7700761372939823440}
-  - component: {fileID: 8776004092663047426}
-  - component: {fileID: 3278521563504507919}
-  - component: {fileID: -1566152343811300086}
-  - component: {fileID: 5411452294418001787}
+  - component: {fileID: 133220287009352267}
+  - component: {fileID: 1594040755141738852}
   m_Layer: 0
-  m_Name: Splitting Bullet
+  m_Name: BombExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7700761372939823446}
   m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
-  m_LocalPosition: {x: -34.938457, y: -31.60448, z: 1}
+  m_LocalPosition: {x: -34.938457, y: -31.60448, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,8 +74,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
+  m_SortingOrder: -51
+  m_Sprite: {fileID: 21300000, guid: 8e8c61de88de7a34483bf5aa1f8f0a2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,8 +107,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &8776004092663047426
-CapsuleCollider2D:
+--- !u!58 &133220287009352267
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -122,10 +120,10 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.12999998, y: 0.56999993}
-  m_Direction: 0
---- !u!114 &3278521563504507919
+  m_Offset: {x: -0.0004696923, y: -0.0048275925}
+  serializedVersion: 2
+  m_Radius: 0.15996362
+--- !u!114 &1594040755141738852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,57 +132,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7700761372939823446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ebd032f4f5b13540ae023ed67610dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 04000000010000000500000006000000
+  breakEnum: 
   breakingSounds: []
   breakingSoundVolume: 1
-  damage: 1
-  hurtsAllies: 0
+  damage: 4
+  hurtsAllies: 1
   isPiercing: 0
-  damageTypes: 00000000
+  damageTypes: 01000000
   isPushing: 0
   pushingPower: 0
   spriteList:
-  - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
-  - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
-  startingSpeed: 6
-  bounceOffObstacles: 0
-  destroyDelay: 5
-  maxBounces: 5
-  timeToAdd: 2
---- !u!114 &-1566152343811300086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: -1
-  gameObjectsToTurnIntoList: 0200000002000000000000000200000002000000
-  shootsAtEnemies: 0
-  basicDirection: 0
-  spreadProjectilesEvenly: 1
-  spreadDegrees: 45
-  leftBulletSpread: 0
-  rightBulletSpread: 0
---- !u!114 &5411452294418001787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d950f1db291832640a93937c00c44330, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  putInLists: 00000000
+  - {fileID: 21300000, guid: 8e8c61de88de7a34483bf5aa1f8f0a2a, type: 3}
+  - {fileID: 21300000, guid: 99fd9373b80084848bd102b122ed3bda, type: 3}
+  startingSpeed: 0
+  timeToExpire: 0.2
+  expandPercentage: 2
+  rotateDuringLifetime: 90

@@ -16,7 +16,7 @@ public class ListUpdater : MonoBehaviour
         DashableObject
     }
 
-
+    #region Activations
     protected void OnEnable()
     {
         AddObjectToLists();
@@ -29,10 +29,26 @@ public class ListUpdater : MonoBehaviour
     {
         RemoveObjectFromLists();
     }
+    #endregion
 
+    #region Destroy
+    public void DestroyObject()
+    {
+        RemoveObjectFromLists();
+        if (!StaticDataHolder.CallAllTriggers(gameObject))
+        {
+            StartCoroutine(DestroyAtTheEndOfFrame());
+        }
+    }
+    private IEnumerator DestroyAtTheEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        Destroy(gameObject);
+    }
+    #endregion
 
-    //Modify lists
-    protected void AddObjectToLists()
+    #region Modify lists
+    private void AddObjectToLists()
     {
         if (putInLists.Contains(AddToLists.Projectile))
         {
@@ -55,7 +71,7 @@ public class ListUpdater : MonoBehaviour
             StaticDataHolder.AddDashableObject(gameObject);
         }
     }
-    protected void RemoveObjectFromLists()
+    private void RemoveObjectFromLists()
     {
         if (putInLists.Contains(AddToLists.Projectile))
         {
@@ -79,6 +95,7 @@ public class ListUpdater : MonoBehaviour
         }
     }
 
+
     public bool ListContains(AddToLists element)
     {
         if (putInLists.Contains(element))
@@ -90,4 +107,5 @@ public class ListUpdater : MonoBehaviour
             return false;
         }
     }
+    #endregion
 }

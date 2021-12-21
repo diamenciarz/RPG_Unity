@@ -7,50 +7,84 @@ public class UnitMovementController : TeamUpdater
     public GameObject lastTargetPosition;
     [Header("Instances")]
     public GameObject target;
-    [Header("Instances")]
+    [Header("Movement")]
     [Tooltip("Degrees per second")]
     public float rotationSpeed = 120;
+    [SerializeField] float shootRange = 2;
 
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
 
     private float POSITION_REFRESH_RATE = 0.25f; // Cooldown to refresh path to target
 
+    #region Initiation
     private void Start()
+    {
+        SetupStartingVariables();
+        StartCoroutine(ITargetPositionUpdater(POSITION_REFRESH_RATE));
+    }
+    private void Update()
+    {
+        RotateTowardsTarget();
+    }
+    private void SetupStartingVariables()
     {
         lastTargetPosition = new GameObject();
         lastTargetPosition.transform.position = transform.position;
         aiDestinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
     }
-    private void Update()
-    {
-        RotateTowardsTarget();
-        StartCoroutine(ITargetPositionUpdater(POSITION_REFRESH_RATE));
-    }
+    #endregion
     
     #region Pathing
     private IEnumerator ITargetPositionUpdater(float refreshRate)
     {
-        UpdateLastTargetPosition();
-        yield return new WaitForSeconds(refreshRate);
+        while (true)
+        {
+            UpdateTargetPosition();
+            yield return new WaitForSeconds(refreshRate);
+        }
     }
-    private void UpdateLastTargetPosition()
+    private void UpdateTargetPosition()
     {
         if (HelperMethods.CanSeeTargetDirectly(transform.position, target))
         {
-            lastTargetPosition.transform.position = target.transform.position;
+            SetTargetPositionPointer();
         }
         else
         {
-            GameObject newTarget = StaticDataHolder.GetClosestEnemyInSight(transform.position, team);
-            if (newTarget)
-            {
-                target = newTarget;
-                aiDestinationSetter.target = newTarget.transform;
-            }
+            FindNewTargetInSight();
         }
     }
+    private void FindNewTargetInSight()
+    {
+        GameObject newTarget = StaticDataHolder.GetClosestEnemyInSight(transform.position, team);
+        if (newTarget)
+        {
+            target = newTarget;
+            aiDestinationSetter.target = newTarget.transform;
+        }
+    }
+    private void SetTargetPositionPointer()
+    {
+        if (HelperMethods.Distance(gameObject, target) <= shootRange)
+        {
+            MovePointerOntoMyself();
+        }
+        else
+        {
+            MovePointerOntoTarget();
+        }
+    }
+    private void MovePointerOntoTarget()
+    {
+        lastTargetPosition.transform.position = target.transform.position;
+    }
+    private void MovePointerOntoMyself()
+    {
+        lastTargetPosition.transform.position = transform.position;
+    }
+
     #endregion
-    
+
     #region Rotation
     private void RotateTowardsTarget()
     {
