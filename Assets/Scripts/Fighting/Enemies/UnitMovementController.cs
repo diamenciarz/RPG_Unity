@@ -11,8 +11,11 @@ public class UnitMovementController : TeamUpdater
     [Tooltip("Degrees per second")]
     public float rotationSpeed = 120;
     [SerializeField] float shootRange = 2;
+    [SerializeField] float moveSpeed = 3;
 
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
+    private Pathfinding.AIBase aiBase;
+    private float currentMoveSpeed;
 
     private float POSITION_REFRESH_RATE = 0.25f; // Cooldown to refresh path to target
 
@@ -28,12 +31,19 @@ public class UnitMovementController : TeamUpdater
     }
     private void SetupStartingVariables()
     {
+        //Setup instances
+        aiDestinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
+        aiBase = GetComponent<Pathfinding.AIBase>();
+        //Setup target position
         lastTargetPosition = new GameObject();
         lastTargetPosition.transform.position = transform.position;
-        aiDestinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
+        //Movement speed
+        currentMoveSpeed = moveSpeed;
+        SetMovementSpeed(currentMoveSpeed);
     }
     #endregion
-    
+
+    #region Movement
     #region Pathing
     private IEnumerator ITargetPositionUpdater(float refreshRate)
     {
@@ -94,4 +104,10 @@ public class UnitMovementController : TeamUpdater
         Quaternion.RotateTowards(transform.rotation, targetRotation, angleThisFrame);
     }
     #endregion
+    private void SetMovementSpeed(float newSpeed)
+    {
+        aiBase.maxSpeed = newSpeed;
+    }
+    #endregion
+
 }
