@@ -13,7 +13,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     protected Vector2 velocityVector;
     //Objects
     protected EntityCreator entityCreator;
-    protected GameObject objectThatCreatedThisProjectile;
     //Components
     protected SpriteRenderer mySpriteRenderer;
     protected Rigidbody2D myRigidbody2D;
@@ -40,10 +39,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     }
 
     #region Mutator methods
-    public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
-    {
-        objectThatCreatedThisProjectile = parentGameObject;
-    }
     private void SetSpriteAccordingToTeam()
     {
         if (spriteList.Count >= team && team > 0)
@@ -79,10 +74,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     public override Vector3 GetVelocityVector3()
     {
         return myRigidbody2D.velocity;
-    }
-    public GameObject GetObjectThatCreatedThisProjectile()
-    {
-        return objectThatCreatedThisProjectile;
     }
     #endregion
 }

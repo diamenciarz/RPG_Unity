@@ -42,7 +42,7 @@ public class EntityCreator : MonoBehaviour
     }
     private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
     {
-        BasicProjectileController basicProjectileController = summonedBullet.GetComponent<BasicProjectileController>();
+        OnCollisionBreak basicProjectileController = summonedBullet.GetComponent<OnCollisionBreak>();
         if (basicProjectileController != null && createdBy != null)
         {
             basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);

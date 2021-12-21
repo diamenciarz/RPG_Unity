@@ -11,6 +11,11 @@ public class OnCollisionBreak : TeamUpdater
     [SerializeField] protected List<AudioClip> breakingSounds;
     [SerializeField] [Range(0, 1)] protected float breakingSoundVolume = 1f;
 
+    protected GameObject objectThatCreatedThisProjectile;
+    private bool isDestroyed = false;
+    protected float creationTime;
+    private bool isARocket;
+
     public enum BreaksOn
     {
         Allies,
@@ -22,9 +27,6 @@ public class OnCollisionBreak : TeamUpdater
         Obstacles
     }
 
-    private bool isDestroyed = false;
-    protected float creationTime;
-    private bool isARocket;
     protected virtual void Awake()
     {
         UpdateStartingVariables();
@@ -88,13 +90,32 @@ public class OnCollisionBreak : TeamUpdater
     private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
     {
         bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
-        bool breaksOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
-        if (breaksOnAlly)
+        if (CheckParent(collisionObject))
         {
-            return true;
+            bool breaksOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
+            if (breaksOnAlly)
+            {
+                return true;
+            }
         }
         bool breaksOnEnemy = !areTeamsEqual && BreaksOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
         return breaksOnEnemy;
+    }
+    /// <summary>
+    /// Checks, if the colliding object is the object that created this projectile and if so, then checks if it should be invulnerable
+    /// </summary>
+    /// <param name="collisionObject"></param>
+    /// <returns></returns>
+    private bool CheckParent(GameObject collisionObject)
+    {
+        bool isTouchingParent = objectThatCreatedThisProjectile == collisionObject;
+        bool isInvulnerable = Time.time > creationTime + 0.1f;
+        if (!isTouchingParent || (isTouchingParent && isInvulnerable))
+        {
+            return true;
+        }
+        return false;
+
     }
     private bool BreaksOnProjectile(GameObject collisionObject)
     {
@@ -171,7 +192,10 @@ public class OnCollisionBreak : TeamUpdater
         }
         return null;
     }
-
+    public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
+    {
+        objectThatCreatedThisProjectile = parentGameObject;
+    }
     //Accessor methods
     public bool BreaksOnContactWith(BreaksOn contact)
     {
@@ -180,5 +204,9 @@ public class OnCollisionBreak : TeamUpdater
             return true;
         }
         return false;
+    }
+    public GameObject GetObjectThatCreatedThisProjectile()
+    {
+        return objectThatCreatedThisProjectile;
     }
 }

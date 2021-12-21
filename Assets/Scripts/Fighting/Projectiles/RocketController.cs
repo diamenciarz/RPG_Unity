@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RocketController : BasicProjectileController
 {
+
+    [Header("Rocket target")]
     [SerializeField] GameObject objectMissingIconGameObject;
 
     [Header("Rocket Flight Settings")]
