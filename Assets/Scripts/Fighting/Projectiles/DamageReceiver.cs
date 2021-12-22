@@ -21,7 +21,7 @@ public class DamageReceiver : ListUpdater
     private GameObject healthBarInstance;
     private int maxHP;
     private bool isDestroyed = false;
-    private ICollidingEntityData myEntityData;
+    private ICollidingEntityData myEntityData; //basic projectile controller script for velocity editing
     protected ProgressionBarController healthBarScript;
 
     protected void Awake()

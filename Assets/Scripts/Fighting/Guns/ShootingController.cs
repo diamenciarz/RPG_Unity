@@ -16,7 +16,7 @@ public class ShootingController : TeamUpdater
     [SerializeField] float basicGunRotation;
     [Header("Mouse Steering")]
     bool isControlledByMouseCursor;
-    [SerializeField] bool isGunReloadingBarOn;
+    [SerializeField] bool reloadingBarOn = true;
 
     //The gun tries to shoot, if this is set to true
     [HideInInspector]
@@ -25,10 +25,10 @@ public class ShootingController : TeamUpdater
     private ProgressionBarController gunReloadingBarScript;
     private EntityCreator entityCreator;
     private SingleShotScriptableObject currentShotSO;
-    public float shootingTimeBank;
-    public float currentTimeBetweenEachShot;
+    private float shootingTimeBank;
+    private float currentTimeBetweenEachShot;
     private float lastShotTime;
-    public int shotIndex;
+    private int shotIndex;
     private bool canShoot;
     private int shotAmount;
 
@@ -256,7 +256,7 @@ public class ShootingController : TeamUpdater
     //Update states
     private void UpdateUIState()
     {
-        if (isControlledByMouseCursor || isGunReloadingBarOn)
+        if (isControlledByMouseCursor || reloadingBarOn)
         {
             CreateUI();
         }

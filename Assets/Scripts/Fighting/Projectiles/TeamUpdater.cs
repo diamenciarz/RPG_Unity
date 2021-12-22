@@ -4,11 +4,35 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
 {
-    [HideInInspector]
-    public int team = -1;
+    protected int team = -1;
     protected GameObject createdBy;
 
     #region Set parent
+    private void Awake()
+    {
+        UpdateCreatedBy();
+    }
+    private void UpdateCreatedBy()
+    {
+        DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
+        if (damageReceiver)
+        {
+            if (createdBy == null)
+            {
+                SetCreatedBy(damageReceiver.gameObject);
+            }
+            return;
+        }
+        BasicProjectileController basicProjectileController = GetComponentInParent<BasicProjectileController>();
+        if (basicProjectileController)
+        {
+            if (createdBy == null)
+            {
+                SetCreatedBy(basicProjectileController.gameObject);
+            }
+            return;
+        }
+    }
     public void SetCreatedBy(GameObject newObject)
     {
         createdBy = newObject;

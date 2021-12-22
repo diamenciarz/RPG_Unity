@@ -314,6 +314,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7021969156104842296, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9056610446592022234, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: team
       value: 2
@@ -11374,7 +11378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7021969156245597980, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7371173148479189348, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54254,6 +54258,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 7021969156245597980, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: team
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7371173148479189348, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -54491,19 +54499,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664170954744231803, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7021969156104842296, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8021823894854508987, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9056610446592022234, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: team
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}

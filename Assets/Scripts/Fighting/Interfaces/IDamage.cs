@@ -11,5 +11,9 @@ public interface IDamage
     public abstract bool IsAProjectile();
     public abstract Vector3 GetVelocityVector3();
     public abstract bool GetIsPushing();
+    /// <summary>
+    /// Where the magnitude is the force and the direction is the velocity normalized
+    /// </summary>
+    /// <returns></returns>
     public abstract Vector3 GetPushVector();
 }
