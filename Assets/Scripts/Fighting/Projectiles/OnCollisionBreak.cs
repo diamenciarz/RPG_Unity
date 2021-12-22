@@ -61,6 +61,7 @@ public class OnCollisionBreak : TeamUpdater
 
         if (BreaksOnAllyOrEnemy(collisionObject))
         {
+            //Debug.Log("Broke on entity, bullet team:" + team);
             Break();
             return;
         }

@@ -17,7 +17,7 @@ public class TriggerOnDeath : TeamUpdater
     protected EntityCreator entityCreator;
     private bool isDestroyed;
 
-    private void Start()
+    private void Awake()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
     }

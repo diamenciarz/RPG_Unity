@@ -34,7 +34,7 @@ public class BulletController : BasicProjectileController
         {
             StartCoroutine(CheckDestroyDelay());
         }
-        FirstFrameCollisionCheck();
+        //FirstFrameCollisionCheck();
     }
     protected void Update()
     {
@@ -138,11 +138,13 @@ public class BulletController : BasicProjectileController
         GameObject collisionObject = collision.gameObject;
         if (ReflectsOffObstacle(collisionObject))
         {
+            //Debug.Log("Reflects off obstacle");
             TryReflect(-collisionNormal);
             return;
         }
-        if (BouncesOffAllyOrEnemy(collisionObject))
+        if (ReflectsOffAllyOrEnemy(collisionObject))
         {
+            //Debug.Log("Reflects off entity");
             TryReflect(-collisionNormal);
             return;
         }
@@ -170,7 +172,7 @@ public class BulletController : BasicProjectileController
     private bool ShouldReflect(Vector3 normal)
     {
         float hitAngle = Vector3.Angle(GetVelocityVector3(), normal);
-        Debug.Log("Angle: " + Mathf.Abs(hitAngle));
+        //Debug.Log("Angle: " + Mathf.Abs(hitAngle));
         bool isAngleRight = Mathf.Abs(hitAngle) >= minAngleToReflect;
         bool areBouncesLeft = maxReflections == -1 || bounces < maxReflections;
 
@@ -224,7 +226,7 @@ public class BulletController : BasicProjectileController
     /// Checks, if the angle of the hit is correct for a bounce and if there are enough bounces left
     /// </summary>
     /// <returns></returns>
-    private bool BouncesOffAllyOrEnemy(GameObject collisionObject)
+    private bool ReflectsOffAllyOrEnemy(GameObject collisionObject)
     {
         bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
         if (CheckParent(collisionObject))
@@ -238,9 +240,13 @@ public class BulletController : BasicProjectileController
         bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
         return bouncesOnEnemy;
     }
+    /// <summary>
+    /// Returns true if the colliding object is not the parent or if it is, but at least 0.1f sec has passed
+    /// </summary>
+    /// <param name="collisionObject"></param>
+    /// <returns></returns>
     private bool CheckParent(GameObject collisionObject)
     {
-        Debug.Log("Bounced on: " + collisionObject.name + " created by: " + createdBy);
         bool isTouchingParent = createdBy == collisionObject;
         bool isInvulnerable = Time.time > creationTime + 0.1f;
         if (!isTouchingParent || (isTouchingParent && isInvulnerable))

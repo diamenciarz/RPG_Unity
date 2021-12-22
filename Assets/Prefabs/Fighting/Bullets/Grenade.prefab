@@ -137,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87032fb490caac4aab0e55e918527c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: -1
   breakEnum: 
   breakingSounds: []
   breakingSoundVolume: 1
@@ -151,11 +150,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1a7b65179356e684abbb8fb0edb8c358, type: 3}
   - {fileID: 21300000, guid: 3a2db6f9bd864da42a74a6f026b5b5af, type: 3}
   startingSpeed: 8
-  timedDestroy: 1
   destroyDelay: -1
   destroyDistance: 5
   bounceEnum: 010000000200000003000000060000000500000000000000
-  minAngleToReflect: 15
+  minAngleToReflect: 0
   maxReflections: -1
   timeToAdd: 0
 --- !u!114 &1082129703195348843
@@ -170,7 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c9974e248e4804ca183ecefbf18f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: -1
   gameObjectsToTurnIntoList: 07000000
   shootsAtEnemies: 0
   basicDirection: 0

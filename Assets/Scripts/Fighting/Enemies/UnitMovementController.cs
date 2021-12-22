@@ -16,6 +16,7 @@ public class UnitMovementController : TeamUpdater
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
     private Pathfinding.AIBase aiBase;
     private float currentMoveSpeed;
+    private bool canSeeTarget;
 
     private float POSITION_REFRESH_RATE = 0.25f; // Cooldown to refresh path to target
 
@@ -27,6 +28,8 @@ public class UnitMovementController : TeamUpdater
     }
     private void Update()
     {
+        CheckIfCanSeeTarget();
+        SetTargetPositionPointer();
         RotateTowardsTarget();
     }
     private void SetupStartingVariables()
@@ -37,6 +40,7 @@ public class UnitMovementController : TeamUpdater
         //Setup target position
         lastTargetPosition = new GameObject();
         lastTargetPosition.transform.position = transform.position;
+        aiDestinationSetter.target = lastTargetPosition.transform;
         //Movement speed
         currentMoveSpeed = moveSpeed;
         SetMovementSpeed(currentMoveSpeed);
@@ -49,17 +53,13 @@ public class UnitMovementController : TeamUpdater
     {
         while (true)
         {
-            UpdateTargetPosition();
+            UpdateTarget();
             yield return new WaitForSeconds(refreshRate);
         }
     }
-    private void UpdateTargetPosition()
+    private void UpdateTarget()
     {
-        if (HelperMethods.CanSeeTargetDirectly(transform.position, target))
-        {
-            SetTargetPositionPointer();
-        }
-        else
+        if (!canSeeTarget)
         {
             FindNewTargetInSight();
         }
@@ -70,23 +70,36 @@ public class UnitMovementController : TeamUpdater
         if (newTarget)
         {
             target = newTarget;
-            aiDestinationSetter.target = newTarget.transform;
         }
     }
     private void SetTargetPositionPointer()
     {
-        if (HelperMethods.Distance(gameObject, target) <= shootRange)
+
+        if (target)
         {
-            MovePointerOntoMyself();
-        }
-        else
-        {
-            MovePointerOntoTarget();
+            if (HelperMethods.Distance(gameObject, target) <= shootRange)
+            {
+                if (canSeeTarget)
+                {
+                    MovePointerOntoMyself();
+                }
+            }
+            else
+            {
+                MovePointerOntoTarget();
+            }
         }
     }
     private void MovePointerOntoTarget()
     {
-        lastTargetPosition.transform.position = target.transform.position;
+        if (target)
+        {
+            lastTargetPosition.transform.position = target.transform.position;
+        }
+        else
+        {
+            Debug.Log("No path target found");
+        }
     }
     private void MovePointerOntoMyself()
     {
@@ -96,12 +109,27 @@ public class UnitMovementController : TeamUpdater
     #endregion
 
     #region Rotation
+    private void CheckIfCanSeeTarget()
+    {
+        canSeeTarget = HelperMethods.CanSeeTargetDirectly(transform.position, target);
+    }
     private void RotateTowardsTarget()
     {
-        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lastTargetPosition.transform.position);
+        Vector3 lookAt = CountLookAtPosition();
+        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lookAt);
         float angleThisFrame = rotationSpeed * Time.deltaTime;
 
         Quaternion.RotateTowards(transform.rotation, targetRotation, angleThisFrame);
+    }
+    private Vector3 CountLookAtPosition() {
+        if (canSeeTarget)
+        {
+            return target.transform.position;
+        }
+        else
+        {
+            return lastTargetPosition.transform.position;
+        }
     }
     #endregion
     private void SetMovementSpeed(float newSpeed)

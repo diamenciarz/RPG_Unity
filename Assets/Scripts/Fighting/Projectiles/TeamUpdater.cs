@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
 {
-    protected int team = -1;
+    [HideInInspector]
+    public int team = -1;
     protected GameObject createdBy;
 
     #region Set parent
@@ -44,7 +45,7 @@ public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
     /// Change team of the whole gameObject. Use ChangeTeamTo() to change team of this script
     /// </summary>
     /// <param name="newTeam"></param>
-    public virtual void SetTeam(int newTeam)
+    public void SetTeam(int newTeam)
     {
         team = newTeam;
         UpdateTeam(newTeam);

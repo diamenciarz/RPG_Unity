@@ -39,8 +39,15 @@ public class EntityCreator : MonoBehaviour
         if (bulletToSummon != null)
         {
             GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
-
-            TrySetupStartingValues(summonedBullet, team, createdBy);
+            if (CanFitSummon(summonedBullet))
+            {
+                TrySetupStartingValues(summonedBullet, team, createdBy);
+            }
+            else
+            {
+                Debug.Log("Bullet did not fit");
+                Destroy(summonedBullet);
+            }
         }
     }
     private GameObject GetProjectilePrefab(BulletTypes bulletType)
@@ -119,6 +126,33 @@ public class EntityCreator : MonoBehaviour
                 }
             }
         }
+    }
+    private bool CanFitSummon(GameObject summonedObject)
+    {
+        Vector3 dir = HelperMethods.DirectionVectorNormalized(transform.rotation.eulerAngles.z);
+        ContactFilter2D filter = CreateObstacleContactFilter();
+        RaycastHit2D[] hits = new RaycastHit2D[0];
+
+        Collider2D collider = summonedObject.GetComponent<Collider2D>();
+        collider.Cast(dir, filter, hits);
+
+        bool hitSomeObstacle = hits.Length != 0;
+        if (hitSomeObstacle)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    private ContactFilter2D CreateObstacleContactFilter()
+    {
+        LayerMask layerMask = LayerMask.GetMask("Obstacles");
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(layerMask);
+
+        return filter;
     }
     #endregion
 }

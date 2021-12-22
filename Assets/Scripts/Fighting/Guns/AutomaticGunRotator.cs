@@ -52,15 +52,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     protected void Start()
     {
         InitializeStartingVariables();
-
-        CallStartingMethods();
     }
-
     private void InitializeStartingVariables()
-    {
-
-    }
-    private void CallStartingMethods()
     {
 
     }
@@ -129,7 +122,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     private void UpdateUI()
     {
         UpdateUIState();
-        //UpdateShootingZone();
+        //UpdateShootingZoneVisibility();
     }
 
 
@@ -482,7 +475,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
 
     }
-    private void UpdateShootingZone()
+    private void UpdateShootingZoneVisibility()
     {
         if (shootingZoneScript != null)
         {

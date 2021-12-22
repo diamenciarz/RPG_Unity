@@ -53,7 +53,6 @@ public class DamageReceiver : ListUpdater
     }
 
     #region Receive Damage
-    //Receive damage
     /// <summary>
     /// Deal damage
     /// </summary>
@@ -108,7 +107,6 @@ public class DamageReceiver : ListUpdater
         {
             isDestroyed = true;
             StaticDataHolder.PlaySound(GetBreakSound(), transform.position, breakingSoundVolume);
-
             DestroyObject();
         }
     }
