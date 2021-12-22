@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ICollidingEntityData
 {
-    public abstract GameObject GetObjectThatCreatedThisProjectile();
+    public abstract GameObject GetCreatedBy();
     public abstract Vector3 GetVelocityVector3();
     public abstract void ModifyVelocityVector3(Vector3 deltaVector);
 }

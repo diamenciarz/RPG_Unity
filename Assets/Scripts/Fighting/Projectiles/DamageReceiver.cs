@@ -185,15 +185,16 @@ public class DamageReceiver : ListUpdater
     {
         team = newTeam;
     }
-    //Accessor methods
+    #endregion
+
+    #region Accessor methods
     public int GetTeam()
     {
         return team;
     }
-    #endregion
-
     public int GetCurrentHealth()
     {
         return health;
     }
+    #endregion
 }

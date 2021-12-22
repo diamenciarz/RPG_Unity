@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TriggerOnDeath : TeamUpdater
 {
-
     [Header("Upon Breaking")]
     [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToTurnIntoList;
 
@@ -15,10 +14,8 @@ public class TriggerOnDeath : TeamUpdater
     [SerializeField] protected float leftBulletSpread;
     [SerializeField] protected float rightBulletSpread;
 
-    
     protected EntityCreator entityCreator;
     private bool isDestroyed;
-
 
     private void Start()
     {
@@ -68,8 +65,6 @@ public class TriggerOnDeath : TeamUpdater
         Destroy(gameObject);
     }
 
-
-    //Shoot once
     #region OneShot
     private void ShootAtTarget(Vector3 targetPosition, int i)
     {

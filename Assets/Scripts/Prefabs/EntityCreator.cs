@@ -79,14 +79,6 @@ public class EntityCreator : MonoBehaviour
         }
         return null;
     }
-    public bool IsThisProjectileARocket(BulletTypes projectile)
-    {
-        if (projectile == BulletTypes.Rocket)
-        {
-            return true;
-        }
-        return false;
-    }
     #endregion
 
     #region Entities
@@ -117,7 +109,7 @@ public class EntityCreator : MonoBehaviour
             {
                 item.SetTeam(team);
 
-                if (createdBy != null)
+                if (createdBy)
                 {
                     item.SetCreatedBy(createdBy);
                 }

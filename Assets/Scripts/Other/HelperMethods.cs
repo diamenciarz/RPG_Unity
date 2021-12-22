@@ -263,13 +263,12 @@ public static class HelperMethods
     #region Object checks
     public static bool IsObjectAProjectile(GameObject collisionObject)
     {
-        bool isAProjectile = false;
         IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
         if (damageReceiver != null)
         {
-            isAProjectile = damageReceiver.IsAProjectile();
+            return damageReceiver.IsAProjectile();
         }
-        return isAProjectile;
+        return false;
     }
     public static bool IsObjectAnEntity(GameObject collisionObject)
     {
@@ -280,23 +279,43 @@ public static class HelperMethods
         }
         return false;
     }
+    public static bool IsAnObstacle(GameObject collisionObject)
+    {
+        if (collisionObject.tag == "Obstacle")
+        {
+            return true;
+        }
+
+        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
+        if (listUpdater)
+        {
+            return listUpdater.ListContains(ListUpdater.AddToLists.Obstacle);
+        }
+        return false;
+    }
     public static int GetObjectTeam(GameObject collisionObject)
     {
-        int returnTeam = -2;
         DamageReceiver damageReceiver = collisionObject.GetComponentInChildren<DamageReceiver>();
         if (damageReceiver)
         {
-            returnTeam = damageReceiver.GetTeam();
+            return damageReceiver.GetTeam();
         }
         else
         {
             TeamUpdater teamUpdater = collisionObject.GetComponentInChildren<TeamUpdater>();
             if (teamUpdater)
             {
-                returnTeam = teamUpdater.GetTeam();
+                return teamUpdater.GetTeam();
             }
         }
-        return returnTeam;
+        return -2;
+    }
+    #endregion
+
+    #region Break checks
+    public static bool ShouldBreak()
+    {
+        return true;
     }
     #endregion
 }

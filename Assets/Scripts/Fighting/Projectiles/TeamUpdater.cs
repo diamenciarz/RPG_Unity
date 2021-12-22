@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamUpdater : MonoBehaviour
+public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
 {
-    //[HideInInspector]
+    [HideInInspector]
     public int team = -1;
     protected GameObject createdBy;
 
@@ -67,7 +67,6 @@ public class TeamUpdater : MonoBehaviour
         {
             team = damageReceiver.GetTeam();
             return;
-
         }
         BasicProjectileController basicProjectileController = GetComponentInParent<BasicProjectileController>();
         if (basicProjectileController)

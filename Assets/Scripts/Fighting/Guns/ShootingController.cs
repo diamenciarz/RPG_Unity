@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
+public class ShootingController : TeamUpdater
 {
     [Header("Instances")]
     [SerializeField] SalvoScriptableObject salvo;
@@ -40,7 +40,6 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     }
     private void InitializeStartingVariables()
     {
-        parentGameObject = gameObject.transform.parent.gameObject;
         entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
         shootingTimeBank = GetSalvoTimeSum();

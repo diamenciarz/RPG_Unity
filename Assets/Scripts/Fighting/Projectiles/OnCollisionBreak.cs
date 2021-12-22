@@ -34,15 +34,6 @@ public class OnCollisionBreak : TeamUpdater
     private void UpdateStartingVariables()
     {
         creationTime = Time.time;
-        CheckRocket();
-    }
-    private void CheckRocket()
-    {
-        OnCollisionDamage onCollisionDamage = GetComponent<OnCollisionDamage>();
-        if (onCollisionDamage != null)
-        {
-            isARocket = onCollisionDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Rocket);
-        }
     }
 
     #region Collisions
@@ -78,14 +69,7 @@ public class OnCollisionBreak : TeamUpdater
     #region Break Checks
     private bool BreaksOnObstacle(GameObject collisionObject)
     {
-        bool isAnObstacle = false;
-        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
-        if (listUpdater)
-        {
-            isAnObstacle = listUpdater.ListContains(ListUpdater.AddToLists.Obstacle);
-        }
-        isAnObstacle = isAnObstacle || collisionObject.tag == "Obstacle";
-        return isAnObstacle && BreaksOnContactWith(BreaksOn.Obstacles);
+        return HelperMethods.IsAnObstacle(collisionObject) && BreaksOnContactWith(BreaksOn.Obstacles);
     }
     private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
     {
@@ -109,8 +93,8 @@ public class OnCollisionBreak : TeamUpdater
     private bool CheckParent(GameObject collisionObject)
     {
         bool isTouchingParent = createdBy == collisionObject;
-        bool isInvulnerable = Time.time > creationTime + 0.1f;
-        if (!isTouchingParent || (isTouchingParent && isInvulnerable))
+        bool isStillInvulnerable = Time.time > creationTime + 0.1f; //The shooting object should be immune to its own projectiles for a split second
+        if (!isTouchingParent || (isTouchingParent && isStillInvulnerable))
         {
             return true;
         }
