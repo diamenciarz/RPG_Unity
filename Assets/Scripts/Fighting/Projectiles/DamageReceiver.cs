@@ -11,16 +11,13 @@ public class DamageReceiver : ListUpdater
     [SerializeField] bool turnHealthBarOn;
     [SerializeField] bool canBePushed;
 
-
-
     [Header("Sounds")]
     [SerializeField] protected List<AudioClip> breakingSounds;
     [SerializeField] [Range(0, 1)] protected float breakingSoundVolume = 1f;
     [SerializeField] protected List<AudioClip> hitSounds;
     [SerializeField] [Range(0, 1)] protected float hitSoundVolume = 1f;
 
-
-
+    //Private variables
     private GameObject healthBarInstance;
     private int maxHP;
     private bool isDestroyed = false;

@@ -98,7 +98,7 @@ public class TriggerOnDeath : TeamUpdater
         Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicDirection);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
@@ -106,7 +106,7 @@ public class TriggerOnDeath : TeamUpdater
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset + basicDirection);
 
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
     {
@@ -114,7 +114,7 @@ public class TriggerOnDeath : TeamUpdater
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
     {
@@ -123,7 +123,7 @@ public class TriggerOnDeath : TeamUpdater
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
 
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     #endregion
 }

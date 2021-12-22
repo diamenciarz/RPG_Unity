@@ -5,7 +5,6 @@ using UnityEngine;
 public class BulletController : BasicProjectileController
 {
     [Header("Timed destroy")]
-    [SerializeField] bool timedDestroy = false;
     [Tooltip("Destroy the bullet after it has existed for this long. -1 for infinity")]
     [SerializeField] float destroyDelay = 5f;
     [Tooltip("Destroy the bullet after it has travelled this much distance. -1 for infinity")]
@@ -24,6 +23,7 @@ public class BulletController : BasicProjectileController
     private int bounces;
     private Vector3 collisionNormal;
     private CapsuleCollider2D myCollider2D;
+    private bool timedDestroy = false;
 
     protected override void Start()
     {
@@ -49,37 +49,37 @@ public class BulletController : BasicProjectileController
     #region Destroy
     private void SetupDestroyTime()
     {
-        if (timedDestroy)
-        {
-            float destroyDistanceDelay = CountDistanceDelay();
-            bool distanceDelayExists = destroyDistanceDelay != -1;
-            bool destroyTimeExists = destroyDelay != -1;
-            destroyTime = Time.time;
+        float destroyDistanceDelay = CountDistanceDelay();
+        bool distanceDelayExists = destroyDistanceDelay != -1;
+        bool destroyTimeExists = destroyDelay != -1;
+        destroyTime = Time.time;
 
-            if (destroyTimeExists && distanceDelayExists)
-            {
-                if (destroyDistanceDelay < destroyDelay)
-                {
-                    destroyTime += destroyDistanceDelay;
-                }
-                else
-                {
-                    destroyTime += destroyDelay;
-                }
-                return;
-            }
-            if (destroyTimeExists)
-            {
-                destroyTime += destroyDelay;
-                return;
-            }
-            if (distanceDelayExists)
+        if (destroyTimeExists && distanceDelayExists)
+        {
+            if (destroyDistanceDelay < destroyDelay)
             {
                 destroyTime += destroyDistanceDelay;
-                return;
             }
-            destroyTime += 100;
+            else
+            {
+                destroyTime += destroyDelay;
+            }
+            timedDestroy = true;
+            return;
         }
+        if (destroyTimeExists)
+        {
+            destroyTime += destroyDelay;
+            timedDestroy = true;
+            return;
+        }
+        if (distanceDelayExists)
+        {
+            destroyTime += destroyDistanceDelay;
+            timedDestroy = true;
+            return;
+        }
+        destroyTime += 100;
     }
     private float CountDistanceDelay()
     {
@@ -192,7 +192,7 @@ public class BulletController : BasicProjectileController
     {
         Vector3 myMomentum = GetVelocityVector3().normalized * pushingPower;
         Vector3 outcomeVelocity = incomingMomentum + myMomentum;
-        
+
         //Modify bullet velocity
         SetVelocityVector(outcomeVelocity);
     }
@@ -227,13 +227,27 @@ public class BulletController : BasicProjectileController
     private bool BouncesOffAllyOrEnemy(GameObject collisionObject)
     {
         bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
-        bool bouncesOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BouncesOnContactWith(BreaksOn.Allies);
-        if (bouncesOnAlly)
+        if (CheckParent(collisionObject))
         {
-            return true;
+            bool bouncesOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BouncesOnContactWith(BreaksOn.Allies);
+            if (bouncesOnAlly)
+            {
+                return true;
+            }
         }
         bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
         return bouncesOnEnemy;
+    }
+    private bool CheckParent(GameObject collisionObject)
+    {
+        Debug.Log("Bounced on: " + collisionObject.name + " created by: " + createdBy);
+        bool isTouchingParent = createdBy == collisionObject;
+        bool isInvulnerable = Time.time > creationTime + 0.1f;
+        if (!isTouchingParent || (isTouchingParent && isInvulnerable))
+        {
+            return true;
+        }
+        return false;
     }
     private bool BouncesOffProjectile(IDamage damageReceiver)
     {

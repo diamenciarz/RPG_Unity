@@ -8,7 +8,6 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     [SerializeField] SalvoScriptableObject salvo;
     [Tooltip("Game Object, which will act as the creation point for the bullets")]
     [SerializeField] Transform shootingPoint;
-    [SerializeField] GameObject parentGameObject;
     [SerializeField] GameObject gunReloadingBarPrefab;
     [Header("Settings")]
     [Tooltip("True - the gun waits the full time to reload all ammo at once. False - the ammo reolads gradually")]
@@ -33,10 +32,10 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     private bool canShoot;
     private int shotAmount;
 
+    #region Initialization
     protected void Start()
     {
         InitializeStartingVariables();
-        //StartCoroutine(ShootSalvo());
         CallStartingMethods();
     }
     private void InitializeStartingVariables()
@@ -54,13 +53,15 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
     {
         UpdateUIState();
     }
+    #endregion
+
     protected void Update()
     {
         CheckTimeBank();
-        Shoot();
+        TryShoot();
         UpdateAmmoBar();
     }
-    public void Shoot()
+    public void TryShoot()
     {
         if (shoot)
         {
@@ -74,6 +75,8 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
             }
         }
     }
+
+    #region Reloading
     private void CheckTimeBank()
     {
         if (reloadAllAtOnce)
@@ -129,6 +132,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
             yield return new WaitForSeconds(salvo.delayAfterEachShot[i]);
         }
     }
+    #endregion
 
     #region Shot Methods
     private void DoOneShot(int shotIndex)
@@ -165,7 +169,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
         Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(currentShotSO.leftBulletSpread, currentShotSO.rightBulletSpread);
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
-        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, createdBy);
     }
     private void SingleShotForwardWithRegularSpread(int index)
     {
@@ -174,7 +178,7 @@ public class ShootingController : TeamUpdater, ISerializationCallbackReceiver
 
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
         //Parent game object should be the owner of the gun
-        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, gameObject);
+        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, createdBy);
     }
     #endregion
 

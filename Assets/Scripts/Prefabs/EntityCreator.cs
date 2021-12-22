@@ -11,12 +11,10 @@ public class EntityCreator : MonoBehaviour
     public GameObject grenadePrefab;
     public GameObject grenadeExplosionPrefab;
     public GameObject bouncyLaserPrefab;
+
     [Header("Enemies")]
     public GameObject walkerPrefab;
-    public enum EntityTypes
-    {
-        Walker
-    }
+
     public enum BulletTypes
     {
         Nothing,
@@ -29,7 +27,12 @@ public class EntityCreator : MonoBehaviour
         GrenadeExplosion,
         BouncyLaser
     }
-    //Projectiles
+    public enum EntityTypes
+    {
+        Walker
+    }
+
+    #region Projectiles
     public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
     {
         GameObject bulletToSummon = GetProjectilePrefab(bulletType);
@@ -37,23 +40,7 @@ public class EntityCreator : MonoBehaviour
         {
             GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
 
-            TrySetupProjectileStartingValues(summonedBullet, team, createdBy);
-        }
-    }
-    private void TrySetupProjectileStartingValues(GameObject summonedBullet, int team, GameObject createdBy)
-    {
-        OnCollisionBreak basicProjectileController = summonedBullet.GetComponent<OnCollisionBreak>();
-        if (basicProjectileController != null && createdBy != null)
-        {
-            basicProjectileController.SetObjectThatCreatedThisProjectile(createdBy);
-        }
-        TeamUpdater[] teamUpdaters = summonedBullet.GetComponentsInChildren<TeamUpdater>();
-        if (teamUpdaters.Length != 0)
-        {
-            foreach (TeamUpdater item in teamUpdaters)
-            {
-                item.SetTeam(team);
-            }
+            TrySetupStartingValues(summonedBullet, team, createdBy);
         }
     }
     private GameObject GetProjectilePrefab(BulletTypes bulletType)
@@ -100,26 +87,15 @@ public class EntityCreator : MonoBehaviour
         }
         return false;
     }
+    #endregion
 
-
-    //Entities
+    #region Entities
     public void SummonEntity(EntityTypes entityType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject parent)
     {
         GameObject entityToSummon = GetEntityPrefab(entityType);
         GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation, parent.transform);
 
-        TrySetupEntityStartingValues(summonedEntity, team, parent);
-    }
-    private void TrySetupEntityStartingValues(GameObject summonedEntity, int team, GameObject parent)
-    {
-        TeamUpdater[] teamUpdaters = summonedEntity.GetComponentsInChildren<TeamUpdater>();
-        if (teamUpdaters.Length != 0)
-        {
-            foreach (TeamUpdater item in teamUpdaters)
-            {
-                item.SetTeam(team);
-            }
-        }
+        TrySetupStartingValues(summonedEntity, team, parent);
     }
     private GameObject GetEntityPrefab(EntityTypes entityType)
     {
@@ -129,4 +105,28 @@ public class EntityCreator : MonoBehaviour
         }
         return null;
     }
+    #endregion
+
+    #region Helper methods
+    private void TrySetupStartingValues(GameObject summonedObject, int team, GameObject createdBy)
+    {
+        TeamUpdater[] teamUpdaters = summonedObject.GetComponentsInChildren<TeamUpdater>();
+        if (teamUpdaters.Length != 0)
+        {
+            foreach (TeamUpdater item in teamUpdaters)
+            {
+                item.SetTeam(team);
+
+                if (createdBy != null)
+                {
+                    item.SetCreatedBy(createdBy);
+                }
+                else
+                {
+                    item.SetCreatedBy(summonedObject);
+                }
+            }
+        }
+    }
+    #endregion
 }

@@ -5,11 +5,17 @@ using UnityEngine;
 public class TeamUpdater : MonoBehaviour
 {
     //[HideInInspector]
-
     public int team = -1;
+    protected GameObject createdBy;
 
+    #region Set parent
+    public void SetCreatedBy(GameObject newObject)
+    {
+        createdBy = newObject;
+    }
+    #endregion
 
-    //Set methods
+    #region Set team
     /// <summary>
     /// Change team of the whole gameObject. Use ChangeTeamTo() to change team of this script
     /// </summary>
@@ -40,12 +46,18 @@ public class TeamUpdater : MonoBehaviour
     {
         team = newTeam;
     }
+    #endregion
 
-    //Accessor Methods
+    #region Accessor methods
     public int GetTeam()
     {
         return team;
     }
+    public GameObject GetCreatedBy()
+    {
+        return createdBy;
+    }
+    #endregion
 
     #region Serialization
     public void OnBeforeSerialize()

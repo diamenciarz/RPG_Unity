@@ -108,14 +108,13 @@ public class OnCollisionBreak : TeamUpdater
     /// <returns></returns>
     private bool CheckParent(GameObject collisionObject)
     {
-        bool isTouchingParent = objectThatCreatedThisProjectile == collisionObject;
+        bool isTouchingParent = createdBy == collisionObject;
         bool isInvulnerable = Time.time > creationTime + 0.1f;
         if (!isTouchingParent || (isTouchingParent && isInvulnerable))
         {
             return true;
         }
         return false;
-
     }
     private bool BreaksOnProjectile(GameObject collisionObject)
     {
@@ -192,10 +191,6 @@ public class OnCollisionBreak : TeamUpdater
         }
         return null;
     }
-    public void SetObjectThatCreatedThisProjectile(GameObject parentGameObject)
-    {
-        objectThatCreatedThisProjectile = parentGameObject;
-    }
     //Accessor methods
     public bool BreaksOnContactWith(BreaksOn contact)
     {
@@ -204,9 +199,5 @@ public class OnCollisionBreak : TeamUpdater
             return true;
         }
         return false;
-    }
-    public GameObject GetObjectThatCreatedThisProjectile()
-    {
-        return objectThatCreatedThisProjectile;
     }
 }
