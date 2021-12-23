@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TeamUpdater : MonoBehaviour
 {
-    //[HideInInspector]
+    [HideInInspector]
     public int team = -1;
     protected GameObject createdBy;
 

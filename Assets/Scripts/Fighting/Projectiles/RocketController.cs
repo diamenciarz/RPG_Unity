@@ -30,7 +30,6 @@ public class RocketController : BasicProjectileController
     {
         base.Start();
         CreateMiaIcon();
-        Debug.Log("my rotation: " + transform.rotation.eulerAngles.z);
     }
     private void CreateMiaIcon()
     {
@@ -81,7 +80,6 @@ public class RocketController : BasicProjectileController
     private void UpdateSpeed()
     {
         Vector3 newVelocity = HelperMethods.DirectionVectorNormalized(transform.eulerAngles.z) * currentRocketSpeed;
-        Debug.Log("New velocity: " + newVelocity);
         SetVelocityVector(newVelocity);
     }
     public override void SetVelocityVector(Vector3 newVelocityVector)

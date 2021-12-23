@@ -201,7 +201,6 @@ MonoBehaviour:
   rotationSpeed: 120
   shootRange: 2
   moveSpeed: 3
-  deltaRotation: -90
 --- !u!1 &2131695840489791758
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +212,7 @@ GameObject:
   - component: {fileID: 4962035639166103971}
   - component: {fileID: 288472290362152858}
   m_Layer: 6
-  m_Name: Gun
+  m_Name: Gun rotator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,7 +226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131695840489791758}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.08600092, z: 0}
+  m_LocalPosition: {x: 0.049, y: -0.101, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 970646365966750472}
@@ -249,7 +248,7 @@ MonoBehaviour:
   team: 2
   shootingSoundsList: []
   shootSoundVolume: 0
-  basicGunDirection: 0
+  basicGunDirection: -90
   maximumShootingRange: 10
   maximumRangeFromMouseToShoot: 10
   gunRotationSpeed: 120
@@ -264,8 +263,8 @@ MonoBehaviour:
   shootingZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
   shootingZoneTransform: {fileID: 6841228381647896854}
   isControlledByMouseCursor: 0
-  isShootingZoneOn: 0
-  invisibleTargetRotation: 0
+  isShootingZoneOn: 1
+  debugZoneOn: 0
 --- !u!1 &3125862760758012088
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +276,7 @@ GameObject:
   - component: {fileID: 970646365966750472}
   - component: {fileID: 1638330691663914073}
   m_Layer: 6
-  m_Name: gun09
+  m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,7 +290,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3125862760758012088}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 0.14, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4621247284816006682}
@@ -342,8 +341,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6012661388676647051}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 0.003, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 970646365966750472}
   m_RootOrder: 0
@@ -372,13 +371,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8145874865722057385}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 600636572777389987}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4499736661043684575
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -455,7 +454,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9120636043268162309}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.08600092, z: 0}
+  m_LocalPosition: {x: -0, y: -0.002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 600636572777389987}

@@ -13,7 +13,6 @@ public class UnitMovementController : TeamUpdater
     [SerializeField] float shootRange = 2;
     [SerializeField] float moveSpeed = 3;
     [Tooltip("Determines the front of the unit for looking purposes")]
-    [SerializeField] float deltaRotation = -90f;
 
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
     private Pathfinding.AIBase aiBase;
@@ -125,7 +124,7 @@ public class UnitMovementController : TeamUpdater
     private void RotateTowardsTarget()
     {
         Vector3 lookAt = CountLookAtPosition();
-        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lookAt) * Quaternion.Euler(0, 0, deltaRotation);
+        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lookAt);
         float angleThisFrame = rotationSpeed * Time.deltaTime;
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, angleThisFrame);

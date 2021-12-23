@@ -41,8 +41,8 @@ public class AutomaticGunRotator : TeamUpdater
     [SerializeField] bool isShootingZoneOn;
 
     private bool areTargetsInRange;
-    public float invisibleTargetRotation;
-    private static bool debugZoneOn = true;
+    private float invisibleTargetRotation;
+    [SerializeField] bool debugZoneOn = true;
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     private bool lastRotationLimitValue;
@@ -285,8 +285,10 @@ public class AutomaticGunRotator : TeamUpdater
         {
             deltaAngle = GoAroundBoundaries(deltaAngle);
         }
-
-        UpdateDebugZone(GetGunAngle(), GetGunAngle() + deltaAngle);
+        if (debugZoneOn)
+        {
+            UpdateDebugZone(GetGunAngle(), GetGunAngle() + deltaAngle);
+        }
         return deltaAngle;
     }
 

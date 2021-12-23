@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 2804781737811633541}
   - component: {fileID: 8021823894982714015}
   m_Layer: 6
-  m_Name: gun09
+  m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 7021969156245597980}
   - component: {fileID: 6493010151437119125}
   m_Layer: 6
-  m_Name: GameObject
+  m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 7002466400094574582}
   - component: {fileID: 6664170954889180255}
   m_Layer: 6
-  m_Name: Gun
+  m_Name: Gun rotator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,4 +396,4 @@ MonoBehaviour:
   shootingZoneTransform: {fileID: 7371173148479189348}
   isControlledByMouseCursor: 0
   isShootingZoneOn: 1
-  invisibleTargetRotation: 0
+  debugZoneOn: 0
