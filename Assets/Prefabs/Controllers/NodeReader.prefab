@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3234156282444344716}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.601553, y: 25.422613, z: -28.847057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -49,7 +49,7 @@ MonoBehaviour:
   dialogueBoxGO: {fileID: 0}
   dialogueChoiceButtonPrefab: {fileID: 3677151485011163866, guid: 2991e265b2322b9499fb5751e168217d, type: 3}
   endConversationButtonPrefab: {fileID: 3677151485011163866, guid: aca9efee0d32fc0468c60e3888eacfa2, type: 3}
-  bigPopupWindowPrefab: {fileID: 301017885515028378, guid: f33bc92cd5dcf084abd0ad2ff6f2e371, type: 3}
+  bigPopupWindowPrefab: {fileID: 1685025740213843504, guid: f2ad6df7251178944b33c579cb9df07c, type: 3}
   smallPopupWindowPrefab: {fileID: 1098409304922893859, guid: ffcfb68c8c37f994598a5e5df056cfdd, type: 3}
   textWindowAnimator: {fileID: 0}
   firstButtonPosition: {x: -500, y: -200}

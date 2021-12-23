@@ -54,11 +54,11 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
             }
         }
     }
-    public void SetVelocityVector(Vector3 newVelocityVector)
+    public virtual void SetVelocityVector(Vector3 newVelocityVector)
     {
         velocityVector = newVelocityVector;
         myRigidbody2D.velocity = newVelocityVector;
-        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + newVelocityVector) * Quaternion.Euler(0, 0, 90);
+        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + newVelocityVector);
     }
     public void ModifyVelocityVector3(Vector3 deltaVector)
     {

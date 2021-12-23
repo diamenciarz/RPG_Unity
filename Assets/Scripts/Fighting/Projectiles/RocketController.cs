@@ -9,18 +9,17 @@ public class RocketController : BasicProjectileController
     [SerializeField] GameObject objectMissingIconGameObject;
 
     [Header("Rocket Flight Settings")]
-    [SerializeField] float maxRocketSpeed;
-    [SerializeField] float speedChangeRatePerSecond = 1f;
-    public float rocketRotationSpeed; //Degrees per second
-    public float spriteDeltaRotation = -90;
-    protected float zRotation;
-
+    [SerializeField] float maxRocketSpeed = 5f;
+    [SerializeField] float speedChangeRatePerSecond = 3f;
+    [Tooltip("In degrees per second")]
+    [SerializeField] float rocketRotationSpeed = 120;
     [Header("Explosion Settings")]
-    public float timeToExpire;
+    public float timeToExpire = 30;
 
     //Private variables
-    protected float currentRocketSpeed;
-    private GameObject targetGameObject;
+    public float currentRocketSpeed;
+    public GameObject targetGameObject;
+
     #region Startup
     protected override void Awake()
     {
@@ -31,6 +30,7 @@ public class RocketController : BasicProjectileController
     {
         base.Start();
         CreateMiaIcon();
+        Debug.Log("my rotation: " + transform.rotation.eulerAngles.z);
     }
     private void CreateMiaIcon()
     {
@@ -80,20 +80,26 @@ public class RocketController : BasicProjectileController
     }
     private void UpdateSpeed()
     {
-        Vector3 newVelocity = HelperMethods.DirectionVectorNormalized(zRotation) * currentRocketSpeed;
+        Vector3 newVelocity = HelperMethods.DirectionVectorNormalized(transform.eulerAngles.z) * currentRocketSpeed;
+        Debug.Log("New velocity: " + newVelocity);
         SetVelocityVector(newVelocity);
+    }
+    public override void SetVelocityVector(Vector3 newVelocityVector)
+    {
+        velocityVector = newVelocityVector;
+        myRigidbody2D.velocity = newVelocityVector;
+        Quaternion deltaRotation = Quaternion.Euler(0, 0, -90); // Weird thing with rockets
+        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + newVelocityVector) * deltaRotation;
     }
     private void TurnTowardsTarget()
     {
-        if (targetGameObject != null)
+        if (targetGameObject)
         {
-            const int DELTA_ROTATION = -90; //I don't understand, why it's necessary. Something is programmed wrong, but this fixes it
-            Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, targetGameObject.transform.position) * Quaternion.Euler(0, 0, DELTA_ROTATION);
-            Quaternion newRotation = Quaternion.RotateTowards(transform.rotation * GetRocketSpriteCounterRotation(), targetRotation, rocketRotationSpeed * Time.deltaTime);
-            //Debug.DrawRay(transform.position, StaticDataHolder.GetFromToVectorIn2D(transform.position, targetGameObject.transform.position), Color.red, 0.1f);
-            zRotation = newRotation.eulerAngles.z;
+            Quaternion deltaRotation = Quaternion.Euler(0, 0, -90);// Weird thing with rockets
+            Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, targetGameObject.transform.position) * deltaRotation;
+            float deltaAngleThisFrame = rocketRotationSpeed * Time.deltaTime;
 
-            transform.rotation = newRotation * GetRocketSpriteRotation();
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, deltaAngleThisFrame);
         }
     }
     #endregion
@@ -114,14 +120,6 @@ public class RocketController : BasicProjectileController
     public void SetCurrentRocketSpeed(float newSpeed)
     {
         currentRocketSpeed = newSpeed;
-    }
-    private Quaternion GetRocketSpriteRotation()
-    {
-        return Quaternion.Euler(0, 0, spriteDeltaRotation);
-    }
-    private Quaternion GetRocketSpriteCounterRotation()
-    {
-        return Quaternion.Euler(0, 0, -spriteDeltaRotation);
     }
     #endregion
 }

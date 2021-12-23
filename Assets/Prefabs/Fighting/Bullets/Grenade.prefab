@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7700761372939823443}
   - component: {fileID: 7700761372939823442}
   - component: {fileID: 7700761372939823440}
-  - component: {fileID: 8776004092663047426}
   - component: {fileID: 3278521563504507919}
   - component: {fileID: 1082129703195348843}
   - component: {fileID: -553088433232255719}
+  - component: {fileID: 5409658927449349606}
   m_Layer: 0
   m_Name: Grenade
   m_TagString: Untagged
@@ -29,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7700761372939823446}
-  m_LocalRotation: {x: 0, y: 0, z: -0.6719985, w: 0.7405525}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -34.938457, y: -31.60448, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -84.443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7700761372939823442
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -109,22 +109,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &8776004092663047426
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700761372939823446}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.12999998, y: 0.56999993}
-  m_Direction: 0
 --- !u!114 &3278521563504507919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,13 +130,13 @@ MonoBehaviour:
   isPiercing: 0
   damageTypes: 00000000
   isPushing: 1
-  pushingPower: 2
+  pushingPower: 1
   spriteList:
   - {fileID: 21300000, guid: 1a7b65179356e684abbb8fb0edb8c358, type: 3}
   - {fileID: 21300000, guid: 3a2db6f9bd864da42a74a6f026b5b5af, type: 3}
   startingSpeed: 8
   destroyDelay: -1
-  destroyDistance: 3
+  destroyDistance: 5
   bounceEnum: 010000000200000003000000060000000500000000000000
   minAngleToReflect: 0
   maxReflections: -1
@@ -190,3 +174,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   putInLists: 00000000
+--- !u!58 &5409658927449349606
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700761372939823446}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.16

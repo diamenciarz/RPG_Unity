@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: Splitting laser
   m_EditorClassIdentifier: 
   shots:
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: 3a3cb1f76348b324fb33364ea2535af1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
   delayAfterEachShot:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.5
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
   reloadDelays:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.5
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
   additionalReloadTime: 1
