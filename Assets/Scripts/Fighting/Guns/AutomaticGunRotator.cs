@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
+public class AutomaticGunRotator : TeamUpdater
 {
     //Instances
     GameObject theNearestEnemyGameObject;
@@ -126,7 +126,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
     }
 
 
-    //SHOOTING ------------
+    #region Shooting behaviour
     private void CheckShooting()
     {
         if (areTargetsInRange)
@@ -154,9 +154,9 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             item.shoot = shoot;
         }
     }
+    #endregion
 
     #region CanShoot
-    //----Checks
     private void LookForTargets()
     {
         areTargetsInRange = AreTargetsInRange();
@@ -189,7 +189,7 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         return false;
     }
 
-    //----Helper functions
+    #region Helper functions
     private bool CanShootTarget(GameObject target, float range)
     {
         if (HelperMethods.CanSeeTargetDirectly(transform.position, target))
@@ -242,6 +242,8 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return false;
     }
+    #endregion
+
     #endregion
 
     #region Movement
@@ -600,10 +602,15 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
         }
         return currentClosestEnemy;
     }
+
+    #region Mutator methods
     public void SetIsControlledByMouseCursorTo(bool isTrue)
     {
         isControlledByMouseCursor = isTrue;
     }
+    #endregion
+
+    #region Accessor methods
     private float GetCurrentRange()
     {
         if (isControlledByMouseCursor)
@@ -615,5 +622,5 @@ public class AutomaticGunRotator : TeamUpdater, ISerializationCallbackReceiver
             return maximumShootingRange;
         }
     }
-
+    #endregion
 }

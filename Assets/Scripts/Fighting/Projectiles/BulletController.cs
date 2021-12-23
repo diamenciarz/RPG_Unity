@@ -34,7 +34,6 @@ public class BulletController : BasicProjectileController
         {
             StartCoroutine(CheckDestroyDelay());
         }
-        //FirstFrameCollisionCheck();
     }
     protected void Update()
     {
@@ -101,22 +100,6 @@ public class BulletController : BasicProjectileController
     #endregion
 
     #region Collisions
-    /// <summary>
-    /// Checks, if the bullet was created inside of a wall
-    /// </summary>
-    private void FirstFrameCollisionCheck()
-    {
-        LayerMask layerMask = LayerMask.GetMask("Obstacles");
-        float dir = transform.rotation.eulerAngles.z;
-        float distance = GetVelocityVector3().magnitude * Time.deltaTime;
-        Vector2 pos = transform.position;
-
-        RaycastHit2D hit = Physics2D.CapsuleCast(pos, myCollider2D.size, CapsuleDirection2D.Vertical, dir, GetVelocityVector3(), distance, layerMask);
-        if (hit)
-        {
-            DestroyObject();
-        }
-    }
     /// <summary>
     /// Measures the possible normal, if a collision were to occur
     /// </summary>

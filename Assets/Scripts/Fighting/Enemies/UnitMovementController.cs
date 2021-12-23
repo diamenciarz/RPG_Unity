@@ -12,11 +12,13 @@ public class UnitMovementController : TeamUpdater
     public float rotationSpeed = 120;
     [SerializeField] float shootRange = 2;
     [SerializeField] float moveSpeed = 3;
+    [Tooltip("Determines the front of the unit for looking purposes")]
+    [SerializeField] float deltaRotation = -90f;
 
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
     private Pathfinding.AIBase aiBase;
     private float currentMoveSpeed;
-    private bool canSeeTarget;
+    protected bool canSeeTarget;
 
     private float POSITION_REFRESH_RATE = 0.25f; // Cooldown to refresh path to target
 
@@ -37,6 +39,9 @@ public class UnitMovementController : TeamUpdater
         //Setup instances
         aiDestinationSetter = GetComponent<Pathfinding.AIDestinationSetter>();
         aiBase = GetComponent<Pathfinding.AIBase>();
+        //Setup rotation
+        aiBase.updateRotation = false;
+        aiBase.enableRotation = true;
         //Setup target position
         lastTargetPosition = new GameObject();
         lastTargetPosition.transform.position = transform.position;
@@ -48,7 +53,10 @@ public class UnitMovementController : TeamUpdater
     #endregion
 
     #region Movement
+
     #region Pathing
+
+    #region New target finding
     private IEnumerator ITargetPositionUpdater(float refreshRate)
     {
         while (true)
@@ -72,17 +80,17 @@ public class UnitMovementController : TeamUpdater
             target = newTarget;
         }
     }
+    #endregion
+
+    #region Current target moving
     private void SetTargetPositionPointer()
     {
-
         if (target)
         {
-            if (HelperMethods.Distance(gameObject, target) <= shootRange)
+            bool stopMoving = HelperMethods.Distance(gameObject, target) <= shootRange && canSeeTarget;
+            if (stopMoving)
             {
-                if (canSeeTarget)
-                {
-                    MovePointerOntoMyself();
-                }
+                MovePointerOntoMyself();
             }
             else
             {
@@ -105,6 +113,7 @@ public class UnitMovementController : TeamUpdater
     {
         lastTargetPosition.transform.position = transform.position;
     }
+    #endregion
 
     #endregion
 
@@ -116,13 +125,14 @@ public class UnitMovementController : TeamUpdater
     private void RotateTowardsTarget()
     {
         Vector3 lookAt = CountLookAtPosition();
-        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lookAt);
+        Quaternion targetRotation = HelperMethods.DeltaPositionRotation(transform.position, lookAt) * Quaternion.Euler(0, 0, deltaRotation);
         float angleThisFrame = rotationSpeed * Time.deltaTime;
 
-        Quaternion.RotateTowards(transform.rotation, targetRotation, angleThisFrame);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, angleThisFrame);
     }
-    private Vector3 CountLookAtPosition() {
-        if (canSeeTarget)
+    private Vector3 CountLookAtPosition()
+    {
+        if (canSeeTarget && target != null)
         {
             return target.transform.position;
         }

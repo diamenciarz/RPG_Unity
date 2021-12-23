@@ -79,7 +79,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     }
     protected void DestroyObject()
     {
-        if (!StaticDataHolder.CallAllTriggers(gameObject))
+        if (!HelperMethods.CallAllTriggers(gameObject))
         {
             StartCoroutine(DestroyAtTheEndOfFrame());
         }

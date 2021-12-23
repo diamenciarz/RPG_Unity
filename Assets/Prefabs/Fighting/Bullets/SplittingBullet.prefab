@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 04000000010000000500000006000000
+  breakEnum: 040000000100000005000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 1
@@ -151,13 +151,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
   - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
   startingSpeed: 6
-  timedDestroy: 0
-  destroyDelay: 5
-  destroyDistance: 1
-  bounceEnum: 
-  minAngleToReflect: 45
+  destroyDelay: -1
+  destroyDistance: -1
+  bounceEnum: 0600000000000000
+  minAngleToReflect: 30
   maxReflections: 3
-  timeToAdd: 2
+  timeToAdd: 0
 --- !u!114 &-1566152343811300086
 MonoBehaviour:
   m_ObjectHideFlags: 0

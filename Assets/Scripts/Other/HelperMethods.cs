@@ -187,6 +187,24 @@ public static class HelperMethods
         inputList.ForEach((item) => returnList.Add(item));
         return returnList;
     }
+    public static List<float> CloneList(List<float> inputList)
+    {
+        List<float> returnList = new List<float>(inputList.Count);
+        inputList.ForEach((item) => returnList.Add(item));
+        return returnList;
+    }
+    public static List<int> CloneList(List<int> inputList)
+    {
+        List<int> returnList = new List<int>(inputList.Count);
+        inputList.ForEach((item) => returnList.Add(item));
+        return returnList;
+    }
+    public static List<Vector3> CloneList(List<Vector3> inputList)
+    {
+        List<Vector3> returnList = new List<Vector3>(inputList.Count);
+        inputList.ForEach((item) => returnList.Add(item));
+        return returnList;
+    }
     #endregion
 
     #region LineOfSight
@@ -317,5 +335,30 @@ public static class HelperMethods
     {
         return true;
     }
+    
+    #region OnDestroy
+    /// <summary>
+    /// Returns true, if this method has found and called at least one trigger
+    /// </summary>
+    /// <param name="gameObject"></param>
+    /// <returns></returns>
+    public static bool CallAllTriggers(GameObject gameObject)
+    {
+        TriggerOnDeath[] triggerOnDeath = gameObject.GetComponentsInChildren<TriggerOnDeath>();
+        if (triggerOnDeath.Length != 0)
+        {
+            foreach (TriggerOnDeath item in triggerOnDeath)
+            {
+                item.ObjectDestroyed();
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
+
     #endregion
 }

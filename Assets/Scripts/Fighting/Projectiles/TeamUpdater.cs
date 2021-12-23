@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
+public class TeamUpdater : MonoBehaviour
 {
     [HideInInspector]
     public int team = -1;
     protected GameObject createdBy;
 
-    #region Set parent
     private void Awake()
     {
+        SetupTeam();
         UpdateCreatedBy();
     }
+    #region Set parent
     private void UpdateCreatedBy()
     {
         DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
@@ -48,9 +49,9 @@ public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
     public void SetTeam(int newTeam)
     {
         team = newTeam;
-        UpdateTeam(newTeam);
+        UpdateTeamInChildren(newTeam);
     }
-    private void UpdateTeam(int newTeam)
+    private void UpdateTeamInChildren(int newTeam)
     {
         TeamUpdater[] teamUpdater = GetComponentsInChildren<TeamUpdater>();
         foreach (TeamUpdater item in teamUpdater)
@@ -71,21 +72,7 @@ public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
     {
         team = newTeam;
     }
-    #endregion
-
-    #region Accessor methods
-    public int GetTeam()
-    {
-        return team;
-    }
-    public GameObject GetCreatedBy()
-    {
-        return createdBy;
-    }
-    #endregion
-
-    #region Serialization
-    public void OnBeforeSerialize()
+    private void SetupTeam()
     {
         DamageReceiver damageReceiver = GetComponentInParent<DamageReceiver>();
         if (damageReceiver)
@@ -100,9 +87,16 @@ public class TeamUpdater : MonoBehaviour, ISerializationCallbackReceiver
             return;
         }
     }
-    public void OnAfterDeserialize()
-    {
+    #endregion
 
+    #region Accessor methods
+    public int GetTeam()
+    {
+        return team;
+    }
+    public GameObject GetCreatedBy()
+    {
+        return createdBy;
     }
     #endregion
 }

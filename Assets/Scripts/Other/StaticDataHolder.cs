@@ -192,7 +192,8 @@ public static class StaticDataHolder
     #region Helper Methods
 
     #region Get Contents
-    //Enemies
+
+    #region Enemies
     public static GameObject GetClosestEnemyInSight(Vector3 positionVector, int myTeam)
     {
         return GetClosestObjectInSight(GetEnemyList(myTeam), positionVector);
@@ -205,8 +206,9 @@ public static class StaticDataHolder
     {
         return SubtractAllies(GetEntityList(), myTeam);
     }
+    #endregion
 
-    //Allies
+    #region Allies
     public static GameObject GetClosestAllyInSight(Vector3 positionVector, int myTeam, GameObject gameObjectToIgnore)
     {
         return GetClosestObjectInSight(GetAllyList(myTeam, gameObjectToIgnore), positionVector);
@@ -219,8 +221,9 @@ public static class StaticDataHolder
     {
         return SubtractMeAndEnemies(GetEntityList(), myTeam, gameObjectToIgnore);
     }
+    #endregion
 
-    //Generic
+    #region Generic
     public static GameObject GetClosestObject(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
         if (possibleTargetList.Count != 0)
@@ -271,6 +274,8 @@ public static class StaticDataHolder
     }
     #endregion
 
+    #endregion
+
     #region Modify List Contents
     public static List<GameObject> SubtractAllies(List<GameObject> inputList, int myTeam)
     {
@@ -309,29 +314,6 @@ public static class StaticDataHolder
     }
     #endregion
 
-    #region OnDestroy
-    /// <summary>
-    /// Returns true, if this method has found and called at least one trigger
-    /// </summary>
-    /// <param name="gameObject"></param>
-    /// <returns></returns>
-    public static bool CallAllTriggers(GameObject gameObject)
-    {
-        TriggerOnDeath[] triggerOnDeath = gameObject.GetComponentsInChildren<TriggerOnDeath>();
-        if (triggerOnDeath.Length != 0)
-        {
-            foreach (TriggerOnDeath item in triggerOnDeath)
-            {
-                item.ObjectDestroyed();
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    #endregion
     #endregion
 
     #region Play Sounds

@@ -154,7 +154,7 @@ public class OnCollisionBreak : TeamUpdater
     }
     private void DestroyObject()
     {
-        if (!StaticDataHolder.CallAllTriggers(gameObject))
+        if (!HelperMethods.CallAllTriggers(gameObject))
         {
             StartCoroutine(DestroyAtTheEndOfFrame());
         }

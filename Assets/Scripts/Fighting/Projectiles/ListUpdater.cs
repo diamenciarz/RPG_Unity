@@ -35,7 +35,7 @@ public class ListUpdater : MonoBehaviour
     public void DestroyObject()
     {
         RemoveObjectFromLists();
-        if (!StaticDataHolder.CallAllTriggers(gameObject))
+        if (!HelperMethods.CallAllTriggers(gameObject))
         {
             StartCoroutine(DestroyAtTheEndOfFrame());
         }

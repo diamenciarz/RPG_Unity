@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   putInLists: 02000000
   team: 2
-  health: 50
+  health: 10
   healthBarPrefab: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
   turnHealthBarOn: 1
   canBePushed: 0
@@ -201,6 +201,7 @@ MonoBehaviour:
   rotationSpeed: 120
   shootRange: 2
   moveSpeed: 3
+  deltaRotation: -90
 --- !u!1 &2131695840489791758
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +419,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 2abba9010a4ba01419225a85220ea972, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
