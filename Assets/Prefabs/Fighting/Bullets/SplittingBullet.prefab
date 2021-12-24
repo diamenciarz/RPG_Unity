@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -51
-  m_Sprite: {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8887aa7e07d9b54b945a0286d775326, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -179,8 +179,8 @@ MonoBehaviour:
   isPushing: 1
   pushingPower: 0.5
   spriteList:
-  - {fileID: 21300000, guid: b5f03607a4427a94bb693afecaa8a73a, type: 3}
-  - {fileID: 21300000, guid: 274061a845716594d8be4c080cf15c05, type: 3}
+  - {fileID: 21300000, guid: f8887aa7e07d9b54b945a0286d775326, type: 3}
+  - {fileID: 21300000, guid: 7090487e8efd833498e1a0ae3367222e, type: 3}
   startingSpeed: 6
   destroyDelay: -1
   destroyDistance: -1
@@ -203,7 +203,7 @@ MonoBehaviour:
   team: -1
   gameObjectsToTurnIntoList: 0200000002000000000000000200000002000000
   shootsAtEnemies: 0
-  basicDirection: 0
+  shotDirection: 0
   spreadProjectilesEvenly: 1
   spreadDegrees: 45
   leftBulletSpread: 0

@@ -15,8 +15,10 @@ public class AutomaticGunRotator : TeamUpdater
     [Header("Gun stats")]
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
-    [SerializeField] float maximumShootingRange = 5f;
-    [SerializeField] float maximumRangeFromMouseToShoot = 5f;
+    [Tooltip("The shooting range of the gun in autonomic mode. Choose 0 for infinite range")]
+    [SerializeField] float maximumShootingRange = 10f;
+    [Tooltip("The click range of the gun in manual mode. Choose 0 for infinite range")]
+    [SerializeField] float maximumRangeFromMouseToShoot = 10f;
 
     [Header("Turret stats")]
     [Tooltip("In degrees per second")]

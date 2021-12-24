@@ -87,11 +87,11 @@ public class OnCollisionBreak : TeamUpdater
         return breaksOnEnemy;
     }
     /// <summary>
-    /// Checks, if the colliding object is the object that created this projectile and if so, then checks if it should be invulnerable
+    /// Every unit is invulnerable to its own projectiles for 0.1 sec
     /// </summary>
     /// <param name="collisionObject"></param>
     /// <returns></returns>
-    private bool CheckParent(GameObject collisionObject)
+    protected bool CheckParent(GameObject collisionObject)
     {
         bool isTouchingParent = createdBy == collisionObject;
         bool isStillInvulnerable = Time.time > creationTime + 0.1f; //The shooting object should be immune to its own projectiles for a split second

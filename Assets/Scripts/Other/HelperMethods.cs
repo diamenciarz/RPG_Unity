@@ -107,7 +107,7 @@ public static class HelperMethods
 
     #region Rotation
     /// <summary>
-    /// Rotation from first position to second position. Range (-180;180>
+    /// Rotation from first position to second position. Range <0;360)
     /// </summary>
     /// <param name="firstPosition"></param>
     /// <param name="secondPosition"></param>
@@ -115,7 +115,7 @@ public static class HelperMethods
     public static Quaternion DeltaPositionRotation(Vector3 firstPosition, Vector3 secondPosition)
     {
         Vector3 deltaPosition = DeltaPosition(firstPosition, secondPosition);
-
+        
         if (deltaPosition.x == 0)
         {
             if (deltaPosition.y >= 0)
@@ -127,18 +127,8 @@ public static class HelperMethods
                 return Quaternion.Euler(0, 0, -90);
             }
         }
-
-        float ratio = deltaPosition.y / deltaPosition.x;
-        float zRotation = Mathf.Rad2Deg * Mathf.Atan(ratio);
-
-        if (deltaPosition.x <= 0)
-        {
-            zRotation += 180;
-        }
-        if (zRotation > 180)
-        {
-            zRotation -= 360;
-        }
+        
+        float zRotation = Mathf.Rad2Deg * Mathf.Atan2(deltaPosition.y, deltaPosition.x);
         return Quaternion.Euler(0, 0, zRotation);
     }
     /// <summary>

@@ -159,7 +159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7725359952001599400}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.015, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4296519749683544341}
@@ -306,10 +306,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 2
   gameObjectsToTurnIntoList: 02000000020000000200000002000000
-  shootsAtEnemies: 0
-  basicDirection: 0
-  spreadProjectilesEvenly: 0
-  spreadDegrees: 90
+  shootsAtEnemies: 1
+  shotDirection: 0
+  spreadProjectilesEvenly: 1
+  spreadDegrees: 15
   leftBulletSpread: 0
   rightBulletSpread: 0
 --- !u!50 &6493010151437119125
@@ -381,8 +381,8 @@ MonoBehaviour:
   shootingSoundsList: []
   shootSoundVolume: 0
   basicGunDirection: 0
-  maximumShootingRange: 5
-  maximumRangeFromMouseToShoot: 5
+  maximumShootingRange: 2
+  maximumRangeFromMouseToShoot: 2
   gunRotationSpeed: 120
   hasRotationLimits: 1
   leftMaxRotationLimit: 90

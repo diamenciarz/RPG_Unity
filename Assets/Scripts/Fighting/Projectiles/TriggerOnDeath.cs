@@ -8,7 +8,8 @@ public class TriggerOnDeath : TeamUpdater
     [SerializeField] protected List<EntityCreator.BulletTypes> gameObjectsToTurnIntoList;
 
     [SerializeField] protected bool shootsAtEnemies; //Otherwise shoots forward
-    [SerializeField] protected float basicDirection;
+    [Tooltip("The direction of the shot, when not shooting at enemies")]
+    [SerializeField] protected float shotDirection = 0;
     [SerializeField] protected bool spreadProjectilesEvenly;
     [SerializeField] protected float spreadDegrees;
     [SerializeField] protected float leftBulletSpread;
@@ -16,14 +17,14 @@ public class TriggerOnDeath : TeamUpdater
 
     protected EntityCreator entityCreator;
     private bool isDestroyed;
+    protected float deltaRotationToTarget = -90;
 
     private void Awake()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
     }
 
-
-    //Death summon
+    #region OnDestroy
     public void ObjectDestroyed()
     {
         if (!isDestroyed)
@@ -64,6 +65,7 @@ public class TriggerOnDeath : TeamUpdater
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
     }
+    #endregion
 
     #region OneShot
     private void ShootAtTarget(Vector3 targetPosition, int i)
@@ -92,13 +94,13 @@ public class TriggerOnDeath : TeamUpdater
     {
         Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
 
-        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicDirection);
+        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, shotDirection);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     private void ShootOnceForwardWithRegularSpread(int index)
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
-        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset + basicDirection);
+        Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset + shotDirection);
 
         newBulletRotation *= transform.rotation;
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
@@ -108,7 +110,7 @@ public class TriggerOnDeath : TeamUpdater
         Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
 
-        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
+        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, deltaRotationToTarget);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
@@ -116,8 +118,8 @@ public class TriggerOnDeath : TeamUpdater
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
-
-        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, basicDirection);
+        Debug.Log("rotation to target: " + rotationToTarget.eulerAngles.z);
+        newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, deltaRotationToTarget);
         entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
     }
     #endregion

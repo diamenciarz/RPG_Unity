@@ -51,11 +51,17 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     private void DamageCheck(GameObject collisionObject)
     {
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
-        if (damageReceiver != null)
+        bool canReceiveDamage = damageReceiver != null;
+        if (canReceiveDamage)
         {
-            if (damageReceiver.GetTeam() != team || hurtsAllies)
+            bool isInvulnerable = CheckParent(collisionObject);
+            if (isInvulnerable)
             {
-                DealDamageToObject(damageReceiver);
+                bool shouldDealDamage = damageReceiver.GetTeam() != team || hurtsAllies;
+                if (shouldDealDamage)
+                {
+                    DealDamageToObject(damageReceiver);
+                }
             }
         }
     }
