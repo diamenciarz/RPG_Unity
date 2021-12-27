@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombController : BasicProjectileController
+public class ExplosionController : BasicProjectileController
 {
 
     [Header("Bomb Settings")]
@@ -15,6 +15,7 @@ public class BombController : BasicProjectileController
     private float originalSize;
     private float originalZRotation;
 
+    #region Initialization
     protected override void Awake()
     {
         base.Awake();
@@ -25,8 +26,9 @@ public class BombController : BasicProjectileController
         originalSize = transform.localScale.x;
         originalZRotation = transform.rotation.eulerAngles.z;
     }
+    #endregion
 
-
+    #region Every frame
     protected void Update()
     {
         UpdateTransform();
@@ -52,10 +54,20 @@ public class BombController : BasicProjectileController
     {
         if (Time.time - creationTime > timeToExpire)
         {
-            gameObject.transform.localScale = new Vector3(expandPercentage * originalSize, expandPercentage * originalSize, 0);
-
+            SetSizeToMax();
             Destroy(gameObject);
         }
+    }
+    private void SetSizeToMax()
+    {
+        gameObject.transform.localScale = new Vector3(expandPercentage * originalSize, expandPercentage * originalSize, 0);
+    }
+    #endregion
+
+    public override Vector3 GetPushVector(Vector3 collisionPosition)
+    {
+        Vector3 deltaPositionToCollision = HelperMethods.DeltaPosition(transform.position, collisionPosition);
+        return deltaPositionToCollision.normalized * pushingPower;
     }
 }
 

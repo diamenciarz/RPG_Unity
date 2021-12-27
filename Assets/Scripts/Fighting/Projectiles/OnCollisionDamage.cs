@@ -126,7 +126,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     {
         return isPushing;
     }
-    public Vector3 GetPushVector()
+    public virtual Vector3 GetPushVector(Vector3 colisionPosition)
     {
         return entityData.GetVelocityVector3().normalized * pushingPower;
     }

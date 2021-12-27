@@ -134,7 +134,7 @@ public class BulletController : BasicProjectileController
         IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
         if (BouncesOffProjectile(damageReceiver))
         {
-            Vector3 projectileVelocity = damageReceiver.GetPushVector();
+            Vector3 projectileVelocity = damageReceiver.GetPushVector(transform.position);
             Bounce(projectileVelocity);
             return;
         }
@@ -222,21 +222,6 @@ public class BulletController : BasicProjectileController
         }
         bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
         return bouncesOnEnemy;
-    }
-    /// <summary>
-    /// Returns true if the colliding object is not the parent or if it is, but at least 0.1f sec has passed
-    /// </summary>
-    /// <param name="collisionObject"></param>
-    /// <returns></returns>
-    private bool CheckParent(GameObject collisionObject)
-    {
-        bool isTouchingParent = createdBy == collisionObject;
-        bool isInvulnerable = Time.time > creationTime + 0.1f;
-        if (!isTouchingParent || (isTouchingParent && isInvulnerable))
-        {
-            return true;
-        }
-        return false;
     }
     private bool BouncesOffProjectile(IDamage damageReceiver)
     {

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 1
   itemSprite: {fileID: -5161473790163378302, guid: 1cdcf589c08e2454c93979f1f6cc7198, type: 3}
-  itemType: 0
+  itemType: 4
   itemDescription: Pickaxe, wow!
   itemBuffs:
   - itemAttributesEnumerator: 4

@@ -6,35 +6,42 @@ public class ObjectMissingIcon : MonoBehaviour
 {
     public GameObject objectToFollow;
 
-    float xMin;
-    float xMax;
-    float yMin;
-    float yMax;
+    public float xMin;
+    public float xMax;
+    public float yMin;
+    public float yMax;
 
+    [Tooltip("Delta position from the screen edge, where the object should be placed")]
     private float positionOffset = 0.3f;
-    [SerializeField] [Range(0, 1)] float minimumSpriteSize = 0.4f;
+    [Tooltip("Fraction of the full size")]
+    [SerializeField] [Range(0.1f, 1)] float minimumSpriteSize = 0.4f;
     [SerializeField]
     [Tooltip("If the followed object is further from the screen edge, than scaleFactor (in map units), the icon will disappear")]
     float scaleFactor = 6f;
+
+    [Tooltip("The full size of the sprite. This will be used in the transform of the game object")]
     [SerializeField] float spriteScale = 1;
-    [SerializeField] float screenEdgeOffset;
-    [SerializeField] float deltaRotation = 0;
+    [Tooltip("Delta position from the screen edge to regard the icon as outside the screen space")]
+    private float screenEdgeOffset = 0.5f;
     [SerializeField] Color allyColor;
     [SerializeField] Color enemyColor;
 
 
     //Private variables
     Camera mainCamera;
-    SpriteRenderer mySpriteRenderer;
+    SpriteRenderer[] mySpriteRenderers;
 
     void Start()
     {
-        mySpriteRenderer = GetComponent<SpriteRenderer>();
+        SetupStartingVariables();
+        RecountScreenEdges();
+    }
+
+    #region Initialization
+    private void SetupStartingVariables()
+    {
+        mySpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         mainCamera = Camera.main;
-        xMin = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + screenEdgeOffset;
-        xMax = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - screenEdgeOffset;
-        yMin = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y + screenEdgeOffset;
-        yMax = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - screenEdgeOffset;
     }
     public void TryFollowThisObject(GameObject followThis)
     {
@@ -82,11 +89,14 @@ public class ObjectMissingIcon : MonoBehaviour
             }
         }
     }
-    // Update is called once per frame
+    #endregion
+
+    #region Update
     void Update()
     {
         if (objectToFollow != null)
         {
+            RecountScreenEdges(); // this is called by every icon instance, even thouth we could only call it once per frame. Maybe that could be dont later?
             UpdateVisibility();
             if (IsVisible())
             {
@@ -106,16 +116,20 @@ public class ObjectMissingIcon : MonoBehaviour
     }
     private void UpdateRotation()
     {
-        transform.rotation = objectToFollow.transform.rotation * Quaternion.Euler(0, 0, deltaRotation);
+        transform.rotation = objectToFollow.transform.rotation;
     }
     private void UpdatePosition()
+    {
+        transform.position = CountNewPosition();
+    }
+    private Vector2 CountNewPosition()
     {
         float newXPosition = objectToFollow.transform.position.x;
         float newYPosition = objectToFollow.transform.position.y;
 
         newXPosition = Mathf.Clamp(newXPosition, xMin - positionOffset, xMax + positionOffset);
         newYPosition = Mathf.Clamp(newYPosition, yMin - positionOffset, yMax + positionOffset);
-        transform.position = new Vector2(newXPosition, newYPosition);
+        return new Vector2(newXPosition,newYPosition);
     }
     private void UpdateScale()
     {
@@ -128,10 +142,10 @@ public class ObjectMissingIcon : MonoBehaviour
     }
     private void UpdateVisibility()
     {
-        bool isFollowedObjectOutsideCameraView = objectToFollow.transform.position.x > xMax + 0.5f
-                || objectToFollow.transform.position.x < xMin - 0.5f
-                || objectToFollow.transform.position.y > yMax + 0.5f
-                || objectToFollow.transform.position.y < yMin - 0.5f;
+        bool isFollowedObjectOutsideCameraView = objectToFollow.transform.position.x > xMax + positionOffset
+                || objectToFollow.transform.position.x < xMin - positionOffset
+                || objectToFollow.transform.position.y > yMax + positionOffset
+                || objectToFollow.transform.position.y < yMin - positionOffset;
         if (isFollowedObjectOutsideCameraView)
         {
             //If the followed object is further from the screen edge, than scaleFactor (in map units), the icon will disappear
@@ -151,15 +165,30 @@ public class ObjectMissingIcon : MonoBehaviour
             SetVisibility(false);
         }
     }
+    #endregion
+
+    #region Accessor/mutator methods
     private void SetVisibility(bool isVisible)
     {
-        if (!isVisible)
+        foreach (SpriteRenderer sprite in mySpriteRenderers)
         {
-            mySpriteRenderer.enabled = isVisible;
+            sprite.enabled = isVisible;
         }
     }
     private bool IsVisible()
     {
-        return mySpriteRenderer.enabled;
+        return mySpriteRenderers[0].enabled;
     }
+    /// <summary>
+    /// Update the screen edges to 
+    /// </summary>
+    private void RecountScreenEdges()
+    {
+        xMin = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + screenEdgeOffset;
+        xMax = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - screenEdgeOffset;
+        yMin = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y + screenEdgeOffset;
+        yMax = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - screenEdgeOffset;
+    }
+    #endregion
+
 }

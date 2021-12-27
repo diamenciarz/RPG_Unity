@@ -194,7 +194,7 @@ public class AutomaticGunRotator : TeamUpdater
     #region Helper functions
     private bool CanShootTarget(GameObject target, float range)
     {
-        if (HelperMethods.CanSeeTargetDirectly(transform.position, target))
+        if (HelperMethods.CanSeeDirectly(transform.position, target))
         {
             if (hasRotationLimits)
             {
@@ -615,7 +615,7 @@ public class AutomaticGunRotator : TeamUpdater
     #endregion
 
     #region Accessor methods
-    private float GetCurrentRange()
+    public float GetCurrentRange()
     {
         if (isControlledByMouseCursor)
         {

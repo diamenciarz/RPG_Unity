@@ -90,7 +90,7 @@ public class OnCollisionBreak : TeamUpdater
     /// Every unit is invulnerable to its own projectiles for 0.1 sec
     /// </summary>
     /// <param name="collisionObject"></param>
-    /// <returns></returns>
+    /// <returns>Whether the collisionObject is invulnerable to this game object</returns>
     protected bool CheckParent(GameObject collisionObject)
     {
         bool isTouchingParent = createdBy == collisionObject;

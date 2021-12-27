@@ -10,21 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0dbfcd4c70cd7f4f8148eee44d81992, type: 3}
-  m_Name: Splitting laser
+  m_Name: Kamils gun
   m_EditorClassIdentifier: 
   shots:
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
+  - {fileID: 11400000, guid: 48b4e8428999aac4fa2fe0a41527866b, type: 2}
+  - {fileID: 11400000, guid: c857a5fb534bd9b41935d54a5d574fd8, type: 2}
+  - {fileID: 11400000, guid: 7316fcd2ef34fa949804ead99678a42f, type: 2}
+  - {fileID: 11400000, guid: 3a3cb1f76348b324fb33364ea2535af1, type: 2}
+  - {fileID: 11400000, guid: 209f30a78c5fc7142a76ce4e9d8861c2, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
   - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
   delayAfterEachShot:
   - 0.4
   - 0.4
   - 0.4
   - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
   reloadDelays:
-  - 0.4
-  - 0.4
-  - 0.4
-  - 0.4
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
   additionalReloadTime: 1

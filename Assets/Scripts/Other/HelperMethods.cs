@@ -115,7 +115,7 @@ public static class HelperMethods
     public static Quaternion DeltaPositionRotation(Vector3 firstPosition, Vector3 secondPosition)
     {
         Vector3 deltaPosition = DeltaPosition(firstPosition, secondPosition);
-        
+
         if (deltaPosition.x == 0)
         {
             if (deltaPosition.y >= 0)
@@ -127,7 +127,7 @@ public static class HelperMethods
                 return Quaternion.Euler(0, 0, -90);
             }
         }
-        
+
         float zRotation = Mathf.Rad2Deg * Mathf.Atan2(deltaPosition.y, deltaPosition.x);
         return Quaternion.Euler(0, 0, zRotation);
     }
@@ -204,13 +204,13 @@ public static class HelperMethods
     /// <param name="originalPos"></param>
     /// <param name="target"></param>
     /// <returns></returns>
-    public static bool CanSeeTargetDirectly(Vector3 originalPos, GameObject target)
+    public static bool CanSeeDirectly(Vector3 originalPos, GameObject target)
     {
-        if (target != null)
+        if (target)
         {
             int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
             Vector2 direction = target.transform.position - originalPos;
-            //Debug.DrawRay(originalPos, direction, Color.red, 0.5f);
+            Debug.DrawRay(originalPos, direction, Color.red, 0.1f);
 
             RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, Mathf.Infinity, obstacleLayerMask);
 
@@ -232,13 +232,53 @@ public static class HelperMethods
         }
     }
     /// <summary>
+    /// Checks, if the target position is visible from the specified position. The default layer names are "Actors" and "Obstacles".
+    /// </summary>
+    /// <param name="originalPos"></param>
+    /// <param name="targetPosition"></param>
+    /// <returns></returns>
+    public static bool CanSeeDirectly(Vector3 originalPos, Vector3 targetPosition)
+    {
+        int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
+        Vector2 direction = targetPosition - originalPos;
+        //Debug.DrawRay(originalPos, direction, Color.red, 0.5f);
+
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, direction.magnitude, obstacleLayerMask);
+        bool somethingIsInTheWay = raycastHit2D;
+        if (somethingIsInTheWay)
+        {
+            return false;
+        }
+        return true;
+    }
+    /// <summary>
+    /// Checks, if the target position is visible from the specified position.
+    /// </summary>
+    /// <param name="originalPos"></param>
+    /// <param name="targetPosition"></param>
+    /// <returns></returns>
+    public static bool CanSeeDirectly(Vector3 originalPos, Vector3 targetPosition, string[] layerNames)
+    {
+        int obstacleLayerMask = LayerMask.GetMask(layerNames);
+        Vector2 direction = targetPosition - originalPos;
+        //Debug.DrawRay(originalPos, direction, Color.red, 0.5f);
+
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, direction.magnitude, obstacleLayerMask);
+        bool somethingIsInTheWay = raycastHit2D;
+        if (somethingIsInTheWay)
+        {
+            return false;
+        }
+        return true;
+    }
+    /// <summary>
     /// Checks, if the target is visible from the specified position.
     /// </summary>
     /// <param name="originalPos"></param>
     /// <param name="target"></param>
     /// <param name="layerNames"></param>
     /// <returns></returns>
-    public static bool CanSeeTargetDirectly(Vector3 originalPos, GameObject target, string[] layerNames)
+    public static bool CanSeeDirectly(Vector3 originalPos, GameObject target, string[] layerNames)
     {
         if (target != null)
         {
@@ -325,7 +365,7 @@ public static class HelperMethods
     {
         return true;
     }
-    
+
     #region OnDestroy
     /// <summary>
     /// Returns true, if this method has found and called at least one trigger

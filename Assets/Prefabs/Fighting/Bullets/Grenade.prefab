@@ -137,7 +137,7 @@ MonoBehaviour:
   startingSpeed: 8
   destroyDelay: -1
   destroyDistance: 5
-  bounceEnum: 010000000200000003000000060000000500000000000000
+  bounceEnum: 000000000100000002000000030000000600000005000000
   minAngleToReflect: 0
   maxReflections: -1
   timeToAdd: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   team: -1
   gameObjectsToTurnIntoList: 07000000
   shootsAtEnemies: 0
-  basicDirection: 0
+  shotDirection: 0
   spreadProjectilesEvenly: 0
   spreadDegrees: 0
   leftBulletSpread: 0

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0dbfcd4c70cd7f4f8148eee44d81992, type: 3}
-  m_Name: Splitting laser
+  m_Name: Rocket launcher
   m_EditorClassIdentifier: 
   shots:
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
-  - {fileID: 11400000, guid: febbea7a599274c4594f8b7bba96b34c, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
+  - {fileID: 11400000, guid: fb763855e448dca4c957bdeb486bbcc1, type: 2}
   delayAfterEachShot:
   - 0.4
   - 0.4

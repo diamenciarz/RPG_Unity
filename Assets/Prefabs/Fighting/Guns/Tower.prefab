@@ -381,8 +381,8 @@ MonoBehaviour:
   shootingSoundsList: []
   shootSoundVolume: 0
   basicGunDirection: 0
-  maximumShootingRange: 2
-  maximumRangeFromMouseToShoot: 2
+  maximumShootingRange: 5
+  maximumRangeFromMouseToShoot: 5
   gunRotationSpeed: 120
   hasRotationLimits: 1
   leftMaxRotationLimit: 90

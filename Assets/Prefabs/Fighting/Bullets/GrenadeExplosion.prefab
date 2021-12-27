@@ -143,13 +143,12 @@ MonoBehaviour:
   hurtsAllies: 1
   isPiercing: 0
   damageTypes: 01000000
-  isPushing: 0
-  pushingPower: 0
+  isPushing: 1
+  pushingPower: 2
   spriteList:
   - {fileID: 21300000, guid: 8e8c61de88de7a34483bf5aa1f8f0a2a, type: 3}
   - {fileID: 21300000, guid: 99fd9373b80084848bd102b122ed3bda, type: 3}
   startingSpeed: 0
-  spriteDeltaRotation: 90
   timeToExpire: 0.3
   expandPercentage: 4
   rotateDuringLifetime: 90

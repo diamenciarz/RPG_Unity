@@ -15,5 +15,5 @@ public interface IDamage
     /// Where the magnitude is the force and the direction is the velocity normalized
     /// </summary>
     /// <returns></returns>
-    public abstract Vector3 GetPushVector();
+    public abstract Vector3 GetPushVector(Vector3 colisionPosition);
 }

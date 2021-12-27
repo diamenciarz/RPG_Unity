@@ -82,7 +82,7 @@ public class DamageReceiver : ListUpdater
         {
             if (canBePushed && iDamage.GetIsPushing())
             {
-                myEntityData.ModifyVelocityVector3(iDamage.GetPushVector());
+                myEntityData.ModifyVelocityVector3(iDamage.GetPushVector(transform.position));
             }
         }
     }

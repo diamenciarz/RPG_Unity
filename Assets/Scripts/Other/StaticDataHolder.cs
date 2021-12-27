@@ -251,7 +251,7 @@ public static class StaticDataHolder
             GameObject currentNearestTarget = null;
             foreach (var item in possibleTargetList)
             {
-                if (HelperMethods.CanSeeTargetDirectly(positionVector, item))
+                if (HelperMethods.CanSeeDirectly(positionVector, item))
                 {
                     if (currentNearestTarget == null)
                     {

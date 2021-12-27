@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 6195473770567518806}
   - component: {fileID: 6195473770567518801}
   - component: {fileID: 5147535588325408921}
-  - component: {fileID: 651507064208136242}
+  - component: {fileID: 8193885503230164162}
   - component: {fileID: 6195473770939546903}
   - component: {fileID: 114496066386386624}
   - component: {fileID: 3186074715888603841}
@@ -355,8 +355,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupTextField: {fileID: 0}
   dialogueTriggerList: []
---- !u!58 &651507064208136242
-CircleCollider2D:
+--- !u!70 &8193885503230164162
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -368,9 +368,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.01291275, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.21592331
+  m_Offset: {x: 0.05080414, y: 0.00269413}
+  m_Size: {x: 0.31258774, y: 0.46799278}
+  m_Direction: 0
 --- !u!50 &6195473770939546903
 Rigidbody2D:
   serializedVersion: 4
@@ -464,7 +464,7 @@ MonoBehaviour:
   team: 1
   gameObjectsToTurnIntoList: 01000000010000000100000001000000
   shootsAtEnemies: 0
-  basicDirection: 0
+  shotDirection: 0
   spreadProjectilesEvenly: 1
   spreadDegrees: 90
   leftBulletSpread: 0
