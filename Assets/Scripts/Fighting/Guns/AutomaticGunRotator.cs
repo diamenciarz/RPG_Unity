@@ -25,6 +25,7 @@ public class AutomaticGunRotator : TeamUpdater
     [Header("Instances")]
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
     [SerializeField] ShootingController[] shootingControllers;
+    [SerializeField] VisualDetector[] visualDetectors;
     [Header("Shooting Zone")]
     [SerializeField] GameObject shootingZonePrefab;
     [SerializeField] Transform shootingZoneTransform;
@@ -146,6 +147,13 @@ public class AutomaticGunRotator : TeamUpdater
     #region CanShoot
     private void LookForTargets()
     {
+        foreach (VisualDetector detector in visualDetectors)
+        {
+            if (detector.get)
+            {
+
+            }
+        }
         areTargetsInRange = AreTargetsInRange();
     }
     private bool AreTargetsInRange()

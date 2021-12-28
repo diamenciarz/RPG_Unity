@@ -31,10 +31,11 @@ public class VisualDetector : TeamUpdater
     [SerializeField] Transform visualZoneTransform;
 
     private GameObject currentTarget;
+    private GameObject[] targetsInSight;
     private ProgressionBarController shootingZoneScript;
 
     private bool lastRotationLimitValue;
-    public bool isTargetInSight;
+    private bool isTargetInSight;
     private Coroutine checkCoroutine;
 
     void Start()
@@ -57,43 +58,32 @@ public class VisualDetector : TeamUpdater
     }
     private void DoChecks()
     {
-        currentTarget = FindTheClosestEnemyInSight();
+        targetsInSight = FindAllEnemiesInSight();
+        currentTarget = StaticDataHolder.GetClosestObjectInSightAngleWise(targetsInSight,transform.position, GetGunAngle());
         isTargetInSight = CanSeeATarget();
     }
     #endregion
 
     #region Checks
-    private GameObject FindTheClosestEnemyInSight()
+    private GameObject[] FindAllEnemiesInSight()
     {
         List<GameObject> targetList = StaticDataHolder.GetEnemyList(team);
-
         targetList.AddRange(StaticDataHolder.GetObstacleList());
         if (targetList.Count == 0)
         {
             return null;
         }
 
-        GameObject currentClosestEnemy = null;
-        foreach (var item in targetList)
+        List<GameObject> targetsInSight = new List<GameObject>();
+        foreach (GameObject target in targetList)
         {
             //I expect enemyList to never have a single null value
-            if (CanSeeTarget(item))
+            if (CanSeeTarget(target))
             {
-                if (currentClosestEnemy == null)
-                {
-                    currentClosestEnemy = item;
-                }
-                float zAngleFromMiddleToCurrentClosestEnemy = CountAngleFromGunToPosition(currentClosestEnemy.transform.position);
-                float zAngleFromMiddleToItem = CountAngleFromGunToPosition(item.transform.position);
-                //If the found target is closer to the middle (angle wise) than the current closest target, make is the closest target
-                bool isCloserAngleWise = Mathf.Abs(zAngleFromMiddleToCurrentClosestEnemy) > Mathf.Abs(zAngleFromMiddleToItem);
-                if (isCloserAngleWise)
-                {
-                    currentClosestEnemy = item;
-                }
+                targetsInSight.Add(target);
             }
         }
-        return currentClosestEnemy;
+        return targetsInSight.ToArray();
     }
     private bool CanSeeATarget()
     {
@@ -272,6 +262,12 @@ public class VisualDetector : TeamUpdater
     #endregion
 
     #region Accessor methods
+    /// <summary>
+    /// Checks, whether this detector can directly see this position
+    /// </summary>
+    /// <param name="targetPosition"></param>
+    /// <param name="ignoreCollisions"></param>
+    /// <returns></returns>
     public bool CanSeePosition(Vector3 targetPosition, bool ignoreCollisions = false)
     {
         if (ignoreCollisions || HelperMethods.CanSeeDirectly(transform.position, targetPosition))
@@ -303,10 +299,26 @@ public class VisualDetector : TeamUpdater
         }
         return false;
     }
-    public GameObject GetCurrentTarget()
+    /// <summary>
+    /// Returns the current closest target that this detector can see. (The closest target angle wise)
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetClosestTarget()
     {
         return currentTarget;
     }
+    /// <summary>
+     /// Returns all targets that this detector can see
+     /// </summary>
+     /// <returns></returns>
+    public GameObject[] GetTargetsInSight()
+    {
+        return targetsInSight;
+    }
+    /// <summary>
+    /// Returns true if the detector can see at least one target
+    /// </summary>
+    /// <returns></returns>
     public bool CanSeeTargets()
     {
         return isTargetInSight;
