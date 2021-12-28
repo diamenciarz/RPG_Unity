@@ -242,15 +242,20 @@ public static class StaticDataHolder
     #region Generic
     public static GameObject GetClosestObject(List<GameObject> possibleTargetList, Vector3 positionVector)
     {
-        GameObject currentNearestTarget = possibleTargetList[0];
-        if (possibleTargetList.Count != 0)
+        GameObject currentNearestTarget = null;
+        if (possibleTargetList.Count > 0)
         {
-            foreach (var item in possibleTargetList)
+            foreach (GameObject target in possibleTargetList)
             {
-                bool currentTargetIsCloser = HelperMethods.Distance(positionVector, item.transform.position) < HelperMethods.Distance(positionVector, currentNearestTarget.transform.position);
+                if (currentNearestTarget == null)
+                {
+                    currentNearestTarget = target;
+                    continue;
+                }
+                bool currentTargetIsCloser = HelperMethods.Distance(positionVector, target.transform.position) < HelperMethods.Distance(positionVector, currentNearestTarget.transform.position);
                 if (currentTargetIsCloser)
                 {
-                    currentNearestTarget = item;
+                    currentNearestTarget = target;
                 }
             }
         }

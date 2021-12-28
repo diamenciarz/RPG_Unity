@@ -25,7 +25,6 @@ public class VisualDetector : TeamUpdater
     [SerializeField] bool ignoreMouseCollisions;
 
     [Header("Instances")]
-    [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
     [SerializeField] ShootingController[] shootingControllers;
 
     [Header("Visual Zone")]
@@ -188,7 +187,7 @@ public class VisualDetector : TeamUpdater
     #region Count values
     private float GetMiddleAngle()
     {
-        float middleAngle = parentGameObject.transform.rotation.eulerAngles.z + basicGunDirection;
+        float middleAngle = transform.rotation.eulerAngles.z + basicGunDirection;
         return middleAngle;
     }
     private float GetGunAngle()
@@ -213,7 +212,7 @@ public class VisualDetector : TeamUpdater
     }
     private void UpdateUIState()
     {
-        if (controlledByMouse || isShootingZoneOn)
+        if (isShootingZoneOn)
         {
             CreateGunShootingZone();
         }
@@ -308,11 +307,11 @@ public class VisualDetector : TeamUpdater
             //Mouse can not hide behind a bush
             if (hasRotationLimits)
             {
-                return IsPositionInCone(targetPosition, range);
+                return IsPositionInCone(targetPosition, GetCurrentRange());
             }
             else
             {
-                return IsPositionInRange(targetPosition, range);
+                return IsPositionInRange(targetPosition, GetCurrentRange());
             }
         }
         return false;
@@ -323,11 +322,11 @@ public class VisualDetector : TeamUpdater
         {
             if (hasRotationLimits)
             {
-                return IsPositionInCone(target.transform.position, range);
+                return IsPositionInCone(target.transform.position, GetCurrentRange());
             }
             else
             {
-                return IsPositionInRange(target.transform.position, range);
+                return IsPositionInRange(target.transform.position, GetCurrentRange());
             }
         }
         return false;

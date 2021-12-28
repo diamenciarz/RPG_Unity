@@ -8,12 +8,16 @@ public class UnitMovementController : TeamUpdater
     [Header("Movement")]
     [Tooltip("The transform from which to shoot a raycast")]
     [SerializeField] Transform[] eyeTransforms;
+    [Tooltip("A list of detectors that act as this unit's vision area")]
+    [SerializeField] VisualDetector[] sightDetectors;
     [Tooltip("Degrees per second")]
     public float rotationSpeed = 240;
     [SerializeField] float baseMoveSpeed = 3;
     [Header("Hunting")]
+    [Tooltip("A list of detectors that decide, if this unit should hold its position")]
+    [SerializeField] VisualDetector[] rangeDetectors;
     [Tooltip("How much time after losing the trace, will this unit go back to its original routine")]
-    [SerializeField] float loseInterestDelay = 10;
+    [SerializeField] float loseInterestDelay = 10; // Will be useful for wandering
     [SerializeField] float placeTraceDelay = 2;
     [Tooltip("If the target travels further than this distance, start losing its trace")]
     [SerializeField] float smellRange = 2;
@@ -24,22 +28,19 @@ public class UnitMovementController : TeamUpdater
     //Objects
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
     private Pathfinding.AIPath aiPath;
-    private AutomaticGunRotator gunRotator;
     public List<Vector3> lastTargetPositions = new List<Vector3>();
     private GameObject lastTargetPosition;
-    private GameObject target;
+    public GameObject target;
     //Movement
     private float currentMoveSpeed;
-    VisualDetector[] inSightDetectors;
     [Tooltip("If this is set to true, the unit will start following its target")]
-    private bool isAnyTargetInSight;
-    VisualDetector[] inRangeDetectors;
+    public bool isTargetInSight;
     [Tooltip("If this is set to true, the unit will hold its position")]
-    private bool isAnyTargetInRange;
+    public bool isTargetInRange;
 
     #region Hunting
     //Booleans
-    public bool canSeeTarget;
+    public bool canShootTarget;
     public bool canSeeLastTargetPosition;
     private bool startedHunting;
     //Other values
@@ -73,8 +74,6 @@ public class UnitMovementController : TeamUpdater
         //Movement speed
         currentMoveSpeed = baseMoveSpeed;
         SetMovementSpeed(currentMoveSpeed);
-        //Shooting
-        gunRotator = GetComponent<AutomaticGunRotator>();
     }
     #endregion
 
@@ -98,7 +97,7 @@ public class UnitMovementController : TeamUpdater
     {
         if (eyeTransforms.Length > 0)
         {
-            CheckIfCanSeeTarget();
+            CheckIfCanShootTarget();
             CheckIfCanSeeLastTargetPosition();
             CheckIfIsInRange();
             CheckIfIsInSight();
@@ -109,11 +108,10 @@ public class UnitMovementController : TeamUpdater
         }
     }
     //Can see
-    private void CheckIfCanSeeTarget()
+    private void CheckIfCanShootTarget()
     {
-
-        canSeeTarget = CanSee(target);
-        if (canSeeTarget)
+        canShootTarget = CanSee(target);
+        if (canShootTarget)
         {
             targetLastSeenTime = Time.time;
         }
@@ -147,18 +145,18 @@ public class UnitMovementController : TeamUpdater
     //In range
     private void CheckIfIsInRange()
     {
-        isAnyTargetInRange = IsAnyTargetInRange();
+        isTargetInRange = IsTargetInRange();
     }
-    private bool IsAnyTargetInRange()
+    private bool IsTargetInRange()
     {
-        if (inRangeDetectors.Length == 0)
+        if (rangeDetectors.Length == 0)
         {
             Debug.LogError("This unit has no range detectors");
             return false;
         }
-        foreach (VisualDetector detector in inRangeDetectors)
+        foreach (VisualDetector detector in rangeDetectors)
         {
-            if (detector.CanSeeTargets())
+            if (detector.CanSeeTarget(target))
             {
                 return true;
             }
@@ -168,18 +166,18 @@ public class UnitMovementController : TeamUpdater
     //In sight
     private void CheckIfIsInSight()
     {
-        isAnyTargetInRange = IsAnyTargetInSight();
+        isTargetInSight = IsTargetInSight();
     }
-    private bool IsAnyTargetInSight()
+    private bool IsTargetInSight()
     {
-        if (inSightDetectors.Length == 0)
+        if (sightDetectors.Length == 0)
         {
             Debug.LogError("This unit has no sight detectors");
             return false;
         }
-        foreach (VisualDetector detector in inSightDetectors)
+        foreach (VisualDetector detector in sightDetectors)
         {
-            if (detector.CanSeeTargets())
+            if (detector.CanSeeTarget(target))
             {
                 return true;
             }
@@ -202,25 +200,40 @@ public class UnitMovementController : TeamUpdater
     }
     private void UpdateTarget()
     {
-        if (!canSeeTarget)
+        if (!canShootTarget)
         {
             FindNewTargetInSight();
         }
     }
     private void FindNewTargetInSight()
     {
-        GameObject newTarget = StaticDataHolder.GetClosestEnemyInSight(transform.position, team);
+        List<GameObject> targetList = GetDetectedTargets();
+        Debug.Log("Detected: " + targetList.Count);
+        GameObject newTarget = StaticDataHolder.GetClosestObject(targetList, transform.position);
         if (newTarget)
         {
             target = newTarget;
         }
+    }
+    private List<GameObject> GetDetectedTargets()
+    {
+        List<GameObject> detectedTargets = new List<GameObject>();
+        foreach (VisualDetector detector in sightDetectors)
+        {
+            GameObject target = detector.GetClosestTarget();
+            if (target)
+            {
+                detectedTargets.Add(target);
+            }
+        }
+        return detectedTargets;
     }
     #endregion
 
     #region Trace following
     private void UpdateMovement()
     {
-        if (canSeeTarget && isAnyTargetInRange)
+        if (canShootTarget && isTargetInRange)
         {
             MovePointerOntoMyself();
         }
@@ -233,7 +246,6 @@ public class UnitMovementController : TeamUpdater
     {
         lastTargetPosition.transform.position = transform.position;
     }
-
     private void FollowTrace()
     {
         if (startedHunting == false)
@@ -255,8 +267,8 @@ public class UnitMovementController : TeamUpdater
     private void CheckNextTrace()
     {
         Vector3 deltaPositionToTrace = transform.position - lastTargetPositions[0];
-        float stopDistance = aiPath.endReachedDistance * 2;
-        bool isClose = deltaPositionToTrace.magnitude < stopDistance; //potentially switch to can see last target position
+        float stopDistance = aiPath.endReachedDistance * 2f;
+        bool isClose = deltaPositionToTrace.magnitude < stopDistance;
         if (isClose)
         {
             if (lastTargetPositions.Count > 1)
@@ -271,7 +283,7 @@ public class UnitMovementController : TeamUpdater
         if (lastTargetPositions.Count > 1)
         {
             int traceIndex = GetTheFreshestTraceInSight();
-            bool fresherTraceFound = traceIndex >= 0;
+            bool fresherTraceFound = traceIndex > 0;
             if (fresherTraceFound)
             {
                 Vector3 newPosition = lastTargetPositions[traceIndex];
@@ -286,20 +298,43 @@ public class UnitMovementController : TeamUpdater
         for (int i = 0; i < lastTargetPositions.Count; i++)
         {
             Vector3 pos = lastTargetPositions[i];
-            if (HelperMethods.CanSeeDirectly(transform.position, pos))
+            if (CanSeeTrace(pos))
             {
                 highestIndex = i;
             }
         }
         return highestIndex;
     }
+    private bool CanSeeTrace(Vector3 tracePosition)
+    {
+        if (sightDetectors.Length == 0)
+        {
+            Debug.LogError("This unit has no sight detectors");
+            return false;
+        }
+        foreach (VisualDetector detector in sightDetectors)
+        {
+            if (detector.CanSeePosition(tracePosition))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     private void DeleteOldTraces(int upToIndex)
     {
-        if (upToIndex >= 0)
+        if (upToIndex > 0)
         {
             for (int i = 0; i < upToIndex; i++)
             {
-                lastTargetPositions.RemoveAt(i);
+                if (lastTargetPositions.Count > i)
+                {
+                    lastTargetPositions.RemoveAt(i);
+                }
+                else
+                {
+                    Debug.Log("Tried to delete from a position of: " + i + " which is out of range!");
+                }
             }
         }
     }
@@ -308,7 +343,7 @@ public class UnitMovementController : TeamUpdater
     #region Trace placement
     private void UpdateTraces()
     {
-        if (canSeeTarget)
+        if (canShootTarget)
         {
             ResetLastPlayerPositions();
         }
@@ -374,7 +409,7 @@ public class UnitMovementController : TeamUpdater
     }
     private Vector3 CountLookAtPosition()
     {
-        if (canSeeTarget && target != null)
+        if (isTargetInSight && canShootTarget && target != null)
         {
             return target.transform.position;
         }

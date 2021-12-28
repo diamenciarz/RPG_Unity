@@ -21,12 +21,11 @@ public class AutomaticGunRotator : TeamUpdater
     [Header("Instances")]
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
     [SerializeField] VisualDetector[] visualDetectors;
-    [Header("Shooting Zone")]
-    [SerializeField] GameObject shootingZonePrefab;
-    [SerializeField] Transform shootingZoneTransform;
 
     [Header("Debug zone")]
     [SerializeField] bool debugZoneOn = true;
+    [SerializeField] GameObject debugZonePrefab;
+    [SerializeField] Transform DebugZoneTransform;
     #endregion
 
     private bool areTargetsInRange;
@@ -34,7 +33,7 @@ public class AutomaticGunRotator : TeamUpdater
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     //Instances
-    public GameObject closestTarget = null;
+    private GameObject closestTarget = null;
 
     private void Start()
     {
@@ -350,9 +349,9 @@ public class AutomaticGunRotator : TeamUpdater
     }
     private void CreateDebugZone()
     {
-        if (shootingZonePrefab != null)
+        if (debugZonePrefab != null)
         {
-            GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
+            GameObject newShootingZoneGo = Instantiate(debugZonePrefab, DebugZoneTransform);
             float debugZoneRange = 1.8f; // This is a constant
             newShootingZoneGo.transform.localScale = new Vector3(debugZoneRange, debugZoneRange, 1);
 
@@ -362,7 +361,7 @@ public class AutomaticGunRotator : TeamUpdater
     private void SetupDebugZone(GameObject newShootingZoneGo)
     {
         debugZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
-        debugZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
+        debugZoneScript.SetObjectToFollow(DebugZoneTransform.gameObject);
     }
     #endregion
 }
