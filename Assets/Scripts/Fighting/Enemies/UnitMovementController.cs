@@ -30,8 +30,12 @@ public class UnitMovementController : TeamUpdater
     private GameObject target;
     //Movement
     private float currentMoveSpeed;
+    VisualDetector[] inSightDetectors;
+    [Tooltip("If this is set to true, the unit will start following its target")]
+    private bool isAnyTargetInSight;
+    VisualDetector[] inRangeDetectors;
     [Tooltip("If this is set to true, the unit will hold its position")]
-    private bool isInRange;
+    private bool isAnyTargetInRange;
 
     #region Hunting
     //Booleans
@@ -46,7 +50,7 @@ public class UnitMovementController : TeamUpdater
     #endregion
     #endregion
 
-    #region Initiation
+    #region Initialization
     private void Start()
     {
         SetupStartingVariables();
@@ -71,14 +75,6 @@ public class UnitMovementController : TeamUpdater
         SetMovementSpeed(currentMoveSpeed);
         //Shooting
         gunRotator = GetComponent<AutomaticGunRotator>();
-        UpdateShootingRange();
-    }
-    private void UpdateShootingRange()
-    {
-        if (gunRotator)
-        {
-            shootRange = gunRotator.GetCurrentRange();
-        }
     }
     #endregion
 
@@ -104,14 +100,18 @@ public class UnitMovementController : TeamUpdater
         {
             CheckIfCanSeeTarget();
             CheckIfCanSeeLastTargetPosition();
+            CheckIfIsInRange();
+            CheckIfIsInSight();
         }
         else
         {
             Debug.LogError("Unit has no eyes");
         }
     }
+    //Can see
     private void CheckIfCanSeeTarget()
     {
+
         canSeeTarget = CanSee(target);
         if (canSeeTarget)
         {
@@ -143,6 +143,38 @@ public class UnitMovementController : TeamUpdater
             }
         }
         return true;
+    }
+    //In range
+    private void CheckIfIsInRange()
+    {
+        isAnyTargetInRange = IsAnyTargetInRange();
+    }
+    private bool IsAnyTargetInRange()
+    {
+        foreach (VisualDetector detector in inRangeDetectors)
+        {
+            if (detector.CanSeeTargets())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    //In sight
+    private void CheckIfIsInSight()
+    {
+        isAnyTargetInRange = IsAnyTargetInSight();
+    }
+    private bool IsAnyTargetInSight()
+    {
+        foreach (VisualDetector detector in inSightDetectors)
+        {
+            if (detector.CanSeeTargets())
+            {
+                return true;
+            }
+        }
+        return false;
     }
     #endregion
     #endregion
@@ -178,8 +210,7 @@ public class UnitMovementController : TeamUpdater
     #region Trace following
     private void UpdateMovement()
     {
-        bool isInRange = HelperMethods.Distance(gameObject, target) <= shootRange;
-        if (canSeeTarget && isInRange)
+        if (canSeeTarget && isAnyTargetInRange)
         {
             MovePointerOntoMyself();
         }
