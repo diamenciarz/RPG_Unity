@@ -111,7 +111,7 @@ public class UnitMovementController : TeamUpdater
     }
     private void CheckIfCanSeeTarget()
     {
-        canSeeTarget = CanSeeTarget();
+        canSeeTarget = CanSee(target);
         if (canSeeTarget)
         {
             targetLastSeenTime = Time.time;
@@ -119,24 +119,24 @@ public class UnitMovementController : TeamUpdater
     }
     private void CheckIfCanSeeLastTargetPosition()
     {
-        canSeeLastTargetPosition = CanSeeLastTargetPosition();
+        canSeeLastTargetPosition = CanSee(lastTargetPosition.transform.position);
     }
-    private bool CanSeeLastTargetPosition()
+    private bool CanSee(Vector3 pos)
     {
         foreach (Transform eye in eyeTransforms)
         {
-            if (!HelperMethods.CanSeeDirectly(eye.position, lastTargetPosition.transform.position))
+            if (!HelperMethods.CanSeeDirectly(eye.position, pos))
             {
                 return false;
             }
         }
         return true;
     }
-    private bool CanSeeTarget()
+    private bool CanSee(GameObject obj)
     {
         foreach (Transform eye in eyeTransforms)
         {
-            if (!HelperMethods.CanSeeDirectly(eye.position, target))
+            if (!HelperMethods.CanSeeDirectly(eye.position, obj))
             {
                 return false;
             }

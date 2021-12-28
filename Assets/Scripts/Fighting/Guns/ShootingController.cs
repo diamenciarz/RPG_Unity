@@ -19,8 +19,7 @@ public class ShootingController : TeamUpdater
     [SerializeField] bool reloadingBarOn = true;
 
     //The gun tries to shoot, if this is set to true
-    [HideInInspector]
-    public bool shoot;
+    protected bool shoot;
     //Private variables
     private ProgressionBarController gunReloadingBarScript;
     private EntityCreator entityCreator;
@@ -48,19 +47,19 @@ public class ShootingController : TeamUpdater
         shotIndex = 0;
         UpdateTimeBetweenEachShot();
     }
-    public void CallStartingMethods()
+    private void CallStartingMethods()
     {
         UpdateUIState();
     }
     #endregion
 
-    protected void Update()
+    protected virtual void Update()
     {
         CheckTimeBank();
         TryShoot();
         UpdateAmmoBar();
     }
-    public void TryShoot()
+    private void TryShoot()
     {
         if (shoot)
         {
@@ -142,7 +141,7 @@ public class ShootingController : TeamUpdater
         //Update time bank
         DecreaseShootingTime();
     }
-    public void CreateNewProjectiles()
+    private void CreateNewProjectiles()
     {
         if (currentShotSO.projectilesToCreateList.Count != 0)
         {
@@ -219,6 +218,10 @@ public class ShootingController : TeamUpdater
             timeSum += salvo.reloadDelays[i];
         }
         return timeSum;
+    }
+    public void SetShoot(bool set)
+    {
+        shoot = set;
     }
     private void DecreaseShootingTime()
     {

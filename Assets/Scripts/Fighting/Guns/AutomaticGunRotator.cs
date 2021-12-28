@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class AutomaticGunRotator : TeamUpdater
 {
-    //Instances
-    GameObject theNearestEnemyGameObject;
-
-    [Header("Sounds")]
-    //Sound
-    [SerializeField] List<AudioClip> shootingSoundsList;
-    [SerializeField] [Range(0, 1)] float shootSoundVolume;
-
+    #region Serializable
     [Header("Gun stats")]
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
@@ -30,17 +23,16 @@ public class AutomaticGunRotator : TeamUpdater
     [SerializeField] float gunTextureRotationOffset = -90f;
 
     [Header("Instances")]
-    [SerializeField] Transform shootingPoint;
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
     [SerializeField] ShootingController[] shootingControllers;
     [Header("Shooting Zone")]
     [SerializeField] GameObject shootingZonePrefab;
     [SerializeField] Transform shootingZoneTransform;
-    private ProgressionBarController shootingZoneScript;
 
     [Header("Mouse Steering")]
     [SerializeField] bool isControlledByMouseCursor;
     [SerializeField] bool isShootingZoneOn;
+    #endregion
 
     private bool areTargetsInRange;
     private float invisibleTargetRotation;
@@ -48,17 +40,10 @@ public class AutomaticGunRotator : TeamUpdater
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     private bool lastRotationLimitValue;
+    //Instances
+    private ProgressionBarController shootingZoneScript;
+    GameObject theNearestEnemyGameObject;
 
-
-    // Startup
-    protected void Start()
-    {
-        InitializeStartingVariables();
-    }
-    private void InitializeStartingVariables()
-    {
-
-    }
     protected void Update()
     {
         UpdateUI();
@@ -153,7 +138,7 @@ public class AutomaticGunRotator : TeamUpdater
     {
         foreach (var item in shootingControllers)
         {
-            item.shoot = shoot;
+            item.SetShoot(shoot);
         }
     }
     #endregion
@@ -506,15 +491,15 @@ public class AutomaticGunRotator : TeamUpdater
         {
             DeleteGunShootingZone();
         }
-        if (debugZoneScript == null && debugZoneOn)
-        {
-            CreateDebugZone();
-        }
         if (lastRotationLimitValue != hasRotationLimits)
         {
             lastRotationLimitValue = hasRotationLimits;
             DeleteGunShootingZone();
             CreateGunShootingZone();
+        }
+        if (debugZoneScript == null && debugZoneOn)
+        {
+            CreateDebugZone();
         }
     }
     #endregion

@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\Fighting\Projectiles\ExplosionController.cs" />
     <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\TraceBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VisualDetector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

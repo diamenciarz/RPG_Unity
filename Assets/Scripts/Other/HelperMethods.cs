@@ -210,7 +210,7 @@ public static class HelperMethods
         {
             int obstacleLayerMask = LayerMask.GetMask("Actors", "Obstacles");
             Vector2 direction = target.transform.position - originalPos;
-            Debug.DrawRay(originalPos, direction, Color.red, 0.1f);
+            //Debug.DrawRay(originalPos, direction, Color.red, 0.1f);
 
             RaycastHit2D raycastHit2D = Physics2D.Raycast(originalPos, direction, Mathf.Infinity, obstacleLayerMask);
 
