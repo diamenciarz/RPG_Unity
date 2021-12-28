@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class VisualDetector : TeamUpdater
 {
-    [Header("Instances")]
-    [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
-    [SerializeField] ShootingController[] shootingControllers;
-
-
+    #region Serialization
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
 
@@ -28,12 +24,17 @@ public class VisualDetector : TeamUpdater
     [SerializeField] bool isShootingZoneOn;
     [SerializeField] bool ignoreMouseCollisions;
 
+    [Header("Instances")]
+    [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
+    [SerializeField] ShootingController[] shootingControllers;
+
     [Header("Visual Zone")]
     [SerializeField] GameObject visualZonePrefab;
     [SerializeField] Transform visualZoneTransform;
+    #endregion
 
     private GameObject currentTarget;
-    private GameObject[] targetsInSightList;
+    private List<GameObject> targetsInSightList = new List<GameObject>();
     private ProgressionBarController shootingZoneScript;
 
     private bool savedIsShootingZoneOn;
@@ -62,12 +63,6 @@ public class VisualDetector : TeamUpdater
             SetShooting();
         }
     }
-    private void DoChecks()
-    {
-        targetsInSightList = FindAllEnemiesInSight();
-        currentTarget = StaticDataHolder.GetClosestObjectInSightAngleWise(targetsInSightList,transform.position, GetGunAngle());
-        isTargetInSight = CanSeeATarget();
-    }
     #region Shooting behaviour
     private void SetShooting()
     {
@@ -88,13 +83,25 @@ public class VisualDetector : TeamUpdater
         }
     }
     #endregion
+    private void DoChecks()
+    {
+        //Get all targets list
+        targetsInSightList = FindAllEnemiesInSight();
+        //The closest target
+        currentTarget = StaticDataHolder.GetClosestObjectInSightAngleWise(targetsInSightList, transform.position, GetGunAngle());
+        //Are there any targets in sight (edge case for mouse cursor)
+        CheckForAnyTargetInSight();
+    }
     #endregion
 
     #region Checks
-    private GameObject[] FindAllEnemiesInSight()
+    private List<GameObject> FindAllEnemiesInSight()
     {
         List<GameObject> targetList = StaticDataHolder.GetEnemyList(team);
-        targetList.AddRange(StaticDataHolder.GetObstacleList());
+        if (targetObstacles)
+        {
+            targetList.AddRange(StaticDataHolder.GetObstacleList());
+        }
         if (targetList.Count == 0)
         {
             return null;
@@ -109,17 +116,24 @@ public class VisualDetector : TeamUpdater
                 targetsInSight.Add(target);
             }
         }
-        return targetsInSight.ToArray();
+        return targetsInSight;
     }
-    private bool CanSeeATarget()
+    private void CheckForAnyTargetInSight()
     {
         if (controlledByMouse)
         {
-            return IsMouseInSight();
+            isTargetInSight = IsMouseInSight();
         }
         else
         {
-            return IsAnyTargetInSight();
+            if (targetsInSightList.Count > 0)
+            {
+                isTargetInSight = true;
+            }
+            else
+            {
+                isTargetInSight = false;
+            }
         }
     }
     private bool IsMouseInSight()
@@ -133,22 +147,6 @@ public class VisualDetector : TeamUpdater
         {
             return false;
         }
-    }
-    private bool IsAnyTargetInSight()
-    {
-        List<GameObject> enemyList = StaticDataHolder.GetEnemyList(team);
-        if (targetObstacles)
-        {
-            enemyList.AddRange(StaticDataHolder.GetObstacleList());
-        }
-        foreach (GameObject enemy in enemyList)
-        {
-            if (CanSeeTarget(enemy))
-            {
-                return true;
-            }
-        }
-        return false;
     }
     #endregion
 
@@ -343,10 +341,10 @@ public class VisualDetector : TeamUpdater
         return currentTarget;
     }
     /// <summary>
-     /// Returns all targets that this detector can see
-     /// </summary>
-     /// <returns></returns>
-    public GameObject[] GetTargetsInSight()
+    /// Returns all targets that this detector can see
+    /// </summary>
+    /// <returns></returns>
+    public List<GameObject> GetTargetsInSight()
     {
         return targetsInSightList;
     }

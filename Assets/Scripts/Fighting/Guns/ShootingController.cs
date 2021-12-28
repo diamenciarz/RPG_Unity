@@ -10,8 +10,6 @@ public class ShootingController : TeamUpdater
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject gunReloadingBarPrefab;
     [Header("Settings")]
-    [Tooltip("True - the gun waits the full time to reload all ammo at once. False - the ammo reolads gradually")]
-    public bool reloadAllAtOnce;
     [Tooltip("The direction of bullets coming out of the gun pipe")]
     [SerializeField] float basicGunRotation;
     [Header("Mouse Steering")]
@@ -77,7 +75,7 @@ public class ShootingController : TeamUpdater
     #region Reloading
     private void CheckTimeBank()
     {
-        if (reloadAllAtOnce)
+        if (salvo.reloadAllAtOnce)
         {
             TryReloadAllAmmo();
         }

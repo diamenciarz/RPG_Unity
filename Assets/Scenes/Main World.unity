@@ -12382,6 +12382,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
+    - target: {fileID: 8017394203629097686, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d862262310b234c9ae611c55e13ab3, type: 3}
 --- !u!4 &987542521 stripped
@@ -55692,7 +55696,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1932329953
 Transform:
   m_ObjectHideFlags: 0
@@ -55721,8 +55725,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  parentGameObject: {fileID: 1932329952}
-  shootingControllers: []
   basicGunDirection: 0
   hasRotationLimits: 1
   leftMaxRotationLimit: 50
@@ -55734,6 +55736,8 @@ MonoBehaviour:
   controlledByMouse: 1
   isShootingZoneOn: 0
   ignoreMouseCollisions: 1
+  parentGameObject: {fileID: 1932329952}
+  shootingControllers: []
   visualZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
   visualZoneTransform: {fileID: 1932329953}
 --- !u!50 &1932329955
@@ -56793,6 +56797,10 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: c5843511aecb4b14287ac0cfcbe8ab59, type: 2}
     - target: {fileID: 5387168661837921317, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: reloadAllAtOnce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055904224721763189, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770114996538, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}

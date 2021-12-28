@@ -5,11 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Single Shot", menuName = "Shots/Salvo")]
 public class SalvoScriptableObject : ScriptableObject, ISerializationCallbackReceiver
 {
+    public float additionalReloadTime;
+    [Tooltip("True - the gun waits the full time to reload all ammo at once. False - the ammo reolads gradually")]
+    public bool reloadAllAtOnce = true;
+    
     public SingleShotScriptableObject[] shots;
     public List<float> delayAfterEachShot;
     public List<float> reloadDelays;
-
-    public float additionalReloadTime;
 
     #region Serialization
     public void OnAfterDeserialize()

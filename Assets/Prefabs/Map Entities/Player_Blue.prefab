@@ -101,10 +101,8 @@ MonoBehaviour:
   salvo: {fileID: 11400000, guid: 6a6c3aa3430480f439354bf5093508c6, type: 2}
   shootingPoint: {fileID: 3458655993273092739}
   gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
-  reloadAllAtOnce: 1
   basicGunRotation: 180
   reloadingBarOn: 1
-  shoot: 0
 --- !u!1 &5617621746383904808
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,13 +126,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5617621746383904808}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0.096, y: 0.23, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6195473770567518806}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6055904224721763189
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,25 +178,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  shootingSoundsList: []
-  shootSoundVolume: 0
   basicGunDirection: 90
-  maximumShootingRange: 0
-  maximumRangeFromMouseToShoot: 0
   gunRotationSpeed: 120
   hasRotationLimits: 1
   leftMaxRotationLimit: 30
   rightMaxRotationLimit: 30
   gunTextureRotationOffset: 0
-  shootingPoint: {fileID: 3458655993273092739}
   parentGameObject: {fileID: 6195473770567518804}
-  shootingControllers:
-  - {fileID: 5387168661837921317}
+  visualDetectors:
+  - {fileID: 5530687257953287971}
   shootingZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
   shootingZoneTransform: {fileID: 3268680416828774221}
-  isControlledByMouseCursor: 1
-  isShootingZoneOn: 1
   debugZoneOn: 0
+  closestTarget: {fileID: 0}
 --- !u!1 &6195473770114996539
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,13 +215,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6195473770114996539}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6195473770567518806}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6195473770114996517
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -314,12 +306,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6195473770567518804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.66, y: -19.63, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6195473770114996538}
   - {fileID: 3268680416828774221}
   - {fileID: 173789610432481516}
+  - {fileID: 3049901069730513033}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -499,3 +492,63 @@ Transform:
   m_Father: {fileID: 8953788913229538285}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8179383231943236424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3049901069730513033}
+  - component: {fileID: 5530687257953287971}
+  m_Layer: 0
+  m_Name: Detector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3049901069730513033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179383231943236424}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1524043, y: 0.010817052, z: -0.03753846}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6195473770567518806}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5530687257953287971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179383231943236424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0978a099a259e5f4b861071502b3381c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: -1
+  basicGunDirection: 0
+  hasRotationLimits: 0
+  leftMaxRotationLimit: 0
+  rightMaxRotationLimit: 0
+  range: 10
+  mouseRange: 10
+  refreshRate: 0.1
+  targetObstacles: 0
+  controlledByMouse: 1
+  isShootingZoneOn: 1
+  ignoreMouseCollisions: 1
+  parentGameObject: {fileID: 6195473770567518804}
+  shootingControllers:
+  - {fileID: 5387168661837921317}
+  visualZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
+  visualZoneTransform: {fileID: 3268680416828774221}

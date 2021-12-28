@@ -34,8 +34,12 @@ public class AutomaticGunRotator : TeamUpdater
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     //Instances
-    GameObject theNearestEnemyGameObject;
+    public GameObject closestTarget = null;
 
+    private void Start()
+    {
+        CreateDebugZone();
+    }
     protected void Update()
     {
         LookForTarget();
@@ -55,15 +59,8 @@ public class AutomaticGunRotator : TeamUpdater
     }
     private void LookForTarget()
     {
-        GameObject[] targets = GetDetectedTargets();
-        if (targets.Length > 0)
-        {
-            theNearestEnemyGameObject = StaticDataHolder.GetClosestObjectAngleWise(targets, transform.position, GetGunAngle());
-        }
-        else
-        {
-            theNearestEnemyGameObject = null;
-        }
+        List<GameObject> targets = GetDetectedTargets();
+        closestTarget = StaticDataHolder.GetClosestObjectAngleWise(targets, transform.position, GetGunAngle());
     }
 
     #region Random Rotation
@@ -160,9 +157,9 @@ public class AutomaticGunRotator : TeamUpdater
     #region Get Delta Angle
     private float CountDeltaAngleToTarget()
     {
-        if (theNearestEnemyGameObject)
+        if (closestTarget)
         {
-            Vector3 targetPosition = theNearestEnemyGameObject.transform.position;
+            Vector3 targetPosition = closestTarget.transform.position;
             return CountAngleFromGunToTargetPosition(targetPosition);
         }
         else
@@ -312,21 +309,29 @@ public class AutomaticGunRotator : TeamUpdater
 
         return gunAngle;
     }
-    private GameObject[] GetDetectedTargets()
+    private List<GameObject> GetDetectedTargets()
     {
         List<GameObject> detectedTargets = new List<GameObject>();
-        foreach(VisualDetector detector in visualDetectors)
+        foreach (VisualDetector detector in visualDetectors)
         {
             GameObject target = detector.GetClosestTarget();
-            detectedTargets.Add(target);
+            if (target)
+            {
+                detectedTargets.Add(target);
+            }
         }
-        return detectedTargets.ToArray();
+        return detectedTargets;
     }
     #endregion
 
     #region UpdateUI
     private void UpdateDebugZone(float startAngle, float endAngle)
     {
+        if (!debugZoneScript)
+        {
+            CreateDebugZone();
+        }
+
         float parentAngle = parentGameObject.transform.rotation.eulerAngles.z;
         float angleSize = startAngle - endAngle;
         //Debug.Log(startAngle + ", " + endAngle);
@@ -342,14 +347,14 @@ public class AutomaticGunRotator : TeamUpdater
             float shootingZoneRotation = startAngle - parentAngle;
             debugZoneScript.SetDeltaRotationToObject(Quaternion.Euler(0, 0, shootingZoneRotation));
         }
-
     }
     private void CreateDebugZone()
     {
         if (shootingZonePrefab != null)
         {
             GameObject newShootingZoneGo = Instantiate(shootingZonePrefab, shootingZoneTransform);
-            newShootingZoneGo.transform.localScale = new Vector3(1.8f, 1.8f, 1);
+            float debugZoneRange = 1.8f; // This is a constant
+            newShootingZoneGo.transform.localScale = new Vector3(debugZoneRange, debugZoneRange, 1);
 
             SetupDebugZone(newShootingZoneGo);
         }
@@ -359,9 +364,5 @@ public class AutomaticGunRotator : TeamUpdater
         debugZoneScript = newShootingZoneGo.GetComponent<ProgressionBarController>();
         debugZoneScript.SetObjectToFollow(shootingZoneTransform.gameObject);
     }
-    #endregion
-
-    #region Accessor methods
-
     #endregion
 }
