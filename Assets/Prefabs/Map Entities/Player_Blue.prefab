@@ -50,7 +50,7 @@ MonoBehaviour:
   salvo: {fileID: 11400000, guid: a0bd2e0b5e4b56b4aa6c78f5ea03e8cb, type: 2}
   shootingPoint: {fileID: 3458655993273092739}
   gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
-  basicGunRotation: 0
+  basicGunRotation: 180
   reloadingBarOn: 1
 --- !u!1 &5617621746383904808
 GameObject:

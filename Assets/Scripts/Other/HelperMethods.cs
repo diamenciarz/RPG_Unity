@@ -311,7 +311,7 @@ public static class HelperMethods
     #region Object checks
     public static bool IsObjectAProjectile(GameObject collisionObject)
     {
-        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        IDamageReceived damageReceiver = collisionObject.GetComponent<IDamageReceived>();
         if (damageReceiver != null)
         {
             return damageReceiver.IsAProjectile();

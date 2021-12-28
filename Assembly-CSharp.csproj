@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{A780B45F-F972-9343-254F-83F8E9225888}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -68,7 +69,6 @@
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\TeamUpdater.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamage.cs" />
     <Compile Include="Assets\Scripts\Prefabs\LaserHolder.cs" />
     <Compile Include="Assets\Scripts\Fighting\Guns\SalvoScriptableObject.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\EndNode.cs" />
@@ -113,6 +113,8 @@
     <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\TraceBehaviour.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VisualDetector.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamageReceived.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Interfaces\IOnDamageDealt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

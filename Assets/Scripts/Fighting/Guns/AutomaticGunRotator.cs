@@ -33,7 +33,7 @@ public class AutomaticGunRotator : TeamUpdater
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     //Instances
-    private GameObject closestTarget = null;
+    public GameObject closestTarget;
 
     private void Start()
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnCollisionDamage : OnCollisionBreak, IDamage
+public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
 {
     [Header("Basic Stats")]
     [SerializeField] int damage;
@@ -129,6 +129,10 @@ public class OnCollisionDamage : OnCollisionBreak, IDamage
     public virtual Vector3 GetPushVector(Vector3 colisionPosition)
     {
         return entityData.GetVelocityVector3().normalized * pushingPower;
+    }
+    public GameObject CreatedBy()
+    {
+        return createdBy;
     }
     #endregion
 }

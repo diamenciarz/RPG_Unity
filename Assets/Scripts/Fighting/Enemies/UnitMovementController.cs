@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitMovementController : TeamUpdater
+public class UnitMovementController : TeamUpdater, IOnDamageDealt
 {
     #region Serializable
     [Header("Movement")]
@@ -208,7 +208,6 @@ public class UnitMovementController : TeamUpdater
     private void FindNewTargetInSight()
     {
         List<GameObject> targetList = GetDetectedTargets();
-        Debug.Log("Detected: " + targetList.Count);
         GameObject newTarget = StaticDataHolder.GetClosestObject(targetList, transform.position);
         if (newTarget)
         {
@@ -266,9 +265,10 @@ public class UnitMovementController : TeamUpdater
     }
     private void CheckNextTrace()
     {
-        Vector3 deltaPositionToTrace = transform.position - lastTargetPositions[0];
-        float stopDistance = aiPath.endReachedDistance * 2f;
-        bool isClose = deltaPositionToTrace.magnitude < stopDistance;
+        float distanceToTrace = HelperMethods.Distance(transform.position, lastTargetPositions[0]);
+        float stopDistance = aiPath.endReachedDistance * 1.2f;
+        Debug.Log("Distance to trace: " + distanceToTrace + " stop distance " + stopDistance);
+        bool isClose = distanceToTrace < stopDistance;
         if (isClose)
         {
             if (lastTargetPositions.Count > 1)
@@ -338,12 +338,31 @@ public class UnitMovementController : TeamUpdater
             }
         }
     }
+    /// <summary>
+    /// If the current target shoots the unit from behing - it will immediately reveal its position
+    /// </summary>
+    /// <param name="hitBy"></param>
+    public void HitBy(GameObject hitBy)
+    {
+        if (hitBy == target)
+        {
+            JumpToTheNewestTrace();
+        }
+    }
+    private void JumpToTheNewestTrace()
+    {
+        if (lastTargetPositions.Count > 1)
+        {
+            DeleteOldTraces(lastTargetPositions.Count - 2);
+            lastTargetPosition.transform.position = lastTargetPositions[0];
+        }
+    }
     #endregion
 
     #region Trace placement
     private void UpdateTraces()
     {
-        if (canShootTarget)
+        if (isTargetInSight)
         {
             ResetLastPlayerPositions();
         }
@@ -373,8 +392,7 @@ public class UnitMovementController : TeamUpdater
     }
     private bool IsOutsideOfSmellRange()
     {
-        Vector3 deltaPosition = lastTargetPositions[lastTargetPositions.Count - 1] - lastTargetPositions[lastTargetPositions.Count - 2];
-        float distance = deltaPosition.magnitude;
+        float distance = HelperMethods.Distance(lastTargetPositions[lastTargetPositions.Count - 1], lastTargetPositions[lastTargetPositions.Count - 2]);
         if (distance > smellRange)
         {
             return true;

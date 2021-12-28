@@ -54,29 +54,20 @@ public class DamageReceiver : ListUpdater
 
     #region Receive Damage
     /// <summary>
-    /// Deal damage
-    /// </summary>
-    /// <param name="damage"></param>
-    /// <param name="gameObject"></param>
-    public void DealDamage(int damage)
-    {
-        health -= damage;
-        CheckHealth();
-    }
-    /// <summary>
     /// Deal damage and try to push object
     /// </summary>
     /// <param name="damage"></param>
     /// <param name="gameObject"></param>
-    public void DealDamage(IDamage iDamage)
+    public void DealDamage(IDamageReceived iDamage)
     {
         health -= iDamage.GetDamage();
         UpdateHealthBar();
         CheckHealth();
 
         ModifyVelocity(iDamage);
+        HandleDamage();
     }
-    private void ModifyVelocity(IDamage iDamage)
+    private void ModifyVelocity(IDamageReceived iDamage)
     {
         if (myEntityData != null)
         {
@@ -96,6 +87,10 @@ public class DamageReceiver : ListUpdater
         {
             HandleHit();
         }
+    }
+    private void HandleDamage()
+    {
+
     }
     #endregion
 

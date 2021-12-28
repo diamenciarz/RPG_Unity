@@ -103,14 +103,14 @@ public class OnCollisionBreak : TeamUpdater
     }
     private bool BreaksOnProjectile(GameObject collisionObject)
     {
-        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        IDamageReceived damageReceiver = collisionObject.GetComponent<IDamageReceived>();
         if (damageReceiver != null && ShouldBreak(damageReceiver))
         {
             return true;
         }
         return false;
     }
-    private bool ShouldBreak(IDamage iDamage)
+    private bool ShouldBreak(IDamageReceived iDamage)
     {
         int collisionTeam = iDamage.GetTeam();
         bool areTeamsEqual = collisionTeam == team;

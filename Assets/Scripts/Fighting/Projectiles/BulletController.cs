@@ -131,7 +131,7 @@ public class BulletController : BasicProjectileController
             TryReflect(-collisionNormal);
             return;
         }
-        IDamage damageReceiver = collisionObject.GetComponent<IDamage>();
+        IDamageReceived damageReceiver = collisionObject.GetComponent<IDamageReceived>();
         if (BouncesOffProjectile(damageReceiver))
         {
             Vector3 projectileVelocity = damageReceiver.GetPushVector(transform.position);
@@ -223,7 +223,7 @@ public class BulletController : BasicProjectileController
         bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
         return bouncesOnEnemy;
     }
-    private bool BouncesOffProjectile(IDamage damageReceiver)
+    private bool BouncesOffProjectile(IDamageReceived damageReceiver)
     {
         if (damageReceiver != null && ProjectileCheck(damageReceiver))
         {
@@ -231,7 +231,7 @@ public class BulletController : BasicProjectileController
         }
         return false;
     }
-    private bool ProjectileCheck(IDamage iDamage)
+    private bool ProjectileCheck(IDamageReceived iDamage)
     {
         if (!iDamage.GetIsPushing())
         {

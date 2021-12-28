@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamage
+public interface IDamageReceived
 {
     public abstract int GetDamage();
     public abstract int GetTeam();
@@ -16,4 +16,9 @@ public interface IDamage
     /// </summary>
     /// <returns></returns>
     public abstract Vector3 GetPushVector(Vector3 colisionPosition);
+    /// <summary>
+    /// The object that dealt this damage 
+    /// </summary>
+    /// <returns></returns>
+    public abstract GameObject CreatedBy();
 }
