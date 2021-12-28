@@ -33,9 +33,7 @@ public class AutomaticGunRotator : TeamUpdater
     private float invisibleTargetRotation;
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
-    private bool lastRotationLimitValue;
     //Instances
-    private ProgressionBarController shootingZoneScript;
     GameObject theNearestEnemyGameObject;
 
     protected void Update()
@@ -58,7 +56,14 @@ public class AutomaticGunRotator : TeamUpdater
     private void LookForTarget()
     {
         GameObject[] targets = GetDetectedTargets();
-        theNearestEnemyGameObject = StaticDataHolder.GetClosestObjectAngleWise(targets, transform.position, GetGunAngle());
+        if (targets.Length > 0)
+        {
+            theNearestEnemyGameObject = StaticDataHolder.GetClosestObjectAngleWise(targets, transform.position, GetGunAngle());
+        }
+        else
+        {
+            theNearestEnemyGameObject = null;
+        }
     }
 
     #region Random Rotation
@@ -155,8 +160,16 @@ public class AutomaticGunRotator : TeamUpdater
     #region Get Delta Angle
     private float CountDeltaAngleToTarget()
     {
-        Vector3 targetPosition = theNearestEnemyGameObject.transform.position;
-        return CountAngleFromGunToTargetPosition(targetPosition);
+        if (theNearestEnemyGameObject)
+        {
+            Vector3 targetPosition = theNearestEnemyGameObject.transform.position;
+            return CountAngleFromGunToTargetPosition(targetPosition);
+        }
+        else
+        {
+            //There is no target to turn towards
+            return 0;
+        }
     }
     private float CountAngleFromGunToTargetPosition(Vector3 targetPosition)
     {

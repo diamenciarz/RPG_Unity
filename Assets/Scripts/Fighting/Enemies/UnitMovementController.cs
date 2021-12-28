@@ -151,6 +151,11 @@ public class UnitMovementController : TeamUpdater
     }
     private bool IsAnyTargetInRange()
     {
+        if (inRangeDetectors.Length == 0)
+        {
+            Debug.LogError("This unit has no range detectors");
+            return false;
+        }
         foreach (VisualDetector detector in inRangeDetectors)
         {
             if (detector.CanSeeTargets())
@@ -167,6 +172,11 @@ public class UnitMovementController : TeamUpdater
     }
     private bool IsAnyTargetInSight()
     {
+        if (inSightDetectors.Length == 0)
+        {
+            Debug.LogError("This unit has no sight detectors");
+            return false;
+        }
         foreach (VisualDetector detector in inSightDetectors)
         {
             if (detector.CanSeeTargets())

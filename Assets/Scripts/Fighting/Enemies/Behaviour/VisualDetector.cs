@@ -28,7 +28,7 @@ public class VisualDetector : TeamUpdater
     [SerializeField] bool isShootingZoneOn;
     [SerializeField] bool ignoreMouseCollisions;
 
-    [Header("Shooting Zone")]
+    [Header("Visual Zone")]
     [SerializeField] GameObject visualZonePrefab;
     [SerializeField] Transform visualZoneTransform;
 
@@ -36,9 +36,12 @@ public class VisualDetector : TeamUpdater
     private GameObject[] targetsInSightList;
     private ProgressionBarController shootingZoneScript;
 
-    private bool lastRotationLimitValue;
-    private bool isTargetInSight;
+    private bool savedIsShootingZoneOn;
+    private float savedLeftMaxRotationLimit;
+    private float savedRightMaxRotationLimit;
+    private float savedBasicGunDirection;
     private Coroutine checkCoroutine;
+    private bool isTargetInSight;
 
     void Start()
     {
@@ -220,11 +223,11 @@ public class VisualDetector : TeamUpdater
         {
             DeleteGunShootingZone();
         }
-        if (lastRotationLimitValue != hasRotationLimits)
+        bool shootingZoneWasModified = (savedIsShootingZoneOn != hasRotationLimits) || (savedLeftMaxRotationLimit != leftMaxRotationLimit) ||
+        (savedRightMaxRotationLimit != rightMaxRotationLimit) || (savedBasicGunDirection != basicGunDirection);
+        if (shootingZoneWasModified)
         {
-            lastRotationLimitValue = hasRotationLimits;
-            DeleteGunShootingZone();
-            CreateGunShootingZone();
+            RefreshGunShootingZone();
         }
     }
     private void UpdateShootingZoneVisibility()
@@ -245,6 +248,15 @@ public class VisualDetector : TeamUpdater
     }
 
     #region Create/Delete UI
+    private void RefreshGunShootingZone()
+    {
+        savedIsShootingZoneOn = hasRotationLimits;
+        savedLeftMaxRotationLimit = leftMaxRotationLimit;
+        savedRightMaxRotationLimit = rightMaxRotationLimit;
+        savedBasicGunDirection = basicGunDirection;
+        DeleteGunShootingZone();
+        CreateGunShootingZone();
+    }
     private void DeleteGunShootingZone()
     {
         if (shootingZoneScript != null)
