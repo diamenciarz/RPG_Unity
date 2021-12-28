@@ -93,7 +93,10 @@ MonoBehaviour:
   smellRange: 2
   traceCount: 5
   lastTargetPositions: []
-  canSeeTarget: 0
+  target: {fileID: 0}
+  isTargetInSight: 0
+  isTargetInRange: 0
+  canShootTarget: 0
   canSeeLastTargetPosition: 0
   totalTracesLeft: 0
 --- !u!50 &7004943701780608939
@@ -577,6 +580,14 @@ PrefabInstance:
       propertyPath: visualZoneTransform
       value: 
       objectReference: {fileID: 7508872829586584096}
+    - target: {fileID: 2691351578028939756, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
+      propertyPath: leftMaxRotationLimit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2691351578028939756, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
+      propertyPath: rightMaxRotationLimit
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 4622248891248038848, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
       propertyPath: m_Name
       value: RangeDetector
@@ -674,6 +685,14 @@ PrefabInstance:
       propertyPath: visualZoneTransform
       value: 
       objectReference: {fileID: 7508872829586584096}
+    - target: {fileID: 2691351578028939756, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
+      propertyPath: leftMaxRotationLimit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2691351578028939756, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
+      propertyPath: rightMaxRotationLimit
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 4622248891248038848, guid: d68ec9f362bd5454a9ddf756e7ea02eb, type: 3}
       propertyPath: m_Name
       value: SightDetector

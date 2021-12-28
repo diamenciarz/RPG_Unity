@@ -23,15 +23,17 @@ public class DamageReceiver : ListUpdater
     private bool isDestroyed = false;
     private ICollidingEntityData myEntityData; //basic projectile controller script for velocity editing
     protected ProgressionBarController healthBarScript;
+    private IOnDamageDealt[] onHitCalls;
 
     protected void Awake()
     {
-        UpdateStartingVariables();
+        SetupStartingVariables();
     }
-    private void UpdateStartingVariables()
+    private void SetupStartingVariables()
     {
         myEntityData = GetComponent<ICollidingEntityData>();
         maxHP = health;
+        onHitCalls = GetComponentsInChildren<IOnDamageDealt>();
     }
     protected void Update()
     {
@@ -65,7 +67,7 @@ public class DamageReceiver : ListUpdater
         CheckHealth();
 
         ModifyVelocity(iDamage);
-        HandleDamage();
+        HandleDamage(iDamage);
     }
     private void ModifyVelocity(IDamageReceived iDamage)
     {
@@ -88,9 +90,12 @@ public class DamageReceiver : ListUpdater
             HandleHit();
         }
     }
-    private void HandleDamage()
+    private void HandleDamage(IDamageReceived iDamage)
     {
-
+        foreach (IOnDamageDealt call in onHitCalls)
+        {
+            call.HitBy(iDamage.CreatedBy());
+        }
     }
     #endregion
 

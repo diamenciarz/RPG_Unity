@@ -209,10 +209,7 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     {
         List<GameObject> targetList = GetDetectedTargets();
         GameObject newTarget = StaticDataHolder.GetClosestObject(targetList, transform.position);
-        if (newTarget)
-        {
-            target = newTarget;
-        }
+        SetTarget(newTarget);
     }
     private List<GameObject> GetDetectedTargets()
     {
@@ -266,7 +263,7 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     private void CheckNextTrace()
     {
         float distanceToTrace = HelperMethods.Distance(transform.position, lastTargetPositions[0]);
-        float stopDistance = aiPath.endReachedDistance * 1.2f;
+        float stopDistance = aiPath.endReachedDistance * 2f;
         Debug.Log("Distance to trace: " + distanceToTrace + " stop distance " + stopDistance);
         bool isClose = distanceToTrace < stopDistance;
         if (isClose)
@@ -338,16 +335,31 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
             }
         }
     }
+
+    #region On hit
     /// <summary>
     /// If the current target shoots the unit from behing - it will immediately reveal its position
     /// </summary>
     /// <param name="hitBy"></param>
     public void HitBy(GameObject hitBy)
     {
-        if (hitBy == target)
+        if (target)
         {
-            JumpToTheNewestTrace();
+            if (hitBy == target)
+            {
+                RevealTargetPosition();
+            }
         }
+        else
+        {
+            SetTarget(hitBy);
+            RevealTargetPosition();
+        }
+    }
+    private void RevealTargetPosition()
+    {
+        AddTargetPosition();
+        JumpToTheNewestTrace();
     }
     private void JumpToTheNewestTrace()
     {
@@ -357,6 +369,8 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
             lastTargetPosition.transform.position = lastTargetPositions[0];
         }
     }
+    #endregion
+
     #endregion
 
     #region Trace placement
@@ -371,6 +385,10 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
             if (CanPlaceNextTrace())
             {
                 AddTargetPosition();
+                if (IsOutsideOfSmellRange())
+                {
+                    totalTracesLeft--;
+                }
             }
         }
     }
@@ -385,10 +403,6 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     {
         lastTraceLeftTime = Time.time;
         lastTargetPositions.Add(target.transform.position);
-        if (IsOutsideOfSmellRange())
-        {
-            totalTracesLeft--;
-        }
     }
     private bool IsOutsideOfSmellRange()
     {
@@ -443,6 +457,13 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     private void SetMovementSpeed(float newSpeed)
     {
         aiPath.maxSpeed = newSpeed;
+    }
+    public void SetTarget(GameObject newTarget)
+    {
+        if (newTarget)
+        {
+            target = newTarget;
+        }
     }
     #endregion
 }
