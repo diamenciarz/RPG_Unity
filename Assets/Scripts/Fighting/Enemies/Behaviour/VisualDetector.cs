@@ -6,6 +6,8 @@ public class VisualDetector : TeamUpdater
 {
     [Header("Instances")]
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;
+    [SerializeField] ShootingController[] shootingControllers;
+
 
     [Tooltip("Delta angle from the middle of parent's rotation")]
     [SerializeField] float basicGunDirection;
@@ -31,7 +33,7 @@ public class VisualDetector : TeamUpdater
     [SerializeField] Transform visualZoneTransform;
 
     private GameObject currentTarget;
-    private GameObject[] targetsInSight;
+    private GameObject[] targetsInSightList;
     private ProgressionBarController shootingZoneScript;
 
     private bool lastRotationLimitValue;
@@ -54,14 +56,35 @@ public class VisualDetector : TeamUpdater
         {
             yield return new WaitForSeconds(refreshRate);
             DoChecks();
+            SetShooting();
         }
     }
     private void DoChecks()
     {
-        targetsInSight = FindAllEnemiesInSight();
-        currentTarget = StaticDataHolder.GetClosestObjectInSightAngleWise(targetsInSight,transform.position, GetGunAngle());
+        targetsInSightList = FindAllEnemiesInSight();
+        currentTarget = StaticDataHolder.GetClosestObjectInSightAngleWise(targetsInSightList,transform.position, GetGunAngle());
         isTargetInSight = CanSeeATarget();
     }
+    #region Shooting behaviour
+    private void SetShooting()
+    {
+        if (isTargetInSight)
+        {
+            UpdateShootingControllers(true);
+        }
+        else
+        {
+            UpdateShootingControllers(false);
+        }
+    }
+    private void UpdateShootingControllers(bool shoot)
+    {
+        foreach (var item in shootingControllers)
+        {
+            item.SetShoot(shoot);
+        }
+    }
+    #endregion
     #endregion
 
     #region Checks
@@ -152,7 +175,7 @@ public class VisualDetector : TeamUpdater
         }
         return false;
     }
-    private float CountAngleFromGunToPosition(Vector3 targetPosition)
+    private float CountAngleToPosition(Vector3 targetPosition)
     {
         float angleFromZeroToItem = HelperMethods.DeltaPositionRotation(transform.position, targetPosition).eulerAngles.z;
         float angleFromGunToItem = Mathf.DeltaAngle(GetGunAngle(), angleFromZeroToItem);
@@ -313,7 +336,7 @@ public class VisualDetector : TeamUpdater
      /// <returns></returns>
     public GameObject[] GetTargetsInSight()
     {
-        return targetsInSight;
+        return targetsInSightList;
     }
     /// <summary>
     /// Returns true if the detector can see at least one target

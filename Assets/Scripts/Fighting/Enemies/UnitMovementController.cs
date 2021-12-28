@@ -30,7 +30,8 @@ public class UnitMovementController : TeamUpdater
     private GameObject target;
     //Movement
     private float currentMoveSpeed;
-    private float shootRange = 10;
+    [Tooltip("If this is set to true, the unit will hold its position")]
+    private bool isInRange;
 
     #region Hunting
     //Booleans
