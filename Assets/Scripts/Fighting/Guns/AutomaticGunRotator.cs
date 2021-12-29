@@ -28,8 +28,8 @@ public class AutomaticGunRotator : TeamUpdater
     [SerializeField] Transform DebugZoneTransform;
     #endregion
 
-    private bool areTargetsInRange;
-    private float invisibleTargetRotation;
+    public bool areTargetsInRange;
+    public float invisibleTargetRotation;
     private Coroutine randomRotationCoroutine;
     private ProgressionBarController debugZoneScript;
     //Instances
@@ -60,6 +60,14 @@ public class AutomaticGunRotator : TeamUpdater
     {
         List<GameObject> targets = GetDetectedTargets();
         closestTarget = StaticDataHolder.GetClosestObjectAngleWise(targets, transform.position, GetGunAngle());
+        if (closestTarget)
+        {
+            areTargetsInRange = true;
+        }
+        else
+        {
+            areTargetsInRange = false;
+        }
     }
 
     #region Random Rotation

@@ -184,7 +184,7 @@ MonoBehaviour:
   destroyDelay: 5
   destroyDistance: -1
   bounceEnum: 0600000000000000
-  minAngleToReflect: 25
+  minAngleToReflect: 0
   maxReflections: 8
   timeToAdd: 2
 --- !u!114 &5534843798056116234

@@ -17,7 +17,7 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     [Tooltip("A list of detectors that decide, if this unit should hold its position")]
     [SerializeField] VisualDetector[] rangeDetectors;
     [Tooltip("How much time after losing the trace, will this unit go back to its original routine")]
-    [SerializeField] float loseInterestDelay = 10; // Will be useful for wandering
+    [SerializeField] float searchDuration = 10; // Will be useful for wandering
     [SerializeField] float placeTraceDelay = 2;
     [Tooltip("If the target travels further than this distance, start losing its trace")]
     [SerializeField] float smellRange = 2;
@@ -28,15 +28,15 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     //Objects
     private Pathfinding.AIDestinationSetter aiDestinationSetter;
     private Pathfinding.AIPath aiPath;
-    public List<Vector3> lastTargetPositions = new List<Vector3>();
+    private List<Vector3> lastTargetPositions = new List<Vector3>();
     private GameObject lastTargetPosition;
-    public GameObject target;
+    private GameObject target;
     //Movement
     private float currentMoveSpeed;
     [Tooltip("If this is set to true, the unit will start following its target")]
-    public bool isTargetInSight;
+    private bool isTargetInSight;
     [Tooltip("If this is set to true, the unit will hold its position")]
-    public bool isTargetInRange;
+    private bool isTargetInRange;
 
     #region Hunting
     //Booleans
@@ -264,7 +264,7 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
     {
         float distanceToTrace = HelperMethods.Distance(transform.position, lastTargetPositions[0]);
         float stopDistance = aiPath.endReachedDistance * 2f;
-        Debug.Log("Distance to trace: " + distanceToTrace + " stop distance " + stopDistance);
+        //Debug.Log("Distance to trace: " + distanceToTrace + " stop distance " + stopDistance);
         bool isClose = distanceToTrace < stopDistance;
         if (isClose)
         {
