@@ -40,10 +40,6 @@ public class BulletController : BasicProjectileController
         myCollider2D = GetComponent<CapsuleCollider2D>();
         SetupDestroyTime();
     }
-    protected void Update()
-    {
-        UpdateCollisionNormal();
-    }
 
     #region Destroy
     private void SetupDestroyTime()
@@ -100,84 +96,35 @@ public class BulletController : BasicProjectileController
     #endregion
 
     #region Collisions
-    /// <summary>
-    /// Measures the possible normal, if a collision were to occur
-    /// </summary>
-    private void UpdateCollisionNormal()
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, GetVelocityVector3(), GetVelocityVector3().magnitude);
-        if (hit2D.collider)
-        {
-            collisionNormal = hit2D.normal;
-        }
+        base.OnCollisionEnter2D(collision);
+        BounceCheck(collision);
+        StartCoroutine(WaitAndUpdateRotation());
     }
-    private ContactFilter2D CreateObstacleContactFilter()
+    private void BounceCheck(Collision2D collision)
     {
-        LayerMask layerMask = LayerMask.GetMask("Obstacles");
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.SetLayerMask(layerMask);
-
-        return filter;
-    }
-    protected override void OnTriggerEnter2D(Collider2D collision)
-    {
-        base.OnTriggerEnter2D(collision);
-        //BounceCheck(collision);
-    }
-    private void BounceCheck(Collider2D collision)
-    {
-        GameObject collisionObject = collision.gameObject;
-        if (ReflectsOffObstacle(collisionObject))
-        {
-            //Debug.Log("Reflects off obstacle");
-            TryReflect(-collisionNormal);
-            return;
-        }
-        if (ReflectsOffAllyOrEnemy(collisionObject))
-        {
-            //Debug.Log("Reflects off entity");
-            TryReflect(-collisionNormal);
-            return;
-        }
-        IDamageReceived damageReceiver = collisionObject.GetComponent<IDamageReceived>();
-        if (BouncesOffProjectile(damageReceiver))
-        {
-            Vector3 projectileVelocity = damageReceiver.GetPushVector(transform.position);
-            Bounce(projectileVelocity);
-            return;
-        }
-    }
-
-    #region Reflect
-    private void TryReflect(Vector3 normal)
-    {
-        if (ShouldReflect(normal))
-        {
-            Reflect(normal);
-        }
-        else
+        if (!ShouldReflect(collision))
         {
             DestroyObject();
         }
     }
-    private bool ShouldReflect(Vector3 normal)
+    private IEnumerator WaitAndUpdateRotation()
     {
-        float hitAngle = Vector3.Angle(GetVelocityVector3(), normal);
-        //Debug.Log("Angle: " + Mathf.Abs(hitAngle));
-        bool isAngleRight = Mathf.Abs(hitAngle) >= minAngleToReflect;
-        bool areBouncesLeft = maxReflections == -1 || bounces < maxReflections;
-
-        return areBouncesLeft && isAngleRight;
+        yield return new WaitForEndOfFrame();
+        UpdateRotationToFaceForward();
     }
-    private void Reflect(Vector3 normal)
+
+    #region Reflect
+    private bool ShouldReflect(Collision2D collision)
     {
-        //Modify bullet state
-        bounces++;
-        destroyTime += timeToAdd;
-        //Modify bullet velocity
-        Vector3 newVelocity = Vector3.Reflect(GetVelocityVector3(), normal);
-        SetVelocityVector(newVelocity);
-        UpdateCollisionNormal();
+        Vector3 collisionNormal = collision.GetContact(0).normal;
+        float hitAngle = Vector3.Angle(GetVelocityVector3(), collisionNormal);
+
+        bool isAngleCorrect = Mathf.Abs(hitAngle) >= minAngleToReflect;
+        bool hasBouncesLeft = maxReflections == -1 || bounces < maxReflections;
+
+        return hasBouncesLeft && isAngleCorrect;
     }
     #endregion
 

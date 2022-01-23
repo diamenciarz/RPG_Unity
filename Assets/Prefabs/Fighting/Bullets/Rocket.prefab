@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5953393413085095053}
   - component: {fileID: 4013303304944118881}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 7748659938827264479}
   - component: {fileID: -776891561322186458}
   - component: {fileID: 9162897449671734551}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ MonoBehaviour:
   team: -1
   gameObjectsToTurnIntoList: 05000000
   shootsAtEnemies: 0
-  basicDirection: 0
+  shotDirection: 0
   spreadProjectilesEvenly: 0
   spreadDegrees: 0
   leftBulletSpread: 0

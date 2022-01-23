@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8989033578331711026}
   - component: {fileID: 8506415841635345968}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7700761372939823447}
   - component: {fileID: 3278521563504507919}
   - component: {fileID: 5534843798056116234}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BouncyLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}

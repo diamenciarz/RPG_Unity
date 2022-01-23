@@ -25,7 +25,7 @@ public class TriggerOnDeath : TeamUpdater
     }
 
     #region OnDestroy
-    public void ObjectDestroyed()
+    public void DestroyObject()
     {
         if (!isDestroyed)
         {

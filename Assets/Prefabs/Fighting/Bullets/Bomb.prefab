@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 0600000003000000040000000100000005000000
+  breakEnum: 060000000300000004000000010000000500000000000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2
@@ -172,7 +172,7 @@ MonoBehaviour:
   team: -1
   gameObjectsToTurnIntoList: 05000000
   shootsAtEnemies: 0
-  basicDirection: 0
+  shotDirection: 0
   spreadProjectilesEvenly: 0
   spreadDegrees: 0
   leftBulletSpread: 0

@@ -85,10 +85,9 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
     }
     protected void DestroyObject()
     {
-        if (!HelperMethods.CallAllTriggers(gameObject))
-        {
-            StartCoroutine(DestroyAtTheEndOfFrame());
-        }
+        HelperMethods.CallAllTriggers(gameObject);
+        StartCoroutine(DestroyAtTheEndOfFrame());
+
     }
     private IEnumerator DestroyAtTheEndOfFrame()
     {

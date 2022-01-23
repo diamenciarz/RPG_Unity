@@ -14,6 +14,8 @@ public class ProgressionBarController : MonoBehaviour
     [SerializeField] Gradient barColorGradient;
     [SerializeField] [Range(0, 1)] float originalAlfa = 1f;
     [SerializeField] protected float hideOverTime = 0.5f;
+    [Tooltip("Time, after which the bar will disappear, after being shown (-1 for never)")]
+    [SerializeField] [Range(0, 100)] private float hideDelay = 0;
 
     [Header("Transform Settings")]
     [SerializeField] bool destroyWithoutParent = true;
@@ -22,6 +24,7 @@ public class ProgressionBarController : MonoBehaviour
     private bool isDestroyed;
     Color currentColor;
     private bool isShown = true;
+    private double lastUsedTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +53,8 @@ public class ProgressionBarController : MonoBehaviour
     void Update()
     {
         FollowParent();
+
+        CheckHideDelay();
         AdjustBarVisibility();
     }
 
@@ -90,6 +95,7 @@ public class ProgressionBarController : MonoBehaviour
             newRatio = Mathf.Clamp(newRatio, 0, 1);
             if (!double.IsNaN(newRatio))
             {
+                lastUsedTime = Time.time;
                 healthBarImage.fillAmount = newRatio;
                 if (useGradient)
                 {
@@ -134,6 +140,19 @@ public class ProgressionBarController : MonoBehaviour
             Color newColor = currentColor;
             newColor.a = colorAlfa;
             healthBarImage.color = newColor;
+        }
+    }
+    private void CheckHideDelay()
+    {
+        if (hideDelay > 0)
+        {
+            if (isShown)
+            {
+                if (Time.time > lastUsedTime + hideDelay)
+                {
+                    IsVisible(false);
+                }
+            }
         }
     }
 }

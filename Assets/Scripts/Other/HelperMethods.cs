@@ -379,7 +379,7 @@ public static class HelperMethods
         {
             foreach (TriggerOnDeath item in triggerOnDeath)
             {
-                item.ObjectDestroyed();
+                item.DestroyObject();
             }
             return true;
         }

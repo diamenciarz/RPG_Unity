@@ -58,7 +58,12 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     {
         velocityVector = newVelocityVector;
         myRigidbody2D.velocity = newVelocityVector;
-        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + newVelocityVector);
+        UpdateRotationToFaceForward();
+    }
+    protected void UpdateRotationToFaceForward()
+    {
+        Vector3 velocity = myRigidbody2D.velocity;
+        transform.rotation = HelperMethods.DeltaPositionRotation(transform.position, transform.position + velocity);
     }
     public void ModifyVelocityVector3(Vector3 deltaVector)
     {
