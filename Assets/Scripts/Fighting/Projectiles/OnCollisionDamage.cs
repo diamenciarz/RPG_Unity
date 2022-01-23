@@ -54,7 +54,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
         bool canReceiveDamage = damageReceiver != null;
         if (canReceiveDamage)
         {
-            bool isInvulnerable = CheckParent(collisionObject);
+            bool isInvulnerable = IsInvulnerable(collisionObject);
             if (isInvulnerable)
             {
                 bool shouldDealDamage = damageReceiver.GetTeam() != team || hurtsAllies;

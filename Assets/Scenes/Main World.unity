@@ -11202,7 +11202,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.16, y: -41.92, z: -9}
+  m_LocalPosition: {x: -48.57, y: -44.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11295,16 +11295,18 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 627441604}
+  - component: {fileID: 627441606}
   - component: {fileID: 627441603}
   - component: {fileID: 627441602}
   - component: {fileID: 627441601}
-  m_Layer: 0
+  - component: {fileID: 627441605}
+  m_Layer: 6
   m_Name: Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &627441601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11317,6 +11319,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab0131b93386bd34bb97758ed922c9e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 5
+  minSpeed: -3
+  acceleratingForce: 3000
+  brakingForce: 5000
+  backingForce: 1000
+  turningSpeed: 200
+  driftFactor: 0.678
 --- !u!50 &627441602
 Rigidbody2D:
   serializedVersion: 4
@@ -11329,7 +11338,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -11381,13 +11390,48 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627441600}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.39, y: -49.9, z: 0.12}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -59.03, y: -42.01, z: 0.12}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1439349412}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &627441605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627441600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f799ed7ff173126468e812a42ccb13d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlledByPlayer: 1
+--- !u!114 &627441606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627441600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53e72e9ba4e45cf4bab3528c6f197f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  putInLists: 02000000
+  team: 1
+  health: 100
+  healthBarPrefab: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
+  turnHealthBarOn: 1
+  canBePushed: 1
+  breakingSounds: []
+  breakingSoundVolume: 1
+  hitSounds: []
+  hitSoundVolume: 1
 --- !u!4 &638362271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4507979778816504411, guid: 24149a6e109f9cb4685151b7ef5afdf5, type: 3}
@@ -12320,7 +12364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1200158902}
   - component: {fileID: 1200158903}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LeftDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47908,12 +47952,12 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.2
+  m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0.2
   m_DeadZoneDepth: 0
-  m_UnlimitedSoftZone: 1
-  m_SoftZoneWidth: 1
-  m_SoftZoneHeight: 0.8
+  m_UnlimitedSoftZone: 0
+  m_SoftZoneWidth: 0.93
+  m_SoftZoneHeight: 0.88
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -48241,7 +48285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1421269653}
   - component: {fileID: 1421269654}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48534,7 +48578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1439349412}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54770,7 +54814,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666678814}
   - component: {fileID: 1666678815}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RightDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54906,7 +54950,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682536240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.16, y: -41.92, z: -9}
+  m_LocalPosition: {x: -48.57, y: -44.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1271477547}
@@ -55318,9 +55362,9 @@ MonoBehaviour:
   mouseRange: 5
   refreshRate: 0.1
   targetObstacles: 0
-  controlledByMouse: 1
-  isShootingZoneOn: 0
-  ignoreMouseCollisions: 1
+  controlledByMouse: 0
+  isShootingZoneOn: 1
+  ignoreMouseCollisions: 0
   shootingControllers: []
   visualZonePrefab: {fileID: 8395912166832606940, guid: f3d668e1204dd294192cc086baa6c8f4, type: 3}
   visualZoneTransform: {fileID: 1932329953}
@@ -56411,17 +56455,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 6195473770567518804, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -37.16
+      value: -48.57
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -41.92
+      value: -44.11
       objectReference: {fileID: 0}
     - target: {fileID: 6195473770567518806, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.z

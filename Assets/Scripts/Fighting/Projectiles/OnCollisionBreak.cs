@@ -75,7 +75,7 @@ public class OnCollisionBreak : TeamUpdater
     private bool BreaksOnAllyOrEnemy(GameObject collisionObject)
     {
         bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
-        if (CheckParent(collisionObject))
+        if (IsInvulnerable(collisionObject))
         {
             bool breaksOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BreaksOnContactWith(BreaksOn.Allies);
             if (breaksOnAlly)
@@ -91,7 +91,7 @@ public class OnCollisionBreak : TeamUpdater
     /// </summary>
     /// <param name="collisionObject"></param>
     /// <returns>Whether the collisionObject is invulnerable to this game object</returns>
-    protected bool CheckParent(GameObject collisionObject)
+    protected bool IsInvulnerable(GameObject collisionObject)
     {
         bool isTouchingParent = createdBy == collisionObject;
         bool isStillInvulnerable = Time.time > creationTime + 0.1f; //The shooting object should be immune to its own projectiles for a split second

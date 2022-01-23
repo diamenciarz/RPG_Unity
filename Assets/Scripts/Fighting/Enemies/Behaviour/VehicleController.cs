@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VehicleController : MonoBehaviour
 {
-    [SerializeField] bool controlledByPlayer;
+    [SerializeField] bool controlledByPlayer = true;
 
     #region Private variables
     IVehicleMover myVehicle;
@@ -30,51 +30,13 @@ public class VehicleController : MonoBehaviour
     {
         if (controlledByPlayer)
         {
-            CheckPlayerInputs();
+            ApplyPlayerInputs();
         }
     }
-    private void CheckPlayerInputs()
+    private void ApplyPlayerInputs()
     {
-        CheckMovementInputs();
-        CheckRotationInputs();
-    }
-    private void CheckMovementInputs()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            myVehicle.StartAccelerating();
-        }
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            myVehicle.StopAccelerating();
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            myVehicle.StartBraking();
-        }
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            myVehicle.StopBraking();
-        }
-    }
-    private void CheckRotationInputs()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            myVehicle.StartTurningLeft();
-        }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            myVehicle.StopTurningLeft();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            myVehicle.StartTurningRight();
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            myVehicle.StopTurningRight();
-        }
+        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        myVehicle.SetInputVector(inputVector);
     }
     #endregion
 }

@@ -35,14 +35,14 @@ public class BulletController : BasicProjectileController
             StartCoroutine(CheckDestroyDelay());
         }
     }
-    protected void Update()
-    {
-        UpdateCollisionNormal();
-    }
     private void SetupStartingVariables()
     {
         myCollider2D = GetComponent<CapsuleCollider2D>();
         SetupDestroyTime();
+    }
+    protected void Update()
+    {
+        UpdateCollisionNormal();
     }
 
     #region Destroy
@@ -122,7 +122,7 @@ public class BulletController : BasicProjectileController
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        BounceCheck(collision);
+        //BounceCheck(collision);
     }
     private void BounceCheck(Collider2D collision)
     {
@@ -221,7 +221,7 @@ public class BulletController : BasicProjectileController
     private bool ReflectsOffAllyOrEnemy(GameObject collisionObject)
     {
         bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
-        if (CheckParent(collisionObject))
+        if (IsInvulnerable(collisionObject))
         {
             bool bouncesOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BouncesOnContactWith(BreaksOn.Allies);
             if (bouncesOnAlly)

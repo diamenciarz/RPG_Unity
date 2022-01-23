@@ -7,24 +7,27 @@ public class CarMover : MonoBehaviour, IVehicleMover
     #region Serialization
     [Tooltip("The highest speed that the vehicle can accelerate towards")]
     [SerializeField] float maxSpeed;
+    [Tooltip("The lowest speed that the vehicle can travel backwards")]
+    [SerializeField] float minSpeed;
     [Tooltip("The speed change rate, when accelerating")]
-    [SerializeField] float acceleratingSpeed;
+    [SerializeField] float acceleratingForce;
     [Tooltip("The speed change rate, when braking")]
-    [SerializeField] float braingSpeed;
-    [Tooltip("The rotation angle change rate, when turning (in degrees)")]
+    [SerializeField] float brakingForce;
+    [Tooltip("The speed change rate, when baking")]
+    [SerializeField] float backingForce;
+    [Tooltip("Turn speed in degrees per second (at the highest speed)")]
     [SerializeField] float turningSpeed;
+    [Tooltip("How slippery the driving experience is. 1 for no drifting, 0 for driving on ice")]
+    [SerializeField] [Range(0, 1)] float driftFactor;
     #endregion
 
     #region Private variables
     //Objects
     Rigidbody2D myRigidbody2D;
-    //Movement
-    private bool isBraking = false;
-    private bool isAccelerating = false;
-    //Rotation
-    private bool isTurningRight = false;
-    private bool isTurningLeft = false;
-    
+    private Vector2 inputVector;
+
+    private float rotationAngle;
+
     #endregion
 
     void Start()
@@ -35,95 +38,78 @@ public class CarMover : MonoBehaviour, IVehicleMover
     {
         myRigidbody2D = GetComponent<Rigidbody2D>();
     }
+    public void SetInputVector(Vector2 newInputVector)
+    {
+        inputVector = newInputVector;
+    }
 
-    #region Update
     void FixedUpdate()
     {
-        Rotate();
-        Move();
-    }
-    #region Movement
-    //Public methods
-    public void StartAccelerating()
-    {
-        isAccelerating = true;
-    }
-    public void StopAccelerating()
-    {
-        isAccelerating = false;
-    }
-    public void StartBraking()
-    {
-        isBraking = true;
-    }
-    public void StopBraking()
-    {
-        isBraking = false;
-    }
-    //Private methods
-    private void Move()
-    {
-        if (isAccelerating)
-        {
-            Accelerate();
-        }
-        if (isBraking)
-        {
-            Brake();
-        }
-    }
-    private void Accelerate()
-    {
-        Vector2 force = transform.rotation.eulerAngles.normalized * acceleratingSpeed;
-        myRigidbody2D.AddForce(force * Time.fixedDeltaTime);
-    }
-    private void Brake()
-    {
-        Vector2 force = -1 * transform.rotation.eulerAngles.normalized * braingSpeed;
-        myRigidbody2D.AddForce(force * Time.fixedDeltaTime);
-    }
-    #endregion
+        ChangeVelocity();
 
-    #region Rotation
-    //Public methods
-    public void StartTurningRight()
-    {
-        isTurningRight = true;
+        KillOrthogonalVelocity();
+
+        RotateByInput(inputVector);
     }
-    public void StopTurningRight()
+    private void ChangeVelocity()
     {
-        isTurningRight = false;
+        myRigidbody2D.AddForce(GetEngineForce(), ForceMode2D.Force);
     }
-    public void StartTurningLeft()
+    private Vector2 GetEngineForce()
     {
-        isTurningLeft = true;
-    }
-    public void StopTurningLeft()
-    {
-        isTurningLeft = false;
-    }
-    //Private methods
-    private void Rotate()
-    {
-        if (isTurningLeft)
+        if (inputVector.y > 0)
         {
-            TurnLeft();
+            return GetForwardForce();
         }
-        if (isTurningRight)
+        else
         {
-            TurnRight();
+            return GetBackwardsForce();
         }
     }
-    private void TurnLeft()
+    private Vector2 GetForwardForce()
     {
-        myRigidbody2D.AddTorque(turningSpeed * Time.fixedDeltaTime);
+        if (GetSpeed() < maxSpeed)
+        {
+            return inputVector.y * transform.right * acceleratingForce * Time.fixedDeltaTime;
+        }
+        else
+        {
+            return Vector2.zero;
+        }
     }
-    private void TurnRight()
+    private Vector2 GetBackwardsForce()
     {
-        myRigidbody2D.AddTorque(-1 * turningSpeed * Time.fixedDeltaTime);
+        if (IsGoingForward())
+        {
+            //Is breaking
+            return inputVector.y * transform.right * brakingForce * Time.fixedDeltaTime;
+        }
+        else
+        {
+            //Is backing
+            if (GetSpeed() > minSpeed)
+            {
+                return inputVector.y * transform.right * backingForce * Time.fixedDeltaTime;
+            }
+            else
+            {
+                return Vector2.zero;
+            }
+        }
     }
-    #endregion
-    #endregion
+
+    private void KillOrthogonalVelocity()
+    {
+        myRigidbody2D.velocity = GetVelocityX() * driftFactor + GetVelocityY();
+    }
+    private void RotateByInput(Vector2 inputVector)
+    {
+        float maxSpeedPercentage = myRigidbody2D.velocity.magnitude / maxSpeed;
+        float deltaAngle = inputVector.x * turningSpeed * Time.fixedDeltaTime * maxSpeedPercentage;
+        rotationAngle -= deltaAngle;
+
+        myRigidbody2D.MoveRotation(rotationAngle);
+    }
 
     #region Accessor methods
     //Physics
@@ -133,37 +119,49 @@ public class CarMover : MonoBehaviour, IVehicleMover
     }
     public float GetSpeed()
     {
-        return myRigidbody2D.velocity.magnitude;
+        Vector2 velocityVector = GetVelocityY();
+        float speed = velocityVector.magnitude;
+        if (Vector2.Dot(myRigidbody2D.velocity, transform.right) > 0)
+        {
+            return speed;
+        }
+        else
+        {
+            return -speed;
+        }
+    }
+    private bool IsGoingForward()
+    {
+        float dot = Vector2.Dot(myRigidbody2D.velocity, transform.right);
+        if (dot >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public Vector2 GetVelocityX()
+    {
+        return transform.up * Vector2.Dot(myRigidbody2D.velocity, transform.up);
+    }
+    public Vector2 GetVelocityY()
+    {
+        return transform.right * Vector2.Dot(myRigidbody2D.velocity, transform.right);
     }
     //Movement
     public float GetBrakingSpeed()
     {
-        return braingSpeed;
+        return brakingForce;
     }
     public float GetAcceleratingSpeed()
     {
-        return acceleratingSpeed;
+        return acceleratingForce;
     }
     public float GetTurningSpeed()
     {
         return turningSpeed;
-    }
-    //State
-    public bool GetIsTurningRight()
-    {
-        return isTurningRight;
-    }
-    public bool GetIsTurningLeft()
-    {
-        return isTurningLeft;
-    }
-    public bool GetIsAccelerating()
-    {
-        return isAccelerating;
-    }
-    public bool GetIsBraking()
-    {
-        return isBraking;
     }
     #endregion
 }
