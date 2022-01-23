@@ -142,8 +142,14 @@ public class EntityCreator : MonoBehaviour
     }
     private void CheckForRocket(GameObject summonedObject, SummonedProjectileData data)
     {
-        RocketController rocketController = summonedObject.GetComponent<RocketController>();
-        rocketController.SetTarget(data.target);
+        if (data.target)
+        {
+            RocketController rocketController = summonedObject.GetComponent<RocketController>();
+            if (rocketController)
+            {
+                rocketController.SetTarget(data.target);
+            }
+        }
     }
 
     #region Unused
