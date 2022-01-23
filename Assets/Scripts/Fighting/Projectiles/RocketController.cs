@@ -21,9 +21,8 @@ public class RocketController : BasicProjectileController
     public GameObject targetGameObject;
 
     #region Startup
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         SetupStartingSpeed();
     }
     protected override void Start()

@@ -8,6 +8,7 @@ public class ProgressionBarController : MonoBehaviour
     [Header("Instances")]
     [SerializeField] Image healthBarImage;
     [SerializeField] GameObject objectToFollow;
+
     [Header("Display Settings")]
     [SerializeField] Vector3 deltaPositionToObject;
     [SerializeField] bool useGradient = true;
@@ -20,18 +21,21 @@ public class ProgressionBarController : MonoBehaviour
     [Header("Transform Settings")]
     [SerializeField] bool destroyWithoutParent = true;
     [SerializeField] bool rotateSameAsParent;
+
     private Quaternion deltaRotationFromParent;
     private bool isDestroyed;
     Color currentColor;
     private bool isShown = true;
     private double lastUsedTime;
-    // Start is called before the first frame update
+
     void Start()
     {
         transform.rotation = Quaternion.Euler(0, 1, 0);
         //originalAlfa = healthBarImage.color.a;
         GetComponent<Canvas>().worldCamera = Camera.main;
     }
+
+    #region Mutator methods
     public void SetObjectToFollow(GameObject followGO)
     {
         objectToFollow = followGO;
@@ -48,111 +52,151 @@ public class ProgressionBarController : MonoBehaviour
     {
         deltaRotationFromParent = newDeltaRotation;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void IsVisible(bool isTrue)
     {
-        FollowParent();
-
-        CheckHideDelay();
-        AdjustBarVisibility();
+        isShown = isTrue;
+        UpdateLastUsedTime();
     }
 
-    private void FollowParent()
-    {
-        if (objectToFollow != null)
-        {
-            transform.position = objectToFollow.transform.position + deltaPositionToObject;
-            if (rotateSameAsParent)
-            {
-                transform.rotation = objectToFollow.transform.rotation * deltaRotationFromParent;
-            }
-        }
-        else
-        {
-            if (destroyWithoutParent)
-            {
-                isDestroyed = true;
-                Destroy(gameObject);
-            }
-        }
-    }
-
+    #region Update Bar
     public void UpdateProgressionBar(float newHP, float maxHP)
     {
         if (!isDestroyed)
         {
+            if (maxHP != 0)
+            {
+                float newRatio = newHP / maxHP;
+                newRatio = Mathf.Clamp(newRatio, 0, 1);
 
-            if (newHP < 0)
-            {
-                newHP = 0;
-            }
-            if (newHP > maxHP)
-            {
-                newHP = maxHP;
-            }
-            float newRatio = newHP / maxHP;
-            newRatio = Mathf.Clamp(newRatio, 0, 1);
-            if (!double.IsNaN(newRatio))
-            {
-                lastUsedTime = Time.time;
-                healthBarImage.fillAmount = newRatio;
-                if (useGradient)
-                {
-                    Color newColor = barColorGradient.Evaluate(newRatio);
-                    newColor.a = originalAlfa;
-                    healthBarImage.color = newColor;
-
-                    currentColor = healthBarImage.color;
-                }
+                UpdateBarRatio(newRatio);
             }
             else
             {
-                Debug.Log("Bar ratio: " + newRatio + " object to follow:  " + objectToFollow);
-                Debug.LogError("NaN");
-
+                Debug.LogError("MaxHP was 0 and the ratio was NaN! Followed object: " + objectToFollow);
             }
         }
     }
-    public void IsVisible(bool isTrue)
+    private void UpdateBarRatio(float ratio)
     {
-        isShown = isTrue;
+        UpdateLastUsedTime();
+        healthBarImage.fillAmount = ratio;
+
+        UpdateGradientColor(ratio);
     }
-    private void AdjustBarVisibility()
+    private void UpdateLastUsedTime()
     {
-        if (isShown)
+        lastUsedTime = Time.time;
+    }
+    private void UpdateGradientColor(float ratio)
+    {
+        if (useGradient)
         {
-            ChangeAlfaTowards(originalAlfa);
+            Color newColor = barColorGradient.Evaluate(ratio);
+            newColor.a = originalAlfa;
+            healthBarImage.color = newColor;
+
+            currentColor = healthBarImage.color;
+        }
+    }
+    #endregion
+
+    #endregion
+
+    #region Update
+    void Update()
+    {
+        CheckForParent();
+
+        CheckHideDelay();
+        ChangeBarVisibility();
+    }
+
+    #region Transform
+    private void CheckForParent()
+    {
+        if (objectToFollow != null)
+        {
+            FollowParent();
+            RotateSameAsParent();
         }
         else
         {
-            ChangeAlfaTowards(0);
+            HandleDestroy();
         }
     }
-    private void ChangeAlfaTowards(float alfa)
+    private void FollowParent()
+    {
+        Vector3 parentPosition = objectToFollow.transform.position;
+        transform.position = parentPosition + deltaPositionToObject;
+    }
+    private void RotateSameAsParent()
+    {
+        if (rotateSameAsParent)
+        {
+            Quaternion parentRotation = objectToFollow.transform.rotation;
+            transform.rotation = parentRotation * deltaRotationFromParent;
+        }
+    }
+    private void HandleDestroy()
+    {
+        if (destroyWithoutParent)
+        {
+            isDestroyed = true;
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    #region Change visibility
+    private void ChangeBarVisibility()
+    {
+        if (isShown)
+        {
+            MoveAlfaTowards(originalAlfa);
+        }
+        else
+        {
+            MoveAlfaTowards(0);
+        }
+    }
+    private void MoveAlfaTowards(float targetAlfa)
     {
         float colorAlfa = healthBarImage.color.a;
-        if (colorAlfa != alfa)
+        if (colorAlfa != targetAlfa)
         {
-            float changeThisFrame = originalAlfa * Time.deltaTime / hideOverTime;
-            colorAlfa = Mathf.MoveTowards(colorAlfa, alfa, changeThisFrame);
-
             Color newColor = currentColor;
-            newColor.a = colorAlfa;
-            healthBarImage.color = newColor;
+            newColor.a = CountNewAlfa(targetAlfa);
+            SetColor(newColor);
         }
     }
+    private float CountNewAlfa(float targetAlfa)
+    {
+        //In how much time it could change from 0 to max value
+        float changeRate = originalAlfa / hideOverTime;
+        float changeThisFrame = changeRate * Time.deltaTime;
+        float newColorAlfa = Mathf.MoveTowards(healthBarImage.color.a, targetAlfa, changeThisFrame);
+        return newColorAlfa;
+    }
+    private void SetColor(Color newColor)
+    {
+        healthBarImage.color = newColor;
+    }
+    #endregion
+    
     private void CheckHideDelay()
     {
-        if (hideDelay > 0)
+        bool shouldHide = hideDelay > 0;
+        if (shouldHide)
         {
             if (isShown)
             {
-                if (Time.time > lastUsedTime + hideDelay)
+                bool pastHideCooldown = Time.time > lastUsedTime + hideDelay;
+                if (pastHideCooldown)
                 {
-                    IsVisible(false);
+                    isShown = false;
                 }
             }
         }
     }
+    #endregion
 }

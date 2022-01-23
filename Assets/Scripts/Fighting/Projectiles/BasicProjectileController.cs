@@ -8,7 +8,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     [SerializeField] protected List<Sprite> spriteList;
     [SerializeField] protected float startingSpeed = 2f;
 
-
     //Private variables
     protected Vector2 velocityVector;
     //Objects
@@ -18,9 +17,8 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     protected Rigidbody2D myRigidbody2D;
 
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         SetupStartingValues();
     }
     protected virtual void Start()

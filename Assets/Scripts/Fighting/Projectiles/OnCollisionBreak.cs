@@ -14,7 +14,6 @@ public class OnCollisionBreak : TeamUpdater
     protected GameObject objectThatCreatedThisProjectile;
     private bool isDestroyed = false;
     protected float creationTime;
-    private bool isARocket;
 
     public enum BreaksOn
     {
@@ -27,7 +26,7 @@ public class OnCollisionBreak : TeamUpdater
         Obstacles
     }
 
-    protected virtual void Awake()
+    private void Start()
     {
         UpdateStartingVariables();
     }

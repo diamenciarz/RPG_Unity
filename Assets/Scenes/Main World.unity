@@ -55338,6 +55338,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 15036850}
     m_Modifications:
+    - target: {fileID: -941003956043371612, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
+      propertyPath: autoRepath.sensitivity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -941003956043371612, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
+      propertyPath: autoRepath.maximumInterval
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 600636572777389987, guid: 3a0d4baa8cef95a4c92741c1a895d4e1, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -56555,7 +56563,7 @@ PrefabInstance:
     - target: {fileID: 5387168661837921317, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: salvo
       value: 
-      objectReference: {fileID: 11400000, guid: a0bd2e0b5e4b56b4aa6c78f5ea03e8cb, type: 2}
+      objectReference: {fileID: 11400000, guid: c47dfffc6e7f712459fd17aba812ed04, type: 2}
     - target: {fileID: 5387168661837921317, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: reloadAllAtOnce
       value: 0

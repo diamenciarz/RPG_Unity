@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0dbfcd4c70cd7f4f8148eee44d81992, type: 3}
   m_Name: Grenade Launcher
   m_EditorClassIdentifier: 
+  additionalReloadTime: 2
+  reloadAllAtOnce: 0
   shots:
   - {fileID: 11400000, guid: 209f30a78c5fc7142a76ce4e9d8861c2, type: 2}
   - {fileID: 11400000, guid: 209f30a78c5fc7142a76ce4e9d8861c2, type: 2}
@@ -27,4 +29,3 @@ MonoBehaviour:
   - 0.2
   - 0.2
   - 0.2
-  additionalReloadTime: 2

@@ -388,5 +388,6 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   originalAlfa: 1
   hideOverTime: 0.1
+  hideDelay: 3
   destroyWithoutParent: 1
   rotateSameAsParent: 0

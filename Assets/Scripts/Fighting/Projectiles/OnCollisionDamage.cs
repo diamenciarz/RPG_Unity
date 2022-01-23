@@ -26,9 +26,8 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
     private ICollidingEntityData entityData;
     private int currentDamageLeft;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         SetupStartingValues();
     }
     private void SetupStartingValues()
