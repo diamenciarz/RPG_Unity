@@ -338,7 +338,7 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
 
     #region On hit
     /// <summary>
-    /// If the current target shoots the unit from behing - it will immediately reveal its position
+    /// If the current target shoots the unit from behind - it will immediately reveal its position
     /// </summary>
     /// <param name="hitBy"></param>
     public void HitBy(GameObject hitBy)

@@ -21,9 +21,8 @@ public class BulletController : BasicProjectileController
 
     private float destroyTime;
     private int bounces;
-    private Vector3 collisionNormal;
-    private CapsuleCollider2D myCollider2D;
     private bool timedDestroy = false;
+    private float MAX_DESTROY_DELAY = 100f;
 
     protected override void Start()
     {
@@ -37,56 +36,54 @@ public class BulletController : BasicProjectileController
     }
     private void SetupStartingVariables()
     {
-        myCollider2D = GetComponent<CapsuleCollider2D>();
         SetupDestroyTime();
     }
 
     #region Destroy
     private void SetupDestroyTime()
     {
-        float destroyDistanceDelay = CountDistanceDelay();
-        bool distanceDelayExists = destroyDistanceDelay != -1;
-        bool destroyTimeExists = destroyDelay != -1;
-        destroyTime = Time.time;
-
-        if (destroyTimeExists && distanceDelayExists)
-        {
-            if (destroyDistanceDelay < destroyDelay)
-            {
-                destroyTime += destroyDistanceDelay;
-            }
-            else
-            {
-                destroyTime += destroyDelay;
-            }
-            timedDestroy = true;
-            return;
-        }
-        if (destroyTimeExists)
-        {
-            destroyTime += destroyDelay;
-            timedDestroy = true;
-            return;
-        }
-        if (distanceDelayExists)
-        {
-            destroyTime += destroyDistanceDelay;
-            timedDestroy = true;
-            return;
-        }
-        destroyTime += 100;
+        destroyTime = Time.time + CountDestroyDelay();
     }
-    private float CountDistanceDelay()
+    private float CountDestroyDelay()
     {
-        if (destroyDistance != -1)
+        float returnTime = MAX_DESTROY_DELAY;
+        //Sets the destroy delay to the lowest number
+        float distanceDelay = TranslateDistanceDelay();
+        if (distanceDelay < returnTime)
         {
-            return destroyDistance / myRigidbody2D.velocity.magnitude;
+            returnTime = distanceDelay;
+            timedDestroy = true;
+        }
+
+        float timeDelay = TranslateTimeDelay();
+        if (timeDelay < returnTime)
+        {
+            returnTime = timeDelay;
+            timedDestroy = true;
+        }
+        return returnTime;
+    }
+    private float TranslateDistanceDelay()
+    {
+        if (destroyDistance == -1)
+        {
+            return MAX_DESTROY_DELAY;
         }
         else
         {
-            return -1;
+            return destroyDistance / myRigidbody2D.velocity.magnitude;
         }
-
+    }
+    private float TranslateTimeDelay()
+    {
+        if (destroyDelay == -1)
+        {
+            return MAX_DESTROY_DELAY;
+        }
+        else
+        {
+            return destroyDelay;
+        }
     }
     private IEnumerator CheckDestroyDelay()
     {

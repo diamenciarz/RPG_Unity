@@ -73,6 +73,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
         }
         return false;
     }
+    #region Deal damage
     private void DealDamageToObject(DamageReceiver damageReceiver)
     {
         damageReceiver.DealDamage(this);
@@ -108,7 +109,8 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
     {
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
-    }
+    } 
+    #endregion
     #endregion
 
     #region Accessor methods

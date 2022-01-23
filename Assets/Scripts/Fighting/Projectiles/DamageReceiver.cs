@@ -66,7 +66,7 @@ public class DamageReceiver : ListUpdater
         UpdateHealthBar();
         CheckHealth();
 
-        ModifyVelocity(iDamage);
+        //ModifyVelocity(iDamage);
         HandleDamage(iDamage);
     }
     private void ModifyVelocity(IDamageReceived iDamage)
@@ -94,6 +94,7 @@ public class DamageReceiver : ListUpdater
     {
         foreach (IOnDamageDealt call in onHitCalls)
         {
+            //If an enemy is hit by a bullet, then he receives information about the position of the entity shooting
             call.HitBy(iDamage.CreatedBy());
         }
     }
