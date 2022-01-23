@@ -36,33 +36,42 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
         currentDamageLeft = damage;
     }
 
-    #region Collisions
+    #region Collision
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
-        DamageCheck(collision.gameObject);
+        HandleCollision(collision.gameObject);
     }
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        DamageCheck(collision.gameObject);
+        HandleCollision(collision.gameObject);
     }
-    private void DamageCheck(GameObject collisionObject)
+    private void HandleCollision(GameObject collisionObject)
+    {
+        if (CanDealDamage(collisionObject))
+        {
+            DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
+            DealDamageToObject(damageReceiver);
+        }
+    }
+    private bool CanDealDamage(GameObject collisionObject)
     {
         DamageReceiver damageReceiver = collisionObject.GetComponent<DamageReceiver>();
-        bool canReceiveDamage = damageReceiver != null;
-        if (canReceiveDamage)
+        bool objectCanReceiveDamage = damageReceiver != null;
+        if (objectCanReceiveDamage)
         {
-            bool isInvulnerable = IsInvulnerableTo(collisionObject);
-            if (isInvulnerable)
+            bool shouldDealDamage = hurtsAllies || damageReceiver.GetTeam() != team;
+            if (shouldDealDamage)
             {
-                bool shouldDealDamage = damageReceiver.GetTeam() != team || hurtsAllies;
-                if (shouldDealDamage)
+                bool isInvulnerable = IsInvulnerableTo(collisionObject);
+                if (!isInvulnerable)
                 {
-                    DealDamageToObject(damageReceiver);
+                    return true;
                 }
             }
         }
+        return false;
     }
     private void DealDamageToObject(DamageReceiver damageReceiver)
     {
@@ -74,19 +83,26 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
         if (isPiercing)
         {
             int collisionHP = damageReceiver.GetCurrentHealth();
-            currentDamageLeft -= collisionHP;
-            if (currentDamageLeft < 0)
-            {
-                currentDamageLeft = 0;
-                DestroyObject();
-            }
+            LowerMyDamage(collisionHP);
+        }
+    }
+    private void LowerMyDamage(int change)
+    {
+        currentDamageLeft -= change;
+        CheckDamageLeft();
+    }
+    private void CheckDamageLeft()
+    {
+        if (currentDamageLeft < 0)
+        {
+            currentDamageLeft = 0;
+            DestroyObject();
         }
     }
     protected void DestroyObject()
     {
         HelperMethods.CallAllTriggers(gameObject);
         StartCoroutine(DestroyAtTheEndOfFrame());
-
     }
     private IEnumerator DestroyAtTheEndOfFrame()
     {
