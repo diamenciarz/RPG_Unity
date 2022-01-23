@@ -114,120 +114,17 @@ public class BulletController : BasicProjectileController
         yield return new WaitForEndOfFrame();
         UpdateRotationToFaceForward();
     }
-
-    #region Reflect
     private bool ShouldReflect(Collision2D collision)
     {
         Vector3 collisionNormal = collision.GetContact(0).normal;
         float hitAngle = Vector3.Angle(GetVelocityVector3(), collisionNormal);
-
-        bool isAngleCorrect = Mathf.Abs(hitAngle) >= minAngleToReflect;
+        //The collision angle has to be bigger than "minAngleToReflect" for the bullet to not get destroyed
+        bool isAngleBigEnough = Mathf.Abs(hitAngle) >= minAngleToReflect;
+        //Some bullets have a limited number of bounces
         bool hasBouncesLeft = maxReflections == -1 || bounces < maxReflections;
 
-        return hasBouncesLeft && isAngleCorrect;
+        return hasBouncesLeft && isAngleBigEnough;
     }
-    #endregion
-
-    #region Bounce
-    private void Bounce(Vector3 incomingMomentum)
-    {
-        Vector3 myMomentum = GetVelocityVector3().normalized * pushingPower;
-        Vector3 outcomeVelocity = incomingMomentum + myMomentum;
-
-        //Modify bullet velocity
-        SetVelocityVector(outcomeVelocity);
-    }
-    #endregion
-
-    #region Bounce checks
-    /// <summary>
-    /// Checks, if the colliding object is an obstacle and can be bounced off of
-    /// </summary>
-    /// <param name="collisionObject"></param>
-    /// <returns></returns>
-    private bool ReflectsOffObstacle(GameObject collisionObject)
-    {
-        return IsAnObstacle(collisionObject) && BouncesOnContactWith(BreaksOn.Obstacles);
-    }
-    private bool IsAnObstacle(GameObject collisionObject)
-    {
-        bool isAnObstacle = false;
-        ListUpdater listUpdater = collisionObject.GetComponent<ListUpdater>();
-
-        if (listUpdater)
-        {
-            isAnObstacle = listUpdater.ListContains(ListUpdater.AddToLists.Obstacle);
-        }
-
-        return isAnObstacle || collisionObject.tag == "Obstacle";
-    }
-    /// <summary>
-    /// Checks, if the angle of the hit is correct for a bounce and if there are enough bounces left
-    /// </summary>
-    /// <returns></returns>
-    private bool ReflectsOffAllyOrEnemy(GameObject collisionObject)
-    {
-        bool areTeamsEqual = team == HelperMethods.GetObjectTeam(collisionObject);
-        if (IsInvulnerable(collisionObject))
-        {
-            bool bouncesOnAlly = areTeamsEqual && HelperMethods.IsObjectAnEntity(collisionObject) && BouncesOnContactWith(BreaksOn.Allies);
-            if (bouncesOnAlly)
-            {
-                return true;
-            }
-        }
-        bool bouncesOnEnemy = !areTeamsEqual && BouncesOnContactWith(BreaksOn.Enemies) && HelperMethods.IsObjectAnEntity(collisionObject);
-        return bouncesOnEnemy;
-    }
-    private bool BouncesOffProjectile(IDamageReceived damageReceiver)
-    {
-        if (damageReceiver != null && ProjectileCheck(damageReceiver))
-        {
-            return true;
-        }
-        return false;
-    }
-    private bool ProjectileCheck(IDamageReceived iDamage)
-    {
-        if (!iDamage.GetIsPushing())
-        {
-            return false;
-        }
-        int collisionTeam = iDamage.GetTeam();
-        bool areTeamsEqual = collisionTeam == team;
-
-        bool breaksOnAllyBullet = BouncesOnContactWith(BreaksOn.AllyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && areTeamsEqual;
-        if (breaksOnAllyBullet)
-        {
-            return true;
-        }
-        bool breaksOnEnemyBullet = BouncesOnContactWith(BreaksOn.EnemyBullets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Projectile) && !areTeamsEqual;
-        if (breaksOnEnemyBullet)
-        {
-            return true;
-        }
-        bool breaksOnExplosion = BouncesOnContactWith(BreaksOn.Explosions) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Explosion);
-        if (breaksOnExplosion)
-        {
-            return true;
-        }
-        bool breaksOnRocket = BouncesOnContactWith(BreaksOn.Rockets) && iDamage.DamageTypeContains(OnCollisionDamage.TypeOfDamage.Rocket);
-        if (breaksOnRocket)
-        {
-            return true;
-        }
-        return false;
-    }
-    public bool BouncesOnContactWith(BreaksOn contact)
-    {
-        if (bounceEnum.Contains(contact))
-        {
-            return true;
-        }
-        return false;
-    }
-    #endregion
-
     #endregion
 }
 

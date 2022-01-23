@@ -56652,6 +56652,14 @@ PrefabInstance:
       propertyPath: m_BodyType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6195473770939546903, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195473770939546903, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6401000288904231909, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: debugZoneOn
       value: 0
@@ -56683,6 +56691,22 @@ PrefabInstance:
     - target: {fileID: 8173652368306461702, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193885503230164162, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_Size.x
+      value: 0.43459266
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193885503230164162, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_Size.y
+      value: 0.28569034
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193885503230164162, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.00028068843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193885503230164162, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.08495001
       objectReference: {fileID: 0}
     - target: {fileID: 8953788913229538285, guid: 2884aa39134ab274093b21b1f03998f3, type: 3}
       propertyPath: m_LocalRotation.w

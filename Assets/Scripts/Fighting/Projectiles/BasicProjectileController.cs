@@ -48,7 +48,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
             catch (System.Exception)
             {
                 Debug.LogError("Bullet sprite list out of bounds. Index: " + (team - 1));
-                throw;
             }
         }
     }

@@ -59,7 +59,7 @@ public class RocketController : BasicProjectileController
         IncreaseSpeed();
         UpdateSpeed();
     }
-    protected void CheckForTarget()
+    private void CheckForTarget()
     {
         if (team != 0)
         {
