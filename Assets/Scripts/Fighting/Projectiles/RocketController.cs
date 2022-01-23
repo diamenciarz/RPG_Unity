@@ -25,9 +25,8 @@ public class RocketController : BasicProjectileController
     {
         SetupStartingSpeed();
     }
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         CreateMiaIcon();
     }
     private void CreateMiaIcon()

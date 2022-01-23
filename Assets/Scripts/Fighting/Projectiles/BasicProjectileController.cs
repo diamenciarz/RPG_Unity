@@ -21,7 +21,7 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     {
         SetupStartingValues();
     }
-    protected virtual void Start()
+    private void Start()
     {
         float dir = transform.rotation.eulerAngles.z;
         SetVelocityVector(HelperMethods.DirectionVector(startingSpeed, dir));

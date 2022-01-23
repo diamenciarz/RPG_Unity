@@ -15,19 +15,17 @@ public class BulletController : BasicProjectileController
     [Tooltip("Min angle from the collision's normal to reflect")]
     [SerializeField] float minAngleToReflect = 45;
     [Tooltip("-1 for infinite bounces")]
-    [SerializeField] int maxReflections = 3;
+    [SerializeField] int maxReflectionNumber = 3;
     [Tooltip("How much time to add to the bullet's lifetime after a reflection")]
-    [SerializeField] float timeToAdd = 2f;
+    [SerializeField] float timeAddedUponReflection = 2f;
 
     private float destroyTime;
-    private int bounces;
+    private int reflections;
     private bool timedDestroy = false;
     private float MAX_DESTROY_DELAY = 100f;
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
-
         SetupStartingVariables();
         if (timedDestroy)
         {
@@ -36,6 +34,8 @@ public class BulletController : BasicProjectileController
     }
     private void SetupStartingVariables()
     {
+        reflections = 0;
+        Debug.Log("Created by: " + createdBy.name);
         SetupDestroyTime();
     }
 
@@ -101,15 +101,14 @@ public class BulletController : BasicProjectileController
     }
     private void BounceCheck(Collision2D collision)
     {
-        if (!ShouldReflect(collision))
+        if (ShouldReflect(collision))
+        {
+            HandleReflection();
+        }
+        else
         {
             DestroyObject();
         }
-    }
-    private IEnumerator WaitAndUpdateRotation()
-    {
-        yield return new WaitForEndOfFrame();
-        UpdateRotationToFaceForward();
     }
     private bool ShouldReflect(Collision2D collision)
     {
@@ -118,9 +117,19 @@ public class BulletController : BasicProjectileController
         //The collision angle has to be bigger than "minAngleToReflect" for the bullet to not get destroyed
         bool isAngleBigEnough = Mathf.Abs(hitAngle) >= minAngleToReflect;
         //Some bullets have a limited number of bounces
-        bool hasBouncesLeft = maxReflections == -1 || bounces < maxReflections;
+        bool hasBouncesLeft = maxReflectionNumber == -1 || reflections < maxReflectionNumber;
 
         return hasBouncesLeft && isAngleBigEnough;
+    }
+    private void HandleReflection()
+    {
+        reflections++;
+        destroyTime += timeAddedUponReflection;
+    }
+    private IEnumerator WaitAndUpdateRotation()
+    {
+        yield return new WaitForEndOfFrame();
+        UpdateRotationToFaceForward();
     }
     #endregion
 }

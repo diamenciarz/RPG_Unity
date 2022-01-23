@@ -18,7 +18,7 @@ public class TriggerOnDeath : TeamUpdater
     protected EntityCreator entityCreator;
     private bool isDestroyed;
     protected float deltaRotationToTarget = -90;
-
+    private GameObject target;
     private void Awake()
     {
         entityCreator = FindObjectOfType<EntityCreator>();
@@ -43,10 +43,10 @@ public class TriggerOnDeath : TeamUpdater
 
                 if (shootsAtEnemies == true)
                 {
-                    GameObject targetGO = StaticDataHolder.GetClosestEnemy(transform.position, team);
-                    if (targetGO != null)
+                    target = StaticDataHolder.GetClosestEnemy(transform.position, team);
+                    if (target != null)
                     {
-                        ShootAtTarget(targetGO.transform.position, i);
+                        ShootAtTarget(target.transform.position, i);
                     }
                     else
                     {
@@ -92,35 +92,82 @@ public class TriggerOnDeath : TeamUpdater
     }
     private void ShootOnceForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
-
-        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, shotDirection);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotForwardRandomSpread();
+        data.summonPosition = transform.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = gameObjectsToTurnIntoList[index];
+        data.target = target;
+        
+        entityCreator.SummonProjectile(data);
     }
+    private Quaternion RotForwardRandomSpread()
+    {
+        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
+        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, shotDirection);
+        return newBulletRotation;
+    }
+
     private void ShootOnceForwardWithRegularSpread(int index)
+    {
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotForwardRegularSpread(index);
+        data.summonPosition = transform.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = gameObjectsToTurnIntoList[index];
+        data.target = target;
+
+        entityCreator.SummonProjectile(data);
+    }
+    private Quaternion RotForwardRegularSpread(int index)
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset + shotDirection);
-
         newBulletRotation *= transform.rotation;
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
+        return newBulletRotation;
     }
+
     private void ShootOnceTowardsPositionWithRandomSpread(int index, Vector3 shootAtPosition)
+    {
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotToPosRandomSpread(shootAtPosition);
+        data.summonPosition = transform.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = gameObjectsToTurnIntoList[index];
+        data.target = target;
+
+        entityCreator.SummonProjectile(data);
+    }
+    private Quaternion RotToPosRandomSpread(Vector3 shootAtPosition)
     {
         Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(leftBulletSpread, rightBulletSpread);
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
-
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, deltaRotationToTarget);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
+        return newBulletRotation;
     }
+
     private void ShootOnceTowardsPositionWithRegularSpread(int index, Vector3 shootAtPosition)
+    {
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotToPosRegularSpread(index,shootAtPosition);
+        data.summonPosition = transform.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = gameObjectsToTurnIntoList[index];
+        data.target = target;
+
+        entityCreator.SummonProjectile(data);
+    }
+    private Quaternion RotToPosRegularSpread(int index,Vector3 shootAtPosition)
     {
         float bulletOffset = (spreadDegrees * (index - (gameObjectsToTurnIntoList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
         Quaternion rotationToTarget = HelperMethods.DeltaPositionRotation(transform.position, shootAtPosition);
-        Debug.Log("rotation to target: " + rotationToTarget.eulerAngles.z);
         newBulletRotation *= rotationToTarget * Quaternion.Euler(0, 0, deltaRotationToTarget);
-        entityCreator.SummonProjectile(gameObjectsToTurnIntoList[index], transform.position, newBulletRotation, team, createdBy);
+        return newBulletRotation;
     }
     #endregion
 }

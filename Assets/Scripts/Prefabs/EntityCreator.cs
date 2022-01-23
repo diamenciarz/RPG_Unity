@@ -41,13 +41,23 @@ public class EntityCreator : MonoBehaviour
             GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
             if (CanFitSummon(summonedBullet))
             {
-                TrySetupStartingValues(summonedBullet, team, createdBy);
+                TrySetupStartingValues(summonedBullet, data);
             }
             else
             {
                 Debug.Log("Bullet did not fit");
                 Destroy(summonedBullet);
             }
+        }
+    }
+    public void SummonProjectile(SummonedProjectileData data)
+    {
+        GameObject bulletToSummon = GetProjectilePrefab(data.bulletType);
+        if (bulletToSummon != null)
+        {
+            GameObject summonedBullet = Instantiate(bulletToSummon, data.summonPosition, data.summonRotation);
+            SetupStartingValues(summonedBullet, data.team, data.createdBy);
+            CheckForRocket(summonedBullet, data);
         }
     }
     private GameObject GetProjectilePrefab(BulletTypes bulletType)
@@ -89,12 +99,12 @@ public class EntityCreator : MonoBehaviour
     #endregion
 
     #region Entities
-    public void SummonEntity(EntityTypes entityType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject parent)
+    public void SummonEntity(SummonedEntityData data)
     {
-        GameObject entityToSummon = GetEntityPrefab(entityType);
-        GameObject summonedEntity = Instantiate(entityToSummon, summonPosition, summonRotation, parent.transform);
+        GameObject entityToSummon = GetEntityPrefab(data.entityType);
+        GameObject summonedEntity = Instantiate(entityToSummon, data.summonPosition, data.summonRotation);
 
-        TrySetupStartingValues(summonedEntity, team, parent);
+        SetupStartingValues(summonedEntity, data.team, data.parent);
     }
     private GameObject GetEntityPrefab(EntityTypes entityType)
     {
@@ -107,7 +117,7 @@ public class EntityCreator : MonoBehaviour
     #endregion
 
     #region Helper methods
-    private void TrySetupStartingValues(GameObject summonedObject, int team, GameObject createdBy)
+    private void SetupStartingValues(GameObject summonedObject, int team, GameObject parent)
     {
         TeamUpdater[] teamUpdaters = summonedObject.GetComponentsInChildren<TeamUpdater>();
         if (teamUpdaters.Length != 0)
@@ -115,18 +125,28 @@ public class EntityCreator : MonoBehaviour
             foreach (TeamUpdater item in teamUpdaters)
             {
                 item.SetTeam(team);
-
-                if (createdBy)
-                {
-                    item.SetCreatedBy(createdBy);
-                }
-                else
-                {
-                    item.SetCreatedBy(summonedObject);
-                }
+                SetCreatedBy(item, parent);
             }
         }
     }
+    private void SetCreatedBy(TeamUpdater item, GameObject createdBy)
+    {
+        if (createdBy)
+        {
+            item.SetCreatedBy(createdBy);
+        }
+        else
+        {
+            item.SetCreatedBy(item.gameObject);
+        }
+    }
+    private void CheckForRocket(GameObject summonedObject, SummonedProjectileData data)
+    {
+        RocketController rocketController = summonedObject.GetComponent<RocketController>();
+        rocketController.SetTarget(data.target);
+    }
+
+    #region Unused
     private bool CanFitSummon(GameObject summonedObject)
     {
         Vector3 dir = HelperMethods.DirectionVectorNormalized(transform.rotation.eulerAngles.z);
@@ -153,6 +173,26 @@ public class EntityCreator : MonoBehaviour
         filter.SetLayerMask(layerMask);
 
         return filter;
-    }
+    } 
     #endregion
+
+    #endregion
+}
+public class SummonedProjectileData
+{
+    public EntityCreator.BulletTypes bulletType;
+    public Vector3 summonPosition;
+    public Quaternion summonRotation;
+    public int team;
+    public GameObject createdBy;
+    public GameObject target;
+}
+public class SummonedEntityData
+{
+    public EntityCreator.EntityTypes entityType;
+    public Vector3 summonPosition;
+    public Quaternion summonRotation;
+    public int team;
+    public GameObject parent;
+    public GameObject target;
 }
