@@ -162,20 +162,44 @@ public class ShootingController : TeamUpdater
     }
     private void SingleShotForwardWithRandomSpread(int index)
     {
-        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(currentShotSO.leftBulletSpread, currentShotSO.rightBulletSpread);
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotForwardRandomSpread();
+        data.summonPosition = shootingPoint.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = currentShotSO.projectilesToCreateList[index];
+        data.target = null;
 
-        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
-        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, createdBy);
+        entityCreator.SummonProjectile(data);
     }
+    private Quaternion RotForwardRandomSpread()
+    {
+        Quaternion newBulletRotation = HelperMethods.RandomRotationInRange(currentShotSO.leftBulletSpread, currentShotSO.rightBulletSpread);
+        newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
+        return newBulletRotation;
+    }
+
     private void SingleShotForwardWithRegularSpread(int index)
+    {
+        SummonedProjectileData data = new SummonedProjectileData();
+        data.summonRotation = RotForwardRegularSpread(index);
+        data.summonPosition = shootingPoint.position;
+        data.team = team;
+        data.createdBy = createdBy;
+        data.bulletType = currentShotSO.projectilesToCreateList[index];
+        data.target = null;
+
+        //Parent game object should be the owner of the gun
+        entityCreator.SummonProjectile(data);
+    }
+    private Quaternion RotForwardRegularSpread(int index)
     {
         float bulletOffset = (currentShotSO.spreadDegrees * (index - (currentShotSO.projectilesToCreateList.Count - 1f) / 2));
         Quaternion newBulletRotation = Quaternion.Euler(0, 0, bulletOffset);
-
         newBulletRotation *= transform.rotation * Quaternion.Euler(0, 0, basicGunRotation);
-        //Parent game object should be the owner of the gun
-        entityCreator.SummonProjectile(currentShotSO.projectilesToCreateList[index], shootingPoint.transform.position, newBulletRotation, team, createdBy);
+        return newBulletRotation;
     }
+
     #endregion
 
     #region Sound
