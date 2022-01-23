@@ -16,8 +16,9 @@ public class ExplosionController : BasicProjectileController
     private float originalZRotation;
 
     #region Initialization
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingValues();
     }
     private void SetupStartingValues()

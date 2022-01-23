@@ -26,7 +26,7 @@ public class OnCollisionBreak : TeamUpdater
         Obstacles
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         UpdateStartingVariables();
     }

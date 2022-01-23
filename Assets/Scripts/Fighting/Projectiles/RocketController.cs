@@ -21,12 +21,14 @@ public class RocketController : BasicProjectileController
     public GameObject targetGameObject;
 
     #region Startup
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingSpeed();
     }
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         CreateMiaIcon();
     }
     private void CreateMiaIcon()

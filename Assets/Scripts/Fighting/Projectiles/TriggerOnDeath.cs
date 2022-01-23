@@ -19,8 +19,9 @@ public class TriggerOnDeath : TeamUpdater
     private bool isDestroyed;
     protected float deltaRotationToTarget = -90;
     private GameObject target;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         entityCreator = FindObjectOfType<EntityCreator>();
     }
 

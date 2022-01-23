@@ -17,14 +17,18 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
     protected Rigidbody2D myRigidbody2D;
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingValues();
     }
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         float dir = transform.rotation.eulerAngles.z;
-        SetVelocityVector(HelperMethods.DirectionVector(startingSpeed, dir));
+        Vector3 newVelocity = HelperMethods.DirectionVector(startingSpeed, dir);
+        Debug.Log(newVelocity);
+        SetVelocityVector(newVelocity);
         SetSpriteAccordingToTeam();
     }
     private void SetupStartingValues()

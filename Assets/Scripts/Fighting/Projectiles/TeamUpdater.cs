@@ -8,7 +8,7 @@ public class TeamUpdater : MonoBehaviour
     public int team = -1;
     protected GameObject createdBy;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         SetupTeam();
         UpdateCreatedBy();

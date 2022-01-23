@@ -24,8 +24,9 @@ public class BulletController : BasicProjectileController
     private bool timedDestroy = false;
     private float MAX_DESTROY_DELAY = 100f;
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         SetupStartingVariables();
         if (timedDestroy)
         {
@@ -35,7 +36,6 @@ public class BulletController : BasicProjectileController
     private void SetupStartingVariables()
     {
         reflections = 0;
-        Debug.Log("Created by: " + createdBy.name);
         SetupDestroyTime();
     }
 

@@ -33,23 +33,6 @@ public class EntityCreator : MonoBehaviour
     }
 
     #region Projectiles
-    public void SummonProjectile(BulletTypes bulletType, Vector3 summonPosition, Quaternion summonRotation, int team, GameObject createdBy)
-    {
-        GameObject bulletToSummon = GetProjectilePrefab(bulletType);
-        if (bulletToSummon != null)
-        {
-            GameObject summonedBullet = Instantiate(bulletToSummon, summonPosition, summonRotation);
-            if (CanFitSummon(summonedBullet))
-            {
-                TrySetupStartingValues(summonedBullet, data);
-            }
-            else
-            {
-                Debug.Log("Bullet did not fit");
-                Destroy(summonedBullet);
-            }
-        }
-    }
     public void SummonProjectile(SummonedProjectileData data)
     {
         GameObject bulletToSummon = GetProjectilePrefab(data.bulletType);

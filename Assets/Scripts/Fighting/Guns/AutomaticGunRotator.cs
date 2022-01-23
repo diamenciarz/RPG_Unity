@@ -15,8 +15,6 @@ public class AutomaticGunRotator : TeamUpdater
     [SerializeField] bool hasRotationLimits;
     [SerializeField] float leftMaxRotationLimit;
     [SerializeField] float rightMaxRotationLimit;
-    [Tooltip("The delta rotation of the gun sprite to an enemy's position")]
-    [SerializeField] float gunTextureRotationOffset = -90f;
 
     [Header("Instances")]
     [SerializeField] [Tooltip("For forward orientation and team setup")] GameObject parentGameObject;

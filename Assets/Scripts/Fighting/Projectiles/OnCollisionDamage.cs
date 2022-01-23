@@ -26,8 +26,9 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
     private ICollidingEntityData entityData;
     private int currentDamageLeft;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SetupStartingValues();
     }
     private void SetupStartingValues()
@@ -109,7 +110,7 @@ public class OnCollisionDamage : OnCollisionBreak, IDamageReceived
     {
         yield return new WaitForEndOfFrame();
         Destroy(gameObject);
-    } 
+    }
     #endregion
     #endregion
 
