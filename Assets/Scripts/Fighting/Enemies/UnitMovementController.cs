@@ -40,14 +40,14 @@ public class UnitMovementController : TeamUpdater, IOnDamageDealt
 
     #region Hunting
     //Booleans
-    public bool canShootTarget;
-    public bool canSeeLastTargetPosition;
+    private bool canShootTarget;
+    private bool canSeeLastTargetPosition;
     private bool startedHunting;
     //Other values
     private float POSITION_REFRESH_RATE = 0.25f; // Cooldown to refresh path to target
     private float targetLastSeenTime; // Will be useful for shooting
     private float lastTraceLeftTime;
-    public int totalTracesLeft;
+    private int totalTracesLeft;
     #endregion
     #endregion
 

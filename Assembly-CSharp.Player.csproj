@@ -55,17 +55,21 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
     <Compile Include="Assets\Scripts\Other\StaticDataHolder.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VisualDetector.cs" />
     <Compile Include="Assets\Scripts\Prefabs\LaserDrawer.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Guns\SingleShotScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Guns\AutomaticGunRotator.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\DamageReceiver.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueBoxController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Interfaces\IOnDamageDealt.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamageReceived.cs" />
     <Compile Include="Assets\Scripts\UI\ObjectMissingIcon.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\PopupNode.cs" />
     <Compile Include="Assets\Scripts\Fighting\Interfaces\ICollidingEntityData.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\TraceBehaviour.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\TeamUpdater.cs" />
     <Compile Include="Assets\Scripts\Prefabs\LaserHolder.cs" />
@@ -110,10 +114,9 @@
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\ExplosionController.cs" />
     <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\TraceBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VisualDetector.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Interfaces\IDamageReceived.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Interfaces\IOnDamageDealt.cs" />
+    <Compile Include="Assets\Scripts\Map\MapColliderManager.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\CarMover.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\IVehicleMover.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

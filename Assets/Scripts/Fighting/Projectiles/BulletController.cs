@@ -111,6 +111,14 @@ public class BulletController : BasicProjectileController
             collisionNormal = hit2D.normal;
         }
     }
+    private ContactFilter2D CreateObstacleContactFilter()
+    {
+        LayerMask layerMask = LayerMask.GetMask("Obstacles");
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(layerMask);
+
+        return filter;
+    }
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
@@ -169,6 +177,7 @@ public class BulletController : BasicProjectileController
         //Modify bullet velocity
         Vector3 newVelocity = Vector3.Reflect(GetVelocityVector3(), normal);
         SetVelocityVector(newVelocity);
+        UpdateCollisionNormal();
     }
     #endregion
 
