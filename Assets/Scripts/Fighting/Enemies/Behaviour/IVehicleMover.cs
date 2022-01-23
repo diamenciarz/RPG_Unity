@@ -16,7 +16,6 @@ public interface IVehicleMover
     public abstract void StopTurningRight();
     public abstract void StartTurningLeft();
     public abstract void StopTurningLeft();
-    //public abstract void handleCollision(IDamageReceived damageData);
     #endregion
 
 }
