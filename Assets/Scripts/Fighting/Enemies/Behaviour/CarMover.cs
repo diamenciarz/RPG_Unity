@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarMover : MonoBehaviour, IVehicleMover
+public class CarMover : MonoBehaviour, IEntityMover
 {
     #region Serialization
     [Tooltip("The highest speed that the vehicle can accelerate towards")]
@@ -47,7 +47,7 @@ public class CarMover : MonoBehaviour, IVehicleMover
     {
         ChangeVelocity();
 
-        KillOrthogonalVelocity();
+        KillSidewayVelocity();
 
         RotateByInput(inputVector);
     }
@@ -98,9 +98,9 @@ public class CarMover : MonoBehaviour, IVehicleMover
         }
     }
 
-    private void KillOrthogonalVelocity()
+    private void KillSidewayVelocity()
     {
-        myRigidbody2D.velocity = GetVelocityX() * driftFactor + GetVelocityY();
+        myRigidbody2D.velocity = GetSidewayVelocity() * driftFactor + GetForwardVelocity();
     }
     private void RotateByInput(Vector2 inputVector)
     {
@@ -119,7 +119,7 @@ public class CarMover : MonoBehaviour, IVehicleMover
     }
     public float GetSpeed()
     {
-        Vector2 velocityVector = GetVelocityY();
+        Vector2 velocityVector = GetForwardVelocity();
         float speed = velocityVector.magnitude;
         if (Vector2.Dot(myRigidbody2D.velocity, transform.right) > 0)
         {
@@ -142,11 +142,11 @@ public class CarMover : MonoBehaviour, IVehicleMover
             return false;
         }
     }
-    public Vector2 GetVelocityX()
+    public Vector2 GetSidewayVelocity()
     {
         return transform.up * Vector2.Dot(myRigidbody2D.velocity, transform.up);
     }
-    public Vector2 GetVelocityY()
+    public Vector2 GetForwardVelocity()
     {
         return transform.right * Vector2.Dot(myRigidbody2D.velocity, transform.right);
     }

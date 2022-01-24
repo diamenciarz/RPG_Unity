@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VehicleController : MonoBehaviour
+public class EntityController : MonoBehaviour
 {
     [SerializeField] bool controlledByPlayer = true;
 
     #region Private variables
-    IVehicleMover myVehicle;
+    IEntityMover myVehicle;
     #endregion
 
     #region Startup
@@ -17,7 +17,7 @@ public class VehicleController : MonoBehaviour
     }
     private void StartupMethods()
     {
-        myVehicle = GetComponent<IVehicleMover>();
+        myVehicle = GetComponent<IEntityMover>();
     }
     #endregion
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,6 +53,9 @@
     <UnityVersion>2021.1.20f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\BaseNode.cs" />
     <Compile Include="Assets\Scripts\Other\StaticDataHolder.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VisualDetector.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="Assets\Scripts\Fighting\Guns\SingleShotScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Guns\AutomaticGunRotator.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\DamageReceiver.cs" />
+    <Compile Include="Assets\Scripts\Player\DashAbility.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueBoxController.cs" />
     <Compile Include="Assets\Scripts\Fighting\Interfaces\IOnDamageDealt.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupController.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="Assets\Scripts\UI\ObjectMissingIcon.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\PopupNode.cs" />
     <Compile Include="Assets\Scripts\Fighting\Interfaces\ICollidingEntityData.cs" />
+    <Compile Include="Assets\Scripts\Map\MapColliderManager.cs" />
     <Compile Include="Assets\Scripts\Inventory\GroundItem.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\TraceBehaviour.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
@@ -76,12 +81,14 @@
     <Compile Include="Assets\Scripts\Fighting\Guns\SalvoScriptableObject.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\EndNode.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueNode.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\CarMover.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryAnimator.cs" />
     <Compile Include="Assets\Scripts\Prefabs\BushController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\UsableItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\ListUpdater.cs" />
     <Compile Include="Assets\Scripts\Dialogue\EventManager.cs" />
     <Compile Include="Assets\Scripts\My Nodes\Csharp Scripts\NodeReader.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\IEntityMover.cs" />
     <Compile Include="Assets\Scripts\Dialogue\PopupPositionController.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\DialogueGraph.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\TriggerOnDeath.cs" />
@@ -90,6 +97,7 @@
     <Compile Include="Assets\Scripts\Inventory\UserInterface.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\ToolItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Guns\ShootingController.cs" />
+    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\EntityController.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\RocketController.cs" />
     <Compile Include="Assets\Scripts\Prefabs\EntityCreator.cs" />
     <Compile Include="Assets\Scripts\UI\ProgressionBarController.cs" />
@@ -109,16 +117,11 @@
     <Compile Include="Assets\Scripts\Fighting\Projectiles\BulletController.cs" />
     <Compile Include="Assets\Scripts\Other\HelperMethods.cs" />
     <Compile Include="Assets\Scripts\Prefabs\TriggerObjectController.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Player\UnitMover.cs" />
     <Compile Include="Assets\Scripts\My Nodes\xNode Scripts\StartNode.cs" />
     <Compile Include="Assets\Scripts\Inventory\Object Instances\FoodItemObject.cs" />
     <Compile Include="Assets\Scripts\Fighting\Projectiles\ExplosionController.cs" />
     <Compile Include="Assets\Scripts\Effects\MusicPlayer.cs" />
-    <Compile Include="Assets\Scripts\Map\MapColliderManager.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\CarMover.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\IVehicleMover.cs" />
-    <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VehicleController.cs" />
-    <Compile Include="Assets\Scripts\Player\DashAbility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

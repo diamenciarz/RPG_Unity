@@ -22,6 +22,8 @@ public class ShootingController : TeamUpdater
     private ProgressionBarController gunReloadingBarScript;
     private EntityCreator entityCreator;
     private SingleShotScriptableObject currentShotSO;
+    private GameObject parent;
+
     private float shootingTimeBank;
     private float currentTimeBetweenEachShot;
     private float lastShotTime;
@@ -37,6 +39,7 @@ public class ShootingController : TeamUpdater
     }
     private void InitializeStartingVariables()
     {
+        parent = transform.parent.gameObject;
         entityCreator = FindObjectOfType<EntityCreator>();
         lastShotTime = Time.time;
         shootingTimeBank = GetSalvoTimeSum();
@@ -310,7 +313,7 @@ public class ShootingController : TeamUpdater
         {
             GameObject newReloadingBarGO = Instantiate(gunReloadingBarPrefab, transform.position, transform.rotation);
             gunReloadingBarScript = newReloadingBarGO.GetComponent<ProgressionBarController>();
-            gunReloadingBarScript.SetObjectToFollow(gameObject);
+            gunReloadingBarScript.SetObjectToFollow(parent);
             lastShotTime = Time.time;
         }
     }

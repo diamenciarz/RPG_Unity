@@ -136,7 +136,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3a2db6f9bd864da42a74a6f026b5b5af, type: 3}
   startingSpeed: 8
   destroyDelay: 3
-  destroyDistance: 0
+  destroyDistance: -1
   minAngleToReflect: 0
   maxReflectionNumber: 3
   timeAddedUponReflection: 0
