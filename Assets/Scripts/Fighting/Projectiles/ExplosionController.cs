@@ -8,7 +8,8 @@ public class ExplosionController : BasicProjectileController
     [Header("Bomb Settings")]
     // Ustawienia dla bomby
     public float timeToExpire;
-    [SerializeField] float expandPercentage; // Sprite scale
+    [Tooltip("How many times larger should the explosion get than the starting size")]
+    [SerializeField] float expandRate; // Sprite scale
     [SerializeField] float rotateDuringLifetime;
 
     //Private variables
@@ -42,7 +43,7 @@ public class ExplosionController : BasicProjectileController
     }
     private void UpdateScale(float lifetimePercentage)
     {
-        float newSize = lifetimePercentage * expandPercentage * originalSize;
+        float newSize = lifetimePercentage * expandRate * originalSize;
         gameObject.transform.localScale = new Vector3(newSize, newSize, 0);
     }
     private void UpdateRotation(float lifetimePercentage)
@@ -60,7 +61,7 @@ public class ExplosionController : BasicProjectileController
     }
     private void SetSizeToMax()
     {
-        gameObject.transform.localScale = new Vector3(expandPercentage * originalSize, expandPercentage * originalSize, 0);
+        gameObject.transform.localScale = new Vector3(expandRate * originalSize, expandRate * originalSize, 0);
     }
     #endregion
 

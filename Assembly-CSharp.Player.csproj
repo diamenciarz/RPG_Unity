@@ -118,6 +118,7 @@
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\CarMover.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\IVehicleMover.cs" />
     <Compile Include="Assets\Scripts\Fighting\Enemies\Behaviour\VehicleController.cs" />
+    <Compile Include="Assets\Scripts\Player\DashAbility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Text\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 147073467114034703}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0.1, y: 0.030000001, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 3049901069730513033}
   m_Father: {fileID: 6195473770567518806}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!114 &5387168661837921317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  salvo: {fileID: 11400000, guid: a0bd2e0b5e4b56b4aa6c78f5ea03e8cb, type: 2}
+  salvo: {fileID: 11400000, guid: c5843511aecb4b14287ac0cfcbe8ab59, type: 2}
   shootingPoint: {fileID: 3458655993273092739}
   gunReloadingBarPrefab: {fileID: 8395912166832606940, guid: 8e09ea130e6998f4c9a04c20952aa1f5, type: 3}
   basicGunRotation: 180
@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 3186074715888603841}
   - component: {fileID: 1778642163727842126}
   - component: {fileID: 4461451869934177596}
+  - component: {fileID: 2756157693903237348}
   m_Layer: 6
   m_Name: Player_Blue
   m_TagString: Player
@@ -218,11 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultPlayerSpeed: 4
-  dashCooldown: 0.3
-  dashLength: 2.5
-  dashRange: 2.5
   rotationSlowdown: 0
-  dashSpeed: 0
 --- !u!114 &5147535588325408921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,8 +247,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00028068735, y: -0.07589836}
-  m_Size: {x: 0.4345926, y: 0.26758695}
+  m_Offset: {x: -0.00028068843, y: -0.08495001}
+  m_Size: {x: 0.43459266, y: 0.28569034}
   m_Direction: 1
 --- !u!50 &6195473770939546903
 Rigidbody2D:
@@ -265,9 +262,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0.9
-  m_AngularDrag: 0.05
+  m_Mass: 75
+  m_LinearDrag: 0
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 2
@@ -323,11 +320,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   putInLists: 02000000
   team: 1
-  health: 25
+  health: 1000
   healthBarPrefab: {fileID: 8395912166832606940, guid: b99e89717e60aad41a544dd09039b2b7, type: 3}
   turnHealthBarOn: 1
   canBePushed: 0
-  breakingSounds: []
+  breakingSounds:
+  - {fileID: 0}
   breakingSoundVolume: 1
   hitSounds: []
   hitSoundVolume: 1
@@ -345,12 +343,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   gameObjectsToTurnIntoList: 01000000010000000100000001000000
-  shootsAtEnemies: 0
+  shootsAtEnemies: 1
   shotDirection: 0
   spreadProjectilesEvenly: 1
   spreadDegrees: 90
   leftBulletSpread: 0
   rightBulletSpread: 0
+--- !u!114 &2756157693903237348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195473770567518804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97556b47ef7f3334291de04ea17eb7c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashCooldown: 0.3
+  dashLength: 4
+  dashRange: 2.5
+  dashSpeed: 0
 --- !u!1 &6500692403444519539
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +389,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6500692403444519539}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8953788913229538285}
@@ -425,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  basicGunDirection: 0
+  basicGunDirection: 180
   hasRotationLimits: 1
   leftMaxRotationLimit: 10
   rightMaxRotationLimit: 10
@@ -434,7 +448,7 @@ MonoBehaviour:
   refreshRate: 0.1
   targetObstacles: 0
   controlledByMouse: 1
-  isShootingZoneOn: 1
+  isShootingZoneOn: 0
   ignoreMouseCollisions: 1
   shootingControllers:
   - {fileID: 5387168661837921317}

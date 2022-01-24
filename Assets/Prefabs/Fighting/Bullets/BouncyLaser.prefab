@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 050000000100000004000000
+  breakEnum: 0500000004000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2
@@ -183,10 +183,9 @@ MonoBehaviour:
   startingSpeed: 10
   destroyDelay: 5
   destroyDistance: -1
-  bounceEnum: 0600000000000000
   minAngleToReflect: 0
-  maxReflections: 8
-  timeToAdd: 2
+  maxReflectionNumber: 8
+  timeAddedUponReflection: 2
 --- !u!114 &5534843798056116234
 MonoBehaviour:
   m_ObjectHideFlags: 0

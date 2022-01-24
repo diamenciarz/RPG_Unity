@@ -2,50 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMover : MonoBehaviour
 {
-    public float defaultPlayerSpeed = 10f;
-    [SerializeField] float dashCooldown = 1f;
-    [SerializeField] float dashLength = 2f;
-    public float dashRange = 3f;
-
+    public float defaultPlayerSpeed = 4f;
     [SerializeField] bool rotationSlowdown = false;
-    private float dashDuration = 0.5f;
-    [HideInInspector]
-    public float dashSpeed;
 
-    private float playerSpeed;
-    private bool isDashing;
-    private bool canDash = true;
-
-    private Vector3 dashDirection;
-    private Coroutine dashCoroutine;
 
     private Rigidbody2D myRigidbody2D;
-    private BoxCollider2D myCollider2D;
-    private Animator myAnimator;
+    DashAbility dashAbility;
+
+    private float playerSpeed;
     private const float PLAYER_SPRITE_ROTATION = -90;
 
     // Start is called before the first frame update
     void Start()
     {
         playerSpeed = defaultPlayerSpeed;
-        myCollider2D = GetComponent<BoxCollider2D>();
         myRigidbody2D = GetComponent<Rigidbody2D>();
-        myAnimator = GetComponent<Animator>();
+        dashAbility = GetComponent<DashAbility>();
         UpdatePlayerGameObject();
     }
     public void UpdatePlayerGameObject()
     {
         EventManager.TriggerEvent("SetPlayerGameObject", gameObject);
-        EventManager.TriggerEvent("UpdateDashSnapRange", dashRange);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        CheckDash();
-
         RotateTowardsMouseCursor();
     }
     void FixedUpdate()
@@ -71,73 +55,21 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 inputVector = GetInputVector();
         
-        Vector2 newVelocity = (inputVector * playerSpeed) + CountDashVector();
+        Vector2 newVelocity = (inputVector * playerSpeed) + GetDashVector();
 
         myRigidbody2D.velocity = newVelocity;
+    }
+    private Vector3 GetDashVector()
+    {
+        if (dashAbility)
+        {
+            return dashAbility.GetDashVector();
+        }
+        return Vector3.zero;
     }
     private Vector3 GetInputVector()
     {
         return new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-    }
-    #endregion
-
-    #region Dash
-    private Vector3 CountDashVector()
-    {
-        const float rangeMultiplier = 2.6f; //Scales dash range to one map unit
-        Vector3 dashVector = dashDirection * rangeMultiplier * dashSpeed * dashLength;
-        return dashVector;
-    }
-    private void CheckDash()
-    {
-        if (canDash && !isDashing)
-        {
-            CheckDashInput();
-        }
-    }
-    private void CheckDashInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TryToDash();
-        }
-    }
-    private void TryToDash()
-    {
-        if (IsDashableObjectInRange())
-        {
-            canDash = false;
-            EventManager.TriggerEvent("UpdateDashIcon", false);
-            StartCoroutine(DashCooldownCoroutine());
-
-            GameObject objectToDashThrough = StaticDataHolder.GetTheClosestDashableObject(transform.position, dashRange);
-            DashThroughObject(objectToDashThrough);
-        }
-    }
-    private bool IsDashableObjectInRange()
-    {
-        GameObject objectToDashThrough = StaticDataHolder.GetTheClosestDashableObject(transform.position, dashRange);
-        return objectToDashThrough != null;
-    }
-    private void DashThroughObject(GameObject dashGO)
-    {
-        isDashing = true;
-        dashDirection = HelperMethods.DeltaPosition(gameObject, dashGO).normalized;
-        dashCoroutine = StartCoroutine(DashCoroutine());
-    }
-    private IEnumerator DashCoroutine()
-    {
-        myAnimator.SetBool("isDashing", true);
-        yield return new WaitForSeconds(dashDuration);
-
-        myAnimator.SetBool("isDashing", false);
-        isDashing = false;
-    }
-    private IEnumerator DashCooldownCoroutine()
-    {
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
-        EventManager.TriggerEvent("UpdateDashIcon", true);
     }
     #endregion
 
@@ -211,10 +143,6 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Accessor methods
-    public bool GetCanDash()
-    {
-        return canDash;
-    }
     public Quaternion GetRotation()
     {
         return transform.rotation;

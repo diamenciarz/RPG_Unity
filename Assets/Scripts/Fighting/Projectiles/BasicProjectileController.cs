@@ -27,7 +27,6 @@ public abstract class BasicProjectileController : OnCollisionDamage, ICollidingE
         base.Start();
         float dir = transform.rotation.eulerAngles.z;
         Vector3 newVelocity = HelperMethods.DirectionVector(startingSpeed, dir);
-        Debug.Log(newVelocity);
         SetVelocityVector(newVelocity);
         SetSpriteAccordingToTeam();
     }

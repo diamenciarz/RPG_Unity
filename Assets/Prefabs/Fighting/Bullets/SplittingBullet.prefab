@@ -149,7 +149,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 7700761372939823446}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e782e5b19ac414042a2688cf19680076, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 040000000100000005000000
+  breakEnum: 0400000001000000050000000600000003000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 1
@@ -184,10 +184,9 @@ MonoBehaviour:
   startingSpeed: 6
   destroyDelay: -1
   destroyDistance: -1
-  bounceEnum: 0600000000000000
-  minAngleToReflect: 30
-  maxReflections: 3
-  timeToAdd: 0
+  minAngleToReflect: 60
+  maxReflectionNumber: 3
+  timeAddedUponReflection: 0
 --- !u!114 &-1566152343811300086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  gameObjectsToTurnIntoList: 0400000008000000080000000800000004000000
+  gameObjectsToTurnIntoList: 080000000800000008000000
   shootsAtEnemies: 0
   shotDirection: 90
   spreadProjectilesEvenly: 1

@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 05000000010000000400000006000000
+  breakEnum: 0500000001000000040000000600000000000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2
@@ -146,10 +146,9 @@ MonoBehaviour:
   startingSpeed: 10
   destroyDelay: -1
   destroyDistance: -1
-  bounceEnum: 
-  minAngleToReflect: 45
-  maxReflections: 3
-  timeToAdd: 2
+  minAngleToReflect: 60
+  maxReflectionNumber: 3
+  timeAddedUponReflection: 0
 --- !u!114 &5329267400732313886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +178,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e782e5b19ac414042a2688cf19680076, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0

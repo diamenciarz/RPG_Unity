@@ -11,7 +11,6 @@ public class BulletController : BasicProjectileController
     [SerializeField] float destroyDistance = 1;
 
     [Header("Wall bouncing")]
-    public List<BreaksOn> bounceEnum = new List<BreaksOn>();
     [Tooltip("Min angle from the collision's normal to reflect")]
     [SerializeField] float minAngleToReflect = 45;
     [Tooltip("-1 for infinite bounces")]
@@ -101,13 +100,16 @@ public class BulletController : BasicProjectileController
     }
     private void BounceCheck(Collision2D collision)
     {
-        if (ShouldReflect(collision))
+        if (!IsInvulnerableTo(collision.gameObject))
         {
-            HandleReflection();
-        }
-        else
-        {
-            DestroyObject();
+            if (ShouldReflect(collision))
+            {
+                HandleReflection();
+            }
+            else
+            {
+                DestroyObject();
+            }
         }
     }
     private bool ShouldReflect(Collision2D collision)

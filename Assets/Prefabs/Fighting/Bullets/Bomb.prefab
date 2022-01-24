@@ -96,15 +96,15 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7700761372939823446}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: e782e5b19ac414042a2688cf19680076, type: 2}
   m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: -1
-  breakEnum: 060000000300000004000000010000000500000000000000
+  breakEnum: 06000000030000000200000004000000050000000100000000000000
   breakingSounds: []
   breakingSoundVolume: 1
   damage: 2
@@ -153,10 +153,9 @@ MonoBehaviour:
   startingSpeed: 6
   destroyDelay: -1
   destroyDistance: -1
-  bounceEnum: 
-  minAngleToReflect: 45
-  maxReflections: 3
-  timeToAdd: 2
+  minAngleToReflect: 0
+  maxReflectionNumber: 0
+  timeAddedUponReflection: 0
 --- !u!114 &1082129703195348843
 MonoBehaviour:
   m_ObjectHideFlags: 0

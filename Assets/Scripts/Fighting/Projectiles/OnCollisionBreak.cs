@@ -104,10 +104,8 @@ public class OnCollisionBreak : TeamUpdater
         bool isStillInvulnerable = Time.time < creationTime + 0.1f; //The shooting object should be immune to its own projectiles for a split second
         if (isTouchingParent && isStillInvulnerable)
         {
-            Debug.Log("Is invulnerable");
             return true;
         }
-        Debug.Log("Is not invulnerable");
         return false;
     }
     private bool BreaksOnAlly(GameObject collisionObject)
